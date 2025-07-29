@@ -40,6 +40,7 @@ import {shopifyCollectionType} from './objects/shopify/shopifyCollectionType'
 import {shopifyProductType} from './objects/shopify/shopifyProductType'
 import {shopifyProductVariantType} from './objects/shopify/shopifyProductVariantType'
 import {spotType} from './objects/hotspot/spotType'
+import theme from './theme';
 
 // Objects used as annotations must be imported first
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
@@ -103,4 +104,4 @@ import {settingsType} from './singletons/settingsType'
 
 const singletons = [homeType, settingsType]
 
-export const schemaTypes = [...annotations, ...objects, ...singletons, ...blocks, ...documents]
+export const schemaTypes = [...annotations, ...objects, ...singletons, ...blocks, ...documents, theme]
