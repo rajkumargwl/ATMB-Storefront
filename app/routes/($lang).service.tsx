@@ -30,33 +30,20 @@ export default function ServicePage() {
   }, []);
 
   return (
-    <div className="max-w-6xl mx-auto p-6">
-      <h1 className="text-2xl font-semibold mb-4">Your Mailbox</h1>
-
-      <div className="border rounded overflow-hidden">
-        <iframe
-          ref={iframeRef}
-          src="https://rewoundtakeback.timex.com/"
-          width="100%"
-          height="600"
-          className="w-full border"
-          onError={() => setIframeBlocked(true)}
-        />
-      </div>
-      {iframeBlocked && (
-        <div className="mt-4 text-center text-red-600">
-          ⚠️ Unable to display mailbox inside this site.
-          <br />
-          <a
-            href="https://rewoundtakeback.timex.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-600 underline mt-2 inline-block"
-          >
-            Click here to open in a new tab
-          </a>
-        </div>
-      )}
+    <div className="w-full p-6">
+    <h1 className="text-2xl font-semibold mb-4">Your Mailbox</h1>
+  
+    <div className="border rounded overflow-hidden">
+      <iframe
+        ref={iframeRef}
+        src="https://rewoundtakeback.timex.com/"
+        width="100%"
+        height="600"
+        className="w-full border"
+        onError={() => setIframeBlocked(true)}
+      />
     </div>
+  </div>
+  
   );
 }
