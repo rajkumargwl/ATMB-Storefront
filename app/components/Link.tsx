@@ -1,16 +1,17 @@
 import {
   Link as RemixLink,
+  type LinkProps as RemixLinkProps,
   NavLink as RemixNavLink,
   type NavLinkProps as RemixNavLinkProps,
-  type LinkProps as RemixLinkProps,
-  useRouteLoaderData,
 } from '@remix-run/react';
-
-import type {RootLoader} from '~/root';
+import {forwardRef} from 'react';
+import {useRootLoaderData} from '~/root';
 
 type LinkProps = Omit<RemixLinkProps, 'className'> & {
   className?: RemixNavLinkProps['className'] | RemixLinkProps['className'];
 };
+
+const ABSOLUTE_URL_REGEX = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
 
 /**
  * In our app, we've chosen to wrap Remix's `Link` component to add
@@ -27,24 +28,34 @@ type LinkProps = Omit<RemixLinkProps, 'className'> & {
  *
  * Ultimately, it is up to you to decide how to implement this behavior.
  */
-export function Link(props: LinkProps) {
+export const Link = forwardRef<HTMLAnchorElement, LinkProps>((props, ref) => {
   const {to, className, ...resOfProps} = props;
-  const rootData = useRouteLoaderData<RootLoader>('root');
-  const selectedLocale = rootData?.selectedLocale;
+  const {selectedLocale} = useRootLoaderData();
 
   let toWithLocale = to;
 
-  if (typeof toWithLocale === 'string' && selectedLocale?.pathPrefix) {
-    if (!toWithLocale.toLowerCase().startsWith(selectedLocale.pathPrefix)) {
-      toWithLocale = `${selectedLocale.pathPrefix}${to}`;
-    }
+  // If we have a string and not an absolute URL, add the locale prefix
+  if (typeof to === 'string' && !ABSOLUTE_URL_REGEX.test(to) && to != '..') {
+    toWithLocale = selectedLocale ? `${selectedLocale.pathPrefix}${to}` : to;
   }
 
   if (typeof className === 'function') {
     return (
-      <RemixNavLink to={toWithLocale} className={className} {...resOfProps} />
+      <RemixNavLink
+        to={toWithLocale}
+        className={className}
+        {...resOfProps}
+        ref={ref}
+      />
     );
   }
 
-  return <RemixLink to={toWithLocale} className={className} {...resOfProps} />;
-}
+  return (
+    <RemixLink
+      to={toWithLocale}
+      className={className}
+      {...resOfProps}
+      ref={ref}
+    />
+  );
+});

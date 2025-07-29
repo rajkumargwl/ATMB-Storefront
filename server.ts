@@ -1,20 +1,21 @@
-// @ts-ignore
 // Virtual entry point for the app
-import * as remixBuild from 'virtual:remix/server-build';
-import {
-  createRequestHandler,
-  getStorefrontHeaders,
-} from '@shopify/remix-oxygen';
+import * as remixBuild from '@remix-run/dev/server-build';
 import {
   cartGetIdDefault,
   cartSetIdDefault,
   createCartHandler,
   createStorefrontClient,
   storefrontRedirect,
-  createCustomerAccountClient,
 } from '@shopify/hydrogen';
+import {
+  createCookieSessionStorage,
+  createRequestHandler,
+  getStorefrontHeaders,
+  type Session,
+  type SessionStorage,
+} from '@shopify/remix-oxygen';
+import {createSanityClient} from 'hydrogen-sanity';
 
-import {AppSession} from '~/lib/session.server';
 import {getLocaleFromRequest} from '~/lib/utils';
 
 /**
@@ -34,10 +35,28 @@ export default {
         throw new Error('SESSION_SECRET environment variable is not set');
       }
 
-      const waitUntil = executionContext.waitUntil.bind(executionContext);
-      const [cache, session] = await Promise.all([
-        caches.open('hydrogen'),
-        AppSession.init(request, [env.SESSION_SECRET]),
+      const waitUntil = (p: Promise<any>) => executionContext.waitUntil(p);
+      const secrets = [env.SESSION_SECRET];
+
+      let [cache, session, previewSession] = await Promise.all([
+        caches?.open('hydrogen'),
+        HydrogenSession.init(request, secrets),
+        (async function createPreviewSession() {
+          const storage = createCookieSessionStorage({
+            cookie: {
+              name: '__preview',
+              httpOnly: true,
+              sameSite: true,
+              secrets,
+            },
+          });
+
+          const session = await storage.getSession(
+            request.headers.get('Cookie'),
+          );
+
+          return new HydrogenSession(storage, session);
+        })(),
       ]);
 
       /**
@@ -49,25 +68,36 @@ export default {
         i18n: getLocaleFromRequest(request),
         publicStorefrontToken: env.PUBLIC_STOREFRONT_API_TOKEN,
         privateStorefrontToken: env.PRIVATE_STOREFRONT_API_TOKEN,
-        storeDomain: env.PUBLIC_STORE_DOMAIN,
+        storeDomain: `https://${env.PUBLIC_STORE_DOMAIN}`,
+        storefrontApiVersion: env.PUBLIC_STOREFRONT_API_VERSION || '2023-10',
         storefrontId: env.PUBLIC_STOREFRONT_ID,
         storefrontHeaders: getStorefrontHeaders(request),
       });
 
-      /**
-       * Create a client for Customer Account API.
-       */
-      const customerAccount = createCustomerAccountClient({
+      const sanity = createSanityClient({
+        cache,
         waitUntil,
-        request,
-        session,
-        customerAccountId: env.PUBLIC_CUSTOMER_ACCOUNT_API_CLIENT_ID,
-        shopId: env.SHOP_ID,
+        // Optionally, pass session and token to enable live-preview
+        preview:
+          env.SANITY_PREVIEW_SECRET && env.SANITY_API_TOKEN
+            ? {
+                session: previewSession,
+                token: env.SANITY_API_TOKEN,
+              }
+            : undefined,
+        // Pass configuration options for Sanity client
+        config: {
+          projectId: env.SANITY_PROJECT_ID,
+          dataset: env.SANITY_DATASET,
+          apiVersion: env.SANITY_API_VERSION ?? '2023-03-30',
+          useCdn: process.env.NODE_ENV === 'production',
+          perspective: 'published',
+        },
       });
 
+      // Create a cart api instance.
       const cart = createCartHandler({
         storefront,
-        customerAccount,
         getCartId: cartGetIdDefault(request.headers),
         setCartId: cartSetIdDefault(),
       });
@@ -83,17 +113,13 @@ export default {
           session,
           waitUntil,
           storefront,
-          customerAccount,
           cart,
           env,
+          sanity,
         }),
       });
 
       const response = await handleRequest(request);
-
-      if (session.isPending) {
-        response.headers.set('Set-Cookie', await session.commit());
-      }
 
       if (response.status === 404) {
         /**
@@ -103,6 +129,7 @@ export default {
          */
         return storefrontRedirect({request, response, storefront});
       }
+
       return response;
     } catch (error) {
       // eslint-disable-next-line no-console
@@ -111,3 +138,59 @@ export default {
     }
   },
 };
+
+/**
+ * This is a custom session implementation for your Hydrogen shop.
+ * Feel free to customize it to your needs, add helper methods, or
+ * swap out the cookie-based implementation with something else!
+ */
+class HydrogenSession {
+  constructor(
+    private sessionStorage: SessionStorage,
+    private session: Session,
+  ) {}
+
+  static async init(request: Request, secrets: string[]) {
+    const storage = createCookieSessionStorage({
+      cookie: {
+        name: 'session',
+        httpOnly: true,
+        path: '/',
+        sameSite: 'lax',
+        secrets,
+      },
+    });
+
+    const session = await storage.getSession(request.headers.get('Cookie'));
+
+    return new this(storage, session);
+  }
+
+  get(key: string) {
+    return this.session.get(key);
+  }
+
+  has(key: string) {
+    return this.session.has(key);
+  }
+
+  destroy() {
+    return this.sessionStorage.destroySession(this.session);
+  }
+
+  flash(key: string, value: any) {
+    this.session.flash(key, value);
+  }
+
+  unset(key: string) {
+    this.session.unset(key);
+  }
+
+  set(key: string, value: any) {
+    this.session.set(key, value);
+  }
+
+  commit() {
+    return this.sessionStorage.commitSession(this.session);
+  }
+}

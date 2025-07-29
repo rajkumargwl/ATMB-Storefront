@@ -1,252 +1,31 @@
-import {useLocation, useRouteLoaderData} from '@remix-run/react';
-import type {MoneyV2} from '@shopify/hydrogen/storefront-api-types';
-import type {FulfillmentStatus} from '@shopify/hydrogen/customer-account-api-types';
-import typographicBase from 'typographic-base';
-
+import {useAsyncValue, useFetcher} from '@remix-run/react';
+import {extract} from '@sanity/mutator';
 import type {
-  ChildMenuItemFragment,
-  MenuFragment,
-  ParentMenuItemFragment,
-} from 'storefrontapi.generated';
-import type {RootLoader} from '~/root';
+  Collection,
+  Product,
+  ProductOption,
+  ProductVariant,
+} from '@shopify/hydrogen/storefront-api-types';
+import {
+  type AppLoadContext,
+  json,
+  type LoaderFunctionArgs,
+} from '@shopify/remix-oxygen';
+import {usePreviewContext} from 'hydrogen-sanity';
+import pluralize from 'pluralize-esm';
+import {useEffect, useMemo, useRef} from 'react';
+
 import {countries} from '~/data/countries';
-
-import type {I18nLocale} from './type';
-
-type EnhancedMenuItemProps = {
-  to: string;
-  target: string;
-  isExternal?: boolean;
-};
-
-export type ChildEnhancedMenuItem = ChildMenuItemFragment &
-  EnhancedMenuItemProps;
-
-export type ParentEnhancedMenuItem = (ParentMenuItemFragment &
-  EnhancedMenuItemProps) & {
-  items: ChildEnhancedMenuItem[];
-};
-
-export type EnhancedMenu = Pick<MenuFragment, 'id'> & {
-  items: ParentEnhancedMenuItem[];
-};
-
-export function missingClass(string?: string, prefix?: string) {
-  if (!string) {
-    return true;
-  }
-
-  const regex = new RegExp(` ?${prefix}`, 'g');
-  return string.match(regex) === null;
-}
-
-export function formatText(input?: string | React.ReactNode) {
-  if (!input) {
-    return;
-  }
-
-  if (typeof input !== 'string') {
-    return input;
-  }
-
-  return typographicBase(input, {locale: 'en-us'}).replace(
-    /\s([^\s<]+)\s*$/g,
-    '\u00A0$1',
-  );
-}
-
-export function getExcerpt(text: string) {
-  const regex = /<p.*>(.*?)<\/p>/;
-  const match = regex.exec(text);
-  return match?.length ? match[0] : text;
-}
-
-export function isNewArrival(date: string, daysOld = 30) {
-  return (
-    new Date(date).valueOf() >
-    new Date().setDate(new Date().getDate() - daysOld).valueOf()
-  );
-}
-
-export function isDiscounted(price: MoneyV2, compareAtPrice: MoneyV2) {
-  if (compareAtPrice?.amount > price?.amount) {
-    return true;
-  }
-  return false;
-}
-
-function resolveToFromType(
-  {
-    customPrefixes,
-    pathname,
-    type,
-  }: {
-    customPrefixes: Record<string, string>;
-    pathname?: string;
-    type?: string;
-  } = {
-    customPrefixes: {},
-  },
-) {
-  if (!pathname || !type) return '';
-
-  /*
-    MenuItemType enum
-    @see: https://shopify.dev/api/storefront/unstable/enums/MenuItemType
-  */
-  const defaultPrefixes = {
-    BLOG: 'blogs',
-    COLLECTION: 'collections',
-    COLLECTIONS: 'collections', // Collections All (not documented)
-    FRONTPAGE: 'frontpage',
-    HTTP: '',
-    PAGE: 'pages',
-    CATALOG: 'collections/all', // Products All
-    PRODUCT: 'products',
-    SEARCH: 'search',
-    SHOP_POLICY: 'policies',
-  };
-
-  const pathParts = pathname.split('/');
-  const handle = pathParts.pop() || '';
-  const routePrefix: Record<string, string> = {
-    ...defaultPrefixes,
-    ...customPrefixes,
-  };
-
-  switch (true) {
-    // special cases
-    case type === 'FRONTPAGE':
-      return '/';
-
-    case type === 'ARTICLE': {
-      const blogHandle = pathParts.pop();
-      return routePrefix.BLOG
-        ? `/${routePrefix.BLOG}/${blogHandle}/${handle}/`
-        : `/${blogHandle}/${handle}/`;
-    }
-
-    case type === 'COLLECTIONS':
-      return `/${routePrefix.COLLECTIONS}`;
-
-    case type === 'SEARCH':
-      return `/${routePrefix.SEARCH}`;
-
-    case type === 'CATALOG':
-      return `/${routePrefix.CATALOG}`;
-
-    // common cases: BLOG, PAGE, COLLECTION, PRODUCT, SHOP_POLICY, HTTP
-    default:
-      return routePrefix[type]
-        ? `/${routePrefix[type]}/${handle}`
-        : `/${handle}`;
-  }
-}
-
-/*
-  Parse each menu link and adding, isExternal, to and target
-*/
-function parseItem(primaryDomain: string, env: Env, customPrefixes = {}) {
-  return function (
-    item:
-      | MenuFragment['items'][number]
-      | MenuFragment['items'][number]['items'][number],
-  ):
-    | EnhancedMenu['items'][0]
-    | EnhancedMenu['items'][number]['items'][0]
-    | null {
-    if (!item?.url || !item?.type) {
-      // eslint-disable-next-line no-console
-      console.warn('Invalid menu item.  Must include a url and type.');
-      return null;
-    }
-
-    // extract path from url because we don't need the origin on internal to attributes
-    const {host, pathname} = new URL(item.url);
-
-    const isInternalLink =
-      host === new URL(primaryDomain).host || host === env.PUBLIC_STORE_DOMAIN;
-
-    const parsedItem = isInternalLink
-      ? // internal links
-        {
-          ...item,
-          isExternal: false,
-          target: '_self',
-          to: resolveToFromType({type: item.type, customPrefixes, pathname}),
-        }
-      : // external links
-        {
-          ...item,
-          isExternal: true,
-          target: '_blank',
-          to: item.url,
-        };
-
-    if ('items' in item) {
-      return {
-        ...parsedItem,
-        items: item.items
-          .map(parseItem(primaryDomain, env, customPrefixes))
-          .filter(Boolean),
-      } as EnhancedMenu['items'][number];
-    } else {
-      return parsedItem as EnhancedMenu['items'][number]['items'][number];
-    }
-  };
-}
-
-/*
-  Recursively adds `to` and `target` attributes to links based on their url
-  and resource type.
-  It optionally overwrites url paths based on item.type
-*/
-export function parseMenu(
-  menu: MenuFragment,
-  primaryDomain: string,
-  env: Env,
-  customPrefixes = {},
-): EnhancedMenu | null {
-  if (!menu?.items) {
-    // eslint-disable-next-line no-console
-    console.warn('Invalid menu passed to parseMenu');
-    return null;
-  }
-
-  const parser = parseItem(primaryDomain, env, customPrefixes);
-
-  const parsedMenu = {
-    ...menu,
-    items: menu.items.map(parser).filter(Boolean),
-  } as EnhancedMenu;
-
-  return parsedMenu;
-}
-
-export const INPUT_STYLE_CLASSES =
-  'appearance-none rounded dark:bg-transparent border focus:border-primary/50 focus:ring-0 w-full py-2 px-3 text-primary/90 placeholder:text-primary/50 leading-tight focus:shadow-outline';
-
-export const getInputStyleClasses = (isError?: string | null) => {
-  return `${INPUT_STYLE_CLASSES} ${
-    isError ? 'border-red-500' : 'border-primary/20'
-  }`;
-};
-
-export function statusMessage(status: FulfillmentStatus) {
-  const translations: Record<FulfillmentStatus, string> = {
-    SUCCESS: 'Success',
-    PENDING: 'Pending',
-    OPEN: 'Open',
-    FAILURE: 'Failure',
-    ERROR: 'Error',
-    CANCELLED: 'Cancelled',
-  };
-  try {
-    return translations?.[status];
-  } catch (error) {
-    return status;
-  }
-}
+import type {
+  SanityCollectionPage,
+  SanityHomePage,
+  SanityModule,
+  SanityPage,
+  SanityProductPage,
+} from '~/lib/sanity';
+import {PRODUCTS_AND_COLLECTIONS} from '~/queries/shopify/product';
+import type {I18nLocale} from '~/types/shopify';
+import {useRootLoaderData} from '~/root';
 
 export const DEFAULT_LOCALE: I18nLocale = Object.freeze({
   ...countries.default,
@@ -270,45 +49,268 @@ export function getLocaleFromRequest(request: Request): I18nLocale {
 }
 
 export function usePrefixPathWithLocale(path: string) {
-  const rootData = useRouteLoaderData<RootLoader>('root');
-  const selectedLocale = rootData?.selectedLocale ?? DEFAULT_LOCALE;
+  const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
 
   return `${selectedLocale.pathPrefix}${
     path.startsWith('/') ? path : '/' + path
   }`;
 }
 
-export function useIsHomePath() {
-  const {pathname} = useLocation();
-  const rootData = useRouteLoaderData<RootLoader>('root');
-  const selectedLocale = rootData?.selectedLocale ?? DEFAULT_LOCALE;
-  const strippedPathname = pathname.replace(selectedLocale.pathPrefix, '');
-  return strippedPathname === '/';
-}
-
-export function parseAsCurrency(value: number, locale: I18nLocale) {
-  return new Intl.NumberFormat(locale.language + '-' + locale.country, {
-    style: 'currency',
-    currency: locale.currency,
-  }).format(value);
+export function validateLocale({
+  params,
+  context,
+}: {
+  context: LoaderFunctionArgs['context'];
+  params: LoaderFunctionArgs['params'];
+}) {
+  const {language, country} = context.storefront.i18n;
+  if (
+    params.lang &&
+    params.lang.toLowerCase() !== `${language}-${country}`.toLowerCase()
+  ) {
+    // If the lang URL param is defined, and it didn't match a valid localization,
+    // then the lang param must be invalid, send to the 404 page
+    throw notFound();
+  }
 }
 
 /**
- * Validates that a url is local
- * @param url
- * @returns `true` if local `false`if external domain
+ * Errors can exist in an errors object, or nested in a data field.
  */
-export function isLocalPath(url: string) {
+export function assertApiErrors(data: Record<string, any> | null | undefined) {
+  const errorMessage = data?.customerUserErrors?.[0]?.message;
+  if (errorMessage) {
+    throw new Error(errorMessage);
+  }
+}
+
+/**
+ * Map Shopify order status to a human-readable string
+ */
+export function statusMessage(status: string) {
+  const translations: Record<string, string> = {
+    ATTEMPTED_DELIVERY: 'Attempted delivery',
+    CANCELED: 'Canceled',
+    CONFIRMED: 'Confirmed',
+    DELIVERED: 'Delivered',
+    FAILURE: 'Failure',
+    FULFILLED: 'Fulfilled',
+    IN_PROGRESS: 'In Progress',
+    IN_TRANSIT: 'In transit',
+    LABEL_PRINTED: 'Label printed',
+    LABEL_PURCHASED: 'Label purchased',
+    LABEL_VOIDED: 'Label voided',
+    MARKED_AS_FULFILLED: 'Marked as fulfilled',
+    NOT_DELIVERED: 'Not delivered',
+    ON_HOLD: 'On Hold',
+    OPEN: 'Open',
+    OUT_FOR_DELIVERY: 'Out for delivery',
+    PARTIALLY_FULFILLED: 'Partially Fulfilled',
+    PENDING_FULFILLMENT: 'Pending',
+    PICKED_UP: 'Displayed as Picked up',
+    READY_FOR_PICKUP: 'Ready for pickup',
+    RESTOCKED: 'Restocked',
+    SCHEDULED: 'Scheduled',
+    SUBMITTED: 'Submitted',
+    UNFULFILLED: 'Unfulfilled',
+  };
   try {
-    // We don't want to redirect cross domain,
-    // doing so could create fishing vulnerability
-    // If `new URL()` succeeds, it's a fully qualified
-    // url which is cross domain. If it fails, it's just
-    // a path, which will be the current domain.
-    new URL(url);
-  } catch (e) {
-    return true;
+    return translations?.[status];
+  } catch (error) {
+    return status;
+  }
+}
+
+/**
+ * Combine products and modules into a single array, with modules inserted at
+ * regular intervals.
+ */
+const MODULE_INTERVAL = 2;
+const START_INDEX = 2;
+
+export function combineProductsAndModules({
+  modules,
+  products,
+}: {
+  products: Product[];
+  modules?: SanityModule[];
+}) {
+  let moduleIndex = 0;
+  return products.reduce<(SanityModule | Product)[]>((acc, val, index) => {
+    if (index >= START_INDEX && index % MODULE_INTERVAL === 0) {
+      const nextModule = modules?.[moduleIndex];
+      if (nextModule) {
+        acc.push(nextModule);
+        moduleIndex += 1;
+      }
+    }
+    acc.push(val);
+    return acc;
+  }, []);
+}
+
+/**
+ * Check if a product has multiple options, e.g. Color / Size / Title
+ */
+
+export const hasMultipleProductOptions = (options?: ProductOption[]) => {
+  const firstOption = options?.[0];
+  if (!firstOption) {
+    return false;
   }
 
-  return false;
+  return (
+    firstOption.name !== 'Title' && firstOption.values[0] !== 'Default Title'
+  );
+};
+
+/**
+ * Get the product options as a string, e.g. "Color / Size / Title"
+ */
+export const getProductOptionString = (options?: ProductOption[]) => {
+  return options
+    ?.map(({name, values}) => pluralize(name, values.length, true))
+    .join(' / ');
+};
+
+type StorefrontPayload = {
+  productsAndCollections: Product[] | Collection[];
+};
+
+/**
+ * Get data from Shopify for page components
+ */
+export async function fetchGids({
+  page,
+  context,
+}: {
+  page: SanityHomePage | SanityPage | SanityCollectionPage | SanityProductPage;
+  context: AppLoadContext;
+}) {
+  const productGids = extract(`..[_type == "productWithVariant"].gid`, page);
+  const collectionGids = extract(`..[_type == "collection"].gid`, page);
+
+  const {productsAndCollections} =
+    await context.storefront.query<StorefrontPayload>(
+      PRODUCTS_AND_COLLECTIONS,
+      {
+        variables: {
+          ids: [...productGids, ...collectionGids],
+        },
+      },
+    );
+
+  return extract(`..[id?]`, productsAndCollections) as (
+    | Product
+    | Collection
+    | ProductVariant
+  )[];
+}
+
+// TODO: better typing?
+export function useGid<
+  T extends Product | Collection | ProductVariant | ProductVariant['image'],
+>(id?: string | null): T | null | undefined {
+  const gids = useRef(useGids());
+  const fetcher = useFetcher();
+  const isPreview = Boolean(usePreviewContext());
+  const {selectedLocale} = useRootLoaderData();
+
+  const gid = useRef(gids.current.get(id as string) as T | null);
+
+  // In preview mode, if a product or collection is added
+  // then the fetcher is used to fetch the new data from
+  // the Storefront API
+  useEffect(() => {
+    if (isPreview && !gid.current && id) {
+      const apiUrl = `${
+        selectedLocale && `${selectedLocale.pathPrefix}`
+      }/api/fetchgids`;
+      if (fetcher.state === 'idle' && fetcher.data == null) {
+        fetcher.submit(
+          {ids: JSON.stringify([id])},
+          {method: 'post', action: apiUrl},
+        );
+      }
+
+      if (fetcher.data) {
+        const newGids = fetcher.data as (
+          | Product
+          | Collection
+          | ProductVariant
+        )[];
+
+        if (!Array.isArray(newGids)) {
+          return;
+        }
+
+        for (const newGid of newGids) {
+          if (gids.current.has(newGid.id)) {
+            continue;
+          }
+
+          gids.current.set(newGid.id, newGid);
+        }
+
+        gid.current = gids.current.get(id as string) as T | null;
+      }
+    }
+  }, [gids, id, isPreview, fetcher, selectedLocale]);
+
+  return gid.current;
+}
+
+export function useGids() {
+  const gids = useAsyncValue();
+
+  // TODO: this doesnt' seem to actually memoize...
+  return useMemo(() => {
+    const byGid = new Map<
+      string,
+      Product | Collection | ProductVariant | ProductVariant['image']
+    >();
+
+    if (!Array.isArray(gids)) {
+      return byGid;
+    }
+
+    for (const gid of gids) {
+      if (byGid.has(gid.id)) {
+        continue;
+      }
+
+      byGid.set(gid.id, gid);
+    }
+
+    return byGid;
+  }, [gids]);
+}
+
+/**
+ * A not found response. Sets the status code.
+ */
+export const notFound = (message = 'Not Found') =>
+  new Response(message, {
+    status: 404,
+    statusText: 'Not Found',
+  });
+
+/**
+ * A bad request response. Sets the status code and response body
+ */
+export const badRequest = <T>(data: T) =>
+  json(data, {status: 400, statusText: 'Bad Request'});
+
+/**
+ * Validates that a url is local to the current request.
+ */
+export function isLocalPath(request: Request, url: string) {
+  // Our domain, based on the current request path
+  const currentUrl = new URL(request.url);
+
+  // If url is relative, the 2nd argument will act as the base domain.
+  const urlToCheck = new URL(url, currentUrl.origin);
+
+  // If the origins don't match the slug is not on our domain.
+  return currentUrl.origin === urlToCheck.origin;
 }
