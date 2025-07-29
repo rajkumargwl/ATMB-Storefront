@@ -1,30 +1,71 @@
-import type {AppLoadContext, EntryContext} from '@shopify/remix-oxygen';
 import {RemixServer} from '@remix-run/react';
+import {createContentSecurityPolicy} from '@shopify/hydrogen';
+import type {AppLoadContext, EntryContext} from '@shopify/remix-oxygen';
 import isbot from 'isbot';
 import {renderToReadableStream} from 'react-dom/server';
-import {createContentSecurityPolicy} from '@shopify/hydrogen';
 
 export default async function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
   remixContext: EntryContext,
-  context: AppLoadContext,
+  loadContext: AppLoadContext,
 ) {
+  const {SANITY_PROJECT_ID: projectId} = loadContext.env;
+
   const {nonce, header, NonceProvider} = createContentSecurityPolicy({
-    shop: {
-      checkoutDomain: context.env.PUBLIC_CHECKOUT_DOMAIN,
-      storeDomain: context.env.PUBLIC_STORE_DOMAIN,
-    },
-    scriptSrc: [
-      'self',
+    imgSrc: [
+      `'self'`,
       'https://cdn.shopify.com',
-      'https://shopify.com',
-      'https://www.google-analytics.com',
-      'https://www.googletagmanager.com',
-      ...(process.env.NODE_ENV !== 'production' ? ['http://localhost:*'] : []),
+      'https://cdn.sanity.io',
+      'https://lh3.googleusercontent.com',
+      'https://modchicleather.com/',
+      'https://mail.google.com/mail/u/0/'
+    ],
+    styleSrc: [
+      `'self'`,
+      `'unsafe-inline'`,
+      'https://fonts.googleapis.com',
+      'https://cdn.shopify.com',
+    ],
+    scriptSrc: [
+      `'self'`,
+      'https://www.instagram.com',
+      'https://cdn.shopify.com',
+    ],
+    fontSrc: [
+      `'self'`,
+      'https://fonts.gstatic.com',
+    ],
+    frameAncestors: [
+      `'self'`,
+      'https://modchicleather.com/',
+      'https://mail.google.com/mail/u/0/',
+    ], // Who can embed *your* site
+    frameSrc: [
+      `'self'`,
+      'https://www.instagram.com',
+      'https://modchicleather.com/',
+      'https://mail.google.com/mail/u/0/',
+    ],
+    connectSrc: [
+      `'self'`,
+      'https://monorail-edge.shopifysvc.com',
+      `https://${projectId}.api.sanity.io`,
+      `wss://${projectId}.api.sanity.io`,
+      'https://modchicleather.com/',
+      'https://mail.google.com/mail/u/0/',
+      'http://localhost:*',
+      'ws://localhost:*',
+      'ws://127.0.0.1:*',
+      'ws://*.tryhydrogen.dev:*',
     ],
   });
+
+  // Only apply CSP in production
+  if (process.env.NODE_ENV === 'production') {
+    responseHeaders.set('Content-Security-Policy', header);
+  }
 
   const body = await renderToReadableStream(
     <NonceProvider>
@@ -34,19 +75,19 @@ export default async function handleRequest(
       nonce,
       signal: request.signal,
       onError(error) {
-        // eslint-disable-next-line no-console
         console.error(error);
         responseStatusCode = 500;
       },
     },
   );
 
+  // For bots, wait until fully rendered
   if (isbot(request.headers.get('user-agent'))) {
     await body.allReady;
   }
 
   responseHeaders.set('Content-Type', 'text/html');
-  responseHeaders.set('Content-Security-Policy', header);
+
   return new Response(body, {
     headers: responseHeaders,
     status: responseStatusCode,
