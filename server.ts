@@ -58,7 +58,6 @@ export default {
           return new HydrogenSession(storage, session);
         })(),
       ]);
-
       /**
        * Create Hydrogen's Storefront client.
        */
