@@ -103,7 +103,6 @@ export default {
          */
         return storefrontRedirect({request, response, storefront});
       }
-
       return response;
     } catch (error) {
       // eslint-disable-next-line no-console
