@@ -19,7 +19,7 @@ export default async function handleRequest(
       'https://cdn.shopify.com',
       'https://cdn.sanity.io',
       'https://lh3.googleusercontent.com',
-      'https://modchicleather.com/',
+      'https://rewoundtakeback.timex.com/',
       'https://mail.google.com/mail/u/0/'
     ],
     styleSrc: [
@@ -39,13 +39,13 @@ export default async function handleRequest(
     ],
     frameAncestors: [
       `'self'`,
-      'https://modchicleather.com/',
+      'https://rewoundtakeback.timex.com/',
       'https://mail.google.com/mail/u/0/',
     ], // Who can embed *your* site
     frameSrc: [
       `'self'`,
       'https://www.instagram.com',
-      'https://modchicleather.com/',
+      'https://rewoundtakeback.timex.com/',
       'https://mail.google.com/mail/u/0/',
     ],
     connectSrc: [
@@ -53,7 +53,7 @@ export default async function handleRequest(
       'https://monorail-edge.shopifysvc.com',
       `https://${projectId}.api.sanity.io`,
       `wss://${projectId}.api.sanity.io`,
-      'https://modchicleather.com/',
+      'https://rewoundtakeback.timex.com/',
       'https://mail.google.com/mail/u/0/',
       'http://localhost:*',
       'ws://localhost:*',
