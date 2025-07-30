@@ -31,7 +31,7 @@ export default function ServicePage() {
 
   return (
     <div className="w-full p-6">
-    <h1 className="text-2xl font-semibold mb-4">Your Mailbox</h1>
+    <h1 className="text-2xl font-semibold mb-20"></h1>
   
     <div className="border rounded overflow-hidden">
       <iframe

@@ -24,6 +24,12 @@ export default function Navigation({menuLinks}: Props) {
       },
       {
         _key: 'static-home',
+        title: 'Service',
+        slug: '/service',
+        _type: 'linkInternal',
+      },
+      {
+        _key: 'static-home',
         title: 'Locations',
         slug: '/',
         _type: 'linkInternal',
