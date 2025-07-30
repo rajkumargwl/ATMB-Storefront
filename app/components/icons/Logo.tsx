@@ -33,7 +33,7 @@ export default function LogoIcon({
     //   />
     // </svg>
     <img
-  src="https://www.anytimemailbox.com/wp-content/uploads/2024/08/homepage-anytime-mailbox-logo-white-2024.png"
+  src="https://cdn.anytimemailbox.com/portals/home/assets/images/homepage-anytime-mailbox-logo-black-2024.png"
   alt="Anytime Mailbox Logo"
   className="h-10 w-auto" // Adjust height and width as needed
 />
