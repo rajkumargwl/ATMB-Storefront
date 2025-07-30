@@ -20,7 +20,8 @@ export default async function handleRequest(
       'https://cdn.sanity.io',
       'https://lh3.googleusercontent.com',
       'https://rewoundtakeback.timex.com/',
-      'https://mail.google.com/mail/u/0/'
+      'https://mail.google.com/mail/u/0/',
+      'https://cdn.anytimemailbox.com/portals/home/assets/images/homepage-anytime-mailbox-logo-black-2024.png',
     ],
     styleSrc: [
       `'self'`,
