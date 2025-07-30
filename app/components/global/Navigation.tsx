@@ -15,10 +15,59 @@ type Props = {
 
 export default function Navigation({menuLinks}: Props) {
   const renderLinks = useCallback(() => {
-    return menuLinks?.map((link) => {
+    const staticLinks = [
+      {
+        _key: 'static-home',
+        title: 'Home',
+        slug: '/',
+        _type: 'linkInternal',
+      },
+      {
+        _key: 'static-home',
+        title: 'Locations',
+        slug: '/',
+        _type: 'linkInternal',
+      },
+      {
+        _key: 'static-home',
+        title: 'Solutions',
+        slug: '/',
+        _type: 'linkInternal',
+      },
+      {
+        _key: 'static-home',
+        title: 'Blog',
+        slug: '/',
+        _type: 'linkInternal',
+      },
+      {
+        _key: 'static-home',
+        title: 'How it works',
+        slug: '/',
+        _type: 'linkInternal',
+      },
+      {
+        _key: 'static-home',
+        title: 'About US',
+        slug: '/',
+        _type: 'linkInternal',
+      },
+      {
+        _key: 'static-contact',
+        title: 'Contact Us',
+        url: 'https://yourdomain.com/contact',
+        newWindow: false,
+        _type: 'linkExternal',
+      },
+    ];
+
+    const combinedLinks = [...staticLinks, ...(menuLinks ?? [])];
+
+    return combinedLinks.map((link) => {
       if (link._type === 'collectionGroup') {
         return <CollectionGroup collectionGroup={link} key={link._key} />;
       }
+
       if (link._type === 'linkExternal') {
         return (
           <div className="flex items-center" key={link._key}>
@@ -33,6 +82,7 @@ export default function Navigation({menuLinks}: Props) {
           </div>
         );
       }
+
       if (link._type === 'linkInternal') {
         if (!link.slug) {
           return null;
