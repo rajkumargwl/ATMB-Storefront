@@ -11,6 +11,7 @@ import type {SanityHomePage} from '~/lib/sanity';
 import {fetchGids, notFound, validateLocale} from '~/lib/utils';
 import {HOME_PAGE_QUERY} from '~/queries/sanity/home';
 
+
 const seo: SeoHandleFunction = ({data}) => ({
   title: data?.page?.seo?.title || 'Sanity x Hydrogen',
   description:
@@ -42,7 +43,6 @@ export async function loader({context, params}: LoaderFunctionArgs) {
 
   // Resolve any references to products on the Storefront API
   const gids = fetchGids({page, context});
-  console.log('page', page);
 
   return defer({
     page,
@@ -57,6 +57,8 @@ export default function Index() {
   const {page, gids} = useLoaderData<typeof loader>();
 
   return (
+    <>
+   
     <SanityPreview data={page} query={HOME_PAGE_QUERY}>
       {(page) => (
         <Suspense>
@@ -69,9 +71,12 @@ export default function Index() {
                 <ModuleGrid items={page.modules} />
               </div>
             )}
+          
           </Await>
         </Suspense>
+         
       )}
     </SanityPreview>
+    </>
   );
 }
