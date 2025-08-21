@@ -197,7 +197,7 @@ export default function Login() {
                 </p>
               </div>
               <a
-                href="https://store.xecurify.com/moas/broker/login/shopify/0dv7ud-pz.myshopify.com/account?idpname=azure_ad_UUR"
+                href="https://store.xecurify.com/moas/broker/login/shopify/0dv7ud-pz.myshopify.com/account?idpname=azure_ad_8EN"
                 className="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
               >
                 Login with Microsoft Entra
