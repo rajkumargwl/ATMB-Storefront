@@ -11,6 +11,11 @@ export const heroType = defineField({
       rows: 3,
     }),
     defineField({
+      name: 'subheading',
+      type: 'text',
+      rows: 3,
+    }),
+    defineField({
       name: 'description',
       type: 'text',
       rows: 3,

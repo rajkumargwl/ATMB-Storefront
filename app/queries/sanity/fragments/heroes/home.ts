@@ -23,5 +23,6 @@ export const HERO_HOME = groq`
       ${LINK_INTERNAL}
     },
   },
-  title
+  title,
+  subheading
 `;
