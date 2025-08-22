@@ -1,3 +1,9 @@
+// Polyfill process.env for Stripe in MiniOxygen / Cloudflare Workers added by dev
+if (typeof process === "undefined") {
+  (globalThis as any).process = {
+    env: {},
+  };
+}
 import {RemixServer} from '@remix-run/react';
 import {createContentSecurityPolicy} from '@shopify/hydrogen';
 import type {AppLoadContext, EntryContext} from '@shopify/remix-oxygen';
