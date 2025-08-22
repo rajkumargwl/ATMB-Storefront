@@ -91,12 +91,14 @@ export type SanityHeroHome = {
   content?: SanityImageWithProductHotspots | SanityProductWithVariant;
   link?: SanityLink;
   title?: string;
+  subheading?: string;
   data?: ProductWithNodes[] | ProductWithNodes;
 };
 
 export type SanityHeroPage = {
   content?: SanityImageWithProductHotspots | SanityProductWithVariant;
   title?: string;
+  subheading?: string;
   data?: ProductWithNodes[] | ProductWithNodes;
 };
 

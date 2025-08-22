@@ -149,6 +149,10 @@ export default function App() {
         <Seo />
         <Meta />
         <Links />
+        <script
+        src='//in.fw-cdn.com/32520975/1392281.js'
+        chat='true'>
+        </script>
       </head>
       <body>
         <PreviewProvider previewConfig={preview} fallback={<PreviewLoading />}>

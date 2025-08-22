@@ -28,6 +28,17 @@ export default function HomeHero({hero}: Props) {
         </h1>
       )}
 
+      {hero.subheading && (
+        <h1
+          className={clsx(
+            'mb-7 max-w-[60rem] whitespace-pre-line text-center text-normal',
+            'md:text-normal',
+          )}
+        >
+          {hero.subheading}
+        </h1>
+      )}
+
       {/* Link */}
       {hero.link && <LinkButton link={hero.link} />}
 
