@@ -39,6 +39,7 @@ export default async function handleRequest(
       `'self'`,
       'https://www.instagram.com',
       'https://cdn.shopify.com',
+      'https://js.stripe.com/basil/stripe.js',
     ],
     fontSrc: [
       `'self'`,
