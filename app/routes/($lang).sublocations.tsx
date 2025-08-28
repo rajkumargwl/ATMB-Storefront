@@ -93,7 +93,7 @@ export default function LocationsPage() {
 
       {/* Right Side Map */}
       <div className="w-full md:w-1/2 p-4">
-        <iframe
+        {/* <iframe
           title="map"
           width="100%"
           height="600"
@@ -103,7 +103,14 @@ export default function LocationsPage() {
           src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyA360dg2Scy3OZJnjw32OUEpSD0DoawVkY&q=${
             filtered[0]?.mlat || 34.0522
           },${filtered[0]?.mlong || -118.2437}`}
-        ></iframe>
+        ></iframe> */}
+        <iframe
+  src="https://www.google.com/maps?q=Hollywood,CA&output=embed"
+  width="100%"
+  height="600"
+  style={{border: 0}}
+  loading="lazy">
+</iframe>
       </div>
     </div>
   );
