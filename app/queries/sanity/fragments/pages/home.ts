@@ -1,5 +1,6 @@
 import groq from 'groq';
 
+<<<<<<< HEAD
 import { HERO_HOME } from '../heroes/home';
 import { MODULES } from '../modules';
 import { SEO } from '../seo';
@@ -95,5 +96,18 @@ export const HOME_PAGE = groq`
     ${MODULES}
   },
   subtitle,
+=======
+import {HERO_HOME} from '../heroes/home';
+import {MODULES} from '../modules';
+import {SEO} from '../seo';
+
+export const HOME_PAGE = groq`
+  hero {
+    ${HERO_HOME}
+  },
+  modules[] {
+    ${MODULES}
+  },
+>>>>>>> 3097ce2e79576a54ef13bd1a5712ec165470d926
   ${SEO}
 `;

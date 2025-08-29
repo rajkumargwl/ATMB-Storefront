@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // import groq from 'groq';
 
 // import {COLOR_THEME} from './fragments/colorTheme';
@@ -92,6 +93,28 @@ export const LAYOUT_QUERY = groq`
       copyright
     },
 
+=======
+import groq from 'groq';
+
+import {COLOR_THEME} from './fragments/colorTheme';
+import {LINKS} from './fragments/links';
+import {PORTABLE_TEXT} from './fragments/portableText/portableText';
+
+export const LAYOUT_QUERY = groq`
+  *[_type == 'settings'] | order(_updatedAt desc) [0] {
+    seo,
+    "menuLinks": menu.links[] {
+      ${LINKS}
+    },
+    footer {
+      links[] {
+        ${LINKS}
+      },
+      text[]{
+        ${PORTABLE_TEXT}
+      },
+    },
+>>>>>>> 3097ce2e79576a54ef13bd1a5712ec165470d926
     notFoundPage {
       body,
       "collectionGid": collection->store.gid,
