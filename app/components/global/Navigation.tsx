@@ -61,7 +61,11 @@ export default function Navigation({menuLinks}: Props) {
       {
         _key: 'static-contact',
         title: 'Contact Us',
+<<<<<<< HEAD
+        url: 'https://yourdomain.com/contact',
+=======
         url: '/contact-us',
+>>>>>>> 3097ce2e79576a54ef13bd1a5712ec165470d926
         newWindow: false,
         _type: 'linkExternal',
       },

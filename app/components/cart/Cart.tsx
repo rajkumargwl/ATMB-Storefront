@@ -280,12 +280,20 @@ export function CartActions({cart}: {cart: Cart}) {
         variantIdsAndQuantities={shopPayLineItems}
         storeDomain={storeDomain}
       />
+<<<<<<< HEAD
+      <Button
+        to={cart.checkoutUrl}
+        className={clsx([defaultButtonStyles(), 'w-1/2'])}
+      >
+        Checkout
+=======
       {/* {cart.checkoutUrl} */}
       <Button
         to="/checkout"
         className={clsx([defaultButtonStyles(), 'w-1/2'])}
       >
         Checkout 
+>>>>>>> 3097ce2e79576a54ef13bd1a5712ec165470d926
       </Button>
     </div>
   );

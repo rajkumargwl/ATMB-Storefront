@@ -91,14 +91,20 @@ export type SanityHeroHome = {
   content?: SanityImageWithProductHotspots | SanityProductWithVariant;
   link?: SanityLink;
   title?: string;
+<<<<<<< HEAD
+=======
   subheading?: string;
+>>>>>>> 3097ce2e79576a54ef13bd1a5712ec165470d926
   data?: ProductWithNodes[] | ProductWithNodes;
 };
 
 export type SanityHeroPage = {
   content?: SanityImageWithProductHotspots | SanityProductWithVariant;
   title?: string;
+<<<<<<< HEAD
+=======
   subheading?: string;
+>>>>>>> 3097ce2e79576a54ef13bd1a5712ec165470d926
   data?: ProductWithNodes[] | ProductWithNodes;
 };
 
@@ -309,3 +315,12 @@ export type SanitySeo = {
   image?: SanityAssetImage;
   title: string;
 };
+<<<<<<< HEAD
+
+
+export type SamplePage = {
+  title?: string;
+  description?: SanityAssetImage;
+};
+=======
+>>>>>>> 3097ce2e79576a54ef13bd1a5712ec165470d926
