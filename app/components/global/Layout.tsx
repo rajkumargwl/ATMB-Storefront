@@ -27,22 +27,14 @@ export function Layout({backgroundColor, children}: LayoutProps) {
         className="max-w-screen flex min-h-screen flex-col"
         style={{background: backgroundColor}}
       >
-<<<<<<< HEAD
-        {/* <Header /> */}
-=======
         <Header />
->>>>>>> 3097ce2e79576a54ef13bd1a5712ec165470d926
 
         <main className="relative grow" id="mainContent" role="main">
           <div className="mx-auto pb-overlap">{children}</div>
         </main>
       </div>
 
-<<<<<<< HEAD
       {/* <Footer /> */}
-=======
-      <Footer />
->>>>>>> 3097ce2e79576a54ef13bd1a5712ec165470d926
 
       {isPreview ? <PreviewBanner /> : <></>}
     </>
