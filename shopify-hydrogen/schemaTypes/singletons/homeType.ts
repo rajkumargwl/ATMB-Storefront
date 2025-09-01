@@ -11,11 +11,11 @@ export const homeType = defineField({
   icon: HomeIcon,
   groups: GROUPS,
   fields: [
-    defineField({
-      name: 'hero',
-      type: 'hero',
-      group: 'editorial',
-    }),
+    // defineField({
+    //   name: 'hero',
+    //   type: 'hero',
+    //   group: 'editorial',
+    // }),
     defineField({
       name: 'modules',
       type: 'array',
@@ -27,6 +27,12 @@ export const homeType = defineField({
         defineArrayMember({ type: 'imageWithProductHotspots', title: 'Image with Hotspots' }),
         defineArrayMember({ type: 'instagram' }),
         defineArrayMember({ type: 'products' }),
+        defineArrayMember({ type: 'hero', title: 'Hero' }),
+        defineArrayMember({ type: 'homeSection2', title: 'Home Section 2' }),
+        defineArrayMember({ type: 'homeSection3', title: 'Home Section 3' }),
+        defineArrayMember({ type: 'homeSection4', title: 'Home Section 4' }),
+        defineArrayMember({ type: 'faq', title: 'FAQ' }),
+        defineArrayMember({ type: 'testimonial', title: 'Testimonial' }),
       ],
       group: 'editorial',
     }),
