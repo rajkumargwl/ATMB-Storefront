@@ -24,9 +24,5 @@ export const HERO_HOME = groq`
     },
   },
   title,
-<<<<<<< HEAD
-   subtitle
-=======
   subheading
->>>>>>> 3097ce2e79576a54ef13bd1a5712ec165470d926
 `;

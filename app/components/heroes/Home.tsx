@@ -28,8 +28,6 @@ export default function HomeHero({hero}: Props) {
         </h1>
       )}
 
-<<<<<<< HEAD
-=======
       {hero.subheading && (
         <h1
           className={clsx(
@@ -41,7 +39,6 @@ export default function HomeHero({hero}: Props) {
         </h1>
       )}
 
->>>>>>> 3097ce2e79576a54ef13bd1a5712ec165470d926
       {/* Link */}
       {hero.link && <LinkButton link={hero.link} />}
 
