@@ -24,5 +24,18 @@ export const HERO_HOME = groq`
     },
   },
   title,
-  subheading
+  heading,
+  description,
+  buttonText,
+  buttonLink,
+  card {
+    title1,
+    subtitle1,
+    title2,
+    subtitle2,
+    
+  },
+  data[]-> {
+    ...${PRODUCT_WITH_VARIANT}
+  }
 `;
