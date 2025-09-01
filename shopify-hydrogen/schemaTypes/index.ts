@@ -17,6 +17,10 @@ import {heroType} from './objects/module/heroType'
 import {homeSection2} from './objects/module/homeSection2'
 import {homeSection3} from './objects/module/homeSection3'
 import {homeSection4} from './objects/module/homeSection4'
+import {plans} from './objects/module/plans'
+import {bundles} from './objects/module/bundles'
+import {whyBusinessChooseUs} from './objects/module/whyBusinessChooseUs'
+import {businessAtFingertips} from './objects/module/businessAtFingertips'
 import {faq} from './objects/module/faq'
 import {testimonial} from './objects/module/testimonial'
 import {imageCallToActionType} from './objects/module/imageCallToActionType'
@@ -70,8 +74,12 @@ const objects = [
   homeSection2,
   homeSection3,
   homeSection4,
+  plans,
+  bundles,
+  whyBusinessChooseUs,
   faq,
   testimonial,
+  businessAtFingertips,
   imageCallToActionType,
   imageFeaturesType,
   imageFeatureType,
