@@ -278,9 +278,9 @@ export default function Index() {
 
               {/* Page modules */}
               {page?.modules && (
-                <div className={clsx('mb-32 mt-24 px-4', 'md:px-8')}>
+                // <div className={clsx('mb-32 mt-24 px-4', 'md:px-8')}>
                   <ModuleGrid items={page.modules} />
-                </div>
+                // </div>
               )}
             </Await>
           </Suspense>
