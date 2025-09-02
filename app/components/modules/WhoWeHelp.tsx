@@ -1,21 +1,17 @@
-import clsx from 'clsx';
 import { useState } from 'react';
-
-import LinkButton from '~/components/elements/LinkButton';
-import HeroContent from '~/components/heroes/HeroContent';
-import type {SanityHomeSection3} from '~/lib/sanity';
+import type {SanityWhoWeHelp} from '~/lib/sanity';
 
 type Props = {
-  hero: SanityHomeSection3;
+  data: SanityWhoWeHelp;
 };
 
 
-export default function HomeHero({ hero }: Props) {
+export default function HomeHero({ data }: Props) {
     const [activeTab, setActiveTab] = useState(
-      hero?.tabs?.[0]?.label || ""
+      data?.tabs?.[0]?.label || ""
     );
     // Find active tab data
-    const activeData = hero?.tabs?.find(
+    const activeData = data?.tabs?.find(
     (t) => t.label === activeTab
     );
   return (
@@ -23,16 +19,16 @@ export default function HomeHero({ hero }: Props) {
          <div className="max-w-8xl mx-auto px-4">
     {/* Heading */}
     <div className="text-center">
-      <p className="text-sm text-gray-500 uppercase tracking-wide">{hero?.title || 'Who We Help'}</p>
+      <p className="text-sm text-gray-500 uppercase tracking-wide">{data?.title || 'Who We Help'}</p>
       <h2 className="text-2xl font-normal text-gray-900 mt-2">
-        {hero?.subtitle1 || 'From solo professionals to scaling businesses'} <br />
-        <span className="font-bold text-black">{hero?.subtitle2 || 'we’ve got you covered'}</span>
+        {data?.subtitle1 || 'From solo professionals to scaling businesses'} <br />
+        <span className="font-bold text-black">{data?.subtitle2 || 'we’ve got you covered'}</span>
       </h2>
     </div>
 
     {/* Tabs */}
     <div className="mt-8 flex flex-wrap justify-center gap-4 border-b border-[#C6CBCD]">
-    {hero?.tabs?.map((tab, i) => (
+    {data?.tabs?.map((tab, i) => (
     <button
         key={i}
         onClick={() => setActiveTab(tab.label)}

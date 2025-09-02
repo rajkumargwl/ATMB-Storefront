@@ -1,6 +1,11 @@
 import { useState } from "react";
+import type {SanityLocations} from '~/lib/sanity';
 
-export default function LocationSearch() {
+type Props = {
+  data: SanityLocations;
+};
+
+export default function Locations({ data }: Props) {
   const [sortBy, setSortBy] = useState("Most Operators");
 
   const locations = [
@@ -19,11 +24,10 @@ export default function LocationSearch() {
       {/* Title */}
       <div className="text-center mb-8">
         <h3 className="text-md font-bold text-gray-600">
-          Find a Anytime Mailbox Location Near You
+          {data.heading || 'Find a Anytime Mailbox Location Near You'}
         </h3>
         <p className="text-[30px] font-normal text-gray-900 mt-5">
-          Search by city, browse all available locations, or choose from our
-          most popular spots with the highest number of operators.
+        {data.description || ' Search by city, browse all available locations, or choose from our most popular spots with the highest number of operators.'}
         </p>
       </div>
 
@@ -31,7 +35,7 @@ export default function LocationSearch() {
       <div className="mb-10 bg-[#FAFAFA] border-[#E5E5E5] border p-9 rounded-sm">
           <input
             type="text"
-            placeholder="Enter city, state, or ZIP"
+            placeholder={data.searchPlaceholder || 'Enter state, city, or ZIP'}
             className="w-full rounded-lg border border-[#D4D4D4] py-3 px-4 pr-10 focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
       </div>
@@ -39,7 +43,7 @@ export default function LocationSearch() {
         {/* Controls with Top Locations */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
         {/* Left: Top Locations */}
-        <h2 className="text-lg font-semibold">Top Locations</h2>
+        <h2 className="text-lg font-semibold">{data.title || 'Top Locations'}</h2>
 
         {/* Right: Sort + Buttons */}
         <div className="flex flex-col sm:flex-row items-center gap-4">

@@ -1,77 +1,24 @@
 
+import type {SanityTestimonial} from '~/lib/sanity';
 
-const testimonials = [
-  {
-    type: "text",
-    name: "David K.",
-    role: "E-Commerce Entrepreneur",
-    review:
-      "I travel for work most of the year, and Anytime Mailbox has made managing my mail effortless. I get scans within hours, can forward packages anywhere, and never worry about missing important documents again.",
-    rating: 5,
-  },
-  {
-    type: "video",
-    name: "Sarah L.",
-    role: "Digital Nomad",
-  },
-  {
-    type: "text",
-    name: "Mark R.",
-    role: "Small Business Owner",
-    review:
-      "I needed a professional address without paying for office space. Anytime Mailbox gave me one in a prime location, and now I can manage all my business mail online—fast, secure, and affordable.",
-    rating: 5,
-  },
-  {
-    type: "text",
-    name: "David K.",
-    role: "E-Commerce Entrepreneur",
-    review:
-      "I travel for work most of the year, and Anytime Mailbox has made managing my mail effortless. I get scans within hours, can forward packages anywhere, and never worry about missing important documents again.",
-    rating: 5,
-  },
-  {
-    type: "text",
-    name: "James R.",
-    role: "E-Commerce Seller",
-    review:
-      "As a freelancer, privacy is important. Anytime Mailbox keeps my home address private and lets me access client documents from anywhere, keeping my work organized and stress-free.",
-    rating: 5,
-  },
-  {
-    type: "video",
-    name: "Lisa T.",
-    role: "Expat",
-  },
-  {
-    type: "text",
-    name: "James R.",
-    role: "E-Commerce Seller",
-    review:
-      "As a freelancer, privacy is important. Anytime Mailbox keeps my home address private and lets me access client documents from anywhere, keeping my work organized and stress-free.",
-    rating: 5,
-  },
-  {
-    type: "video",
-    name: "Emily P.",
-    role: "Freelance Designer",
-  },
-];
+type Props = {
+  data: SanityTestimonial;
+};
 
-export default function Testimonials() {
+export default function Testimonials({ data }: Props) {
   return (
     <section className="py-16 bg-[#F2F5F7]">
       <div className="max-w-6xl mx-auto px-6 text-center">
         <h3 className="text-sm font-bold text-gray-500">
-          Thousand trust Anytime Mailbox
+          {data?.headline || "Thousand trust Anytime Mailbox"}
         </h3>
         <p className="text-2xl md:text-2xl text-gray-900 mt-2">
-          See What Our Customers Are Saying
+        {data?.subheadline || "See What Our Customers Are Saying"}
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
-          {testimonials.map((item, idx) =>
-            item.type === "text" ? (
+          {data?.testimonials?.map((item, idx) =>
+            item.type === "quote" ? (
               <div
                 key={idx}
                 className="bg-white rounded-2xl shadow-sm p-6 flex flex-col justify-between text-left"
@@ -91,12 +38,21 @@ export default function Testimonials() {
                     ))}
                   </div>
                   <p className="text-[#374151] text-[18px] leading-[150%]">
-                    {item.review}
+                    {item.quote}
                   </p>
                 </div>
+               <div className="flex items-center mt-6">
+                {item.authorImage && (
+                  <img
+                    src={item.authorImage?.url}
+                    alt={item.authorName}
+                    className="w-12 h-12 rounded-full object-cover"
+                  />
+                )}
+                </div>
                 <div className="mt-4">
-                  <p className="font-semibold text-gray-800">{item.name}</p>
-                  <p className="text-sm text-gray-500">{item.role}</p>
+                  <p className="font-semibold text-gray-800">{item.authorName}</p>
+                  <p className="text-sm text-gray-500">{item.authorTitle}</p>
                 </div>
               </div>
             ) : (
@@ -115,8 +71,8 @@ export default function Testimonials() {
                   </svg>
                 </button>
                 <div className="mt-6 text-center">
-                  <p className="font-semibold text-gray-800">{item.name}</p>
-                  <p className="text-sm text-gray-600">{item.role}</p>
+                  <p className="font-semibold text-gray-800">{item.authorName}</p>
+                  <p className="text-sm text-gray-600">{item.authorTitle}</p>
                 </div>
               </div>
             )
