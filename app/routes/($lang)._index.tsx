@@ -15,13 +15,7 @@ import ModuleGrid from '~/components/modules/ModuleGrid';
 import type {SanityHomePage} from '~/lib/sanity';
 import {fetchGids, notFound, validateLocale} from '~/lib/utils';
 import {HOME_PAGE_QUERY} from '~/queries/sanity/home';
-import HomeSection4 from '~/components/modules/HomeSection4';
-import HomeSection5 from '~/components/modules/HomeSection5';
-import HomeSection6 from '~/components/modules/HomeSection6';
-import HomeSection7 from '~/components/modules/HomeSection7';
-import HomeSection8 from '~/components/modules/HomeSection8';
-import HomeSection9 from '~/components/modules/HomeSection9';
-import HomeSection10 from '~/components/modules/HomeSection10';
+
 
 const seo: SeoHandleFunction = ({data}) => ({
   title: data?.page?.seo?.title || 'Sanity x Hydrogen',
@@ -136,13 +130,6 @@ export default function Index() {
                   <ModuleGrid items={page.modules} />
                 // </div>
                )}
-              <HomeSection4 />
-              <HomeSection5 />
-              <HomeSection6 />
-              <HomeSection7 />
-              <HomeSection8 />
-              <HomeSection9 />
-              <HomeSection10 />
             </Await>
           </Suspense>
         )}
