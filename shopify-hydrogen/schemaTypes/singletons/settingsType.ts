@@ -1,12 +1,10 @@
-
 import {CogIcon, ControlsIcon, ErrorOutlineIcon, MenuIcon, SearchIcon} from '@sanity/icons'
 import {defineType, defineField} from 'sanity'
- 
+
 const TITLE = 'Settings'
 interface ProductOptions {
   title: string
 }
- 
 export const settingsType = defineType({
   name: 'settings',
   title: TITLE,
@@ -95,5 +93,3 @@ export const settingsType = defineType({
     },
   },
 })
- 
- 

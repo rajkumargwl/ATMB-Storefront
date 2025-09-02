@@ -23,10 +23,17 @@ export const HERO_HOME = groq`
       ${LINK_INTERNAL}
     },
   },
-  title,
-<<<<<<< HEAD
-   subtitle
-=======
-  subheading
->>>>>>> 9d8d655 (Pushing code of header and footer 02/09)
+  heading,
+  description,
+  buttonText,
+  buttonLink,
+  card {
+    title1,
+    subtitle1,
+    title2,
+    subtitle2,
+  },
+  data[]-> {
+    ...${PRODUCT_WITH_VARIANT}
+  }
 `;

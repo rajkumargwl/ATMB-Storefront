@@ -94,58 +94,69 @@ type Props = {
 
 export default function ModuleGrid({items}: Props) {
   return (
-    <ul className="grid grid-cols-1 gap-x-[7.5vw] gap-y-[7.5vw] md:grid-cols-2">
-      {items.map((item, index) => {
-        const productLayout = PRODUCT_LAYOUT[index % PRODUCT_LAYOUT.length];
-        const productImageAspect = CLASSES.imageAspect[productLayout.aspect];
-        const productWidth = CLASSES.width[productLayout.width];
-        const productLayoutClasses = clsx([
-          CLASSES.flexAlign[productLayout.flex.align],
-          CLASSES.flexJustify[productLayout.flex.justify],
-          productLayout.offsetY ? 'md:mt-[5vw]' : 'mt-0',
-        ]);
+    <>
+       {items.map((item, index) => {
+         return (
+           <Module
+           module={item}
+         />
+         );
+       })}
+    </>
+   );
+  // return (
+  //   <ul className="grid grid-cols-1 gap-x-[7.5vw] gap-y-[7.5vw] md:grid-cols-2">
+  //     {items.map((item, index) => {
+  //       const productLayout = PRODUCT_LAYOUT[index % PRODUCT_LAYOUT.length];
+  //       const productImageAspect = CLASSES.imageAspect[productLayout.aspect];
+  //       const productWidth = CLASSES.width[productLayout.width];
+  //       const productLayoutClasses = clsx([
+  //         CLASSES.flexAlign[productLayout.flex.align],
+  //         CLASSES.flexJustify[productLayout.flex.justify],
+  //         productLayout.offsetY ? 'md:mt-[5vw]' : 'mt-0',
+  //       ]);
 
-        if (isModule(item)) {
-          const isProductModule = item._type === 'module.product';
+  //       if (isModule(item)) {
+  //         const isProductModule = item._type === 'module.product';
 
-          // Render modules
-          return (
-            <li
-              className={clsx([
-                'flex overflow-hidden',
-                isProductModule
-                  ? productLayoutClasses
-                  : 'items-center justify-center',
-                FULL_WIDTH_MODULE_TYPES.includes(item._type)
-                  ? 'md:col-span-2'
-                  : 'md:col-span-1',
-              ])}
-              key={item._key}
-            >
-              <div className={clsx(isProductModule ? productWidth : 'w-full')}>
-                <Module
-                  imageAspectClassName={productImageAspect}
-                  module={item}
-                />
-              </div>
-            </li>
-          );
-        } else {
-          // Render product cards
-          return (
-            <li className={productLayoutClasses} key={item.id}>
-              <div className={productWidth}>
-                <ProductCard
-                  imageAspectClassName={productImageAspect}
-                  storefrontProduct={item}
-                />
-              </div>
-            </li>
-          );
-        }
-      })}
-    </ul>
-  );
+  //         // Render modules
+  //         return (
+  //           <li
+  //             className={clsx([
+  //               'flex overflow-hidden',
+  //               isProductModule
+  //                 ? productLayoutClasses
+  //                 : 'items-center justify-center',
+  //               FULL_WIDTH_MODULE_TYPES.includes(item._type)
+  //                 ? 'md:col-span-2'
+  //                 : 'md:col-span-1',
+  //             ])}
+  //             key={item._key}
+  //           >
+  //             <div className={clsx(isProductModule ? productWidth : 'w-full')}>
+  //               <Module
+  //                 imageAspectClassName={productImageAspect}
+  //                 module={item}
+  //               />
+  //             </div>
+  //           </li>
+  //         );
+  //       } else {
+  //         // Render product cards
+  //         return (
+  //           <li className={productLayoutClasses} key={item.id}>
+  //             <div className={productWidth}>
+  //               <ProductCard
+  //                 imageAspectClassName={productImageAspect}
+  //                 storefrontProduct={item}
+  //               />
+  //             </div>
+  //           </li>
+  //         );
+  //       }
+  //     })}
+  //   </ul>
+  // );
 }
 
 const isModule = (
