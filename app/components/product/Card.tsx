@@ -23,29 +23,33 @@ export default function ProductCard({
   storefrontProduct,
   variantGid,
 }: Props) {
+  // ✅ Guard: variants may be missing
+  const variants = storefrontProduct?.variants?.nodes ?? [];
+  if (variants.length === 0) {
+    return null; // No variants → don’t render
+  }
+
   const firstVariant =
     useGid<ProductVariant>(variantGid) ??
-    storefrontProduct.variants.nodes.find(
-      (variant) => variant.id == variantGid,
-    ) ??
-    storefrontProduct.variants.nodes[0];
+    variants.find((variant) => variant.id === variantGid) ??
+    variants[0];
 
-  if (firstVariant == null) {
+  if (!firstVariant) {
     return null;
   }
 
   const multipleProductOptions = hasMultipleProductOptions(
-    storefrontProduct.options,
+    storefrontProduct.options ?? [],
   );
-  const productOptions = getProductOptionString(storefrontProduct.options);
+  const productOptions = getProductOptionString(storefrontProduct.options ?? []);
 
   const productAnalytics: ShopifyAnalyticsProduct = {
-    productGid: storefrontProduct.id ? storefrontProduct.id : '',
+    productGid: storefrontProduct.id ?? '',
     variantGid: firstVariant.id,
-    name: storefrontProduct.title ? storefrontProduct.title : '',
-    variantName: firstVariant.title,
-    brand: storefrontProduct.vendor ? storefrontProduct.vendor : '',
-    price: firstVariant.price.amount,
+    name: storefrontProduct.title ?? '',
+    variantName: firstVariant.title ?? '',
+    brand: storefrontProduct.vendor ?? '',
+    price: firstVariant.price?.amount ?? '0',
     quantity: 1,
   };
 
@@ -73,16 +77,13 @@ export default function ProductCard({
 
           {/* Badges */}
           <div className="absolute left-4 top-4">
-            {/* Sale */}
             {firstVariant?.availableForSale && firstVariant?.compareAtPrice && (
               <Badge label="Sale" tone="critical" />
             )}
-            {/* Sold out */}
             {!firstVariant?.availableForSale && <Badge label="Sold out" />}
           </div>
         </Link>
 
-        {/* Quick add to cart */}
         {firstVariant.availableForSale && (
           <div
             className={clsx(
@@ -111,29 +112,22 @@ export default function ProductCard({
 
       <div className="mt-3 text-md">
         <div className="space-y-1">
-          {/* Title */}
           <Link
-            className={clsx(
-              'font-bold', //
-              'hover:underline',
-            )}
+            className={clsx('font-bold', 'hover:underline')}
             to={`/products/${storefrontProduct.handle}`}
           >
             {storefrontProduct.title}
           </Link>
 
-          {/* Vendor */}
           {storefrontProduct.vendor && (
             <div className="text-darkGray">{storefrontProduct.vendor}</div>
           )}
 
-          {/* Product options */}
           {multipleProductOptions && (
             <div className="text-darkGray">{productOptions}</div>
           )}
         </div>
 
-        {/* Price / compare at price */}
         <div className="mt-3 flex font-bold">
           {firstVariant.compareAtPrice && (
             <span className="text-darkGray">

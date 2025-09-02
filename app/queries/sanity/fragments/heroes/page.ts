@@ -13,10 +13,5 @@ export const HERO_PAGE = groq`
       ...${PRODUCT_WITH_VARIANT}
     },
   },
-<<<<<<< HEAD
-  title,
-  subtitle
-=======
   title
->>>>>>> 3097ce2e79576a54ef13bd1a5712ec165470d926
 `;

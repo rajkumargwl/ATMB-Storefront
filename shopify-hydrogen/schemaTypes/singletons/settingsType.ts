@@ -5,7 +5,6 @@ const TITLE = 'Settings'
 interface ProductOptions {
   title: string
 }
-
 export const settingsType = defineType({
   name: 'settings',
   title: TITLE,
@@ -42,7 +41,7 @@ export const settingsType = defineType({
     }),
     defineField({
       name: 'footer',
-      type: 'footerSettings',
+      type: 'footer',
       group: 'navigation',
     }),
     defineField({
