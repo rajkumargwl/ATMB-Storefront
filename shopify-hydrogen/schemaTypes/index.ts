@@ -50,11 +50,16 @@ import {shopifyProductType} from './objects/shopify/shopifyProductType'
 import {shopifyProductVariantType} from './objects/shopify/shopifyProductVariantType'
 import {spotType} from './objects/hotspot/spotType'
 import {menu} from './objects/shopify/menu'
+import {keyHighlights} from './objects/module/keyHighlights'
+import {detailedFeatureType} from './objects/module/detailedFeature'
+
 import location from './location'
 // Objects used as annotations must be imported first
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
 
 const objects = [
+  detailedFeatureType,
+  keyHighlights,
   accordionGroupType,
   accordionType,
   calloutType,

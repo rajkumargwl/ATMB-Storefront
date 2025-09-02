@@ -1,227 +1,155 @@
-<<<<<<< HEAD
-import React from "react";
+// app/components/global/Footer.tsx
+import { Link } from '@remix-run/react';
 
-const Footer = ({ data }) => {
+type FooterProps = {
+  data: {
+    title?: string;
+    logo?: { asset?: { url?: string } };
+    description?: string;
+    companyColumn?: { title?: string; links?: { label: string; link?: string }[] };
+    servicesColumn?: { title?: string; links?: { label: string; link?: string }[] };
+    locationsColumn?: { title?: string; links?: { label: string; link?: string; highlight?: boolean }[] };
+    appButtons?: { icon?: { asset?: { url?: string } }; link?: string }[];
+    socialLinks?: { icon?: { asset?: { url?: string } }; link?: string }[];
+    bottomLinks?: { label: string; link?: string }[];
+  };
+};
+
+export default function Footer({ data }: FooterProps) {
   if (!data) return null;
 
-  const {
-    links = [],
-    text = "",
-    contactInfo,
-    latestNews = [],
-    openingHours = [],
-      copyright = "",
-    socialLinks = {},
-  } = data;
-
-  // Convert socialLinks object into an array
-  const socialLinksArray = Object.entries(socialLinks).map(([label, url]) => ({
-    label,
-    url,
-    icon: null, // If you have icons, replace this with actual icon paths
-  }));
-
   return (
-    <footer className="bg-gray-50 relative font-sans mr-auto">
-      <div className="max-w-[90rem] mx-auto px-4">
-        <div className="flex flex-wrap gap-8 pt-10">
-          {/* Contact Info */}
-          {contactInfo && (
-            <div className="flex-1 sm:basis-1/2 lg:basis-1/4 mb-5">
-              <h3 className="text-xl font-bold text-gray-800 mb-6">Contact Info</h3>
-              {contactInfo.description && (
-                <p className="text-sm text-gray-600 mb-4">{contactInfo.description}</p>
+    <footer className="bg-black text-white">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-12">
+        {/* Top Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
+          {/* Logo + Title + Description */}
+          <div>
+            <div className="flex items-center gap-3 mb-4">
+              {data.logo?.asset?.url && (
+                <img
+                  src={data.logo.asset.url}
+                  alt={data.title || 'Logo'}
+                  className="h-8"
+                />
               )}
-              {contactInfo.phone && (
-                <p className="flex items-center text-gray-700 text-sm mb-2">
-                  <a href={`tel:${contactInfo.phone}`} className="hover:text-blue-600">
-                    {contactInfo.phone}
-                  </a>
-                </p>
+              {data.title && (
+                <span className="text-lg font-semibold">{data.title}</span>
               )}
-              {contactInfo.email && (
-                <p className="flex items-center text-gray-700 text-sm mb-2">
-                  <a href={`mailto:${contactInfo.email}`} className="hover:text-blue-600">
-                    {contactInfo.email}
-                  </a>
-                </p>
-              )}
+            </div>
+            {data.description && (
+              <p className="text-sm">{data.description}</p>
+            )}
+          </div>
+
+          {/* Company */}
+          {data.companyColumn && (
+            <div>
+              <h4 className="text-sm font-semibold mb-3">
+                {data.companyColumn.title}
+              </h4>
+              <ul className="space-y-2">
+                {data.companyColumn.links?.map((link, idx) => (
+                  <li key={idx}>
+                    <Link to={link.link || '#'} className="text-sm">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
             </div>
           )}
 
-          {/* Latest News */}
-          {latestNews.length > 0 && (
-            <div className="flex-1 basis-full sm:basis-1/2 lg:basis-1/4 mb-5">
-              <h3 className="text-xl font-bold text-gray-800 mb-6">Latest News</h3>
-              {latestNews.map((item, idx) => (
-                <div className="flex items-center mb-4" key={idx}>
-                  {item.imageUrl && (
-                    <img
-                      src={item.imageUrl}
-                      alt={item.title}
-                      className="w-20 h-20 rounded-full object-contain mr-4"
-                    />
-                  )}
-                  <div>
-                    <p className="text-base font-bold text-gray-800 m-0">{item.title}</p>
-                    {item.date && (
-                      <p className="text-sm text-gray-500 mt-1">{item.date}</p>
+          {/* Services */}
+          {data.servicesColumn && (
+            <div>
+              <h4 className="text-sm font-semibold mb-3">
+                {data.servicesColumn.title}
+              </h4>
+              <ul className="space-y-2">
+                {data.servicesColumn.links?.map((link, idx) => (
+                  <li key={idx}>
+                    <Link to={link.link || '#'} className="text-sm">
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Locations */}
+          {data.locationsColumn && (
+            <div>
+              <h4 className="text-sm font-semibold mb-3">
+                {data.locationsColumn.title}
+              </h4>
+              <ul className="space-y-2">
+                {data.locationsColumn.links?.map((link, idx) => (
+                  <li key={idx}>
+                    <Link
+                      to={link.link || '#'}
+                      className={`text-sm ${link.highlight ? 'font-semibold' : ''}`}
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {/* App Download */}
+          {data.appButtons && (
+            <div>
+              <h4 className="text-sm font-semibold mb-3">
+                Download App
+              </h4>
+              <div className="flex flex-col space-y-3">
+                {data.appButtons.map((btn, idx) => (
+                  <a key={idx} href={btn.link} target="_blank" rel="noreferrer">
+                    {btn.icon?.asset?.url && (
+                      <img
+                        src={btn.icon.asset.url}
+                        alt="App button"
+                        className="h-10"
+                      />
                     )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* Opening Hours + Social Links */}
-          {(openingHours.length > 0 || socialLinksArray.length > 0) && (
-            <div className="flex-1 basis-full sm:basis-1/2 lg:basis-1/4 mb-5">
-              <h3 className="text-xl font-bold text-gray-800 mb-6">Opening Hours</h3>
-              {openingHours.map((hour, idx) => (
-                <p key={idx} className="text-sm text-gray-600 mb-2 flex justify-between">
-                  {hour.day}{" "}
-                  <span className="font-normal text-gray-800">{hour.time}</span>
-                </p>
-              ))}
-              <div className="mt-5 flex gap-4">
-                {socialLinksArray.map((link, idx) => (
-                  <a
-                    key={idx}
-                    href={link.url}
-                    aria-label={link.label}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hover:fill-blue-600"
-                  >
-                    {/* If you have icons, render them here */}
-                    <span className="capitalize">{link.label}</span>
                   </a>
                 ))}
               </div>
             </div>
           )}
         </div>
-      </div>
 
-      {/* Bottom Footer */}
-      <div className="bg-gray-50 py-5 border-t border-gray-200 text-sm text-gray-600 w-full">
-        <div className="max-w-[90rem] mx-auto px-4 flex flex-col md:flex-row justify-between items-center flex-wrap gap-4 md:gap-0">
-          <div className="text-center md:text-left">{text}</div>
-          <ul className="list-none p-0 m-0 flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-6 text-sm">
-            {links.map((link, idx) => (
-              <li key={idx}>
-                <a
-                  href={link.href}
-                  className="hover:text-[#7ab730] text-gray-600 no-underline"
-                >
-                  {link.label}
-                </a>
-              </li>
+        {/* Divider */}
+        <div className="border-t border-gray-800 mt-8 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
+          {/* Bottom Links */}
+          <div className="flex flex-wrap justify-center gap-6 text-xs">
+            {data.bottomLinks?.map((link, idx) => (
+              <Link key={idx} to={link.link || '#'} className="text-xs">
+                {link.label}
+              </Link>
             ))}
-          </ul>
-        </div>
-        {/* Copyright */}
-        {copyright && (
-          <div className="mt-4 text-center text-xs text-gray-500">
-            {copyright}
           </div>
-        )}
+
+          {/* Social Icons */}
+          <div className="flex items-center gap-4">
+            <span className="text-sm">Follow Us</span>
+            {data.socialLinks?.map((social, idx) => (
+              <a key={idx} href={social.link} target="_blank" rel="noreferrer">
+                {social.icon?.asset?.url && (
+                  <img
+                    src={social.icon.asset.url}
+                    alt="Social"
+                    className="h-5 w-5"
+                  />
+                )}
+              </a>
+            ))}
+          </div>
+        </div>
       </div>
-    </footer>
-  );
-};
-
-export default Footer;
-=======
-import clsx from 'clsx';
-
-import SanityFooter from '~/components/global/SanityFooter';
-import LogoIcon from '~/components/icons/Logo';
-import {Link} from '~/components/Link';
-import PortableText from '~/components/portableText/PortableText';
-import type {SanityLink} from '~/lib/sanity';
-import {useRootLoaderData} from '~/root';
-
-/**
- * A component that specifies the content of the footer on the website
- */
-export default function Footer() {
-  const {layout} = useRootLoaderData();
-  const {footer} = layout || {};
-
-  const renderLinks = footer?.links?.map((link: SanityLink) => {
-    if (link._type === 'linkExternal') {
-      return (
-        <div className="mb-6" key={link._key}>
-          <a
-            className="linkTextNavigation"
-            href={link.url}
-            rel="noreferrer"
-            target={link.newWindow ? '_blank' : '_self'}
-          >
-            {link.title}
-          </a>
-        </div>
-      );
-    }
-    if (link._type === 'linkInternal') {
-      if (!link.slug) {
-        return null;
-      }
-
-      return (
-        <div className="mb-6" key={link._key}>
-          <Link className="linkTextNavigation" to={link.slug}>
-            {link.title}
-          </Link>
-        </div>
-      );
-    }
-    return null;
-  });
-
-  return (
-    <footer className="-mt-overlap" role="contentinfo">
-      {/* AVKA Footer */}
-      <div
-        className={clsx(
-          'align-start relative overflow-hidden rounded-xl bg-peach px-4 py-8', //
-          'md:px-8 md:py-10',
-        )}
-      >
-        <div
-          className={clsx(
-            'flex flex-col justify-between', //
-            'md:flex-row',
-          )}
-        >
-          <div className="pb-4">
-            <LogoIcon />
-          </div>
-
-          <div
-            className={clsx(
-              'my-16 w-full max-w-[22rem] columns-2 gap-x-8 self-start text-md font-bold',
-              'md:my-0 md:max-w-[27rem]',
-            )}
-          >
-            {renderLinks}
-          </div>
-        </div>
-        {footer?.text && (
-          <PortableText
-            blocks={footer.text}
-            className={clsx(
-              'text-xs', //
-              'text-sm text-darkGray',
-            )}
-          />
-        )}
-      </div>
-
-      {/* Sanity Footer */}
-      <SanityFooter />
     </footer>
   );
 }
->>>>>>> 3097ce2e79576a54ef13bd1a5712ec165470d926

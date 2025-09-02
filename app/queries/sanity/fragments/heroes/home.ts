@@ -23,7 +23,6 @@ export const HERO_HOME = groq`
       ${LINK_INTERNAL}
     },
   },
-  title,
   heading,
   description,
   buttonText,
@@ -33,7 +32,6 @@ export const HERO_HOME = groq`
     subtitle1,
     title2,
     subtitle2,
-    
   },
   data[]-> {
     ...${PRODUCT_WITH_VARIANT}

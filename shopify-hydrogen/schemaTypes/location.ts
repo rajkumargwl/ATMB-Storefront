@@ -8,19 +8,23 @@ export default defineType({
   icon: PinIcon,
   fields: [
     defineField({
-      name: 'name',
-      title: 'Location Name',
-      type: 'string',
-      validation: (Rule) => Rule.required().min(2),
-    }),
-    defineField({
-      name: 'address',
-      title: 'Address',
+      name: 'locationId',
+      title: 'Location ID',
       type: 'string',
     }),
     defineField({
-      name: 'city',
-      title: 'City',
+      name: 'parentLocationId',
+      title: 'Parent Location ID',
+      type: 'string',
+    }),
+    defineField({
+      name: 'country',
+      title: 'Country',
+      type: 'string',
+    }),
+    defineField({
+      name: 'countryCode',
+      title: 'Country Code',
       type: 'string',
     }),
     defineField({
@@ -29,8 +33,18 @@ export default defineType({
       type: 'string',
     }),
     defineField({
-      name: 'country',
-      title: 'Country',
+      name: 'stateCode',
+      title: 'State Code',
+      type: 'string',
+    }),
+    defineField({
+      name: 'city',
+      title: 'City',
+      type: 'string',
+    }),
+    defineField({
+      name: 'addressLine1',
+      title: 'Address Line 1',
       type: 'string',
     }),
     defineField({
@@ -41,12 +55,51 @@ export default defineType({
     defineField({
       name: 'coordinates',
       title: 'Coordinates',
-      type: 'geopoint',
+      type: 'geopoint', // stores latitude + longitude
+    }),
+    defineField({
+      name: 'displayName',
+      title: 'Display Name',
+      type: 'string',
+    }),
+    defineField({
+      name: 'webkey',
+      title: 'Web Key',
+      type: 'string',
+    }),
+    defineField({
+      name: 'featureList',
+      title: 'Feature List',
+      type: 'array',
+      of: [{type: 'string'}],
+    }),
+    defineField({
+      name: 'ratingList',
+      title: 'Rating List',
+      type: 'array',
+      of: [{type: 'string'}],
+    }),
+    defineField({
+      name: 'attributionList',
+      title: 'Attribution List',
+      type: 'array',
+      of: [{type: 'string'}],
+    }),
+    defineField({
+      name: 'attributeList',
+      title: 'Attribute List',
+      type: 'array',
+      of: [{type: 'string'}],
+    }),
+    defineField({
+      name: 'createdAt',
+      title: 'Created At',
+      type: 'datetime',
     }),
   ],
   preview: {
     select: {
-      title: 'name',
+      title: 'displayName',
       subtitle: 'city',
     },
   },

@@ -499,9 +499,12 @@ export type SanitySeo = {
   image?: SanityAssetImage;
   title: string;
 };
+<<<<<<< HEAD
 
 
 export type SamplePage = {
   title?: string;
   description?: SanityAssetImage;
 };
+=======
+>>>>>>> 9d8d655 (Pushing code of header and footer 02/09)
