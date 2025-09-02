@@ -56,6 +56,7 @@ export const productType = defineType({
       description: 'Product data from Shopify (read-only)',
       group: 'shopifySync',
     }),
+<<<<<<< HEAD
      defineField({
       name: 'modules',
       title: 'Modules',
@@ -67,6 +68,8 @@ export const productType = defineType({
         // {type: 'secondModule'}  <-- will add later
       ],
     }),
+=======
+>>>>>>> main
     defineField({
       name: 'seo',
       title: 'SEO',

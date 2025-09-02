@@ -27,7 +27,7 @@ export function Layout({backgroundColor, children}: LayoutProps) {
         className="max-w-screen flex min-h-screen flex-col"
         style={{background: backgroundColor}}
       >
-        {/* <Header /> */}
+        <Header />
 
         <main className="relative grow" id="mainContent" role="main">
           <div className="mx-auto pb-overlap">{children}</div>

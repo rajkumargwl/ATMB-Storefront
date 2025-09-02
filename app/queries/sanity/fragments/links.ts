@@ -1,8 +1,8 @@
 import groq from 'groq';
 
-import { COLLECTION_GROUP } from './collectionGroup';
-import { LINK_EXTERNAL } from './linkExternal';
-import { LINK_INTERNAL } from './linkInternal';
+import {COLLECTION_GROUP} from './collectionGroup';
+import {LINK_EXTERNAL} from './linkExternal';
+import {LINK_INTERNAL} from './linkInternal';
 
 export const LINKS = groq`
   _key,
@@ -18,10 +18,6 @@ export const LINKS = groq`
       (_type == 'linkInternal') => {
         ${LINK_INTERNAL}
       },
-      (_type == 'pageLink') => {
-        title,
-        url
-      }
     },
     title
   },
@@ -31,8 +27,4 @@ export const LINKS = groq`
   (_type == 'linkInternal') => {
     ${LINK_INTERNAL}
   },
-  (_type == 'pageLink') => {
-    title,
-    url
-  }
 `;

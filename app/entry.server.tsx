@@ -1,3 +1,9 @@
+// Polyfill process.env for Stripe in MiniOxygen / Cloudflare Workers added by dev
+if (typeof process === "undefined") {
+  (globalThis as any).process = {
+    env: {},
+  };
+}
 import {RemixServer} from '@remix-run/react';
 import {createContentSecurityPolicy} from '@shopify/hydrogen';
 import type {AppLoadContext, EntryContext} from '@shopify/remix-oxygen';
@@ -33,6 +39,7 @@ export default async function handleRequest(
       `'self'`,
       'https://www.instagram.com',
       'https://cdn.shopify.com',
+      'https://js.stripe.com/basil/stripe.js',
     ],
     fontSrc: [
       `'self'`,
@@ -48,6 +55,7 @@ export default async function handleRequest(
       'https://www.instagram.com',
       'https://rewoundtakeback.timex.com/',
       'https://mail.google.com/mail/u/0/',
+      'https://js.stripe.com/',
     ],
     connectSrc: [
       `'self'`,

@@ -91,18 +91,210 @@ export type SanityHeroHome = {
   content?: SanityImageWithProductHotspots | SanityProductWithVariant;
   link?: SanityLink;
   title?: string;
+  subheading?: string;
   data?: ProductWithNodes[] | ProductWithNodes;
+  heading?: string;
+  description?: string;
+  buttonText?: string;
+  buttonLink?: SanityLink;
+  card?: {
+    title1?: string;
+    subtitle1?: string;
+    title2?: string;
+    subtitle2?: string;
+  };
 };
-
+export type SanityTrustedByBusiness = {
+  _key?: string;
+  _type: 'homeSection2';
+  heading?: string;
+  icons?: SanityAssetImage[];
+  images?: SanityAssetImage[];
+};
+export type SanityWhoWeHelp = {
+  _key?: string;
+  _type: 'homeSection3';
+  title?: string;
+  subtitle1?: string;
+  subtitle2?: string;
+  tabs?: {
+    _key: string;
+    _type: 'tab';
+    label: string;
+    description?: string;
+    keyNeeds?: string[];
+    services?: {
+      _key: string;
+      _type: 'service';
+      icon?: SanityAssetImage;
+      title: string;
+      description?: string;
+    }[];
+    image?: SanityAssetImage;
+  }[];
+};
+export type SanityLocations = {
+  _key?: string;
+  _type: 'homeSection4';
+  heading?: string;
+  description?: string;
+  searchPlaceholder?: string;
+  title?: string;
+};
+export type SanityPlans = {
+  _key?: string;
+  _type: 'plans';
+  heading?: string;
+  description?: string;
+  plans?: {
+    icon?: {
+      svgCode?: string;
+      svgFile?: SanityAssetImage;
+    };
+    title: string;
+    price: string;
+    heading?: string;
+    features?: string[];
+    ctaText?: string;
+    ctaUrl?: SanityLink;
+    isMostPopular?: boolean;
+  }[];
+};
+export type SanityBundles = {
+  _key?: string;
+  _type: 'bundles';
+  eyebrow?: string;
+  description?: string;
+  plans?: {
+    badgeText?: string;
+    title: string;
+    subtitle?: string;
+    startingFrom?: string;
+    oldPrice?: string;
+    price: string;
+    priceUnit?: string;
+    services?: {
+      name: string;
+      description?: string;
+      tier?: string;
+    }[];
+    features?: string[];
+    ctaText?: string;
+    ctaUrl?: SanityLink;
+    isMostPopular?: boolean;
+    points?: string[];
+  }[];
+};
+export type SanityWhyBusinessesChooseUs = {
+  _key?: string;
+  _type: 'whyBusinessesChooseUs';
+  heading?: string;
+  description?: string;
+  image?: SanityAssetImage;
+  features?: {
+    _key: string;
+    _type: 'feature';
+    title: string;
+    description?: string;
+  }[];
+};
+export type SanityTestimonial = {
+  _key?: string;
+  _type: 'testimonial';
+  headline?: string;
+  subheadline?: string;
+  testimonials?: {
+    _key: string;
+    _type: 'text' | 'video';
+    authorName: string;
+    authorTitle: string;
+    authorImage?: SanityAssetImage;
+    rating?: number;
+    starIcon?: {
+      svgFile?: SanityAssetImage;
+      svgCode?: string;
+    };
+    quote?: string;
+    svgFile?: SanityAssetImage;
+    svgCode?: string;
+    videoUrl?: string;
+    playIcon?: {
+      playSvgFile?: SanityAssetImage;
+      playSvgCode?: string;
+    };
+  }[];
+};
+export type SanityBusinessAtFingerips = {
+  _key?: string;
+  _type: 'testimonial';
+  heading?: string;
+  description?: string;
+  phoneImage?: SanityAssetImage;
+  personas?: {
+    _key: string;
+    _type: 'persona';
+    authorImage?: SanityAssetImage;
+    role: string;
+    quote?: string;
+  }[];
+  features?: {
+    _key: string;
+    _type: 'feature';
+    icon?: {
+      iconFile?: SanityAssetImage;
+      iconCode?: string;
+    };
+    title: string;
+    description?: string;
+  }[];
+  appButtons?: {
+    _key: string;
+    _type: 'appButton';
+    icon?: {
+      iconFile?: SanityAssetImage;
+      iconCode?: string;
+      textColor?: string;
+      bgColor?: string;
+    };
+    label: string;
+    url?: SanityLink;
+  }[];
+  socialProof?: {
+    text?: string;
+    rating?: number;
+    starIcon?: {
+      svgFile?: SanityAssetImage;
+      svgCode?: string;
+    };
+  };
+};
+export type SanityFAQ = {
+  _key?: string;
+  _type: 'faq';
+  headline?: string;
+  subheadline?: string;
+  faqCategories?: {
+    _key: string;
+    _type: 'faqCategory';
+    title: string;
+    faqs?: {
+      _key: string;
+      _type: 'faqItem';
+      question: string;
+      answer: string;
+    }[];
+  }[];
+};
 export type SanityHeroPage = {
   content?: SanityImageWithProductHotspots | SanityProductWithVariant;
   title?: string;
+  subheading?: string;
   data?: ProductWithNodes[] | ProductWithNodes;
 };
 
 export type SanityHomePage = {
   hero?: SanityHeroHome;
-  modules: (SanityModuleImage | SanityModuleInstagram)[];
+  modules: (SanityModuleImage | SanityModuleInstagram | SanityTrustedByBusiness | SanityWhoWeHelp)[];
   seo: SanitySeo;
 };
 

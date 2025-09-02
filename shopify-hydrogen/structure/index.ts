@@ -20,15 +20,15 @@ import settings from './settingStructure'
  * To learn more about structure builder, visit our docs:
  * https://www.sanity.io/docs/overview-structure-builder
  */
- 
+
 // If you add document types to structure manually, you can add them to this function to prevent duplicates in the root pane
 const hiddenDocTypes = (listItem: ListItemBuilder) => {
   const id = listItem.getId()
- 
+
   if (!id) {
     return false
   }
- 
+
   return ![
     'collection',
     'colorTheme',
