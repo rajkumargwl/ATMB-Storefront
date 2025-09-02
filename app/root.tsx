@@ -149,6 +149,13 @@ export default function App() {
         <Seo />
         <Meta />
         <Links />
+<<<<<<< HEAD
+=======
+        <script
+        src='//in.fw-cdn.com/32520975/1392281.js'
+        chat='true'>
+        </script>
+>>>>>>> 9d8d655 (Pushing code of header and footer 02/09)
       </head>
       <body>
         <PreviewProvider previewConfig={preview} fallback={<PreviewLoading />}>

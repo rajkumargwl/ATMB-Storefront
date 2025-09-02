@@ -24,5 +24,9 @@ export const HERO_HOME = groq`
     },
   },
   title,
+<<<<<<< HEAD
    subtitle
+=======
+  subheading
+>>>>>>> 9d8d655 (Pushing code of header and footer 02/09)
 `;

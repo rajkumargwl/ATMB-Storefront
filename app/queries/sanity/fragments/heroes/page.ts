@@ -13,6 +13,10 @@ export const HERO_PAGE = groq`
       ...${PRODUCT_WITH_VARIANT}
     },
   },
+<<<<<<< HEAD
   title,
   subtitle
+=======
+  title
+>>>>>>> 9d8d655 (Pushing code of header and footer 02/09)
 `;
