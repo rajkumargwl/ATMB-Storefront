@@ -1,25 +1,21 @@
-import clsx from 'clsx';
-
-import LinkButton from '~/components/elements/LinkButton';
-import HeroContent from '~/components/heroes/HeroContent';
-import type {SanityHomeSection2} from '~/lib/sanity';
+import type {SanityTrustedByBusiness} from '~/lib/sanity';
 
 type Props = {
-  hero: SanityHomeSection2;
+  data: SanityTrustedByBusiness;
 };
 
-export default function HomeHero({ hero }: Props) {
+export default function Homedata({ data }: Props) {
   return (
      <section className="bg-[#F2F5F7] py-12 border-t border-b border-[#C6CBCD]">
          <div className="max-w-6xl mx-auto text-center px-4">
            {/* Title */}
            <h2 className="text-lg font-semibold text-gray-900">
-            {hero?.heading || 'Trusted by Businesses Around the World'}
+            {data?.heading || 'Trusted by Businesses Around the World'}
            </h2>
    
            {/* Stats Row */}
            <div className="flex flex-wrap justify-center gap-4 mt-6">
-            {hero?.icons?.map((item, idx) => (
+            {data?.icons?.map((item, idx) => (
                 <div
                 key={idx}
                 className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-lg shadow-sm"
@@ -41,7 +37,7 @@ export default function HomeHero({ hero }: Props) {
    
            {/* Logos Row */}
            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-6 mt-10">
-            {hero?.images?.map((item, idx) => {
+            {data?.images?.map((item, idx) => {
                 // handle both "upload" and "upload1"
                 const assetRef = item.image;
 
