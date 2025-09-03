@@ -11,9 +11,19 @@ import {customProductOptionColorType} from './objects/customProductOption/custom
 import {customProductOptionSizeObjectType} from './objects/customProductOption/customProductOptionSizeObjectType'
 import {customProductOptionSizeType} from './objects/customProductOption/customProductOptionSizeType'
 import {footerType} from './objects/global/footerType'
+import {headerType} from './objects/global/headerType'
 import {gridItemType} from './objects/module/gridItemType'
 import {gridType} from './objects/module/gridType'
 import {heroType} from './objects/module/heroType'
+import {homeSection2} from './objects/module/homeSection2'
+import {homeSection3} from './objects/module/homeSection3'
+import {homeSection4} from './objects/module/homeSection4'
+import {plans} from './objects/module/plans'
+import {bundles} from './objects/module/bundles'
+import {whyBusinessChooseUs} from './objects/module/whyBusinessChooseUs'
+import {businessAtFingertips} from './objects/module/businessAtFingertips'
+import {faq} from './objects/module/faq'
+import {testimonial} from './objects/module/testimonial'
 import {imageCallToActionType} from './objects/module/imageCallToActionType'
 import {imageFeaturesType} from './objects/module/imageFeaturesType'
 import {imageFeatureType} from './objects/module/imageFeatureType'
@@ -40,11 +50,17 @@ import {shopifyCollectionType} from './objects/shopify/shopifyCollectionType'
 import {shopifyProductType} from './objects/shopify/shopifyProductType'
 import {shopifyProductVariantType} from './objects/shopify/shopifyProductVariantType'
 import {spotType} from './objects/hotspot/spotType'
+import {menu} from './objects/shopify/menu'
+import {keyHighlights} from './objects/module/keyHighlights'
+import {detailedFeatureType} from './objects/module/detailedFeature'
 
+import location from './location'
 // Objects used as annotations must be imported first
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
 
 const objects = [
+  detailedFeatureType,
+  keyHighlights,
   accordionGroupType,
   accordionType,
   calloutType,
@@ -58,9 +74,19 @@ const objects = [
   customProductOptionSizeObjectType,
   customProductOptionSizeType,
   footerType,
+  headerType,
   gridItemType,
   gridType,
   heroType,
+  homeSection2,
+  homeSection3,
+  homeSection4,
+  plans,
+  bundles,
+  whyBusinessChooseUs,
+  faq,
+  testimonial,
+  businessAtFingertips,
   imageCallToActionType,
   imageFeaturesType,
   imageFeatureType,
@@ -83,6 +109,7 @@ const objects = [
   shopifyProductType,
   shopifyProductVariantType,
   spotType,
+  menu
 ]
 
 import {portableTextType} from './portableText/portableTextType'
@@ -103,4 +130,4 @@ import {settingsType} from './singletons/settingsType'
 
 const singletons = [homeType, settingsType]
 
-export const schemaTypes = [...annotations, ...objects, ...singletons, ...blocks, ...documents]
+export const schemaTypes = [...annotations, ...objects, ...singletons, ...blocks, ...documents,location]
