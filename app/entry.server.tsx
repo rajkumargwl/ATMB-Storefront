@@ -56,6 +56,7 @@ export default async function handleRequest(
       'https://rewoundtakeback.timex.com/',
       'https://mail.google.com/mail/u/0/',
       'https://js.stripe.com/',
+      'https://www.google.com/',
     ],
     connectSrc: [
       `'self'`,
