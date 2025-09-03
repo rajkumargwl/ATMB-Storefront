@@ -1,15 +1,16 @@
 // ~/components/Search.tsx
-import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from '@remix-run/react';
+import {useState, useEffect} from 'react';
+import {useNavigate, useLocation} from '@remix-run/react';
 
 interface SearchProps {
   initialResults: any[];
   initialQuery: string;
 }
 
-export default function Search({ initialResults, initialQuery }: SearchProps) {
+export default function Search({initialResults, initialQuery}: SearchProps) {
   const navigate = useNavigate();
   const location = useLocation();
+
   const [query, setQuery] = useState(initialQuery || '');
   const [results, setResults] = useState(initialResults || []);
   const [isLoading, setIsLoading] = useState(false);
@@ -24,14 +25,14 @@ export default function Search({ initialResults, initialQuery }: SearchProps) {
 
     if (!query.trim()) {
       params.delete('q');
-      navigate(`?${params.toString()}`, { replace: true });
+      navigate(`?${params.toString()}`, {replace: true});
       setResults([]);
       return;
     }
 
     const timeout = setTimeout(() => {
       params.set('q', query);
-      navigate(`?${params.toString()}`, { replace: true });
+      navigate(`?${params.toString()}`, {replace: true});
     }, 500);
 
     return () => clearTimeout(timeout);
@@ -39,10 +40,15 @@ export default function Search({ initialResults, initialQuery }: SearchProps) {
 
   const handleResultClick = (item: any) => {
     if (item.type === 'product') {
+      // Navigate to product page
       navigate(`/products/${item.handle}`);
     } else if (item.type === 'location') {
-      navigate(`/locations/${item.slug}`);
+      // Navigate to sublocations page with query param
+      const queryParam = item.name ? item.name : item.city;
+      navigate(`/sublocations?q=${encodeURIComponent(queryParam)}`);
     }
+
+    // Reset search after navigation
     setQuery('');
     setResults([]);
   };
