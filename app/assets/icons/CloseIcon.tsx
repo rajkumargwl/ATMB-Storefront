@@ -1,0 +1,8 @@
+const CloseIcon: React.FC = () => (
+<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M5 15L15 5" stroke="#5A5D60" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M15 15L5 5" stroke="#5A5D60" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+);
+
+export default CloseIcon;
