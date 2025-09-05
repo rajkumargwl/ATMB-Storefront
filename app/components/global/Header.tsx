@@ -33,8 +33,8 @@ export default function Header({ data }: HeaderProps) {
   const [query, setQuery] = useState("");
 
   return (
-    <header className="w-full bg-white shadow-sm">
-      <div className="max-w-[1240px] mx-auto flex items-center justify-between px-4 md:px-6 py-3">
+    <header className="w-full bg-white shadow-sm border-b border-[#DCDCDC]">
+      <div className="max-w-[1240px] mx-auto flex items-center justify-between px-4 md:px-6 py-4">
         {/* Logo */}
         <div className="flex items-center">
           {logo?.url && (
