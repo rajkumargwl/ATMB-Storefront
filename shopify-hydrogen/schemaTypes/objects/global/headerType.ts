@@ -1,6 +1,6 @@
 import { defineType, defineField } from "sanity";
  
-export const headerType = defineType({
+export const header = defineType({
   name: "header",
   title: "Header",
   type: "document",
