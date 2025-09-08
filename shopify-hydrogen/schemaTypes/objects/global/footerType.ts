@@ -102,6 +102,38 @@ export const footerType = defineType({
       ],
     }),
 
+     // Services Column
+     defineField({
+      name: "contactColumn",
+      title: "Contact Column",
+      type: "object",
+      fields: [
+        {name: "title", title: "Title", type: "string"},
+        {
+          name: "links",
+          title: "Links",
+          type: "array",
+          validation: (Rule) => Rule.max(3),
+          of: [
+            {
+              type: "object",
+              fields: [
+                {
+                  name: "icon",
+                  title: "Icon",
+                  type: "image",
+                  options: {hotspot: true},
+                },
+                {name: "label", title: "Label", type: "string"},
+                {name: "link", title: "Link", type: "string"},
+              ],
+            },
+          ],
+        },
+        {name: "address", title: "Address", type: "string"},
+      ],
+    }),
+
     // App Download Buttons
     defineField({
       name: "appButtons",
