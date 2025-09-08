@@ -37,6 +37,8 @@ import {COLLECTION_QUERY_ID} from '~/queries/shopify/collection';
 import stylesheet from '~/styles/tailwind.css';
 import type {I18nLocale} from '~/types/shopify';
 import {SanityLayout} from './lib/sanity';
+import swiperStyles from "swiper/css?url";
+import swiperNavStyles from "swiper/css/navigation?url";
 
 const seo: SeoHandleFunction<typeof loader> = ({data}) => ({
   title: data?.layout?.seo?.title,
@@ -82,6 +84,8 @@ export const links: LinksFunction = () => {
       href: 'https://fonts.googleapis.com',
       crossOrigin: 'anonymous',
     },
+    { rel: "stylesheet", href: swiperStyles },
+    { rel: "stylesheet", href: swiperNavStyles },
   ];
 };
 

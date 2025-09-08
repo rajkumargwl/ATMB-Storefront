@@ -130,16 +130,16 @@ export default function Footer({ data }: FooterProps) {
             {/* {data?.contactColumn && ( */}
               <div>
                 <h4 className="text-[18px] font-bold mb-5">
-                  {data?.contactColumn?.title || 'Contact'}
+                  {data?.contactColumn?.title}
                 </h4>
                 <ul className="space-y-2 text-sm">
                   {data?.contactColumn?.links?.map((item, idx) => (
-                    <li key={idx}>
+                    <li key={idx} className='flex gap-2 space-y-2 items-center'>
                       {item?.icon?.asset?.url && (
                       <img
                         src={item.icon.asset.url}
                         alt="App button"
-                        className="h-10"
+                        className="w-[24px]"
                       />
                     )}
                       {item?.link ? (
@@ -157,7 +157,7 @@ export default function Footer({ data }: FooterProps) {
                     </li>
                   ))}
                 </ul>
-                <p className='text-[14px]'>{data?.contactColumn?.address || "Bugo LLC, 2831 St. Rose Pkwy Suite 244, Henderson, NV 89052"}</p>
+                <p className='text-[14px] mt-4'>{data?.contactColumn?.address}</p>
               </div>
             {/* )} */}
           </div>
