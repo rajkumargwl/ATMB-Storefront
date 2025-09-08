@@ -188,7 +188,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
   const [page, header, footer] = await Promise.all([
     context.sanity.query({ query: HOME_PAGE_QUERY, cache }),
     context.sanity.query({ query: HEADER_QUERY, cache }),
-    context.sanity.query({ query: FOOTER_QUERY }),
+    context.sanity.query({ query: FOOTER_QUERY, cache }),
   ]);
 
   if (!page) throw notFound();

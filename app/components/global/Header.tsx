@@ -1,12 +1,12 @@
 import { Link } from "@remix-run/react";
 import { useState } from "react";
-import CloseIcon from "../../assets/icons/CloseIcon";
-import CartIcon from "../../assets/icons/CartIcon";
-import SearchIcon from "../../assets/icons/SearchIcon";
-import Logo from "../../assets/images/logo.png";
-import ArrowRightIcon from "../../assets/icons/ArrowRightIcon";
-import MenuIcon from "../../assets/icons/MenuIcon"; // you’ll need to create/import hamburger icon
-import ArrowDownIcon from "../../assets/icons/ArrowDownIcon";
+import CloseIcon from "~/components/icons/CloseIcon";
+import CartIcon from "~/components/icons/CartIcon";
+import SearchIcon from "~/components/icons/SearchIcon";
+import Logo from "~/components/media/logo.png";
+import ArrowRightIcon from "~/components/icons/ArrowRightIcon";
+import MenuIcon from "~/components/icons/MenuIcon"; // you’ll need to create/import hamburger icon
+import ArrowDownIcon from '~/components/icons/ArrowDownIcon';
 
 type HeaderProps = {
   data: {
