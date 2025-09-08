@@ -11,6 +11,7 @@ import {customProductOptionColorType} from './objects/customProductOption/custom
 import {customProductOptionSizeObjectType} from './objects/customProductOption/customProductOptionSizeObjectType'
 import {customProductOptionSizeType} from './objects/customProductOption/customProductOptionSizeType'
 import {footerType} from './objects/global/footerType'
+import {header} from './objects/global/headerType'
 import {gridItemType} from './objects/module/gridItemType'
 import {gridType} from './objects/module/gridType'
 import {heroType} from './objects/module/heroType'
@@ -60,6 +61,7 @@ const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProd
 const objects = [
   detailedFeatureType,
   keyHighlights,
+  header,
   accordionGroupType,
   accordionType,
   calloutType,

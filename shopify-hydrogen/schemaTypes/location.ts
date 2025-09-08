@@ -96,7 +96,42 @@ export default defineType({
       title: 'Created At',
       type: 'datetime',
     }),
+    defineField({
+      name: 'planTier',
+      title: 'Plan Tier',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Basic', value: 'basic'},
+          {title: 'Premium', value: 'premium'},
+        ],
+        layout: 'radio', // optional: makes it radio buttons
+      },
+    }),
+    defineField({
+      name: 'priceRange',
+      title: 'Price Range',
+      type: 'number', // integer
+    }),
+    defineField({
+      name: 'options',
+      title: 'Options',
+      type: 'array',
+      of: [{type: 'string'}],
+      options: {
+        list: [
+          {title: 'Easy ingress', value: 'easyIngress'},
+          {title: '24/7 Access', value: 'access247'},
+          {title: 'Mail forwarding', value: 'mailForwarding'},
+          {title: 'Mail Scanning', value: 'mailScanning'},
+          {title: 'Parking', value: 'parking'},
+          {title: 'ADA Accessibility', value: 'adaAccessibility'},
+        ],
+      },
+    }),
+
   ],
+  
   preview: {
     select: {
       title: 'displayName',
