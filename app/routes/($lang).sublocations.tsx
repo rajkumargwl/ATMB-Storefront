@@ -1,8 +1,7 @@
 // app/routes/locations.tsx
-import {json, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
+import {json, type LoaderFunctionArgs, defer} from '@shopify/remix-oxygen';
 import {useLoaderData} from '@remix-run/react';
-import {useState, useEffect, useMemo} from 'react';
-import {defer} from '@shopify/remix-oxygen';
+import {useState, useEffect} from 'react';
 import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
 import Header from '~/components/global/Header';
 import Footer from '~/components/global/Footer';
@@ -18,9 +17,9 @@ type LocationAPI = {
   slug: string;
   latitude?: number;
   longitude?: number;
-  planTier?: string; // optional for filtering
-  features?: string[];
+  planTier?: string;
   price?: number;
+  features?: string[];
 };
 
 const seo: SeoHandleFunction = () => ({
@@ -68,7 +67,10 @@ export async function loader({context, request}: LoaderFunctionArgs) {
             postalCode,
             "slug": slug.current,
             latitude,
-            longitude
+            longitude,
+            planTier,
+            price,
+            features
           }
         }`,
         params: {search: searchParam},
@@ -86,7 +88,10 @@ export async function loader({context, request}: LoaderFunctionArgs) {
         postalCode,
         "slug": slug.current,
         latitude,
-        longitude
+        longitude,
+        planTier,
+        price,
+        features
       }`,
     });
     results.locations = locations;
@@ -100,19 +105,22 @@ export async function loader({context, request}: LoaderFunctionArgs) {
   });
 }
 
-export default function SublocationsPage() {
+export default function LocationsPage() {
   const {locations, header, footer} = useLoaderData<typeof loader>();
-
   const [selectedCity, setSelectedCity] = useState<string>('');
   const [selectedLocation, setSelectedLocation] = useState<LocationAPI | null>(
     locations[0] || null,
   );
 
-  // Filters
+  // filter states
   const [showFilters, setShowFilters] = useState(false);
   const [planTier, setPlanTier] = useState('');
-  const [minPrice, setMinPrice] = useState<number>(0);
-  const [maxPrice, setMaxPrice] = useState<number>(999);
+  const [minPrice, setMinPrice] = useState(
+    Math.min(...locations.map((loc) => loc.price || 0)),
+  );
+  const [maxPrice, setMaxPrice] = useState(
+    Math.max(...locations.map((loc) => loc.price || 999)),
+  );
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
 
   const toggleFeature = (feature: string) => {
@@ -123,33 +131,37 @@ export default function SublocationsPage() {
     );
   };
 
-  // Apply Filters
-  const filtered = useMemo(() => {
-    return locations.filter((loc) => {
-      const price = loc.price ?? 0;
+  // city filter
+  const filtered = locations.filter((loc) => {
+    const matchCity = selectedCity ? loc.city === selectedCity : true;
+    const matchTier = planTier ? loc.planTier === planTier : true;
+    const matchPrice =
+      (loc.price || 0) >= minPrice && (loc.price || 0) <= maxPrice;
+    const matchFeatures =
+      selectedFeatures.length > 0
+        ? selectedFeatures.every((f) => loc.features?.includes(f))
+        : true;
 
-      if (selectedCity && loc.city !== selectedCity) return false;
-      if (planTier && loc.planTier !== planTier) return false;
-      if (price < minPrice || price > maxPrice) return false;
-      if (
-        selectedFeatures.length > 0 &&
-        !selectedFeatures.every((f) => loc.features?.includes(f))
-      )
-        return false;
+    return matchCity && matchTier && matchPrice && matchFeatures;
+  });
 
-      return true;
-    });
-  }, [locations, selectedCity, planTier, minPrice, maxPrice, selectedFeatures]);
-
-  // Reset location if city changes
+  // reset selected location on filter change
   useEffect(() => {
     if (filtered.length > 0) {
       setSelectedLocation(filtered[0]);
     }
-  }, [selectedCity, filtered]);
+  }, [selectedCity, planTier, minPrice, maxPrice, selectedFeatures]);
 
   const cities = Array.from(
     new Set(locations.map((loc) => loc.city).filter(Boolean)),
+  );
+
+  const uniqueFeatures = Array.from(
+    new Set(locations.flatMap((loc) => loc.features || [])),
+  );
+
+  const uniqueTiers = Array.from(
+    new Set(locations.map((loc) => loc.planTier).filter(Boolean)),
   );
 
   return (
@@ -163,7 +175,7 @@ export default function SublocationsPage() {
             Virtual Mailbox in {selectedLocation?.city || 'Unknown'}
           </h1>
 
-          {/* Dropdown + Filter */}
+          {/* City Dropdown + Filter Icon */}
           <div className="flex items-center gap-2 mb-4">
             <select
               value={selectedCity}
@@ -177,11 +189,9 @@ export default function SublocationsPage() {
                 </option>
               ))}
             </select>
-
             <button
               onClick={() => setShowFilters(true)}
-              className="p-2 bg-gray-200 rounded hover:bg-gray-300"
-              title="Open Filters"
+              className="p-2 border rounded"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -214,6 +224,15 @@ export default function SublocationsPage() {
                 <p className="text-sm text-gray-600">
                   Postal Code: {loc.postalCode || 'N/A'}
                 </p>
+                <p className="text-sm text-gray-600">
+                  Tier: {loc.planTier || 'N/A'} | Price: $
+                  {loc.price?.toFixed(2) || 'N/A'}
+                </p>
+                {loc.features && (
+                  <p className="text-sm text-gray-600">
+                    Features: {loc.features.join(', ')}
+                  </p>
+                )}
                 <button
                   onClick={() => setSelectedLocation(loc)}
                   className="bg-orange-500 text-white px-4 py-2 rounded mt-2"
@@ -249,20 +268,11 @@ export default function SublocationsPage() {
         </div>
       </div>
 
-      {/* Filter Modal */}
+      {/* Filter Popup */}
       {showFilters && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg w-full max-w-md shadow-lg">
-            {/* Header */}
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">Filters</h2>
-              <button
-                onClick={() => setShowFilters(false)}
-                className="text-gray-500 text-2xl"
-              >
-                ×
-              </button>
-            </div>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg max-w-md w-full">
+            <h2 className="text-xl font-bold mb-4">Filters</h2>
 
             {/* Filters */}
             <div className="space-y-4">
@@ -275,8 +285,11 @@ export default function SublocationsPage() {
                   className="border p-2 rounded w-full"
                 >
                   <option value="">All Tiers</option>
-                  <option value="Basic">Basic</option>
-                  <option value="Premium">Premium</option>
+                  {uniqueTiers.map((tier) => (
+                    <option key={tier} value={tier}>
+                      {tier}
+                    </option>
+                  ))}
                 </select>
               </div>
 
@@ -302,14 +315,7 @@ export default function SublocationsPage() {
 
               {/* Features */}
               <div className="grid grid-cols-2 gap-2">
-                {[
-                  'Easy Ingress',
-                  '24/7 access',
-                  'Mail Forwarding',
-                  'Mail Scanning',
-                  'Parking',
-                  'ADA Accessibility',
-                ].map((feature) => (
+                {uniqueFeatures.map((feature) => (
                   <label key={feature} className="flex items-center gap-2">
                     <input
                       type="checkbox"
@@ -327,8 +333,8 @@ export default function SublocationsPage() {
               <button
                 onClick={() => {
                   setPlanTier('');
-                  setMinPrice(0);
-                  setMaxPrice(999);
+                  setMinPrice(Math.min(...locations.map((loc) => loc.price || 0)));
+                  setMaxPrice(Math.max(...locations.map((loc) => loc.price || 999)));
                   setSelectedFeatures([]);
                 }}
                 className="px-4 py-2 border rounded"
