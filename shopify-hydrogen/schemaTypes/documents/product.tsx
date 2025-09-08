@@ -5,8 +5,7 @@ import ShopifyDocumentStatus from '../../components/media/ShopifyDocumentStatus'
 import {defineField, defineType} from 'sanity'
 import {getPriceRange} from '../../utils/getPriceRange'
 import { GROUPS } from '../../constants'
-import {keyHighlights} from '../objects/module/keyHighlights'
-import {detailedFeatureType} from './objects/module/detailedFeature'
+
 export const productType = defineType({
   name: 'product',
   title: 'Product',
@@ -55,17 +54,6 @@ export const productType = defineType({
       type: 'shopifyProduct',
       description: 'Product data from Shopify (read-only)',
       group: 'shopifySync',
-    }),
-     defineField({
-      name: 'modules',
-      title: 'Modules',
-      type: 'array',
-      group: 'editorial',
-      of: [
-        {type: 'keyHighlights'},
-        {type: "detailedFeature"}
-        // {type: 'secondModule'}  <-- will add later
-      ],
     }),
     defineField({
       name: 'seo',
