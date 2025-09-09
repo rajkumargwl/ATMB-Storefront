@@ -254,7 +254,7 @@ export default function LocationsPage() {
               style={{border: 0}}
               loading="lazy"
               allowFullScreen
-              src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyBBVlawFbk_Wpf71qDshZmiycrbuK5oC7o&q=${
+              src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyD9hXTbp7SLLl5FSCKtRNu9mezIjxz89D8&q=${
                 selectedLocation.latitude && selectedLocation.longitude
                   ? `${selectedLocation.latitude},${selectedLocation.longitude}`
                   : selectedLocation.city || 'New Delhi'
