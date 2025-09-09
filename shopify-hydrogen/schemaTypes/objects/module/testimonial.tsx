@@ -72,11 +72,11 @@ export const testimonial = defineType({
             }),
             defineField({
               name: 'playIcon',
-              title: 'Play Icon (SVG Upload/Code)',
+              title: 'Video Thumbnail Image',
               type: 'object',
               fields: [
-                { name: 'playSvgFile', title: 'Play Icon (SVG File)', type: 'file', options: { accept: '.svg' } },
-                { name: 'playSvgCode', title: 'Play Icon (Inline SVG Code)', type: 'text' },
+                { name: 'playSvgFile', title: 'Thumbnail', type: 'image', options: { hotspot: true } },
+                { name: 'playSvgCode', title: 'Thumbnail (Inline SVG Code)', type: 'text' },
               ],
               hidden: ({ parent }) => parent?.type !== 'video',
             }),
@@ -97,7 +97,7 @@ export const testimonial = defineType({
               title: 'Author Image',
               type: 'image',
               options: { hotspot: true },
-              hidden: ({ parent }) => parent?.type !== 'quote', // hide in video testimonials
+              // hidden: ({ parent }) => parent?.type !== 'quote', // hide in video testimonials
             }),
           ],
         }),
