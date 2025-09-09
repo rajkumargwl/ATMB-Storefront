@@ -15,8 +15,12 @@ import WhyBusinessChooseUs from '~/components/modules/WhyBusinessChooseUs';
 import Testimonial from '~/components/modules/Testimonial';
 import BusinessAtFingertips from '~/components/modules/BusinessAtFingertips';
 import FAQ from '~/components/modules/FAQ';
-
-
+import HeroBanner from '~/components/modules/HeroBanner';
+import FeaturesModule from '~/components/modules/FeaturesModule';
+import Pricingmodule from '~/components/modules/Pricingmodule';
+import HowItWorks from '~/components/modules/Howitworks'; // Add this import
+import WhyChooseUs from '~/components/modules/WhyChooseUs'; // Add this import
+import CustomerReviews from '~/components/modules/CustomerReviews'; // Add this import
 type Props = {
   imageAspectClassName?: string;
   module: SanityModule;
@@ -24,6 +28,18 @@ type Props = {
 
 export default function Module({imageAspectClassName, module}: Props) {
   switch (module._type) {
+    case 'heroBanner':       // <-- add this
+      return <HeroBanner data={module} />;
+    case 'featuresModule':   // ✅ new case for features
+      return <FeaturesModule {...module} />;
+       case 'pricingModule':       // <-- add this
+      return <Pricingmodule data={module} />;
+    case 'howItWorks': // Add this case
+      return <HowItWorks data={module} />;
+    case 'whyChooseAnytimePhones': // Add this case
+      return <WhyChooseUs data={module} />;
+    case 'review': // Add this case
+      return <CustomerReviews data={module} />;
     case 'module.callout':
       return <CalloutModule module={module} />;
     case 'module.callToAction':

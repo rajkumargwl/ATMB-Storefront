@@ -53,7 +53,11 @@ export default function Header({ data }: HeaderProps) {
           {menu?.map((item, idx) => (
             <div key={idx} className="relative group">
               <Link
-                to={item.url ?? "#"}
+                to={item.label === "Solutions"
+      ? "/solutions"
+      : item.label === "Locations"
+      ? "/locations"
+      : item.url ?? "#"}
                 className="text-gray-700 hover:text-gray-900 font-medium flex items-center gap-1"
               >
                 {item.label}
@@ -161,7 +165,7 @@ export default function Header({ data }: HeaderProps) {
               {menu?.map((item, idx) => (
                 <Link
                   key={idx}
-                  to={item.url ?? "#"}
+                  to={item.label === "Solutions" ? "/solutions": item.label === "Locations"? "/locations": item.url ?? "#"}
                   className="text-gray-700 hover:text-gray-900 font-medium"
                   onClick={() => setIsMobileMenuOpen(false)} // auto close on link click
                 >
