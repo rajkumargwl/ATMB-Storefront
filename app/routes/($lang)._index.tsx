@@ -258,7 +258,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
 
 export default function Index() {
   const { page, gids,  header, footer, mergedResults, q } = useLoaderData<typeof loader>();
-  console.log("ffff",footer);
+  console.log("ffff",page);
   return (
     <>
      <Header data={header} />
