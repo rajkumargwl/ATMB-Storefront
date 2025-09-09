@@ -7,6 +7,7 @@ import {PRODUCT_WITH_VARIANT} from '../productWithVariant';
 import {IMAGE} from '../image';
 
 export const FAQ = groq`
+   _type,
    headline,
     subheadline,
     faqCategories[] {
