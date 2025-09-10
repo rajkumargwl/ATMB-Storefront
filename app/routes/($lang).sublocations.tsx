@@ -1,7 +1,7 @@
 // app/routes/locations.tsx
 import {json, type LoaderFunctionArgs, defer} from '@shopify/remix-oxygen';
 import {useLoaderData} from '@remix-run/react';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useMemo, useRef} from 'react';
 import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
 import Header from '~/components/global/Header';
 import Footer from '~/components/global/Footer';
@@ -116,10 +116,10 @@ export default function LocationsPage() {
   const [showFilters, setShowFilters] = useState(false);
   const [planTier, setPlanTier] = useState('');
   const [minPrice, setMinPrice] = useState(
-    Math.min(...locations.map((loc) => loc.price || 0)),
+    Math.min(...locations.map((loc) => loc.price || 0), 0),
   );
   const [maxPrice, setMaxPrice] = useState(
-    Math.max(...locations.map((loc) => loc.price || 999)),
+    Math.max(...locations.map((loc) => loc.price || 999), 999),
   );
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
 
@@ -163,6 +163,64 @@ export default function LocationsPage() {
   const uniqueTiers = Array.from(
     new Set(locations.map((loc) => loc.planTier).filter(Boolean)),
   );
+   // --- MAP LOGIC ---
+    const mapRef = useRef<google.maps.Map | null>(null);
+    const markersRef = useRef<google.maps.Marker[]>([]);
+  
+    useEffect(() => {
+      if (!window.google) {
+        const script = document.createElement('script');
+        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyBBVlawFbk_Wpf71qDshZmiycrbuK5oC7o`;
+        script.async = true;
+        script.onload = () => initMap();
+        document.body.appendChild(script);
+      } else {
+        initMap();
+      }
+    }, [filtered]);
+  
+    const initMap = () => {
+      if (!filtered.length) return;
+  
+      const map = new google.maps.Map(
+        document.getElementById('map') as HTMLElement,
+        {
+          center: {lat: filtered[0].latitude || 0, lng: filtered[0].longitude || 0},
+          zoom: 4,
+        },
+      );
+  
+      mapRef.current = map;
+  
+      // Clear old markers
+      markersRef.current.forEach((m) => m.setMap(null));
+      markersRef.current = [];
+  
+      // Add markers
+      filtered.forEach((loc) => {
+        if (loc.latitude && loc.longitude) {
+          const marker = new google.maps.Marker({
+            position: {lat: loc.latitude, lng: loc.longitude},
+            map,
+            title: loc.name,
+          });
+          markersRef.current.push(marker);
+        }
+      });
+  
+      // Fit to bounds
+      const bounds = new google.maps.LatLngBounds();
+      markersRef.current.forEach((m) => bounds.extend(m.getPosition()!));
+      map.fitBounds(bounds);
+    };
+  
+    const zoomToLocation = (loc: LocationAPI) => {
+      if (mapRef.current && loc.latitude && loc.longitude) {
+        mapRef.current.setZoom(12);
+        mapRef.current.panTo({lat: loc.latitude, lng: loc.longitude});
+      }
+    };
+  
 
   return (
     <>
@@ -216,8 +274,9 @@ export default function LocationsPage() {
             {filtered.map((loc) => (
               <div
                 key={loc._id}
-                className="border rounded p-4 shadow-sm hover:shadow-md"
-              >
+                className="border rounded p-4 shadow-sm hover:shadow-md cursor-pointer"
+                onMouseEnter={() => zoomToLocation(loc)}             
+                 >
                 <h2 className="font-semibold text-lg">
                   {loc.city || 'Unknown City'} - {loc.name}
                 </h2>
@@ -246,7 +305,8 @@ export default function LocationsPage() {
 
         {/* Right Side Map */}
         <div className="w-full md:w-1/2 p-4">
-          {selectedLocation ? (
+        <div id="map" className="w-full h-[600px] rounded shadow" />
+          {/* {selectedLocation ? (
             <iframe
               title="map"
               width="100%"
@@ -264,7 +324,7 @@ export default function LocationsPage() {
             <p className="text-gray-500">
               Select a plan to view it on the map.
             </p>
-          )}
+          )} */}
         </div>
       </div>
 
