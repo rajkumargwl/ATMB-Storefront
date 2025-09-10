@@ -53,12 +53,26 @@ import {spotType} from './objects/hotspot/spotType'
 import {menu} from './objects/shopify/menu'
 import {keyHighlights} from './objects/module/keyHighlights'
 import {detailedFeatureType} from './objects/module/detailedFeature'
-
+import solutions from './singletons/solutions'
+import { heroBanner } from "./objects/module/heroBanner";
 import location from './location'
+import { featuresModule } from "./objects/module/featuresModule";
+import { pricingModule } from "./objects/module/pricingModule";
+import { extraFeatures } from "./objects/module/extraFeatures";
+import { howItWorks } from "./objects/module/howItWorks";
+import { whyChooseAnytimePhones } from "./objects/module/whyChooseAnytimePhones";
+import { review } from "./objects/module/review";
 // Objects used as annotations must be imported first
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
 
 const objects = [
+  review,
+  whyChooseAnytimePhones,
+  howItWorks,
+  extraFeatures,
+  pricingModule,
+  featuresModule,
+  heroBanner,
   detailedFeatureType,
   keyHighlights,
   header,
@@ -128,6 +142,6 @@ const documents = [collectionType, colorThemeType, pageType, productType, produc
 import {homeType} from './singletons/homeType'
 import {settingsType} from './singletons/settingsType'
 
-const singletons = [homeType, settingsType]
+const singletons = [homeType, settingsType,solutions,]
 
 export const schemaTypes = [...annotations, ...objects, ...singletons, ...blocks, ...documents,location]

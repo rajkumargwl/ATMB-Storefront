@@ -25,8 +25,10 @@ export const TESTIMONIAL = groq`
       // Video Testimonials
         videoUrl,
         playIcon {
-          playSvgFile,
-          playSvgCode
+          playSvgCode,
+            playSvgFile{
+            ${IMAGE}
+          }
         },
       //  Author Info (common)
         authorName,
