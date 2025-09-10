@@ -18,8 +18,6 @@ type FooterProps = {
 export default function Footer({ data }: FooterProps) {
   if (!data) return null;
 
-  console.log('Footer data:', data);
-
   return (
     <footer className="bg-[#0A0A0A] text-white">
       <div className="max-w-[1312px] mx-auto px-4 md:px-8 py-12">
