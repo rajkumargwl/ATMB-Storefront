@@ -30,6 +30,7 @@ export default async function handleRequest(
       'https://cdn.anytimemailbox.com/portals/home/assets/images/homepage-anytime-mailbox-logo-black-2024.png',
       'https://maps.gstatic.com',
       'https://maps.googleapis.com',
+      'data:',
     ],
     styleSrc: [
       `'self'`,
@@ -49,6 +50,7 @@ export default async function handleRequest(
     fontSrc: [
       `'self'`,
       'https://fonts.gstatic.com',
+      'data:',
     ],
     frameAncestors: [
       `'self'`,
