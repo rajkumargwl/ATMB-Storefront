@@ -1,5 +1,5 @@
-import { Link } from "@remix-run/react";
-import { useState } from "react";
+import { Link, useNavigate, useLocation } from "@remix-run/react";
+import { useState, useEffect } from "react";
 import CloseIcon from "~/components/icons/CloseIcon";
 import CartIcon from "~/components/icons/CartIcon";
 import SearchIcon from "~/components/icons/SearchIcon";
@@ -7,6 +7,7 @@ import Logo from "~/components/media/logo.png";
 import ArrowRightIcon from "~/components/icons/ArrowRightIcon";
 import MenuIcon from "~/components/icons/MenuIcon"; // you’ll need to create/import hamburger icon
 import ArrowDownIcon from '~/components/icons/ArrowDownIcon';
+
 
 type HeaderProps = {
   data: {
@@ -22,15 +23,61 @@ type HeaderProps = {
     loginButton?: { label: string; link?: string | null };
     getStartedButton?: { label: string; link?: string | null };
   };
+  searchResults: any[];   // 👈 new
+  searchQuery: string;    // 👈 new
 };
 
-export default function Header({ data }: HeaderProps) {
+
+export default function Header({ data, searchResults, searchQuery }: HeaderProps) {
   if (!data) return null;
 
   const { logo, menu, icon1, icon2, loginButton, getStartedButton } = data;
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+   const [results, setResults] = useState(searchResults || []);
   const [query, setQuery] = useState("");
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [skipSearchSync, setSkipSearchSync] = useState(false);
+   useEffect(() => {
+    setQuery(searchQuery || "");
+    setResults(searchResults || []);
+  }, [searchQuery, searchResults]);
+
+  // Sync search input to URL
+  useEffect(() => {
+    if (skipSearchSync) return;
+
+    const params = new URLSearchParams(location.search);
+
+    if (!query.trim()) {
+      params.delete("q");
+      navigate(`?${params.toString()}`, { replace: true });
+      setResults([]);
+      return;
+    }
+
+    const timeout = setTimeout(() => {
+      params.set("q", query);
+      navigate(`?${params.toString()}`, { replace: true });
+    }, 500);
+
+    return () => clearTimeout(timeout);
+  }, [query, navigate, location.search, skipSearchSync]);
+    const handleResultClick = (item: any) => {
+    setSkipSearchSync(true);
+    setQuery("");
+    setResults([]);
+    setIsSearchOpen(false);
+
+    if (item.type === "product") {
+      navigate(`/products/${item.handle}`);
+    } else if (item.type === "location") {
+      const queryParam = item.name || item.city;
+      navigate(`/sublocations?q=${encodeURIComponent(queryParam)}`);
+    }
+  };
 
   return (
     <header className="w-full bg-white shadow-sm px-5">
@@ -104,29 +151,28 @@ export default function Header({ data }: HeaderProps) {
 
           {/* Cart */}
           {icon2?.url && (
-              <Link to="/cart">
+            <button>
               <img
                 src={icon2.url}
                 alt="Cart"
                 className="h-6 w-6 object-contain"
               />
-            </Link>
+            </button>
           )}
 
           {/* Login / Get Started (Desktop only) */}
           <div className="hidden md:flex items-center space-x-4">
             {loginButton && (
               <Link
-                //to={loginButton.link ?? "#"}
-                 to="/account/login"
-                className="text-gray-700 font-medium hover:text-gray-900 border border-gray-400 px-7 py-3.5 rounded-md"
+                to={loginButton.link ?? "/account/login"}
+                className="rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[15px]"
               >
                 {loginButton.label}
               </Link>
             )}
             {getStartedButton && (
               <Link
-                to={getStartedButton.link ?? "#"}
+                to={getStartedButton.link ?? "/account/register"}
                 className="rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-4 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2"
               >
                 {getStartedButton.label} 
@@ -178,9 +224,8 @@ export default function Header({ data }: HeaderProps) {
 
               {loginButton && (
                 <Link
-                  //to={loginButton.link ?? "#"}
-                   to="/account/login"
-                  className="text-gray-700 font-medium hover:text-gray-900"
+                  to={loginButton.link ?? "#"}
+                  className="text-PrimaryBlack hover:text-PrimaryBlack font-normal text-base leading-[24px]"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {loginButton.label}
@@ -203,42 +248,55 @@ export default function Header({ data }: HeaderProps) {
 
 
       {/* Search Popup Modal */}
-      {isSearchOpen && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50">
-          <div className="bg-[#F9F9F9] rounded-md shadow-lg w-full max-w-[1208px] mt-5">
-            
-            {/* Header Row */}
-            <div className="flex items-center justify-between px-6 py-5">
-              {/* Logo */}
-              <div className="flex items-center">
-                <img
-                  src={Logo}
-                  alt="Logo"
-                  className="w-[80px] md:w-[100px] object-contain"
-                />
-              </div>
+     {/* Search Popup Modal */}
+{isSearchOpen && (
+  <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50">
+    <div className="bg-[#F9F9F9] rounded-md shadow-lg w-full max-w-[1208px] mt-5">
+      
+      {/* Header Row */}
+      <div className="flex items-center justify-between px-6 py-4">
+        {/* Logo */}
+        <div className="flex items-center">
+          <img
+            src={Logo}
+            alt="Logo"
+            className="h-13 w-auto"
+          />
+        </div>
 
-              {/* Search Input */}
-              <div className="flex-1 mx-6 relative">
-                {/* Search Icon inside input */}
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
-                  <SearchIcon />
-                </span>
+        {/* Search Input */}
+        <div className="flex-1 mx-6 relative">
+          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+            <SearchIcon />
+          </span>
 
-                <input
-                  type="text"
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Enter location, product, or keyword"
-                  className="w-full pl-9 pr-9 py-4 text-sm text-gray-700 placeholder-gray-500 border border-[#DCDCDC] rounded-xl focus:outline-none"
-                />
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              // update URL param so loader runs again
+              const params = new URLSearchParams(window.location.search);
+              if (e.target.value.trim()) {
+                params.set("q", e.target.value);
+              } else {
+                params.delete("q");
+              }
+              window.history.replaceState(null, "", `?${params.toString()}`);
+            }}
+            placeholder="Enter location, product, or keyword"
+            className="w-full pl-9 pr-9 py-4 text-sm text-gray-700 placeholder-gray-500 border border-[#DCDCDC] rounded-xl focus:outline-none"
+          />
 
-                {/* Close Icon inside input */}
-                {query && (
+          {/* Close Icon inside input */}
+         {query && (
                   <button
                     onClick={() => {
-                      setQuery("");        // optional: clear search
-                      setIsSearchOpen(false); // ✅ close popup
+                      setQuery("");
+                      setIsSearchOpen(false);
+                      const params = new URLSearchParams(location.search);
+                      params.delete("q");
+                      navigate(`?${params.toString()}`, { replace: true });
                     }}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                   >
@@ -246,46 +304,50 @@ export default function Header({ data }: HeaderProps) {
                   </button>
                 )}
               </div>
+        {/* Right Buttons */}
+        <div className="flex items-center space-x-4">
+          <button>
+            <CartIcon />
+          </button>
+          <button className="text-[#091019] font-medium px-6 py-3 text-[16px] rounded-sm border border-[#091019]">
+            Login
+          </button>
+          <button className="bg-[#EE6D2D] text-white px-4 py-3.5 text-[16px] rounded-md font-medium flex items-center gap-2">
+            Get Started <ArrowRightIcon />
+          </button>
+        </div>
+      </div>
 
-              {/* Right Buttons */}
-              <div className="flex items-center space-x-4">
-                <button>
-                  <CartIcon />
-                  {/* <img src="cart-icon.svg" alt="Cart" className="h-5 w-5" /> */}
-                </button>
-                <button className="rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[15px]">
-                  Login
-                </button>
-                <button className="rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-4 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2">
-                  Get Started 
-                </button>
-              </div>
-            </div>
-
-            {/* Outer Results Container (full width, background same as popup) */}
-            {query && (
+      {/* Results List */}
+        {query && (
               <div className="ml-[151px] max-w-[718px] pb-4">
                 <div className="bg-white border border-[#DCDCDC] rounded-lg shadow-md w-full">
                   <ul className="max-h-72 overflow-y-auto">
-                    {[
-                      "Anaheim, California, United States",
-                      "Anaheim Resort, Anaheim California, United States",
-                      "Anaheim Hills, Anaheim California, United States",
-                      "Anaheim Colony, Anaheim California, United States",
-                      "Anaheim Canyon Business Center, Anaheim California, United States",
-                    ].map((item, idx) => (
-                      <li
-                        key={idx}
-                        className="px-4 py-3 cursor-pointer hover:bg-gray-100 text-sm"
-                      >
-                        <span className="font-medium text-black">
-                          {item.split(",")[0]}
-                        </span>
-                        <span className="ml-1 text-gray-600">
-                          {item.replace(item.split(",")[0], "")}
-                        </span>
-                      </li>
-                    ))}
+                    {results.length > 0 ? (
+                      results.map((item) => (
+                        <li
+                          key={item._id}
+                          className="px-4 py-3 cursor-pointer hover:bg-gray-100 text-sm"
+                          onClick={() => handleResultClick(item)}
+                        >
+                          {item.type === "location" ? (
+                            <>
+                              <span className="font-medium text-black">{item.name}</span>
+                              <span className="ml-1 text-gray-600">
+                                {item.city}, {item.postalCode}
+                              </span>
+                            </>
+                          ) : (
+                            <>
+                              <span className="font-medium text-black">{item.title}</span>
+                              <span className="ml-1 text-gray-600">(Product)</span>
+                            </>
+                          )}
+                        </li>
+                      ))
+                    ) : (
+                      <li className="px-4 py-3 text-gray-500">No results found</li>
+                    )}
                   </ul>
                 </div>
               </div>
