@@ -41,6 +41,7 @@ export default async function handleRequest(
       'https://cdn.shopify.com',
       'https://js.stripe.com/basil/stripe.js',
       'https://maps.googleapis.com/maps/api/js?key=AIzaSyDXYZ7HuZbqyLOv8xlijti1jwP9k4lSJqM',
+      'https://in.fw-cdn.com/32520975/1392281.js',
     ],
     fontSrc: [
       `'self'`,
