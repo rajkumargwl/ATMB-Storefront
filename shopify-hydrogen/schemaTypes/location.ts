@@ -47,6 +47,11 @@ export default defineType({
       title: 'Address Line 1',
       type: 'string',
     }),
+     defineField({
+      name: 'addressLine2',        // <--- Added field
+      title: 'Address Line 2',
+      type: 'string',
+    }),
     defineField({
       name: 'postalCode',
       title: 'Postal Code',
@@ -71,7 +76,21 @@ export default defineType({
       name: 'featureList',
       title: 'Feature List',
       type: 'array',
-      of: [{type: 'string'}],
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'category', type: 'string' },
+            { name: 'class', type: 'string' },
+            { name: 'description', type: 'string' },
+            { name: 'feature_id', type: 'string' },
+            { name: 'label', type: 'string' },
+            { name: 'status', type: 'string' },
+            { name: 'type', type: 'string' },
+            { name: 'sort_order', type: 'number' }, // <--- added sort_order inside feature object
+          ],
+        },
+      ],
     }),
     defineField({
       name: 'ratingList',
