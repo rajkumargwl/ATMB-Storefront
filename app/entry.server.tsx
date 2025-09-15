@@ -40,6 +40,7 @@ export default async function handleRequest(
       'https://www.instagram.com',
       'https://cdn.shopify.com',
       'https://js.stripe.com/basil/stripe.js',
+      'https://maps.googleapis.com/maps/api/js?key=AIzaSyDXYZ7HuZbqyLOv8xlijti1jwP9k4lSJqM',
     ],
     fontSrc: [
       `'self'`,
