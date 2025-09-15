@@ -416,7 +416,7 @@ export default function LocationsPage() {
                 )}
                 <button
                   //onClick={() => setSelectedLocation(loc)}
-                  onClick={() => navigate(`/plans?locationId=${loc._id}`)}
+                  onClick={() => navigate(`/PDP/virtual-mailbox?locationId=${loc._id}`)}
                   className="bg-orange-500 text-white px-4 py-2 rounded mt-2"
                 >
                   Select Plan

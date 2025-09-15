@@ -102,20 +102,21 @@ export default function Header({ data }: HeaderProps) {
 
           {/* Cart */}
           {icon2?.url && (
-            <button>
+              <Link to="/cart">
               <img
                 src={icon2.url}
                 alt="Cart"
                 className="h-5 w-5 object-contain"
               />
-            </button>
+            </Link>
           )}
 
           {/* Login / Get Started (Desktop only) */}
           <div className="hidden md:flex items-center space-x-4">
             {loginButton && (
               <Link
-                to={loginButton.link ?? "#"}
+                //to={loginButton.link ?? "#"}
+                 to="/account/login"
                 className="text-gray-700 font-medium hover:text-gray-900 border border-gray-400 px-7 py-3.5 rounded-md"
               >
                 {loginButton.label}
@@ -175,7 +176,8 @@ export default function Header({ data }: HeaderProps) {
 
               {loginButton && (
                 <Link
-                  to={loginButton.link ?? "#"}
+                  //to={loginButton.link ?? "#"}
+                   to="/account/login"
                   className="text-gray-700 font-medium hover:text-gray-900"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
