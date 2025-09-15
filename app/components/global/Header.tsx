@@ -25,10 +25,17 @@ type HeaderProps = {
   };
   searchResults: any[];   // 👈 new
   searchQuery: string;    // 👈 new
+  isLoggedIn: boolean;    // 👈 new
+  customer?: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  } | null;               // 👈 new
 };
 
 
-export default function Header({ data, searchResults, searchQuery }: HeaderProps) {
+export default function Header({ data, searchResults, searchQuery, isLoggedIn, customer }: HeaderProps) {
   if (!data) return null;
 
   const { logo, menu, icon1, icon2, loginButton, getStartedButton } = data;
@@ -162,15 +169,24 @@ export default function Header({ data, searchResults, searchQuery }: HeaderProps
 
           {/* Login / Get Started (Desktop only) */}
           <div className="hidden md:flex items-center space-x-4">
-            {loginButton && (
-              <Link
-                to={loginButton.link ?? "/account/login"}
-                className="rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[15px]"
-              >
-                {loginButton.label}
-              </Link>
+            {isLoggedIn ? (
+               <Link
+               to="/account"
+               className="text-base font-medium text-PrimaryBlack hover:underline cursor-pointer"
+             >
+               Welcome, {customer?.firstName || "User"}
+             </Link>
+            ) : (
+              loginButton && (
+                <Link
+                  to={loginButton.link ?? "/account/login"}
+                  className="rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[15px]"
+                >
+                  {loginButton.label}
+                </Link>
+              )
             )}
-            {getStartedButton && (
+            {!isLoggedIn && getStartedButton && (
               <Link
                 to={getStartedButton.link ?? "/account/register"}
                 className="rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-4 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2"
@@ -246,8 +262,6 @@ export default function Header({ data, searchResults, searchQuery }: HeaderProps
         </div>
       )}
 
-
-      {/* Search Popup Modal */}
      {/* Search Popup Modal */}
 {isSearchOpen && (
   <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50">

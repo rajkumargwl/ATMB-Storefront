@@ -342,7 +342,6 @@ export default function LocationsPage() {
 
   return (
     <>
-      <Header data={header} />
 
       <div className="flex flex-col md:flex-row mt-10 max-w-6xl mx-auto">
         {/* Left Side */}
@@ -535,7 +534,6 @@ export default function LocationsPage() {
         </div>
       )}
 
-      <Footer data={footer} />
     </>
   );
 }
