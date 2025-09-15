@@ -12,7 +12,34 @@ import {type ShopifyAnalyticsProduct} from '@shopify/hydrogen';
 import AddToCartButton from '~/components/product/buttons/AddToCartButton';
 import {useState} from 'react';
 
-export async function loader({context, params}: LoaderFunctionArgs) {
+// Location query from Sanity
+const LOCATION_QUERY = /* groq */ `
+  *[_type == "location" && locationId == $id][0]{
+    _id,
+    locationId,
+    parentLocationId,
+    country,
+    countryCode,
+    state,
+    stateCode,
+    city,
+    addressLine1,
+    postalCode,
+    coordinates,
+    displayName,
+    webkey,
+    featureList,
+    ratingList,
+    attributionList,
+    attributeList,
+    createdAt,
+    planTier,
+    priceRange,
+    options
+  }
+`;
+
+export async function loader({context, params, request}: LoaderFunctionArgs) {
   const cache = context.storefront.CacheCustom({
     mode: 'public',
     maxAge: 60,
@@ -28,21 +55,25 @@ export async function loader({context, params}: LoaderFunctionArgs) {
 
   const handle = params.handle ?? 'virtual-mailbox';
 
+  // Fetch Shopify product
   const {product} = await context.storefront.query<{product: Product}>(PRODUCT_QUERY, {
     variables: {
       handle,
       selectedOptions: [],
     },
   });
-
   if (!product) throw notFound();
 
-  const location = {
-    id: 101,
-    name: 'Anaheim - Ball Rd',
-    address: '1720 W Ball Rd Anaheim, CA 92804',
-    mailboxId: '#101',
-  };
+  // Fetch Sanity location dynamically
+  // Assume the location id comes from query param or default
+  const locationId = new URL(request.url).searchParams.get('locationId') ?? '101';
+  const location = await context.sanity.query({
+    query: LOCATION_QUERY,
+    params: {id: locationId},
+    cache,
+  });
+
+  if (!location) throw notFound();
 
   return defer({
     location,
@@ -58,7 +89,6 @@ export default function Plans() {
 
   const variants = product?.variants?.nodes as ProductVariant[];
 
-  // Build analytics if variant selected
   const productAnalytics: ShopifyAnalyticsProduct | null = selectedVariant
     ? {
         productGid: product.id,
@@ -82,10 +112,10 @@ export default function Plans() {
               Virtual Mailbox &gt; Locations &gt; Plans
             </p>
             <h2 className="text-2xl font-bold mt-2">{product.title}</h2>
-            <p className="text-lg font-semibold">{location.name}</p>
-            <p className="text-gray-600">{location.address}</p>
+            <p className="text-lg font-semibold">{location.displayName}</p>
+            <p className="text-gray-600">{location.addressLine1}</p>
             <p className="text-gray-600">
-              Mailbox ID: <span className="font-bold">{location.mailboxId}</span>
+              Mailbox ID: <span className="font-bold">#{location.locationId}</span>
             </p>
           </div>
 
