@@ -63,7 +63,7 @@ export const links: LinksFunction = () => {
   return [
     {rel: 'stylesheet', href: stylesheet},
     {
-      href: 'https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,500;0,700;1,500;1,700&display=swap',
+      href: 'https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap',
       rel: 'stylesheet',
     },
     {
