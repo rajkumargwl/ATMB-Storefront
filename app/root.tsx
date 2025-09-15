@@ -37,8 +37,12 @@ import {COLLECTION_QUERY_ID} from '~/queries/shopify/collection';
 import stylesheet from '~/styles/tailwind.css';
 import type {I18nLocale} from '~/types/shopify';
 import {SanityLayout} from './lib/sanity';
-import swiperStyles from "swiper/css?url";
-import swiperNavStyles from "swiper/css/navigation?url";
+import swiperStyles from 'swiper/css?url';
+import swiperNavStyles from 'swiper/css/navigation?url';
+import Header from '~/components/global/Header';
+import Footer from '~/components/global/Footer';
+import {HEADER_QUERY} from '~/queries/sanity/header';
+import {FOOTER_QUERY} from '~/queries/sanity/footer';
 
 const seo: SeoHandleFunction<typeof loader> = ({data}) => ({
   title: data?.layout?.seo?.title,
@@ -84,12 +88,12 @@ export const links: LinksFunction = () => {
       href: 'https://fonts.googleapis.com',
       crossOrigin: 'anonymous',
     },
-    { rel: "stylesheet", href: swiperStyles },
-    { rel: "stylesheet", href: swiperNavStyles },
+    {rel: 'stylesheet', href: swiperStyles},
+    {rel: 'stylesheet', href: swiperNavStyles},
   ];
 };
 
-export async function loader({context}: LoaderFunctionArgs) {
+export async function loader({request, context}: LoaderFunctionArgs) {
   const {cart} = context;
 
   const cache = context.storefront.CacheCustom({
@@ -104,6 +108,62 @@ export async function loader({context}: LoaderFunctionArgs) {
     context.storefront.query<{shop: Shop}>(SHOP_QUERY),
     context.sanity.query<SanityLayout>({query: LAYOUT_QUERY, cache}),
   ]);
+
+  const [header, footer] = await Promise.all([
+    context.sanity.query({query: HEADER_QUERY, cache}),
+    context.sanity.query({query: FOOTER_QUERY, cache}),
+  ]);
+
+  // 🔹 Handle search param
+  const url = new URL(request.url);
+  const q = url.searchParams.get('q') || '';
+
+  let mergedResults: any[] = [];
+  if (q) {
+    try {
+      const searchParam = `${q}*`;
+      const results = await context.sanity.query({
+        query: `{
+          "locations": *[_type == "location" && (
+            name match $search ||
+            city match $search ||
+            postalCode match $search
+          )][0...5]{
+            _id,
+            _type,
+            name,
+            city,
+            postalCode,
+            "slug": slug.current
+          },
+          "products": *[_type == "product" && (
+            title match $search ||
+            description match $search ||
+            store.title match $search
+          )][0...5]{
+            _id,
+            _type,
+            "title": store.title,
+            "handle": select(store.slug.current != null => store.slug.current, "")
+          }
+        }`,
+        params: {search: searchParam},
+      });
+
+      mergedResults = [
+        ...(results.locations || []).map((item: any) => ({
+          ...item,
+          type: 'location',
+        })),
+        ...(results.products || []).map((item: any) => ({
+          ...item,
+          type: 'product',
+        })),
+      ];
+    } catch (err) {
+      console.error('Search error:', err);
+    }
+  }
 
   const selectedLocale = context.storefront.i18n as I18nLocale;
 
@@ -130,6 +190,10 @@ export async function loader({context}: LoaderFunctionArgs) {
     sanityDataset: context.env.SANITY_DATASET,
     selectedLocale,
     storeDomain: context.storefront.getShopifyDomain(),
+    header,
+    footer,
+    q,
+    searchResults: mergedResults,
   });
 }
 
@@ -139,7 +203,8 @@ export const useRootLoaderData = () => {
 };
 
 export default function App() {
-  const {preview, ...data} = useLoaderData<SerializeFrom<typeof loader>>();
+  const {preview, header, footer, q, searchResults, ...data} =
+    useLoaderData<SerializeFrom<typeof loader>>();
   const locale = data.selectedLocale ?? DEFAULT_LOCALE;
   const hasUserConsent = true;
   const nonce = useNonce();
@@ -153,23 +218,19 @@ export default function App() {
         <Seo />
         <Meta />
         <Links />
-        <script
-          src="//in.fw-cdn.com/32520975/1392281.js"
-          chat="true"
-        ></script>
-         {/* <link href="https://anytime-cdn-cdc3c2fbcrffb0db.z03.azurefd.net/css/styles.css" rel="stylesheet" />
-        <script src="https://anytime-cdn-cdc3c2fbcrffb0db.z03.azurefd.net/js/navigation.js" defer></script>
-
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
-        <script src="https://code.jquery.com/jquery-3.6.4.min.js" defer></script> */}
+        <script src="//in.fw-cdn.com/32520975/1392281.js" chat="true"></script>
       </head>
       <body>
         <PreviewProvider previewConfig={preview} fallback={<PreviewLoading />}>
+          {/* 🔹 Global Header with search support */}
+          <Header data={header} searchQuery={q} searchResults={searchResults} />
+
           <Layout key={`${locale.language}-${locale.country}`}>
             <Outlet />
           </Layout>
+
+          {/* 🔹 Global Footer */}
+          <Footer data={footer} />
         </PreviewProvider>
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />

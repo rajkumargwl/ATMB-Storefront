@@ -10,7 +10,7 @@ import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import clsx from 'clsx';
 import {SanityPreview} from 'hydrogen-sanity';
 import {Suspense, useState, useEffect} from 'react';
-import Search from '~/components/Search';
+// import Search from '~/components/Search';
 import HomeHero from '~/components/heroes/Home';
 import ModuleGrid from '~/components/modules/ModuleGrid';
 import Header from '~/components/global/Header'; 
@@ -117,7 +117,7 @@ export default function Index() {
   const { page, gids,  header, footer, mergedResults, q } = useLoaderData<typeof loader>();
   return (
     <>
-     <Header data={header} searchResults={mergedResults} searchQuery={q} />
+     {/* <Header data={header} searchResults={mergedResults} searchQuery={q} /> */}
 
 
       <SanityPreview data={page} query={HOME_PAGE_QUERY}>
@@ -143,7 +143,7 @@ export default function Index() {
           </Suspense>
         )}
       </SanityPreview>
-      <Footer data={footer} />
+      {/* <Footer data={footer} /> */}
     </>
   );
 }
