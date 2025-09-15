@@ -117,17 +117,18 @@ export default function Index() {
   const { page, gids,  header, footer, mergedResults, q } = useLoaderData<typeof loader>();
   return (
     <>
-     <Header data={header} />
+     <Header data={header} searchResults={mergedResults} searchQuery={q} />
+
 
       <SanityPreview data={page} query={HOME_PAGE_QUERY}>
         {(page) => (
           <Suspense>
             <Await resolve={gids}>
               {/* Unified search box - Now mergedResults is available immediately */}
-              <div className="flex flex-col items-center my-24">
-                <h2 className="text-lg font-semibold mb-4">Search Locations & Products</h2>
-                <Search initialResults={mergedResults} initialQuery={q} />
-              </div>
+              {/* <div className="flex flex-col items-center my-24">
+                <h2 className="text-lg font-semibold mb-4">Search Locations & Products</h2> */}
+                {/* <Search initialResults={mergedResults} initialQuery={q} /> */}
+              {/* </div> */}
 
               {/* Page hero */}
               {page?.hero && <HomeHero hero={page.hero} />}
