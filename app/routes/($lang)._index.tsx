@@ -117,7 +117,7 @@ export default function Index() {
   const { page, gids,  header, footer, mergedResults, q } = useLoaderData<typeof loader>();
   return (
     <>
-     <Header data={header} searchResults={mergedResults} searchQuery={q} />
+     {/* <Header data={header} searchResults={mergedResults} searchQuery={q} /> */}
 
 
       <SanityPreview data={page} query={HOME_PAGE_QUERY}>
@@ -143,7 +143,7 @@ export default function Index() {
           </Suspense>
         )}
       </SanityPreview>
-      <Footer data={footer} />
+      {/* <Footer data={footer} /> */}
     </>
   );
 }
