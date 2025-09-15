@@ -43,6 +43,8 @@ export default async function handleRequest(
       'https://js.stripe.com/basil/stripe.js',
       'https://maps.googleapis.com/maps/api/js?key=AIzaSyDXYZ7HuZbqyLOv8xlijti1jwP9k4lSJqM',
       'https://in.fw-cdn.com/32520975/1392281.js',
+      'https://atmb-team-c26e0b650c4d16117551675.freshchat.com',
+      'https://maps.googleapis.com',
     ],
     fontSrc: [
       `'self'`,
