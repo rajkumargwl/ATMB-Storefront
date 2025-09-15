@@ -28,6 +28,7 @@ export default async function handleRequest(
       'https://rewoundtakeback.timex.com/',
       'https://mail.google.com/mail/u/0/',
       'https://cdn.anytimemailbox.com/portals/home/assets/images/homepage-anytime-mailbox-logo-black-2024.png',
+      'https://maps.googleapis.com/maps/api/js/StaticMapService.GetMapImage?1m2&1i819&2i1338&2e1&3u4&4m2&1u544&2u600&5m6&1e0&5sen-GB&6sus&10b1&12b1&14i47083502&8e1&key=AIzaSyDXYZ7HuZbqyLOv8xlijti1jwP9k4lSJqM&token=6729',
     ],
     styleSrc: [
       `'self'`,
@@ -71,6 +72,7 @@ export default async function handleRequest(
       'ws://localhost:*',
       'ws://127.0.0.1:*',
       'ws://*.tryhydrogen.dev:*',
+      'https://maps.googleapis.com/maps/api/mapsjs/gen_204?csp_test=true',
     ],
   });
 
