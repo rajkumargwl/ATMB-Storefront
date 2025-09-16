@@ -2,7 +2,7 @@ import {defineType, defineField} from 'sanity'
 
 export const homeSection4 = defineType({
   name: 'homeSection4',
-  title: 'Find a Anytime ',
+  title: 'Find a Virtual Mailbox',
   type: 'object',
   fields: [
     // Section heading
@@ -19,174 +19,100 @@ export const homeSection4 = defineType({
       rows: 2,
     }),
 
-    // Search bar
+    // Search bar placeholder
     defineField({
       name: 'searchPlaceholder',
       title: 'Search Placeholder',
       type: 'string',
+      initialValue: 'Search by city...',
     }),
-    // defineField({
-    //   name: 'searchActionUrl',
-    //   title: 'Search Action URL',
-    //   type: 'url',
-    // }),
-    // defineField({
-    //   name: 'searchIcon',
-    //   title: 'Search Icon',
-    //   type: 'object',
-    //   fields: [
-    //     {
-    //       name: 'svgFile',
-    //       title: 'Upload SVG File',
-    //       type: 'file',
-    //       options: {accept: '.svg'},
-    //     },
-    //     {
-    //       name: 'svgCode',
-    //       title: 'SVG Code',
-    //       type: 'text',
-    //       rows: 4,
-    //     },
-    //   ],
-    // }),
+
+    // Section title (e.g. "Most Popular Locations")
     defineField({
       name: 'title',
       title: 'Title',
       type: 'string',
-      description: 'Heading top loactions',
+      description: 'Heading above the top locations list',
     }),
 
-    // Sorting
-    // defineField({
-    //   name: 'sortLabel',
-    //   title: 'Sort Label',
-    //   type: 'string',
-    // }),
-    // defineField({
-    //   name: 'sortOptions',
-    //   title: 'Sort Options',
-    //   type: 'array',
-    //   of: [{type: 'string'}],
-    // }),
+    // Locations list
+    defineField({
+      name: 'locations',
+      title: 'Top Locations',
+      type: 'array',
+      of: [
+        defineField({
+          name: 'locationItem',
+          title: 'Location Item',
+          type: 'object',
+          fields: [
+            {
+              name: 'city',
+              title: 'City',
+              type: 'string',
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: 'state',
+              title: 'State',
+              type: 'string',
+              validation: (Rule) => Rule.required(),
+            },
+            {
+              name: 'operatorCount',
+              title: 'Number of Operators',
+              type: 'number',
+              validation: (Rule) => Rule.min(0),
+            },
+            {
+              name: 'image',
+              title: 'City Image',
+              type: 'image',
+              options: {hotspot: true},
+            },
+            {
+              name: 'locationUrl',
+              title: 'Location URL',
+              type: 'url',
+              description: 'Link to map or detail page for this location',
+            },
+          ],
+          preview: {
+            select: {
+              title: 'city',
+              subtitle: 'state',
+              media: 'image',
+              operatorCount: 'operatorCount',
+            },
+            prepare({title, subtitle, media, operatorCount}) {
+              return {
+                title: `${title}, ${subtitle}`,
+                subtitle: `${operatorCount || 0} Operators`,
+                media,
+              }
+            },
+          },
+        }),
+      ],
+    }),
 
-    // View on Map button with icon
-    // defineField({
-    //   name: 'viewOnMapText',
-    //   title: 'View on Map Button Text',
-    //   type: 'string',
-    //   initialValue: 'View on Map',
-    // }),
-    // defineField({
-    //   name: 'viewOnMapIcon',
-    //   title: 'View on Map Icon',
-    //   type: 'object',
-    //   fields: [
-    //     {
-    //       name: 'svgFile',
-    //       title: 'Upload SVG File',
-    //       type: 'file',
-    //       options: {accept: '.svg'},
-    //     },
-    //     {
-    //       name: 'svgCode',
-    //       title: 'SVG Code',
-    //       type: 'text',
-    //       rows: 4,
-    //     },
-    //   ],
-    //   description: 'SVG icon shown on View on Map button',
-    // }),
-    // defineField({
-    //   name: 'viewOnMapUrl',
-    //   title: 'View on Map URL',
-    //   type: 'url',
-    // }),
-
-    // Browse all locations button
-    // defineField({
-    //   name: 'browseAllText',
-    //   title: 'Browse All Locations Button Text',
-    //   type: 'string',
-    //   initialValue: 'Browse All Locations',
-    // }),
-    // defineField({
-    //   name: 'browseAllUrl',
-    //   title: 'Browse All Locations URL',
-    //   type: 'url',
-    // }),
-
-    // 🔹 One global location icon for all items
-    // defineField({
-    //   name: 'locationIcon',
-    //   title: 'Location Icon',
-    //   type: 'object',
-    //   fields: [
-    //     {
-    //       name: 'svgFile',
-    //       title: 'Upload SVG File',
-    //       type: 'file',
-    //       options: {accept: '.svg'},
-    //     },
-    //     {
-    //       name: 'svgCode',
-    //       title: 'SVG Code',
-    //       type: 'text',
-    //       rows: 4,
-    //     },
-    //   ],
-    //   description: 'This icon will be used for all top locations',
-    // }),
-
-    // Locations list (state removed, only city now)
-    // defineField({
-    //   name: 'locations',
-    //   title: 'Top Locations',
-    //   type: 'array',
-    //   of: [
-    //     defineField({
-    //       name: 'locationItem',
-    //       title: 'Location Item',
-    //       type: 'object',
-    //       fields: [
-    //         {
-    //           name: 'city',
-    //           title: 'City',
-    //           type: 'string',
-    //           validation: (Rule) => Rule.required(),
-    //         },
-    //         {
-    //           name: 'operatorCount',
-    //           title: 'Number of Operators',
-    //           type: 'number',
-    //           validation: (Rule) => Rule.min(0),
-    //         },
-    //         {
-    //           name: 'locationUrl',
-    //           title: 'Location URL',
-    //           type: 'url',
-    //           description: 'Link to map or page for this location',
-    //         },
-    //       ],
-    //       preview: {
-    //         select: {
-    //           title: 'city',
-    //           operatorCount: 'operatorCount',
-    //         },
-    //         prepare({title, operatorCount}) {
-    //           return {
-    //             title: title,
-    //             subtitle: `${operatorCount || 0} Operators`,
-    //           }
-    //         },
-    //       },
-    //     }),
-    //   ],
-    // }),
+    // Browse All Locations button
+    defineField({
+      name: 'browseAllText',
+      title: 'Browse All Locations Button Text',
+      type: 'string',
+      initialValue: 'Browse All Locations',
+    }),
+    defineField({
+      name: 'browseAllUrl',
+      title: 'Browse All Locations URL',
+      type: 'url',
+    }),
   ],
   preview: {
     select: {
       title: 'heading',
-      subtitle: 'subheading',
+      subtitle: 'title',
     },
   },
 })

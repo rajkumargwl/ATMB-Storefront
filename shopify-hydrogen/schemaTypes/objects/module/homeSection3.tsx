@@ -5,21 +5,17 @@ export const homeSection3 = defineType({
   title: 'Who We Help',
   type: 'object',
   fields: [
-   
     defineField({
       name: 'title',
-      title: 'Title',
+      title: 'Section Title',
       type: 'string',
+      description: 'e.g. Who We Help',
     }),
     defineField({
-      name: 'subtitle1',
-      title: 'Subtitle 1',
+      name: 'subtitle',
+      title: 'Section Subtitle',
       type: 'string',
-    }),
-    defineField({
-      name: 'subtitle2',
-      title: 'Subtitle 2',
-      type: 'string',
+      description: 'e.g. From solo professionals to scaling businesses...',
     }),
     defineField({
       name: 'tabs',
@@ -35,21 +31,41 @@ export const homeSection3 = defineType({
               name: 'label',
               title: 'Tab Label',
               type: 'string',
+              description: 'e.g. Small Business Owner, E-Commerce Entrepreneur',
+            }),
+            defineField({
+              name: 'heading',
+              title: 'Tab Heading',
+              type: 'string',
+              description: 'Main heading inside the tab content',
             }),
             defineField({
               name: 'description',
               title: 'Description',
               type: 'text',
+              rows: 3,
+              description: 'Short paragraph under the heading',
             }),
             defineField({
               name: 'keyNeeds',
               title: 'Key Needs',
               type: 'array',
               of: [{type: 'string'}],
+              description: 'Bullet points (use check icons in frontend)',
+            }),
+            defineField({
+              name: 'quote',
+              title: 'Quote Section',
+              type: 'object',
+              fields: [
+                {name: 'avatar', title: 'Avatar', type: 'image', options: {hotspot: true}},
+                {name: 'author', title: 'Author / Role', type: 'string'},
+                {name: 'text', title: 'Quote Text', type: 'text'},
+              ],
             }),
             defineField({
               name: 'services',
-              title: 'Relevant Services',
+              title: 'Key Services',
               type: 'array',
               of: [
                 defineField({
@@ -72,12 +88,16 @@ export const homeSection3 = defineType({
                           name: 'svgCode',
                           title: 'SVG Code',
                           type: 'text',
-                          description: 'Paste raw SVG markup here',
+                          description: 'Paste raw SVG markup if no upload',
                         },
                       ],
                     },
                     {name: 'title', title: 'Service Title', type: 'string'},
+                    {name: 'description', title: 'Service Description', type: 'string'},
                   ],
+                  preview: {
+                    select: {title: 'title', subtitle: 'description', media: 'icon.upload'},
+                  },
                 }),
               ],
             }),
@@ -86,31 +106,26 @@ export const homeSection3 = defineType({
               title: 'Button',
               type: 'object',
               fields: [
-                {name: 'label', title: 'Label', type: 'string'},
+                {name: 'label', title: 'Label', type: 'string', description: 'e.g. Get Started'},
                 {name: 'textColor', title: 'Text Color', type: 'color'},
                 {name: 'bgColor', title: 'Background Color', type: 'color'},
               ],
             }),
-            defineField({
-              name: 'image',
-              title: 'Main Image',
-              type: 'image',
-              options: {hotspot: true},
-            }),
-            defineField({
-              name: 'quote',
-              title: 'Quote',
-              type: 'string',
-            }),
           ],
+          preview: {
+            select: {title: 'label', subtitle: 'heading'},
+          },
         }),
       ],
     }),
   ],
   preview: {
-    select: {
-      title: 'title',
-      subtitle: 'subtitle',
+    select: {title: 'title', subtitle: 'subtitle'},
+    prepare({title, subtitle}) {
+      return {
+        title: title || 'Who We Help Section',
+        subtitle: subtitle,
+      }
     },
   },
 })
