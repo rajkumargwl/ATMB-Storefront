@@ -28,6 +28,9 @@ export default async function handleRequest(
       'https://rewoundtakeback.timex.com/',
       'https://mail.google.com/mail/u/0/',
       'https://cdn.anytimemailbox.com/portals/home/assets/images/homepage-anytime-mailbox-logo-black-2024.png',
+      'https://maps.gstatic.com',
+      'https://maps.googleapis.com',
+      'data:',
     ],
     styleSrc: [
       `'self'`,
@@ -40,10 +43,14 @@ export default async function handleRequest(
       'https://www.instagram.com',
       'https://cdn.shopify.com',
       'https://js.stripe.com/basil/stripe.js',
+      'https://in.fw-cdn.com/32520975/1392281.js',
+      'https://atmb-team-c26e0b650c4d16117551675.freshchat.com',
+      'https://maps.googleapis.com',
     ],
     fontSrc: [
       `'self'`,
       'https://fonts.gstatic.com',
+      'data:',
     ],
     frameAncestors: [
       `'self'`,
@@ -69,6 +76,7 @@ export default async function handleRequest(
       'ws://localhost:*',
       'ws://127.0.0.1:*',
       'ws://*.tryhydrogen.dev:*',
+      'https://maps.googleapis.com',
     ],
   });
 

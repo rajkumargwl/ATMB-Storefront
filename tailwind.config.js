@@ -14,8 +14,11 @@ module.exports = {
     boxShadow: {
       DEFAULT: '0px 0px 4px rgba(0, 0, 0, 0.1)',
     },
-    fontFamily: {
-      sans: '"DM Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+    // fontFamily: {
+    //   sans: '"DM Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+    // },
+      fontFamily: {
+      sans: ["Roboto", "sans-serif"],
     },
     fontSize: {
       // 12px
@@ -94,6 +97,7 @@ module.exports = {
     fontWeight: {
       bold: 700,
       medium: 500,
+      normal: 400,
     },
     letterSpacing: {
       normal: '-0.03em',
@@ -113,10 +117,15 @@ module.exports = {
         peach: '#FFE1D1',
         red: '#EC5039',
         shopPay: '#5A31F4',
+        PrimaryBlack: '#091019',
+        LightWhite: '#DCDCDC',
       },
       height: {
         'header-sm': '4.375rem',
         'header-lg': '6.25rem',
+      },
+      fontFamily: {
+        roboto: ["Roboto", "sans-serif"], 
       },
       spacing: {
         1: '4px',

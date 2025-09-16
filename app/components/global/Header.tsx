@@ -25,10 +25,17 @@ type HeaderProps = {
   };
   searchResults: any[];   // 👈 new
   searchQuery: string;    // 👈 new
+  isLoggedIn: boolean;    // 👈 new
+  customer?: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  } | null;               // 👈 new
 };
 
 
-export default function Header({ data, searchResults, searchQuery }: HeaderProps) {
+export default function Header({ data, searchResults, searchQuery, isLoggedIn, customer }: HeaderProps) {
   if (!data) return null;
 
   const { logo, menu, icon1, icon2, loginButton, getStartedButton } = data;
@@ -89,69 +96,71 @@ export default function Header({ data, searchResults, searchQuery }: HeaderProps
 
 
   return (
-    <header className="w-full bg-white shadow-sm border-b border-[#DCDCDC]">
-      <div className="max-w-[1240px] mx-auto flex items-center justify-between px-4 md:px-6 py-4">
-        {/* Logo */}
-        <div className="flex items-center">
-          {logo?.url && (
-            <Link to="/">
-              <img
-                src={logo.url}
-                alt="Logo"
-                className="h-10 w-auto object-contain"
-              />
-            </Link>
-          )}
+    <header className="w-full bg-white shadow-sm px-5">
+      <div className="max-w-[1240px] mx-auto flex items-center justify-between py-5">
+        <div className="flex items-center gap-10">
+          {/* Logo */}
+          <div className="flex items-center">
+            {logo?.url && (
+              <Link to="/">
+                <img
+                  src={logo.url}
+                  alt="Logo"
+                  className="w-[80px] md:w-[100px] object-contain"
+                />
+              </Link>
+            )}
+          </div>
+
+          {/* Menu (Desktop only) */}
+          <nav className="hidden md:flex space-x-3">
+            {menu?.map((item, idx) => (
+              <div key={idx} className="relative group p-2">
+                <Link
+                  to={item.label === "Solutions"
+        ? "/solutions"
+        : item.label === "Locations"
+        ? "/locations"
+        : item.url ?? "#"}
+                  className="text-PrimaryBlack hover:text-PrimaryBlack font-normal flex items-center gap-[6px] text-base leading-[24px]"
+                >
+                  {item.label}
+                  {item.hasSubmenu && (
+                  <ArrowDownIcon />
+                  )}
+                </Link>
+
+                {/* Dropdown submenu */}
+                {item.hasSubmenu && item.subMenu && (
+                  <div className="absolute left-0 mt-2 bg-white border shadow-md rounded-[6px] hidden group-hover:block min-w-[100px]">
+                    <ul className="py-2">
+                      {item.subMenu.map((sub, i) => (
+                        <li key={i}>
+                          <Link
+                            to={sub.url ?? "#"}
+                            className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                          >
+                            {sub.label}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            ))}
+          </nav>
         </div>
 
-        {/* Menu (Desktop only) */}
-        <nav className="hidden md:flex space-x-6">
-          {menu?.map((item, idx) => (
-            <div key={idx} className="relative group">
-              <Link
-                to={item.label === "Solutions"
-      ? "/solutions"
-      : item.label === "Locations"
-      ? "/locations"
-      : item.url ?? "#"}
-                className="text-gray-700 hover:text-gray-900 font-medium flex items-center gap-1"
-              >
-                {item.label}
-                {item.hasSubmenu && (
-                 <ArrowDownIcon />
-                )}
-              </Link>
-
-              {/* Dropdown submenu */}
-              {item.hasSubmenu && item.subMenu && (
-                <div className="absolute left-0 mt-2 bg-white border shadow-md rounded-lg hidden group-hover:block">
-                  <ul className="py-2">
-                    {item.subMenu.map((sub, i) => (
-                      <li key={i}>
-                        <Link
-                          to={sub.url ?? "#"}
-                          className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                        >
-                          {sub.label}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          ))}
-        </nav>
-
         {/* Right section */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-7">
           {/* Search */}
           {icon1?.url && (
             <button onClick={() => setIsSearchOpen(true)}>
               <img
                 src={icon1.url}
                 alt="Search"
-                className="h-5 w-5 object-contain"
+                className="h-6 w-6 object-contain"
               />
             </button>
           )}
@@ -162,27 +171,36 @@ export default function Header({ data, searchResults, searchQuery }: HeaderProps
               <img
                 src={icon2.url}
                 alt="Cart"
-                className="h-5 w-5 object-contain"
+                className="h-6 w-6 object-contain"
               />
             </button>
           )}
 
           {/* Login / Get Started (Desktop only) */}
           <div className="hidden md:flex items-center space-x-4">
-            {loginButton && (
-              <Link
-                to={loginButton.link ?? "#"}
-                className="text-gray-700 font-medium hover:text-gray-900 border border-gray-400 px-7 py-3.5 rounded-md"
-              >
-                {loginButton.label}
-              </Link>
+            {isLoggedIn ? (
+               <Link
+               to="/account"
+               className="text-base font-medium text-PrimaryBlack hover:underline cursor-pointer"
+             >
+               Welcome, {customer?.firstName || "User"}
+             </Link>
+            ) : (
+              loginButton && (
+                <Link
+                  to={loginButton.link ?? "/account/login"}
+                  className="rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[15px]"
+                >
+                  {loginButton.label}
+                </Link>
+              )
             )}
-            {getStartedButton && (
+            {!isLoggedIn && getStartedButton && (
               <Link
-                to={getStartedButton.link ?? "#"}
-                className="bg-[#EE6D2D] text-white px-4 py-3 rounded-md font-medium flex items-center gap-2"
+                to={getStartedButton.link ?? "/account/register"}
+                className="rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-4 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2"
               >
-                {getStartedButton.label} <ArrowRightIcon />
+                {getStartedButton.label} 
               </Link>
             )}
           </div>
@@ -222,7 +240,7 @@ export default function Header({ data, searchResults, searchQuery }: HeaderProps
                 <Link
                   key={idx}
                   to={item.label === "Solutions" ? "/solutions": item.label === "Locations"? "/locations": item.url ?? "#"}
-                  className="text-gray-700 hover:text-gray-900 font-medium"
+                  className="text-PrimaryBlack hover:text-PrimaryBlack font-normal text-base leading-[24px]"
                   onClick={() => setIsMobileMenuOpen(false)} // auto close on link click
                 >
                   {item.label}
@@ -232,7 +250,7 @@ export default function Header({ data, searchResults, searchQuery }: HeaderProps
               {loginButton && (
                 <Link
                   to={loginButton.link ?? "#"}
-                  className="text-gray-700 font-medium hover:text-gray-900"
+                  className="text-PrimaryBlack hover:text-PrimaryBlack font-normal text-base leading-[24px]"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {loginButton.label}
@@ -242,10 +260,10 @@ export default function Header({ data, searchResults, searchQuery }: HeaderProps
               {getStartedButton && (
                 <Link
                   to={getStartedButton.link ?? "#"}
-                  className="bg-[#EE6D2D] text-white px-4 py-2 rounded-md font-medium flex items-center gap-2"
+                  className="rounded-[100px] bg-[#F60] text-white px-4 py-2 font-normal text-base leading-[24px] flex items-center gap-2"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  {getStartedButton.label} <ArrowRightIcon />
+                  {getStartedButton.label} 
                 </Link>
               )}
             </nav>
@@ -253,6 +271,21 @@ export default function Header({ data, searchResults, searchQuery }: HeaderProps
         </div>
       )}
 
+     {/* Search Popup Modal */}
+{isSearchOpen && (
+  <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50">
+    <div className="bg-[#F9F9F9] rounded-md shadow-lg w-full max-w-[1208px] mt-5">
+      
+      {/* Header Row */}
+      <div className="flex items-center justify-between px-6 py-4">
+        {/* Logo */}
+        <div className="flex items-center">
+          <img
+            src={Logo}
+            alt="Logo"
+            className="h-13 w-auto"
+          />
+        </div>
 
       {/* Search Popup Modal */}
      {/* Search Popup Modal */}

@@ -1,4 +1,4 @@
-import {type FetcherWithComponents, useFetcher} from '@remix-run/react';
+import {type FetcherWithComponents, useFetcher, useNavigate} from '@remix-run/react';
 import {
   AnalyticsEventName,
   CartForm,
@@ -132,6 +132,7 @@ function AddToCartAnalytics({
   const fetcherData = fetcher.data;
   const formData = fetcher.formData;
   const pageAnalytics = usePageAnalytics({hasUserConsent: true});
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (formData) {
@@ -161,6 +162,7 @@ function AddToCartAnalytics({
           eventName: AnalyticsEventName.ADD_TO_CART,
           payload: addToCartPayload,
         });
+        navigate('/cart');
       }
     }
   }, [fetcherData, formData, pageAnalytics]);

@@ -47,12 +47,58 @@ export const PRODUCT_FIELDS = `
   }
 `;
 
+// export const PRODUCT_QUERY = `#graphql
+//   ${PRODUCT_FIELDS}
+//   ${PRODUCT_VARIANT_FIELDS}
+
+//   query product($country: CountryCode, $language: LanguageCode, $handle: String!, $selectedOptions: [SelectedOptionInput!]!)
+//   @inContext(country: $country, language: $language) {
+//     product(handle: $handle) {
+//       ...ProductFields
+//       media(first: 20) {
+//         nodes {
+//           ... on MediaImage {
+//             id
+//             mediaContentType
+//             image {
+//               id
+//               url
+//               altText
+//               width
+//               height
+//             }
+//           }
+//           ... on Model3d {
+//             id
+//             mediaContentType
+//             sources {
+//               mimeType
+//               url
+//             }
+//           }
+//         }
+//       }
+//       selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {
+//         ...ProductVariantFields
+//       }
+//       variants(first: 1) {
+//         nodes {
+//           ...ProductVariantFields
+//         }
+//       }
+//     }
+//   }
+// `;
 export const PRODUCT_QUERY = `#graphql
   ${PRODUCT_FIELDS}
   ${PRODUCT_VARIANT_FIELDS}
 
-  query product($country: CountryCode, $language: LanguageCode, $handle: String!, $selectedOptions: [SelectedOptionInput!]!)
-  @inContext(country: $country, language: $language) {
+  query product(
+    $country: CountryCode
+    $language: LanguageCode
+    $handle: String!
+    $selectedOptions: [SelectedOptionInput!]!
+  ) @inContext(country: $country, language: $language) {
     product(handle: $handle) {
       ...ProductFields
       media(first: 20) {
@@ -81,7 +127,7 @@ export const PRODUCT_QUERY = `#graphql
       selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {
         ...ProductVariantFields
       }
-      variants(first: 1) {
+      variants(first: 50) {
         nodes {
           ...ProductVariantFields
         }
@@ -89,6 +135,9 @@ export const PRODUCT_QUERY = `#graphql
     }
   }
 `;
+
+
+
 
 export const PRODUCTS_AND_VARIANTS = `#graphql
   ${PRODUCT_FIELDS}
