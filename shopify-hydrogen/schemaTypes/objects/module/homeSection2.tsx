@@ -9,82 +9,92 @@ export const homeSection2 = defineType({
       name: 'heading',
       title: 'Heading',
       type: 'string',
+      description: 'Main heading, e.g. Trusted by Businesses Around the World',
     }),
-  
     defineField({
-      name: 'icons',
-      title: 'Icons / Highlights',
-      type: 'array',
-      of: [
-        {
-          type: 'object',
-          fields: [
-            defineField({
-              name: 'icon',
-              title: 'Icon',
-              type: 'object',
-              fields: [
-                {
-                  name: 'upload',
-                  title: 'Upload Icon (SVG/PNG)',
-                  type: 'image',
-                  options: {hotspot: true},
-                },
-                {
-                  name: 'svgCode',
-                  title: 'SVG Code',
-                  type: 'text',
-                  rows: 4,
-                  description: 'Paste raw SVG markup if no upload',
-                },
-              ],
-            }),
-            defineField({
-              name: 'label',
-              title: 'Label',
-              type: 'string',
-            }),
-          ],
-          preview: {
-            select: {title: 'label', media: 'icon.upload'},
-            prepare({title, media}) {
-              return {
-                title: title || 'Icon item',
-                media,
-              }
-            },
-          },
-        },
+      name: 'highlight',
+      title: 'Highlight Years',
+      type: 'object',
+      fields: [
+        {name: 'value', title: 'Value', type: 'string', description: 'e.g. 15+'},
+        {name: 'label', title: 'Label', type: 'string', description: 'e.g. Years powering virtual operations'},
       ],
     }),
     defineField({
-      name: 'images',
-      title: 'Logos / Images',
+      name: 'ratings',
+      title: 'Ratings',
+      type: 'array',
+      of: [
+        defineField({
+          name: 'ratingItem',
+          title: 'Rating Item',
+          type: 'object',
+          fields: [
+            {
+              name: 'platform',
+              title: 'Platform Name',
+              type: 'string',
+              description: 'e.g. Google, Shopper Approved',
+            },
+            {
+              name: 'logo',
+              title: 'Platform Logo',
+              type: 'image',
+              options: {hotspot: true},
+            },
+            {
+              name: 'score',
+              title: 'Score',
+              type: 'string',
+              description: 'e.g. 4.5/5',
+            },
+            {
+              name: 'label',
+              title: 'Label',
+              type: 'string',
+              description: 'e.g. on Google Review',
+            },
+          ],
+          preview: {
+            select: {title: 'platform', subtitle: 'score', media: 'logo'},
+          },
+        }),
+      ],
+    }),
+    defineField({
+      name: 'logos',
+      title: 'Partner Logos',
       type: 'array',
       of: [
         {
           type: 'object',
           fields: [
-            defineField({
-              name: 'image',
-              title: 'Image',
+            {
+              name: 'logo',
+              title: 'Logo',
               type: 'image',
               options: {hotspot: true},
-            }),
+            },
+            {
+              name: 'alt',
+              title: 'Alt Text',
+              type: 'string',
+            },
           ],
+          preview: {
+            select: {title: 'alt', media: 'logo'},
+          },
         },
       ],
     }),
   ],
   preview: {
     select: {
-      title: 'title',
       heading: 'heading',
     },
-    prepare({title, heading}) {
+    prepare({heading}) {
       return {
-        title: heading || 'Business Section 2',
-        subtitle: title || 'No title set',
+        title: heading || 'Trusted by Businesses Section',
       }
     },
   },

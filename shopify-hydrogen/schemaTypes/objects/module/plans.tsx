@@ -2,10 +2,11 @@ import {defineType, defineField} from 'sanity'
 
 export const plans = defineType({
   name: 'plans',
-  title: 'Stay Connected',
+  title: 'Stay Connected Section',
   type: 'object',
   fields: [
-  defineField({
+    // Section heading + description
+    defineField({
       name: 'heading',
       title: 'Heading',
       type: 'string',
@@ -17,7 +18,44 @@ export const plans = defineType({
       type: 'text',
       rows: 2,
     }),
-    // Cards array
+
+    // Tabs (Individual Products, Bundles)
+    defineField({
+      name: 'tabs',
+      title: 'Tabs',
+      type: 'array',
+      of: [{type: 'string'}],
+      initialValue: ['Individual Products', 'Bundles'],
+    }),
+
+    // Toggle (Monthly / Yearly)
+    defineField({
+      name: 'billingToggle',
+      title: 'Billing Toggle',
+      type: 'object',
+      fields: [
+        {
+          name: 'monthlyLabel',
+          title: 'Monthly Label',
+          type: 'string',
+          initialValue: 'Monthly',
+        },
+        {
+          name: 'yearlyLabel',
+          title: 'Yearly Label',
+          type: 'string',
+          initialValue: 'Yearly',
+        },
+        {
+          name: 'discountLabel',
+          title: 'Discount Label',
+          type: 'string',
+          initialValue: '20% Off',
+        },
+      ],
+    }),
+
+    // Cards
     defineField({
       name: 'plans',
       title: 'Plans / Cards',
@@ -28,7 +66,7 @@ export const plans = defineType({
           title: 'Plan',
           type: 'object',
           fields: [
-              {
+            {
               name: 'icon',
               title: 'Icon',
               type: 'object',
@@ -42,9 +80,9 @@ export const plans = defineType({
                 {
                   name: 'svgFile',
                   title: 'SVG File Upload',
-                  type: 'image',
-                  description: 'Upload SVG file if you prefer',
-                  options: {accept: 'image/svg+xml'},
+                  type: 'file',
+                
+                  description: 'Upload SVG file if preferred',
                 },
               ],
             },
@@ -55,17 +93,23 @@ export const plans = defineType({
               validation: (Rule) => Rule.required(),
             },
             {
+              name: 'subheading',
+              title: 'Subheading',
+              type: 'string',
+              description: 'Short description under the title',
+            },
+            {
+              name: 'startingFromText',
+              title: 'Starting From Text',
+              type: 'string',
+              initialValue: 'Starting from',
+            },
+            {
               name: 'price',
               title: 'Price',
               type: 'string',
-              description: 'Example: $9/month, Free, etc.',
+              description: 'Example: US$9/month',
             },
-            defineField({
-                name: 'heading',
-                title: 'Heading',
-                type: 'string',
-                validation: (Rule) => Rule.required(),
-            }),
             {
               name: 'features',
               title: 'Features',
@@ -73,12 +117,11 @@ export const plans = defineType({
               of: [{type: 'string'}],
               description: 'Plain text list — checkmark icons added in frontend',
             },
-     
             {
               name: 'ctaText',
               title: 'CTA Button Text',
               type: 'string',
-              initialValue: 'Get Started',
+              initialValue: 'Buy Now',
             },
             {
               name: 'ctaUrl',
@@ -88,12 +131,14 @@ export const plans = defineType({
             {
               name: 'ctaTextColor',
               title: 'CTA Text Color',
-              type: 'color',  
+              type: 'string',
+              description: 'Hex or CSS color (e.g. #fff)',
             },
             {
               name: 'ctaBgColor',
               title: 'CTA Background Color',
-              type: 'color',  
+              type: 'string',
+              description: 'Hex or CSS color (e.g. #FF6600)',
             },
             {
               name: 'isMostPopular',
@@ -101,12 +146,17 @@ export const plans = defineType({
               type: 'boolean',
               initialValue: false,
             },
+            {
+              name: 'mostPopularLabel',
+              title: 'Most Popular Label',
+              type: 'string',
+              initialValue: 'Most Popular',
+            },
           ],
           preview: {
             select: {
               title: 'title',
               subtitle: 'price',
-              media: 'icon',
             },
           },
         }),
@@ -116,7 +166,7 @@ export const plans = defineType({
   preview: {
     select: {
       title: 'heading',
-      subtitle: 'eyebrow',
+      subtitle: 'description',
     },
   },
 })
