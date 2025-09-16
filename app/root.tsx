@@ -25,7 +25,7 @@ import {
   type SerializeFrom,
 } from '@shopify/remix-oxygen';
 import {getPreview, PreviewProvider} from 'hydrogen-sanity';
-
+ 
 import {GenericError} from '~/components/global/GenericError';
 import {Layout} from '~/components/global/Layout';
 import {NotFound} from '~/components/global/NotFound';
@@ -43,7 +43,6 @@ import Header from '~/components/global/Header';
 import Footer from '~/components/global/Footer';
 import {HEADER_QUERY} from '~/queries/sanity/header';
 import {FOOTER_QUERY} from '~/queries/sanity/footer';
-
 const seo: SeoHandleFunction<typeof loader> = ({data}) => ({
   title: data?.layout?.seo?.title,
   titleTemplate: `%s${
@@ -51,18 +50,18 @@ const seo: SeoHandleFunction<typeof loader> = ({data}) => ({
   }`,
   description: data?.layout?.seo?.description,
 });
-
+ 
 export const handle = {
   seo,
 };
-
+ 
 export const meta: MetaFunction = () => [
   {
     name: 'viewport',
     content: 'width=device-width,initial-scale=1',
   },
 ];
-
+ 
 export const links: LinksFunction = () => {
   return [
     {rel: 'stylesheet', href: stylesheet},
@@ -92,23 +91,55 @@ export const links: LinksFunction = () => {
     {rel: 'stylesheet', href: swiperNavStyles},
   ];
 };
-
 export async function loader({request, context}: LoaderFunctionArgs) {
   const {cart} = context;
+  const customerAccessToken = await context.session.get('customerAccessToken');
+  let customer;
+  if (customerAccessToken) {
+    try {
+      customer = await context.storefront.query<{
+        customer: { id: string };
+      }>(
+        `#graphql
+          query customer($customerAccessToken: String!) {
+            customer(customerAccessToken: $customerAccessToken) {
+              id
+              firstName
+              lastName
+              email
+            }
+          }
+        `,
+        {
+          variables: {
+            customerAccessToken,
+          },
+        }
+      );
+  
+      // If the token is invalid, remove it from the session
+      // if (!customer) {
+      //   context.session.unset('customerAccessToken');
+      // }
+    } catch (error) {
+      console.error("Error fetching customer:", error);
+    }
+  }
+ 
+  const isAuthenticated = Boolean(customerAccessToken);
 
   const cache = context.storefront.CacheCustom({
     mode: 'public',
     maxAge: 60,
     staleWhileRevalidate: 60,
   });
-
+ 
   const preview = getPreview(context);
-
+ 
   const [shop, layout] = await Promise.all([
     context.storefront.query<{shop: Shop}>(SHOP_QUERY),
     context.sanity.query<SanityLayout>({query: LAYOUT_QUERY, cache}),
   ]);
-
   const [header, footer] = await Promise.all([
     context.sanity.query({query: HEADER_QUERY, cache}),
     context.sanity.query({query: FOOTER_QUERY, cache}),
@@ -149,7 +180,6 @@ export async function loader({request, context}: LoaderFunctionArgs) {
         }`,
         params: {search: searchParam},
       });
-
       mergedResults = [
         ...(results.locations || []).map((item: any) => ({
           ...item,
@@ -164,9 +194,8 @@ export async function loader({request, context}: LoaderFunctionArgs) {
       console.error('Search error:', err);
     }
   }
-
   const selectedLocale = context.storefront.i18n as I18nLocale;
-
+ 
   return defer({
     preview,
     analytics: {
@@ -194,23 +223,26 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     footer,
     q,
     searchResults: mergedResults,
+    customer: customer ? customer.customer : null,
+    customerAccessToken,
+    isLoggedIn: isAuthenticated,
   });
 }
-
+ 
 export const useRootLoaderData = () => {
   const [root] = useMatches();
   return root?.data as SerializeFrom<typeof loader>;
 };
-
+ 
 export default function App() {
   const {preview, header, footer, q, searchResults, ...data} =
     useLoaderData<SerializeFrom<typeof loader>>();
   const locale = data.selectedLocale ?? DEFAULT_LOCALE;
   const hasUserConsent = true;
   const nonce = useNonce();
-
+ 
   useAnalytics(hasUserConsent);
-
+ 
   return (
     <html lang={locale.language}>
       <head>
@@ -239,15 +271,15 @@ export default function App() {
     </html>
   );
 }
-
+ 
 export function ErrorBoundary({error}: {error: Error}) {
   const nonce = useNonce();
-
+ 
   const routeError = useRouteError();
   const isRouteError = isRouteErrorResponse(routeError);
-
+ 
   const rootData = useRootLoaderData();
-
+ 
   const {
     selectedLocale: locale,
     layout,
@@ -260,12 +292,12 @@ export function ErrorBoundary({error}: {error: Error}) {
         notFoundCollection: undefined,
       };
   const {notFoundPage} = layout || {};
-
+ 
   let title = 'Error';
   if (isRouteError) {
     title = 'Not found';
   }
-
+ 
   return (
     <html lang={locale.language}>
       <head>
@@ -303,7 +335,7 @@ export function ErrorBoundary({error}: {error: Error}) {
     </html>
   );
 }
-
+ 
 const SHOP_QUERY = `#graphql
   query layout {
     shop {
