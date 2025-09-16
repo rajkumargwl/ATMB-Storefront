@@ -47,8 +47,8 @@ export default defineType({
       title: 'Address Line 1',
       type: 'string',
     }),
-     defineField({
-      name: 'addressLine2',        // <--- Added field
+    defineField({
+      name: 'addressLine2',
       title: 'Address Line 2',
       type: 'string',
     }),
@@ -60,7 +60,7 @@ export default defineType({
     defineField({
       name: 'coordinates',
       title: 'Coordinates',
-      type: 'geopoint', // stores latitude + longitude
+      type: 'geopoint',
     }),
     defineField({
       name: 'displayName',
@@ -72,6 +72,8 @@ export default defineType({
       title: 'Web Key',
       type: 'string',
     }),
+
+    // ---------- Feature List ----------
     defineField({
       name: 'featureList',
       title: 'Feature List',
@@ -87,29 +89,71 @@ export default defineType({
             { name: 'label', type: 'string' },
             { name: 'status', type: 'string' },
             { name: 'type', type: 'string' },
-            { name: 'sort_order', type: 'number' }, // <--- added sort_order inside feature object
+            { name: 'sort_order', type: 'number' },
           ],
         },
       ],
     }),
+
+    // ---------- Rating List ----------
     defineField({
       name: 'ratingList',
       title: 'Rating List',
       type: 'array',
-      of: [{type: 'string'}],
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'rating_id', title: 'Rating ID', type: 'string' },
+            { name: 'sort_order', title: 'Sort Order', type: 'number' },
+            { name: 'status', title: 'Status', type: 'string' },
+            { name: 'type', title: 'Type', type: 'string' },
+            { name: 'value', title: 'Value', type: 'number' },
+          ],
+        },
+      ],
     }),
+
+    // ---------- Attribution List ----------
     defineField({
       name: 'attributionList',
       title: 'Attribution List',
       type: 'array',
-      of: [{type: 'string'}],
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'attribution_id', title: 'Attribution ID', type: 'string' },
+            { name: 'name', title: 'Name', type: 'string' },
+            { name: 'sort_order', title: 'Sort Order', type: 'number' },
+            { name: 'status', title: 'Status', type: 'string' },
+            { name: 'type', title: 'Type', type: 'string' },
+            { name: 'value', title: 'Value', type: 'string' },
+          ],
+        },
+      ],
     }),
+
+    // ---------- Attribute List ----------
     defineField({
       name: 'attributeList',
       title: 'Attribute List',
       type: 'array',
-      of: [{type: 'string'}],
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'attribute_id', title: 'Attribute ID', type: 'string' },
+            { name: 'name', title: 'Name', type: 'string' },
+            { name: 'sort_order', title: 'Sort Order', type: 'number' },
+            { name: 'status', title: 'Status', type: 'string' },
+            { name: 'type', title: 'Type', type: 'string' },
+            { name: 'value', title: 'Value', type: 'string' },
+          ],
+        },
+      ],
     }),
+
     defineField({
       name: 'createdAt',
       title: 'Created At',
@@ -124,13 +168,13 @@ export default defineType({
           {title: 'Basic', value: 'basic'},
           {title: 'Premium', value: 'premium'},
         ],
-        layout: 'radio', // optional: makes it radio buttons
+        layout: 'radio',
       },
     }),
     defineField({
       name: 'priceRange',
       title: 'Price Range',
-      type: 'number', // integer
+      type: 'number',
     }),
     defineField({
       name: 'options',
@@ -148,9 +192,8 @@ export default defineType({
         ],
       },
     }),
-
   ],
-  
+
   preview: {
     select: {
       title: 'displayName',
