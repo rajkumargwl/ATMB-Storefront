@@ -272,23 +272,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
       )}
 
      {/* Search Popup Modal */}
-{isSearchOpen && (
-  <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50">
-    <div className="bg-[#F9F9F9] rounded-md shadow-lg w-full max-w-[1208px] mt-5">
-      
-      {/* Header Row */}
-      <div className="flex items-center justify-between px-6 py-4">
-        {/* Logo */}
-        <div className="flex items-center">
-          <img
-            src={Logo}
-            alt="Logo"
-            className="h-13 w-auto"
-          />
-        </div>
-
-      {/* Search Popup Modal */}
-     {/* Search Popup Modal */}
+{/* Search Popup Modal */}
 {isSearchOpen && (
   <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50">
     <div className="bg-[#F9F9F9] rounded-md shadow-lg w-full max-w-[1208px] mt-5">
@@ -310,112 +294,101 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
             <SearchIcon />
           </span>
 
-          {/* <input
+          <input
             type="text"
             value={query}
             onChange={(e) => {
-              setQuery(e.target.value);
-              // update URL param so loader runs again
-              const params = new URLSearchParams(window.location.search);
-              if (e.target.value.trim()) {
-                params.set("q", e.target.value);
+              const newValue = e.target.value;
+              setQuery(newValue);
+
+              const params = new URLSearchParams(location.search);
+              if (newValue.trim()) {
+                params.set("q", newValue);
               } else {
                 params.delete("q");
               }
-              window.history.replaceState(null, "", `?${params.toString()}`);
+
+              navigate(`?${params.toString()}`, { replace: true });
             }}
             placeholder="Enter location, product, or keyword"
             className="w-full pl-9 pr-9 py-4 text-sm text-gray-700 placeholder-gray-500 border border-[#DCDCDC] rounded-xl focus:outline-none"
-          /> */}
-          <input
-  type="text"
-  value={query}
-  onChange={(e) => {
-    const newValue = e.target.value;
-    setQuery(newValue);
-
-    // Debounce navigation for smoother UX
-    const params = new URLSearchParams(location.search);
-    if (newValue.trim()) {
-      params.set("q", newValue);
-    } else {
-      params.delete("q");
-    }
-
-    navigate(`?${params.toString()}`, { replace: true });
-  }}
-  placeholder="Enter location, product, or keyword"
-  className="w-full pl-9 pr-9 py-4 text-sm text-gray-700 placeholder-gray-500 border border-[#DCDCDC] rounded-xl focus:outline-none"
-/>
-
+          />
 
           {/* Close Icon inside input */}
-         {query && (
-                  <button
-                    onClick={() => {
-                      setQuery("");
-                      setIsSearchOpen(false);
-                      const params = new URLSearchParams(location.search);
-                      params.delete("q");
-                      navigate(`?${params.toString()}`, { replace: true });
-                    }}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  >
-                    <CloseIcon />
-                  </button>
-                )}
-              </div>
+          {query && (
+            <button
+              onClick={() => {
+                setQuery("");
+                setIsSearchOpen(false);
+                const params = new URLSearchParams(location.search);
+                params.delete("q");
+                navigate(`?${params.toString()}`, { replace: true });
+              }}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            >
+              <CloseIcon />
+            </button>
+          )}
+        </div>
+
         {/* Right Buttons */}
         <div className="flex items-center space-x-4">
           <button>
             <CartIcon />
           </button>
-          <button className="text-[#091019] font-medium px-6 py-3 text-[16px] rounded-sm border border-[#091019]">
-            Login
-          </button>
-          <button className="bg-[#EE6D2D] text-white px-4 py-3.5 text-[16px] rounded-md font-medium flex items-center gap-2">
-            Get Started <ArrowRightIcon />
-          </button>
+          <Link
+            to={loginButton?.link ?? "/account/login"}
+            className="text-[#091019] font-medium px-6 py-3 text-[16px] rounded-sm border border-[#091019]"
+          >
+            {loginButton?.label || "Login"}
+          </Link>
+          <Link
+            to={getStartedButton?.link ?? "/account/register"}
+            className="bg-[#EE6D2D] text-white px-4 py-3.5 text-[16px] rounded-md font-medium flex items-center gap-2"
+          >
+            {getStartedButton?.label || "Get Started"} <ArrowRightIcon />
+          </Link>
         </div>
       </div>
 
       {/* Results List */}
-        {query && (
-              <div className="ml-[151px] max-w-[718px] pb-4">
-                <div className="bg-white border border-[#DCDCDC] rounded-lg shadow-md w-full">
-                  <ul className="max-h-72 overflow-y-auto">
-                    {results.length > 0 ? (
-                      results.map((item) => (
-                        <li
-                          key={item._id}
-                          className="px-4 py-3 cursor-pointer hover:bg-gray-100 text-sm"
-                          onClick={() => handleResultClick(item)}
-                        >
-                          {item.type === "location" ? (
-                            <>
-                              <span className="font-medium text-black">{item.name}</span>
-                              <span className="ml-1 text-gray-600">
-                                {item.city}, {item.postalCode}
-                              </span>
-                            </>
-                          ) : (
-                            <>
-                              <span className="font-medium text-black">{item.title}</span>
-                              <span className="ml-1 text-gray-600">(Product)</span>
-                            </>
-                          )}
-                        </li>
-                      ))
+      {query && (
+        <div className="ml-[151px] max-w-[718px] pb-4">
+          <div className="bg-white border border-[#DCDCDC] rounded-lg shadow-md w-full">
+            <ul className="max-h-72 overflow-y-auto">
+              {results.length > 0 ? (
+                results.map((item) => (
+                  <li
+                    key={item._id}
+                    className="px-4 py-3 cursor-pointer hover:bg-gray-100 text-sm"
+                    onClick={() => handleResultClick(item)}
+                  >
+                    {item.type === "location" ? (
+                      <>
+                        <span className="font-medium text-black">{item.name}</span>
+                        <span className="ml-1 text-gray-600">
+                          {item.city}, {item.postalCode}
+                        </span>
+                      </>
                     ) : (
-                      <li className="px-4 py-3 text-gray-500">No results found</li>
+                      <>
+                        <span className="font-medium text-black">{item.title}</span>
+                        <span className="ml-1 text-gray-600">(Product)</span>
+                      </>
                     )}
-                  </ul>
-                </div>
-              </div>
-            )}
+                  </li>
+                ))
+              ) : (
+                <li className="px-4 py-3 text-gray-500">No results found</li>
+              )}
+            </ul>
           </div>
         </div>
       )}
+    </div>
+  </div>
+)}
+
     </header>
   );
 }
