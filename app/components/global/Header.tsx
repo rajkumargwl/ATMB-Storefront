@@ -78,6 +78,15 @@ export default function Header({ data, searchResults, searchQuery }: HeaderProps
       navigate(`/sublocations?q=${encodeURIComponent(queryParam)}`);
     }
   };
+  
+  useEffect(() => {
+  const params = new URLSearchParams(location.search);
+  const newQuery = params.get("q") || "";
+
+  setQuery(newQuery);
+  setResults(searchResults || []); // new results from loader
+}, [location.search, searchResults]);
+
 
   return (
     <header className="w-full bg-white shadow-sm border-b border-[#DCDCDC]">
@@ -268,7 +277,7 @@ export default function Header({ data, searchResults, searchQuery }: HeaderProps
             <SearchIcon />
           </span>
 
-          <input
+          {/* <input
             type="text"
             value={query}
             onChange={(e) => {
@@ -284,7 +293,28 @@ export default function Header({ data, searchResults, searchQuery }: HeaderProps
             }}
             placeholder="Enter location, product, or keyword"
             className="w-full pl-9 pr-9 py-4 text-sm text-gray-700 placeholder-gray-500 border border-[#DCDCDC] rounded-xl focus:outline-none"
-          />
+          /> */}
+          <input
+  type="text"
+  value={query}
+  onChange={(e) => {
+    const newValue = e.target.value;
+    setQuery(newValue);
+
+    // Debounce navigation for smoother UX
+    const params = new URLSearchParams(location.search);
+    if (newValue.trim()) {
+      params.set("q", newValue);
+    } else {
+      params.delete("q");
+    }
+
+    navigate(`?${params.toString()}`, { replace: true });
+  }}
+  placeholder="Enter location, product, or keyword"
+  className="w-full pl-9 pr-9 py-4 text-sm text-gray-700 placeholder-gray-500 border border-[#DCDCDC] rounded-xl focus:outline-none"
+/>
+
 
           {/* Close Icon inside input */}
          {query && (
