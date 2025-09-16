@@ -1,4 +1,4 @@
-import {Form, useActionData} from '@remix-run/react';
+import {Form, useActionData, useNavigation} from '@remix-run/react';
 import type {SeoHandleFunction} from '@shopify/hydrogen';
 import type {CustomerCreatePayload} from '@shopify/hydrogen/storefront-api-types';
 import {
@@ -46,18 +46,14 @@ export const action: ActionFunction = async ({request, context, params}) => {
   const email = formData.get('email');
   const password = formData.get('password');
 
-  if (
-    !email ||
-    !password ||
-    typeof email !== 'string' ||
-    typeof password !== 'string'
-  ) {
+  if (!email || !password || typeof email !== 'string' || typeof password !== 'string') {
     return badRequest<ActionData>({
       formError: 'Please provide both an email and a password.',
     });
   }
 
   try {
+    // 1️ Create Shopify customer
     const data = await storefront.mutate<{
       customerCreate: CustomerCreatePayload;
     }>(CUSTOMER_CREATE_MUTATION, {
@@ -67,13 +63,66 @@ export const action: ActionFunction = async ({request, context, params}) => {
     });
 
     if (!data?.customerCreate?.customer?.id) {
-      /**
-       * Something is wrong with the user's input.
-       */
-      throw new Error(data?.customerCreate?.customerUserErrors.join(', '));
+      const userErrors = data?.customerCreate?.customerUserErrors ?? [];
+      const message = userErrors.map((e) => e.message).join(', ') || 'Customer creation failed';
+      throw new Error(message);
     }
 
+    // 2️ Get Microsoft Entra Token
+    const tokenResponse = await fetch(
+      `https://login.microsoftonline.com/${context.env.MS_ENTRA_TENANT_ID}/oauth2/v2.0/token`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          client_id: context.env.MS_ENTRA_CLIENT_ID!,
+          client_secret: context.env.MS_ENTRA_CLIENT_SECRET!,
+          scope: 'api://development.anytimeapi.com/customer/.default',
+          grant_type: 'client_credentials',
+        }),
+      }
+    );
+
+    if (!tokenResponse.ok) {
+      console.error('Failed to get Microsoft Entra token', await tokenResponse.text());
+      throw new Error('Could not get Microsoft Entra access token');
+    }
+
+    const tokenData = await tokenResponse.json();
+    const accessToken = tokenData.access_token;
+
+    // 3️ Call External API to Create User
+    const userResponse = await fetch('https://development.anytimeapi.com/customer', {
+      method: 'POST',
+      headers: {
+        'API-Version': 'v1',
+        'Api-Environment': 'DEV',
+        'Ocp-Apim-Subscription-Key': context.env.ANYTIME_SUBSCRIPTION_KEY!,
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        first_name: 'test',
+        last_name: 'test',
+        phone: '+639123456789',
+        status: 'Active',
+        type: 'Customer',
+      }),
+    });
+
+    const userResponses = await userResponse.json();
+    if (userResponses.success === false) {
+      // console.error('External API failed', await userResponses.errors);
+      throw new Error('Could not create user in external API: ' + userResponses.errors.map((err: any) => err.message).join(', '));
+    }
+
+    // 4️⃣ Login customer in Shopify
     const customerAccessToken = await doLogin(context, {email, password});
+    if (!customerAccessToken) throw new Error('Login failed');
+
     session.set('customerAccessToken', customerAccessToken);
 
     return redirect(params.lang ? `/${params.lang}/account` : '/account', {
@@ -82,41 +131,27 @@ export const action: ActionFunction = async ({request, context, params}) => {
       },
     });
   } catch (error: any) {
-    if (storefront.isApiError(error)) {
-      return badRequest({
-        formError: 'Something went wrong. Please try again later.',
-      });
-    }
-
-    /**
-     * The user did something wrong, but the raw error from the API is not super friendly.
-     * Let's make one up.
-     */
+    console.error('Register action failed:', error);
     return badRequest({
       formError:
-        'Sorry. We could not create an account with this email. User might already exist, try to login instead.',
+        error?.message ||
+        'Sorry. We could not create an account. Please try again or login if you already have an account.',
     });
   }
 };
 
 export default function Register() {
   const actionData = useActionData<ActionData>();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === 'submitting';
   const [nativeEmailError, setNativeEmailError] = useState<null | string>(null);
-  const [nativePasswordError, setNativePasswordError] = useState<null | string>(
-    null,
-  );
+  const [nativePasswordError, setNativePasswordError] = useState<null | string>(null);
 
   return (
-    <div
-      className={clsx(
-        'my-32 px-4', //
-        'md:px-8',
-      )}
-    >
+    <div className={clsx('my-32 px-4', 'md:px-8')}>
       <div className="flex justify-center">
         <FormCardWrapper title="Create an account">
           <Form method="post" noValidate>
-            {/* Form error */}
             {actionData?.formError && (
               <div className="mb-6 flex items-center justify-center rounded-sm border border-red p-4 text-sm text-red">
                 <p>{actionData.formError}</p>
@@ -156,10 +191,7 @@ export default function Register() {
                 error={nativePasswordError || ''}
                 label="Password"
                 onBlur={(event) => {
-                  if (
-                    event.currentTarget.validity.valid ||
-                    !event.currentTarget.value.length
-                  ) {
+                  if (event.currentTarget.validity.valid || !event.currentTarget.value.length) {
                     setNativePasswordError(null);
                   } else {
                     setNativePasswordError(
@@ -176,10 +208,11 @@ export default function Register() {
             <div className="mt-4 space-y-4">
               <Button
                 type="submit"
-                disabled={!!(nativePasswordError || nativeEmailError)}
+                disabled={!!(nativePasswordError || nativeEmailError) || isSubmitting}
               >
-                Create account
+                {isSubmitting ? 'Creating account...' : 'Create account'}
               </Button>
+
               <div className="flex justify-between">
                 <p className="text-sm">
                   Already have an account? &nbsp;
