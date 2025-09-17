@@ -1,6 +1,8 @@
 import { useState } from "react";
 import ArrowRightIcon from "~/components/icons/ArrowRightIcon";
 import type { SanityFAQ } from "~/lib/sanity";
+import PlusFAQ from '~/components/icons/PlusFAQ';
+import CloseFAQ from '~/components/icons/CloseFAQ';
 
 type Props = {
   data: SanityFAQ;
@@ -11,43 +13,49 @@ export default function FAQ({ data }: Props) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <div className="flex flex-col items-center px-6 py-12 bg-white">
+    <section className="px-5 py-[40px] md:py-[100px]">
+       <div className="max-w-[1240px] mx-auto">
+    <div className="flex flex-col items-center">
+        <div className="max-w-[744px] mx-auto pb-[44px] md:pb-[56px] flex flex-col align-center justify-center gap-5">
       {/* Heading */}
-      <h2 className="text-[36px] font-bold text-center text-[#091019] mb-2">
-        {data?.headline}
-      </h2>
-      <p className="text-[#091019] text-center max-w-3xl mb-10 text-[18px] leading-[27px]">
-       {data?.subheadline}
-      </p>
+        <h2 className="font-Roboto text-PrimaryBlack font-semibold leading-[38.4px] md:leading-[43.2px] text-[32px] md:text-[36px] tracking-[-0.48px] md:tracking-[-0.54px] text-center">
+            {data?.headline}
+          </h2>
+          <p className="font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] text-center">
+          {data?.subheadline}
+          </p>
+      </div>
 
       {/* FAQ Content */}
-      <div className="w-full max-w-2xl space-y-3">
+      <div className="space-y-4 max-w-[812px] lg:min-w-[812px] mx-auto">
         {data?.faqCategories?.[activeTab]?.faqs?.length > 0 ? (
           data.faqCategories[activeTab].faqs.map((faq, idx) => {
             const isOpen = openIndex === idx;
             return (
               <div
                 key={idx}
-                className={`rounded-lg border border-gray-200 ${
-                  isOpen ? "bg-[#0B0D17] text-white" : "bg-[#F9F9F9]"
+                className={`rounded-[12px] p-6 border border-LightWhite ${
+                  isOpen ? "bg-PrimaryBlack text-white" : "bg-[#F9F9F9]"
                 }`}
               >
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : idx)}
-                  className="flex justify-between items-center w-full px-5 py-4 text-left font-medium text-lg"
+                  className="w-full flex justify-between items-center text-left gap-6"
                 >
-                  <span>{faq.question}</span>
+                  <span className={`font-Roboto font-medium leading-[28px] text-[20px] ${
+                      isOpen ? "text-white" : ""
+                    } text-PrimaryBlack`}>{faq.question}</span>
                   <span
                     className={`text-2xl font-bold ${
-                      isOpen ? "rotate-45" : ""
+                      isOpen ? "rotate-0" : ""
                     } transition-transform`}
                   >
-                    {isOpen ? "−" : "+"}
+                    {isOpen ? <CloseFAQ /> : <PlusFAQ />}
                   </span>
                 </button>
 
                 {isOpen && (
-                  <div className="px-5 pb-4 text-sm leading-relaxed text-gray-300">
+                  <div className="pt-4 font-Roboto text-white font-normal leading-[24px] text-[16px]">
                     {faq.answer}
                   </div>
                 )}
@@ -63,10 +71,13 @@ export default function FAQ({ data }: Props) {
 
 
       {/* View All FAQs Button */}
-      <button className="mt-10 flex items-center gap-2 bg-[#E85B1A] hover:bg-[#d45113] transition text-white font-semibold px-8 py-3 rounded-full shadow-md">
-        View All FAQs
-        <ArrowRightIcon />
-      </button>
+      <div className="flex justify-center mt-11 md:mt-14">
+        <button className="bg-DarkOrange text-white font-Roboto font-medium leading-[16px] text-[16px] tracking-[0.08px] py-3 md:py-[18px] px-4 md:px-[143px] rounded-[100px] min-w-[205px] md:min-w-aauto min-h-[52px] md:min-h-auto">
+          View All FAQs
+        </button>
+      </div>
     </div>
+    </div>
+    </section>
   );
 }
