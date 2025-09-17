@@ -96,6 +96,7 @@ module.exports = {
     },
     fontWeight: {
       bold: 700,
+      semibold: 600,
       medium: 500,
       normal: 400,
     },
@@ -117,8 +118,10 @@ module.exports = {
         peach: '#FFE1D1',
         red: '#EC5039',
         shopPay: '#5A31F4',
-        PrimaryBlack: '#091019',
+         PrimaryBlack: '#091019',
         LightWhite: '#DCDCDC',
+        DarkOrange: '#F60',
+        LightGray: '#4D4E4F',
       },
       height: {
         'header-sm': '4.375rem',
