@@ -9,17 +9,35 @@ import {HEADER_QUERY} from '~/queries/sanity/header';
 import {FOOTER_QUERY} from '~/queries/sanity/footer';
 import {notFound} from '~/lib/utils';
 
+type Feature = {
+  feature_id: string;
+  label: string;
+  description?: string;
+  status?: string;
+  type?: string;
+};
+
+type Rating = {
+  rating_id: string;
+  type: string;
+  status: string;
+  value: number;
+};
+
 type LocationAPI = {
   _id: string;
-  name: string;
+  displayName: string;
   city: string;
+  stateCode: string;
   postalCode: string;
-  slug: string;
+  addressLine1: string;
+  addressLine2?: string;
   latitude?: number;
   longitude?: number;
   planTier?: string;
-  price?: number;
-  features?: string[];
+  priceRange?: number;
+  featureList?: Feature[];
+  ratingList?: Rating[];
 };
 
 const seo: SeoHandleFunction = () => ({
@@ -36,7 +54,6 @@ export async function loader({context, request}: LoaderFunctionArgs) {
     staleWhileRevalidate: 60,
   });
 
-  // fetch header + footer
   const [header, footer] = await Promise.all([
     context.sanity.query({query: HEADER_QUERY, cache}),
     context.sanity.query({query: FOOTER_QUERY, cache}),
@@ -61,16 +78,30 @@ export async function loader({context, request}: LoaderFunctionArgs) {
             postalCode match $search
           )][0...10]{
             _id,
-            name,
+            displayName,
             city,
-            display_name,
+            stateCode,
+            addressLine1,
+            addressLine2,
             postalCode,
-            "slug": slug.current,
+            coordinates,
             "latitude":coordinates.lat,
             "longitude":coordinates.lng,
+            featureList[]{
+              feature_id,
+              label,
+              description,
+              status,
+              type
+            },
+            ratingList[]{
+              rating_id,
+              type,
+              status,
+              value
+            },
             planTier,
-            price,
-            features,
+            priceRange
           }
         }`,
         params: {search: searchParam},
@@ -82,21 +113,37 @@ export async function loader({context, request}: LoaderFunctionArgs) {
     const locations: LocationAPI[] = await context.sanity.query({
       query: `*[_type == "location"][0...10]{
         _id,
-        name,
+        displayName,
         city,
-        display_name,
+        stateCode,
+        addressLine1,
+        addressLine2,
         postalCode,
-        "slug": slug.current,
+        coordinates,
         "latitude":coordinates.lat,
         "longitude":coordinates.lng,
+        featureList[]{
+          feature_id,
+          label,
+          description,
+          status,
+          type
+        },
+        ratingList[]{
+          rating_id,
+          type,
+          status,
+          value
+        },
         planTier,
-        price,
-        features,
+        priceRange
       }`,
     });
     results.locations = locations;
   }
-console.log('Fetched locations:', results.locations);
+
+  console.log('Fetched locations:', JSON.stringify(results.locations));
+
   return defer({
     locations: results.locations,
     header,
@@ -113,14 +160,13 @@ export default function LocationsPage() {
     locations[0] || null,
   );
 
-  // filter states
   const [showFilters, setShowFilters] = useState(false);
   const [planTier, setPlanTier] = useState('');
   const [minPrice, setMinPrice] = useState(
-    Math.min(...locations.map((loc) => loc.price || 0), 0),
+    Math.min(...locations.map((loc) => loc.priceRange || 0), 0),
   );
   const [maxPrice, setMaxPrice] = useState(
-    Math.max(...locations.map((loc) => loc.price || 999), 999),
+    Math.max(...locations.map((loc) => loc.priceRange || 999), 999),
   );
   const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
 
@@ -132,21 +178,21 @@ export default function LocationsPage() {
     );
   };
 
-  // city filter
   const filtered = locations.filter((loc) => {
     const matchCity = selectedCity ? loc.city === selectedCity : true;
     const matchTier = planTier ? loc.planTier === planTier : true;
     const matchPrice =
-      (loc.price || 0) >= minPrice && (loc.price || 0) <= maxPrice;
+      (loc.priceRange || 0) >= minPrice && (loc.priceRange || 0) <= maxPrice;
     const matchFeatures =
       selectedFeatures.length > 0
-        ? selectedFeatures.every((f) => loc.features?.includes(f))
+        ? selectedFeatures.every((f) =>
+            (loc.featureList || []).map((ft) => ft.label).includes(f),
+          )
         : true;
 
     return matchCity && matchTier && matchPrice && matchFeatures;
   });
 
-  // reset selected location on filter change
   useEffect(() => {
     if (filtered.length > 0) {
       setSelectedLocation(filtered[0]);
@@ -158,191 +204,89 @@ export default function LocationsPage() {
   );
 
   const uniqueFeatures = Array.from(
-    new Set(locations.flatMap((loc) => loc.features || [])),
+    new Set(locations.flatMap((loc) => loc.featureList?.map((f) => f.label) || [])),
   );
 
   const uniqueTiers = Array.from(
     new Set(locations.map((loc) => loc.planTier).filter(Boolean)),
   );
-   // --- MAP LOGIC ---
-    const mapRef = useRef<google.maps.Map | null>(null);
-    const markersRef = useRef<google.maps.Marker[]>([]);
-    const boundsRef = useRef<google.maps.LatLngBounds | null>(null);
-  
-    useEffect(() => {
-      if (!window.google) {
-        const script = document.createElement('script');
-        script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDXYZ7HuZbqyLOv8xlijti1jwP9k4lSJqM`;
-        script.async = true;
-        script.onload = () => initMap();
-        document.body.appendChild(script);
-      } else {
-        initMap();
-      }
-    }, [filtered]);
-  
-    const initMap = () => {
-      if (!filtered.length) return;
-  
-      const map = new google.maps.Map(
-        document.getElementById('map') as HTMLElement,
-        {
-          center: {lat: filtered[0].latitude || 0, lng: filtered[0].longitude || 0},
-          zoom: 4,
-        },
-      );
-  
-      mapRef.current = map;
-  
-      // Clear old markers
-      markersRef.current.forEach((m) => m.setMap(null));
-      markersRef.current = [];
-  
-    //   // Add markers
-    //   filtered.forEach((loc) => {
-    //     console.log(loc.latitude, loc.longitude);
-    //     if (loc.latitude && loc.longitude) {
-    //       const marker = new google.maps.Marker({
-    //         position: {lat: loc.latitude, lng: loc.longitude},
-    //         map,
-    //         title: loc.name,
-    //       });
-    //       markersRef.current.push(marker);
-    //     }
-    //   });
-  
-    //   // Fit to bounds
-    //   const bounds = new google.maps.LatLngBounds();
-    //   markersRef.current.forEach((m) => bounds.extend(m.getPosition()!));
-    //   map.fitBounds(bounds);
-    //   if (!bounds.isEmpty()) {
-    //     map.fitBounds(bounds);
-    //   }
-  
-    //   boundsRef.current = bounds;
-      
-    // };
+
+  // --- MAP LOGIC ---
+  const mapRef = useRef<google.maps.Map | null>(null);
+  const markersRef = useRef<google.maps.Marker[]>([]);
+  const boundsRef = useRef<google.maps.LatLngBounds | null>(null);
+
+  useEffect(() => {
+    if (!window.google) {
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDXYZ7HuZbqyLOv8xlijti1jwP9k4lSJqM`;
+      script.async = true;
+      script.onload = () => initMap();
+      document.body.appendChild(script);
+    } else {
+      initMap();
+    }
+  }, [filtered]);
+
+  const initMap = () => {
+    if (!filtered.length) return;
+
+    const map = new google.maps.Map(
+      document.getElementById('map') as HTMLElement,
+      {
+        center: {lat: filtered[0].latitude || 0, lng: filtered[0].longitude || 0},
+        zoom: 4,
+      },
+    );
+
+    mapRef.current = map;
+
+    markersRef.current.forEach((m) => m.setMap(null));
+    markersRef.current = [];
+
     filtered.forEach((loc) => {
-      console.log(loc.latitude, loc.longitude);
       if (loc.latitude && loc.longitude) {
         const marker = new google.maps.Marker({
           position: {lat: loc.latitude, lng: loc.longitude},
           map,
-          title: loc.name,
+          title: loc.displayName,
           icon: {
-      url: "data:image/svg+xml;utf-8," + encodeURIComponent(`
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32">
-          <path fill="#FF6600" d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5c-1.4 0-2.5-1.1-2.5-2.5S10.6 6.5 12 6.5s2.5 1.1 2.5 2.5S13.4 11.5 12 11.5z"/>
-        </svg>
-      `),
-      scaledSize: new google.maps.Size(32, 32),
-      anchor: new google.maps.Point(16, 32),
-    },
+            url:
+              'data:image/svg+xml;utf-8,' +
+              encodeURIComponent(`
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32">
+                <path fill="#FF6600" d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5c-1.4 0-2.5-1.1-2.5-2.5S10.6 6.5 12 6.5s2.5 1.1 2.5 2.5S13.4 11.5 12 11.5z"/>
+              </svg>
+            `),
+            scaledSize: new google.maps.Size(32, 32),
+            anchor: new google.maps.Point(16, 32),
+          },
         });
         markersRef.current.push(marker);
       }
     });
-     
-      
-          // Fit to bounds
-          const bounds = new google.maps.LatLngBounds();
-          markersRef.current.forEach((m) => bounds.extend(m.getPosition()!));
-          map.fitBounds(bounds);
-        };
-    const smoothZoom = (
-      map: google.maps.Map,
-      targetZoom: number,
-      currentZoom?: number,
-      onComplete?: () => void
-    ) => {
-      currentZoom = currentZoom || map.getZoom() || 4;
-      if (currentZoom === targetZoom) {
-        if (onComplete) onComplete();
-        return;
-      }
-     
-      google.maps.event.addListenerOnce(map, 'zoom_changed', () => {
-        smoothZoom(
-          map,
-          targetZoom,
-          currentZoom! + (targetZoom > currentZoom ? 1 : -1),
-          onComplete
-        );
-      });
-     
-      setTimeout(() => map.setZoom(currentZoom!), 80);
-    };
-     
-      
-    const smoothPanTo = (
-      map: google.maps.Map,
-      target: google.maps.LatLngLiteral,
-      duration = 1000,
-      onComplete?: () => void
-    ) => {
-      const start = map.getCenter();
-      if (!start) return;
-     
-      const startLat = start.lat();
-      const startLng = start.lng();
-      const deltaLat = target.lat - startLat;
-      const deltaLng = target.lng - startLng;
-     
-      let startTime: number | null = null;
-     
-      const step = (timestamp: number) => {
-        if (!startTime) startTime = timestamp;
-        const progress = Math.min((timestamp - startTime) / duration, 1);
-     
-        // ease-in-out
-        const easeInOut = progress < 0.5
-          ? 2 * progress * progress
-          : -1 + (4 - 2 * progress) * progress;
-     
-        const lat = startLat + deltaLat * easeInOut;
-        const lng = startLng + deltaLng * easeInOut;
-     
-        map.setCenter({ lat, lng });
-     
-        if (progress < 1) {
-          requestAnimationFrame(step);
-        } else if (onComplete) {
-          onComplete();
-        }
-      };
-     
-      requestAnimationFrame(step);
-    };
-     
-    const zoomToLocation = (loc: LocationAPI) => {
-      if (mapRef.current && loc.latitude && loc.longitude) {
-        const target = { lat: loc.latitude, lng: loc.longitude };
-     
-        // Step 1: Zoom OUT a bit first
-        smoothZoom(mapRef.current, 8, undefined, () => {
-          // Step 2: Pan while zoomed out
-          smoothPanTo(mapRef.current!, target, 1200, () => {
-            // Step 3: Zoom back IN to final level
-            smoothZoom(mapRef.current!, 12);
-          });
-        });
-      }
-    };
-    // const zoomToLocation = (loc: LocationAPI) => {
-    //   if (mapRef.current && loc.latitude && loc.longitude) {
-    //     mapRef.current.setZoom(9);
-    //     mapRef.current.panTo({lat: loc.latitude, lng: loc.longitude});
-    //   }
-    // };
-    const resetToAllLocations = () => {
-      if (mapRef.current && boundsRef.current && !boundsRef.current.isEmpty()) {
-        mapRef.current.fitBounds(boundsRef.current);
-      }
-    };
+
+    const bounds = new google.maps.LatLngBounds();
+    markersRef.current.forEach((m) => bounds.extend(m.getPosition()!));
+    map.fitBounds(bounds);
+    boundsRef.current = bounds;
+  };
+
+  const zoomToLocation = (loc: LocationAPI) => {
+    if (mapRef.current && loc.latitude && loc.longitude) {
+      mapRef.current.setZoom(12);
+      mapRef.current.panTo({lat: loc.latitude, lng: loc.longitude});
+    }
+  };
+
+  const resetToAllLocations = () => {
+    if (mapRef.current && boundsRef.current && !boundsRef.current.isEmpty()) {
+      mapRef.current.fitBounds(boundsRef.current);
+    }
+  };
 
   return (
     <>
-
       <div className="flex flex-col md:flex-row mt-10 max-w-6xl mx-auto">
         {/* Left Side */}
         <div className="w-full md:w-1/2 p-4">
@@ -378,7 +322,6 @@ export default function LocationsPage() {
                 strokeLinecap="round"
                 strokeLinejoin="round"
               >
-                {/* funnel-style filter icon */}
                 <path d="M3 5h18M6.75 10h10.5M10.5 15h3" />
               </svg>
             </button>
@@ -387,38 +330,73 @@ export default function LocationsPage() {
           <p className="text-gray-600 mb-2">{filtered.length} locations found</p>
 
           {/* Locations List */}
-          <div className="space-y-4 max-h-[500px] overflow-y-auto">
+          <div className="space-y-4 max-h-[600px] overflow-y-auto">
             {filtered.map((loc) => (
               <div
                 key={loc._id}
-                className="border rounded p-4 shadow-sm hover:shadow-md cursor-pointer"
-                onMouseEnter={() => zoomToLocation(loc)}  
-               // onMouseLeave={resetToAllLocations}           
-                 >
-                <h2 className="font-semibold text-lg">
-                  {loc.city || 'Unknown City'} - {loc.name}
-                </h2>
+                className="border rounded-lg p-4 shadow-sm hover:shadow-md transition cursor-pointer"
+                onMouseEnter={() => zoomToLocation(loc)}
+              >
+                {/* Top Row: Badges + Distance */}
+                
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex gap-2">
+                    {loc.ratingList?.some(
+                      (r) => r.type === 'TOPRATED' && r.status === 'ACTIVE',
+                    ) && (
+                      <span className="text-xs bg-orange-100 text-orange-600 font-semibold px-2 py-1 rounded">
+                        TOP RATED
+                      </span>
+                    )}
+                    <span className="text-xs bg-blue-100 text-blue-600 font-semibold px-2 py-1 rounded">
+                      PREMIUM ADDRESS
+                    </span>
+                  </div>
+                  <span className="text-xs bg-green-100 text-green-600 px-2 py-1 rounded">
+                    0.2 miles
+                  </span>
+                </div>
+
+                {/* Location Title + Address */}
+                <h2 className="font-semibold text-lg">{loc.displayName}</h2>
                 <p className="text-sm text-gray-600">
-                  Lat Long: {loc.latitude} - {loc.longitude}
+                  {loc.addressLine1}, {loc.city}, {loc.stateCode}{' '}
+                  {loc.postalCode}
                 </p>
-                <p className="text-sm text-gray-600">
-                  Postal Code: {loc.postalCode || 'N/A'}
-                </p>
-                <p className="text-sm text-gray-600">
-                  Tier: {loc.planTier || 'N/A'} | Price: $
-                  {loc.price?.toFixed(2) || 'N/A'}
-                </p>
-                {loc.features && (
-                  <p className="text-sm text-gray-600">
-                    Features: {loc.features.join(', ')}
+
+                {/* Price Row */}
+                <div className="flex items-center justify-between mt-3">
+                  <p className="text-sm text-gray-500">Starting from</p>
+                  <p className="text-lg font-bold text-gray-900">
+                    US${(loc.priceRange || 0.0).toFixed(2)}/month
                   </p>
-                )}
+                </div>
+
+                {/* Feature Icons */}
+                <div className="flex flex-wrap gap-4 mt-3 text-sm text-gray-700">
+                  {loc.featureList?.slice(0, 3).map((feature) => (
+                    <div
+                      key={feature.feature_id}
+                      className="flex items-center gap-1"
+                    >
+                      <span>📬</span> {feature.label}
+                    </div>
+                  ))}
+                  {loc.featureList && loc.featureList.length > 3 && (
+                    <span className="text-xs text-gray-500">
+                      +{loc.featureList.length - 3}
+                    </span>
+                  )}
+                </div>
+
+                {/* CTA Button */}
                 <button
-                  //onClick={() => setSelectedLocation(loc)}
-                  onClick={() => navigate(`/PDP/virtual-mailbox?locationId=${loc._id}`)}
-                  className="bg-orange-500 text-white px-4 py-2 rounded mt-2"
+                  onClick={() =>
+                    navigate(`/PDP/virtual-mailbox?locationId=${loc._id}`)
+                  }
+                  className="mt-4 w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 rounded-lg"
                 >
-                  Select Plan
+                  Select
                 </button>
               </div>
             ))}
@@ -427,26 +405,7 @@ export default function LocationsPage() {
 
         {/* Right Side Map */}
         <div className="w-full md:w-1/2 p-4">
-        <div id="map" className="w-full h-[600px] rounded shadow" />
-          {/* {selectedLocation ? (
-            <iframe
-              title="map"
-              width="100%"
-              height="600"
-              style={{border: 0}}
-              loading="lazy"
-              allowFullScreen
-              src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyD9hXTbp7SLLl5FSCKtRNu9mezIjxz89D8&q=${
-                selectedLocation.latitude && selectedLocation.longitude
-                  ? `${selectedLocation.latitude},${selectedLocation.longitude}`
-                  : selectedLocation.city || 'New Delhi'
-              }`}
-            ></iframe>
-          ) : (
-            <p className="text-gray-500">
-              Select a plan to view it on the map.
-            </p>
-          )} */}
+          <div id="map" className="w-full h-[600px] rounded shadow" />
         </div>
       </div>
 
@@ -456,7 +415,6 @@ export default function LocationsPage() {
           <div className="bg-white p-6 rounded-lg max-w-md w-full">
             <h2 className="text-xl font-bold mb-4">Filters</h2>
 
-            {/* Filters */}
             <div className="space-y-4">
               {/* Plan Tier */}
               <div>
@@ -515,8 +473,8 @@ export default function LocationsPage() {
               <button
                 onClick={() => {
                   setPlanTier('');
-                  setMinPrice(Math.min(...locations.map((loc) => loc.price || 0)));
-                  setMaxPrice(Math.max(...locations.map((loc) => loc.price || 999)));
+                  setMinPrice(Math.min(...locations.map((loc) => loc.priceRange || 0)));
+                  setMaxPrice(Math.max(...locations.map((loc) => loc.priceRange || 999)));
                   setSelectedFeatures([]);
                 }}
                 className="px-4 py-2 border rounded"
@@ -533,7 +491,6 @@ export default function LocationsPage() {
           </div>
         </div>
       )}
-
     </>
   );
 }
