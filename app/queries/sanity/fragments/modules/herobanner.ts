@@ -3,14 +3,41 @@ import groq from 'groq';
 export const MODULE_HERO_BANNER = groq`
   _type,
   _key,
+  smallheading,
   title,
+  highlightedWord,
   subtitle,
-  ctaText,
-  ctaUrl,
-  background {
+  searchPlaceholder,
+  searchButtonText,
+  trustedText,
+  trustedAvatars[]{
     asset->{
       _id,
       url
+    }
+  },
+  features[]{
+    icon{
+      asset->{
+        _id,
+        url
+      }
+    },
+    title
+  },
+  rightImages[]{
+    image{
+      asset->{
+        _id,
+        url
+      }
+    },
+    overlayText,
+    icon{
+      asset->{
+        _id,
+        url
+      }
     }
   }
 `;
