@@ -54,7 +54,7 @@ import {menu} from './objects/shopify/menu'
 import {keyHighlights} from './objects/module/keyHighlights'
 import {detailedFeatureType} from './objects/module/detailedFeature'
 import solutions from './singletons/solutions'
-import { heroBanner } from "./objects/module/heroBanner";
+// import { heroBanner } from "./objects/module/heroBanner";
 import location from './location'
 import { featuresModule } from "./objects/module/featuresModule";
 import { pricingModule } from "./objects/module/pricingModule";
@@ -72,7 +72,7 @@ const objects = [
   extraFeatures,
   pricingModule,
   featuresModule,
-  heroBanner,
+ 
   detailedFeatureType,
   keyHighlights,
   header,
