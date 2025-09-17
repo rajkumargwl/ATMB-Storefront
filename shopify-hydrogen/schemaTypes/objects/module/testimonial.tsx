@@ -2,9 +2,10 @@ import {defineType, defineField} from 'sanity'
 
 export const testimonial = defineType({
   name: 'testimonial',
-  title: 'Thousand trust - Testimonials',
+  title: 'Thousand Trust - Testimonials',
   type: 'object',
   fields: [
+    // Section heading
     defineField({
       name: 'headline',
       title: 'Headline',
@@ -15,6 +16,8 @@ export const testimonial = defineType({
       title: 'Subheadline',
       type: 'string',
     }),
+
+    // Testimonials list
     defineField({
       name: 'testimonials',
       title: 'Testimonials',
@@ -25,6 +28,7 @@ export const testimonial = defineType({
           title: 'Testimonial',
           type: 'object',
           fields: [
+            // Type of testimonial
             defineField({
               name: 'type',
               title: 'Type',
@@ -38,7 +42,7 @@ export const testimonial = defineType({
               },
             }),
 
-            // ⭐ Quote Testimonials
+            // ⭐ Quote-based testimonial
             defineField({
               name: 'rating',
               title: 'Star Rating',
@@ -51,8 +55,17 @@ export const testimonial = defineType({
               title: 'Star Icon (SVG Upload/Code)',
               type: 'object',
               fields: [
-                { name: 'svgFile', title: 'Upload SVG File', type: 'file', options: { accept: '.svg' } },
-                { name: 'svgCode', title: 'Inline SVG Code', type: 'text' },
+                { 
+                  name: 'svgFile', 
+                  title: 'Upload SVG File', 
+                  type: 'file', 
+                  options: { accept: '.svg' } 
+                },
+                { 
+                  name: 'svgCode', 
+                  title: 'Inline SVG Code', 
+                  type: 'text' 
+                },
               ],
               hidden: ({ parent }) => parent?.type !== 'quote',
             }),
@@ -62,8 +75,21 @@ export const testimonial = defineType({
               type: 'text',
               hidden: ({ parent }) => parent?.type !== 'quote',
             }),
+            defineField({
+              name: 'readMoreText',
+              title: 'Read More Text',
+              type: 'string',
+              initialValue: 'Read More',
+              hidden: ({ parent }) => parent?.type !== 'quote',
+            }),
+            defineField({
+              name: 'readMoreUrl',
+              title: 'Read More URL',
+              type: 'url',
+              hidden: ({ parent }) => parent?.type !== 'quote',
+            }),
 
-            // 🎥 Video Testimonials
+            // 🎥 Video-based testimonial
             defineField({
               name: 'videoUrl',
               title: 'Video URL',
@@ -71,17 +97,33 @@ export const testimonial = defineType({
               hidden: ({ parent }) => parent?.type !== 'video',
             }),
             defineField({
+              name: 'videoThumbnail',
+              title: 'Video Thumbnail',
+              type: 'image',
+              options: { hotspot: true },
+              hidden: ({ parent }) => parent?.type !== 'video',
+            }),
+            defineField({
               name: 'playIcon',
-              title: 'Video Thumbnail Image',
+              title: 'Play Icon (SVG or Image)',
               type: 'object',
               fields: [
-                { name: 'playSvgFile', title: 'Thumbnail', type: 'image', options: { hotspot: true } },
-                { name: 'playSvgCode', title: 'Thumbnail (Inline SVG Code)', type: 'text' },
+                { 
+                  name: 'playSvgFile', 
+                  title: 'Upload Play Icon (SVG)', 
+                  type: 'file', 
+                  options: { accept: '.svg' } 
+                },
+                { 
+                  name: 'playSvgCode', 
+                  title: 'Play Icon Inline SVG Code', 
+                  type: 'text' 
+                },
               ],
               hidden: ({ parent }) => parent?.type !== 'video',
             }),
 
-            // 👤 Author Info (common)
+            // 👤 Author Info
             defineField({
               name: 'authorName',
               title: 'Author Name',
@@ -97,10 +139,37 @@ export const testimonial = defineType({
               title: 'Author Image',
               type: 'image',
               options: { hotspot: true },
-              // hidden: ({ parent }) => parent?.type !== 'quote', // hide in video testimonials
             }),
           ],
+          preview: {
+            select: {
+              title: 'authorName',
+              subtitle: 'type',
+              media: 'authorImage',
+            },
+          },
         }),
+      ],
+    }),
+
+    // Navigation (arrows)
+    defineField({
+      name: 'navigation',
+      title: 'Navigation Arrows',
+      type: 'object',
+      fields: [
+        {
+          name: 'prevIcon',
+          title: 'Previous Arrow Icon',
+          type: 'string',
+          initialValue: '←',
+        },
+        {
+          name: 'nextIcon',
+          title: 'Next Arrow Icon',
+          type: 'string',
+          initialValue: '→',
+        },
       ],
     }),
   ],
