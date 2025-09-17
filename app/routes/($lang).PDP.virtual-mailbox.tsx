@@ -103,7 +103,6 @@ export default function Plans() {
 
   return (
     <>
-      <Header data={header} />
 
       <div className="flex flex-col min-h-screen">
         <main className="flex-1 p-8">
@@ -185,7 +184,6 @@ export default function Plans() {
           </div>
         </main>
 
-        <Footer data={footer} />
       </div>
     </>
   );

@@ -9,9 +9,18 @@ import { useEffect,useState } from "react";
 import type { LoaderFunction } from "@remix-run/node";
 
 import { useLoaderData } from "@remix-run/react";
+import {
+  redirect,
+} from '@shopify/remix-oxygen';
 
-export const loader: LoaderFunction = async ({ context }) => {
+export const loader: LoaderFunction = async ({ context, params }) => {
   const { env } = context;
+  const customerAccessToken = await context.session.get('customerAccessToken');
+  
+  if (customerAccessToken === null || customerAccessToken === undefined || customerAccessToken === '') {
+    return redirect(params.lang ? `${params.lang}/register` : '/account/register');
+  }
+
   return new Response(
     JSON.stringify({
       stripePublishableKey: env.VITE_STRIPE_PUBLISHABLE_KEY,
