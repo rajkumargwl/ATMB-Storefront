@@ -1,20 +1,12 @@
 import groq from 'groq';
 
-import {IMAGE_WITH_PRODUCT_HOTSPOTS} from '../imageWithProductHotspots';
-import {LINK_EXTERNAL} from '../linkExternal';
-import {LINK_INTERNAL} from '../linkInternal';
-import {PRODUCT_WITH_VARIANT} from '../productWithVariant';
-import {IMAGE} from '../image';
-
 export const FAQ = groq`
-   _type,
-   headline,
-    subheadline,
-    faqCategories[] {
-      title,
-      faqs[] {
-        question,
-        answer
-      }
-    }
+  _type,
+  headline,
+  subheadline,
+  faqs[] {
+    _key,
+    question,
+    answer
+  }
 `;

@@ -1,4 +1,4 @@
-import {defineType, defineField} from 'sanity'
+import { defineType, defineField } from 'sanity'
 
 export const faq = defineType({
   name: 'faq',
@@ -16,37 +16,26 @@ export const faq = defineType({
       type: 'text',
     }),
 
-    // FAQ Categories
+    // FAQs (no categories, just flat list)
     defineField({
-      name: 'faqCategories',
-      title: 'FAQ Categories',
+      name: 'faqs',
+      title: 'FAQs',
       type: 'array',
       of: [
         defineField({
-          name: 'faqCategory',
-          title: 'FAQ Category',
+          name: 'faq',
+          title: 'FAQ',
           type: 'object',
           fields: [
-            { name: 'title', title: 'Category Title', type: 'string' },
-
-            {
-              name: 'faqs',
-              title: 'FAQs',
-              type: 'array',
-              of: [
-                defineField({
-                  name: 'faq',
-                  title: 'FAQ',
-                  type: 'object',
-                  fields: [
-                    { name: 'question', title: 'Question', type: 'string' },
-                    { name: 'answer', title: 'Answer', type: 'text' },
-                   
-                  ],
-                }),
-              ],
-            },
+            { name: 'question', title: 'Question', type: 'string' },
+            { name: 'answer', title: 'Answer', type: 'text' },
           ],
+          preview: {
+            select: {
+              title: 'question',
+              subtitle: 'answer',
+            },
+          },
         }),
       ],
     }),
