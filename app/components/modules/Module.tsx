@@ -15,7 +15,7 @@ import WhyBusinessChooseUs from '~/components/modules/WhyBusinessChooseUs';
 import Testimonial from '~/components/modules/Testimonial';
 import BusinessAtFingertips from '~/components/modules/BusinessAtFingertips';
 import FAQ from '~/components/modules/FAQ';
-import HeroBanner from '~/components/modules/HeroBanner';
+import Home from '~/components/heroes/Home';
 import FeaturesModule from '~/components/modules/FeaturesModule';
 import Pricingmodule from '~/components/modules/Pricingmodule';
 import HowItWorks from '~/components/modules/Howitworks'; // Add this import
@@ -28,8 +28,8 @@ type Props = {
 
 export default function Module({imageAspectClassName, module}: Props) {
   switch (module._type) {
-    case 'heroBanner':       // <-- add this
-      return <HeroBanner data={module} />;
+    case 'heroType':       // <-- add this
+      return <Home data={module} />;
     case 'featuresModule':   // ✅ new case for features
       return <FeaturesModule {...module} />;
        case 'pricingModule':       // <-- add this

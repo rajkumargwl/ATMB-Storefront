@@ -38,8 +38,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
     staleWhileRevalidate: 60,
   });
 
-  // const url = new URL(request.url);
-  // const q = url.searchParams.get('q') || '';
+  
 
   // Fetch all at once
   const [page, header, footer] = await Promise.all([
@@ -50,64 +49,16 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
 
   if (!page) throw notFound();
 
-  // let results = { locations: [], products: [] };
 
-  // if (q) {
-  //   // Prepare search string with wildcard for each field
-  //   const searchParam = `${q}*`;
-    
-  //   console.log('Searching for:', q, 'with param:', searchParam);
-    
-  //   try {
-  //     results = await context.sanity.query({
-  //       query: `{
-  //         "locations": *[_type == "location" && (
-  //           name match $search ||
-  //           city match $search ||
-  //           postalCode match $search
-  //         )][0...5]{
-  //           _id,
-  //           _type,
-  //           name,
-  //           city,
-  //           postalCode,
-  //           "slug": slug.current
-  //         },
-  //         "products": *[_type == "product" && (
-  //           title match $search ||
-  //           description match $search ||
-  //           store.title match $search
-  //         )][0...5]{
-  //           _id,
-  //           _type,
-  //         "title": store.title, 
-  //           "handle": select(store.slug.current != null => store.slug.current, "")
-  //         }
-  //       }`,
-  //       params: { search: searchParam },
-  //     });
-      
-   
-  //   } catch (error) {
-  //     console.error('Search error:', error);
-  //   }
-  // }
-  
-  // // Merge both arrays and add type field for consistency
-  // const mergedResults = [
-  //   ...(results.locations || []).map(item => ({ ...item, type: 'location' })),
-  //   ...(results.products || []).map(item => ({ ...item, type: 'product' }))
-  // ];
   
   const gids = fetchGids({ page, context });
 
   return defer({
-    page,
+     page,                           
     header,
     footer,
     gids,
-    // mergedResults, // This is now synchronous data
-    // q,
+  
     analytics: { pageType: AnalyticsPageType.home },
   });
 }
@@ -115,7 +66,10 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
 
 export default function Index() {
   //const { page, gids,  header, footer, mergedResults, q } = useLoaderData<typeof loader>();
-   const { page, gids,  header, footer} = useLoaderData<typeof loader>();
+   const { page, gids} = useLoaderData<typeof loader>();
+   console.log('Page Data:', JSON.stringify(page, null, 2));
+   
+console.log("Preview Hero Data:", page?.hero);
   return (
     <>
      {/* <Header data={header} searchResults={mergedResults} searchQuery={q} /> */}
@@ -123,6 +77,7 @@ export default function Index() {
 
       <SanityPreview data={page} query={HOME_PAGE_QUERY}>
         {(page) => (
+          
           <Suspense>
             <Await resolve={gids}>
               {/* Unified search box - Now mergedResults is available immediately */}
@@ -132,7 +87,7 @@ export default function Index() {
               {/* </div> */}
 
               {/* Page hero */}
-              {page?.hero && <HomeHero hero={page.hero} />}
+              {/* {page?.modules.hero && <HomeHero hero={page.hero} />} */}
 
               {/* Page modules */}
               {page?.modules && (

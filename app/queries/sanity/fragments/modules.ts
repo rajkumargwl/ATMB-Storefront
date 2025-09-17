@@ -7,7 +7,8 @@ import {MODULE_COLLECTION} from './modules/collection';
 import {MODULE_IMAGE} from './modules/image';
 import {MODULE_INSTAGRAM} from './modules/instagram';
 import {MODULE_PRODUCT} from './modules/product';
-import {HERO_HOME} from './heroes/home';
+// import {HERO_HOME} from './heroes/home';
+import {MODULE_HERO_BANNER} from './modules/herobanner';
 import {HOME_SECTION_2} from './modules/homeSection2';
 import {HOME_SECTION_3} from './modules/homeSection3';
 import {HOME_SECTION_4} from './modules/homeSection4';
@@ -43,7 +44,7 @@ export const MODULES = groq`
     ${MODULE_PRODUCT}
   },
    (_type == "hero") => {
-    ${HERO_HOME}
+    ${MODULE_HERO_BANNER}
   },
   (_type == "homeSection2") => {
     ${HOME_SECTION_2}
