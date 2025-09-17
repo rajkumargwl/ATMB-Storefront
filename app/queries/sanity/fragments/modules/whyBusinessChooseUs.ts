@@ -1,21 +1,18 @@
 import groq from 'groq';
-
-import {IMAGE_WITH_PRODUCT_HOTSPOTS} from '../imageWithProductHotspots';
-import {LINK_EXTERNAL} from '../linkExternal';
-import {LINK_INTERNAL} from '../linkInternal';
-import {PRODUCT_WITH_VARIANT} from '../productWithVariant';
-import {IMAGE} from '../image';
+import { IMAGE } from '../image';
 
 export const WHY_BUSINESS_CHOOSE_US = groq`
-    heading,
+  heading,
+  description,
+  features[] {
+    _key,
+    title,
     description,
-     features[] {
-        _key,
-        _type,
-        title,
-        description
+    icon {
+      upload {
+        ${IMAGE}
       },
-    image {
-      ${IMAGE}
-    },
+      svgCode
+    }
+  }
 `;
