@@ -43,7 +43,6 @@ import Header from '~/components/global/Header';
 import Footer from '~/components/global/Footer';
 import {HEADER_QUERY} from '~/queries/sanity/header';
 import {FOOTER_QUERY} from '~/queries/sanity/footer';
- 
 const seo: SeoHandleFunction<typeof loader> = ({data}) => ({
   title: data?.layout?.seo?.title,
   titleTemplate: `%s${
@@ -92,7 +91,6 @@ export const links: LinksFunction = () => {
     {rel: 'stylesheet', href: swiperNavStyles},
   ];
 };
- 
 export async function loader({request, context}: LoaderFunctionArgs) {
   const {cart} = context;
   const customerAccessToken = await context.session.get('customerAccessToken');
@@ -142,16 +140,15 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     context.storefront.query<{shop: Shop}>(SHOP_QUERY),
     context.sanity.query<SanityLayout>({query: LAYOUT_QUERY, cache}),
   ]);
- 
   const [header, footer] = await Promise.all([
     context.sanity.query({query: HEADER_QUERY, cache}),
     context.sanity.query({query: FOOTER_QUERY, cache}),
   ]);
- 
+
   // 🔹 Handle search param
   const url = new URL(request.url);
   const q = url.searchParams.get('q') || '';
- 
+
   let mergedResults: any[] = [];
   if (q) {
     try {
@@ -183,7 +180,6 @@ export async function loader({request, context}: LoaderFunctionArgs) {
         }`,
         params: {search: searchParam},
       });
- 
       mergedResults = [
         ...(results.locations || []).map((item: any) => ({
           ...item,
@@ -198,7 +194,6 @@ export async function loader({request, context}: LoaderFunctionArgs) {
       console.error('Search error:', err);
     }
   }
- 
   const selectedLocale = context.storefront.i18n as I18nLocale;
  
   return defer({
@@ -260,12 +255,12 @@ export default function App() {
       <body>
         <PreviewProvider previewConfig={preview} fallback={<PreviewLoading />}>
           {/* 🔹 Global Header with search support */}
-          <Header data={header} searchQuery={q} searchResults={searchResults} isLoggedIn={data?.isLoggedIn} customer={data?.customer} />
- 
+          <Header data={header} searchQuery={q} searchResults={searchResults} />
+
           <Layout key={`${locale.language}-${locale.country}`}>
             <Outlet />
           </Layout>
- 
+
           {/* 🔹 Global Footer */}
           <Footer data={footer} />
         </PreviewProvider>
