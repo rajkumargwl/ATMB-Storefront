@@ -36,23 +36,16 @@ async function downloadImage(url: string, filename: string) {
   })
 }
 
-// async function uploadImageToSanity(url: string) {
-//   const tempFile = path.join('./', path.basename(url))
-//   await downloadImage(url, tempFile)
-//   const asset = await client.assets.upload('image', fs.createReadStream(tempFile))
-//   fs.unlinkSync(tempFile)
-//   return { _type: 'image', asset: { _ref: asset._id, _type: 'reference' } }
-// }
 async function uploadImageToSanity(url: string) {
-  if (!url) return null; // skip if URL is empty
+  if (!url) return null; 
 
   const tempFile = path.join('./', path.basename(url));
 
   try {
-    // Download the image
+   
     await downloadImage(url, tempFile);
 
-    // Check file size > 0 to avoid empty files
+    // Check if file is empty
     const stats = fs.statSync(tempFile);
     if (stats.size === 0) {
       console.warn(`Skipped empty image: ${url}`);
