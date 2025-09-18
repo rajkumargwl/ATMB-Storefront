@@ -13,7 +13,7 @@ export default function FAQ({ data }: Props) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="px-5 py-[40px] md:py-[100px]">
+    <section className="px-5 py-[40px] md:py-[60px] lg:py-[100px]">
        <div className="max-w-[1240px] mx-auto">
     <div className="flex flex-col items-center">
         <div className="max-w-[744px] mx-auto pb-[44px] md:pb-[56px] flex flex-col align-center justify-center gap-5">
@@ -21,7 +21,7 @@ export default function FAQ({ data }: Props) {
         <h2 className="font-Roboto text-PrimaryBlack font-semibold leading-[38.4px] md:leading-[43.2px] text-[32px] md:text-[36px] tracking-[-0.48px] md:tracking-[-0.54px] text-center">
             {data?.headline}
           </h2>
-          <p className="font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] text-center">
+          <p className="font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px] text-center">
           {data?.subheadline}
           </p>
       </div>
@@ -42,7 +42,7 @@ export default function FAQ({ data }: Props) {
                   onClick={() => setOpenIndex(isOpen ? null : idx)}
                   className="w-full flex justify-between items-center text-left gap-6"
                 >
-                  <span className={`font-Roboto font-medium leading-[28px] text-[20px] ${
+                  <span className={`font-Roboto font-medium leading-[28px] text-[20px] tracking-[0px] ${
                       isOpen ? "text-white" : ""
                     } text-PrimaryBlack`}>{faq.question}</span>
                   <span
@@ -55,7 +55,7 @@ export default function FAQ({ data }: Props) {
                 </button>
 
                 {isOpen && (
-                  <div className="pt-4 font-Roboto text-white font-normal leading-[24px] text-[16px]">
+                  <div className="pt-4 font-Roboto text-white font-normal leading-[24px] text-[16px] tracking-[0px]">
                     {faq.answer}
                   </div>
                 )}
@@ -63,7 +63,7 @@ export default function FAQ({ data }: Props) {
             );
           })
         ) : (
-          <p className="text-gray-500 italic text-center">
+          <p className="font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px] text-center">
             No FAQs available for this section.
           </p>
         )}

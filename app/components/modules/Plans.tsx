@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import PlanBg from '~/components/icons/PlanBg';
 import Fire from '~/components/icons/Fire';
+import CheckBlack from '~/components/icons/CheckBlack';
+import Phone from '~/components/icons/Phone';
 
 /* ---------------- Mock JSON ---------------- */
 const mockData = {
@@ -125,7 +127,7 @@ function PricingSection({ data }: { data: typeof mockData }) {
     activeTab === "individual" ? data.individualPlans : data.bundlePlans;
 
   return (
-    <section className="bg-[#F6F6F6] px-5 py-[40px] md:py-[100px]">
+    <section className="bg-[#F6F6F6] px-5 py-[40px] md:py-[60px] lg:py-[100px]">
       <div className="max-w-[1240px] mx-auto items-center justify-center flex flex-col">
         {/* Badge */}
         {/* <div className="flex gap-2 mb-4 bg-[#FFE5D8] px-3 py-2 rounded-full w-max">
@@ -139,7 +141,7 @@ function PricingSection({ data }: { data: typeof mockData }) {
         <h2 className="max-w-[870px] mx-auto font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[26px] md:text-[36px] tracking-[-0.39px] md:tracking-[-0.54px] text-center">
           {data.heading}
         </h2>
-        <p className="mt-5 font-Roboto text-PrimaryBlack font-normal leading-[21px] md:leading-[27px] text-[14px] md:text-[18px] text-center">Virtual tools that let you manage mail, calls, and growth from anywhere.</p>
+        <p className="mt-5 font-Roboto text-PrimaryBlack font-normal leading-[21px] md:leading-[27px] text-[14px] md:text-[18px] tracking-[0px] text-center">Virtual tools that let you manage mail, calls, and growth from anywhere.</p>
 
         {/* Tabs + Toggle */}
         <div className="mt-11 flex flex-col md:flex-row gap-6 w-full max-w-[1240px] items-center justify-between relative">
@@ -152,7 +154,7 @@ function PricingSection({ data }: { data: typeof mockData }) {
             <div className="flex gap-4">
               <button
                 onClick={() => setActiveTab("individual")}
-                className={`px-6 py-3 font-Roboto text-[16px] leading-[24px] font-normal rounded-full  border border-LightWhite transition ${
+                className={`px-6 py-3 font-Roboto text-[16px] leading-[24px] tracking-[0px] font-normal rounded-full  border border-LightWhite transition ${
                   activeTab === "individual"
                     ? "border-PrimaryBlack text-white bg-PrimaryBlack"
                     : "text-PrimaryBlack"
@@ -162,7 +164,7 @@ function PricingSection({ data }: { data: typeof mockData }) {
               </button>
               <button
                 onClick={() => setActiveTab("bundles")}
-                className={`px-6 py-3 font-Roboto text-[16px] leading-[24px] font-normal rounded-full  border border-LightWhite transition ${
+                className={`px-6 py-3 font-Roboto text-[16px] leading-[24px] tracking-[0px] font-normal rounded-full  border border-LightWhite transition ${
                   activeTab === "bundles"
                     ? "border-PrimaryBlack text-white bg-PrimaryBlack"
                     : "text-PrimaryBlack"
@@ -177,7 +179,7 @@ function PricingSection({ data }: { data: typeof mockData }) {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setBilling("monthly")}
-              className={`font-Roboto text-PrimaryBlack font-normal leading-[21px] text-[14px] ${
+              className={`font-Roboto text-PrimaryBlack font-normal leading-[21px] text-[14px] tracking-[0px] ${
                 !isYearly ? "text-text-PrimaryBlack" : "text-gray-500 hover:text-text-PrimaryBlack"
               }`}
             >
@@ -200,14 +202,14 @@ function PricingSection({ data }: { data: typeof mockData }) {
 
             <button
               onClick={() => setBilling("yearly")}
-              className={`font-Roboto text-PrimaryBlack font-normal leading-[21px] text-[14px] ${
+              className={`font-Roboto text-PrimaryBlack font-normal leading-[21px] text-[14px] tracking-[0px] ${
                 isYearly ? "text-PrimaryBlack" : "text-gray-500 hover:text-PrimaryBlack"
               }`}
             >
               Yearly
             </button>
 
-            <span className="font-Roboto font-normal leading-[18px] text-[12px] text-[#ffffff] bg-[#74A038] px-2 py-1 rounded-full">
+            <span className="font-Roboto font-normal leading-[18px] text-[12px] tracking-[0px] text-[#ffffff] bg-[#74A038] px-2 py-1 rounded-full">
               20% off
             </span>
           </div>
@@ -215,7 +217,7 @@ function PricingSection({ data }: { data: typeof mockData }) {
 
 
         {/* Cards */}
-        <div className={`mt-11 items-center justify-center ${activeTab === 'individual' ? 'grid gap-6 md:grid-cols-2 lg:grid-cols-3' : 'grid md:grid-cols-2 lg:grid-cols-3 justify-center items-center gap-6 '} w-full`}>
+        <div className={`mt-11 items-center justify-center ${activeTab === 'individual' ? 'grid gap-6 md:grid-cols-2 lg:grid-cols-3' : 'grid md:grid-cols-2 lg:grid-cols-3 justify-center items-center gap-6'} w-full`}>
           {plans.map((plan, idx) => {
             if (activeTab === "individual") {
               // ---------- Individual Card ----------
@@ -237,7 +239,7 @@ function PricingSection({ data }: { data: typeof mockData }) {
                     <div className="bg-white rounded-[20px] p-6 border border-[#EE6D2D] shadow-[0_6px_24px_0_rgba(0,0,0,0.05)]">
                       <div className="flex items-center justify-between">
                       <div className="w-12 h-12 rounded-full bg-[#F9F9F9] border border-[#DCDCDC] flex items-center justify-center">
-                        +
+                        <Phone />
                       </div>
                        {plan?.isMostPopular && (
                       <div className="flex gap-2 p-2 rounded-[100px] border border-[rgba(238,109,45,0.5)] bg-[#FFF1EA] font-Roboto text-PrimaryBlack font-normal leading-[18px] text-[12px]">
@@ -249,17 +251,17 @@ function PricingSection({ data }: { data: typeof mockData }) {
                       <h3 className="font-Roboto text-PrimaryBlack text-[22px] md:text-[24px] leading-[28.6px] md:leading-[31.2px] font-semibold tracking-[-0.33px] md:tracking-[-0.36px] mt-6 mb-2">
                         {plan.title}
                       </h3>
-                      <p className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px]">{plan.heading}</p>
+                      <p className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">{plan.heading}</p>
 
                       <div className="mt-6 flex flex-row justify-between items-center">
                         {/* Left: Price */}
                         <div>
-                           <p className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px]">Starting from</p>
+                           <p className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">Starting from</p>
                           <div className="flex items-end mt-1">
                             <span className="font-Roboto text-PrimaryBlack text-[24px] leading-[31.2px] font-semibold tracking-[-0.36px]">
                               {price}
                             </span>
-                            <span className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px]">/{unit}</span>
+                            <span className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">/{unit}</span>
                           </div>
                          
                         </div>
@@ -273,7 +275,7 @@ function PricingSection({ data }: { data: typeof mockData }) {
                     <ul className="mt-7 mb-7 space-y-4 text-[16px] text-[#091019] pl-[7px] md:pl-6">
                       {plan.features.map((f, i) => (
                         <li key={i} className="flex items-center gap-3 font-Roboto text-PrimaryBlack font-normal leading-[24px] text-[16px]">
-                          <Check />
+                          <CheckBlack />
                           {f}
                         </li>
                       ))}
@@ -306,7 +308,7 @@ function PricingSection({ data }: { data: typeof mockData }) {
               return (
                 <div
                   key={idx}
-                className="relative relative p-[8px] pt-[8px] pb-[24px] border border-LightWhite bg-[#F6F6F6] rounded-[24px] lg:min-w-[390px] lg:max-w-[390px]"
+                className="relative relative p-[8px] pt-[8px] pb-[24px] border border-LightWhite bg-[#F6F6F6] rounded-[24px] xl:min-w-[390px] xl:max-w-[390px]"
                 >
                   <div className="bg-white rounded-[20px] p-6 border border-[#EE6D2D] shadow-[0_6px_24px_0_rgba(0,0,0,0.05)]">
                     <div className="font-Roboto bg-[#74A03812] text-[#558019] text-[14px] px-4 py-3 rounded-full w-max border border-[#74A038] mt-4 mb-5">
@@ -316,12 +318,12 @@ function PricingSection({ data }: { data: typeof mockData }) {
                     <h3 className="font-Roboto text-PrimaryBlack text-[24px] leading-[31.2px] font-semibold tracking-[-0.36px] mt-6 mb-2">
                       {plan.title}
                     </h3>
-                    <p className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px]">{plan.heading}</p>
+                    <p className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">{plan.heading}</p>
 
                      <div className="mt-6 flex flex-row justify-between items-center">
                         {/* Left: Price */}
                         <div>
-                          <p className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px]">Starting from</p>
+                          <p className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">Starting from</p>
                           <div className="flex items-end mt-1">
                             <span className="font-Roboto text-LightGray font-normal leading-[21px] text-[18px]">
                               {originalPrice}
@@ -329,7 +331,7 @@ function PricingSection({ data }: { data: typeof mockData }) {
                             <span className="font-Roboto text-PrimaryBlack text-[24px] leading-[31.2px] font-semibold tracking-[-0.36px]">
                               {discountPrice}
                             </span>
-                            <span className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px]">/{unit}</span>
+                            <span className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">/{unit}</span>
                           </div>
                           
                         </div>
@@ -349,7 +351,7 @@ function PricingSection({ data }: { data: typeof mockData }) {
                           <p className="font-Roboto text-PrimaryBlack text-[24px] leading-[31.2px] font-semibold tracking-[-0.36px] mb-2">
                             {s.name}
                           </p>
-                          <p className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px]">{s.desc}</p>
+                          <p className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">{s.desc}</p>
                         </div>
                         <span className="font-Roboto text-[12px] bg-[#FFF1EA] text-[#091019] px-4 py-3 border border-[#EE6D2D] rounded-full">
                           {s.tier}
