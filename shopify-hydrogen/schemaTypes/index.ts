@@ -62,6 +62,14 @@ import { extraFeatures } from "./objects/module/extraFeatures";
 import { howItWorks } from "./objects/module/howItWorks";
 import { whyChooseAnytimePhones } from "./objects/module/whyChooseAnytimePhones";
 import { review } from "./objects/module/review";
+import {aboutIntroSection} from './objects/module/aboutIntroSection'
+import {aboutHowItStartedSection} from './objects/module/aboutHowItStartedSection'
+import {aboutFeaturesSection} from './objects/module/aboutFeaturesSection'
+import {aboutDetailedFeaturesSection} from './objects/module/aboutDetailedFeaturesSection'
+import {aboutFoundersSection} from './objects/module/aboutFoundersSection'
+import {aboutResourceAuthorsSection} from './objects/module/aboutResourceAuthorsSection'
+import {aboutUsModule} from './objects/module/aboutUsModule'
+
 // Objects used as annotations must be imported first
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
 
@@ -72,7 +80,7 @@ const objects = [
   extraFeatures,
   pricingModule,
   featuresModule,
- 
+  aboutUsModule,
   detailedFeatureType,
   keyHighlights,
   header,
@@ -123,7 +131,13 @@ const objects = [
   shopifyProductType,
   shopifyProductVariantType,
   spotType,
-  menu
+  menu,
+  aboutIntroSection,
+    aboutHowItStartedSection,
+      aboutFeaturesSection,
+      aboutDetailedFeaturesSection,
+       aboutFoundersSection, 
+       aboutResourceAuthorsSection
 ]
 
 import {portableTextType} from './portableText/portableTextType'

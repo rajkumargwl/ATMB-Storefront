@@ -1,10 +1,10 @@
 import {DocumentIcon} from '@sanity/icons'
-import {defineField} from 'sanity'
+import {defineField, defineType} from 'sanity'
 
 import {validateSlug} from '../../utils/validateSlug'
-import { GROUPS } from '../../constants'
+import {GROUPS} from '../../constants'
 
-export const pageType = defineField({
+export const pageType = defineType({
   name: 'page',
   title: 'Page',
   type: 'document',
@@ -48,6 +48,19 @@ export const pageType = defineField({
       type: 'portableText',
       group: 'editorial',
     }),
+
+    // 👇 Add Page Modules (with About Us module)
+    defineField({
+      name: 'modules',
+      title: 'Modules',
+      type: 'array',
+      group: 'editorial',
+      of: [
+        { type: 'aboutUsModule' }, // new module
+        // you can add more like contactUsModule, cmsPageModule, etc.
+      ],
+    }),
+
     defineField({
       name: 'seo',
       title: 'SEO',

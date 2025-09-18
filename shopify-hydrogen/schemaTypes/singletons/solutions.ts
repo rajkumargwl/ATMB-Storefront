@@ -10,7 +10,7 @@ export default defineType({
       title: "Modules",
       type: "array",
       of: [
-        { type: "heroBanner" },
+     
         { type: "featuresModule" },
         { type: "pricingModule" },
         { type: "extraFeatures" },
