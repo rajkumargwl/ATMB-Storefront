@@ -23,7 +23,7 @@ type Props = {
 
 
 export default function HomeHero({ hero }: Props) {
-  console.log("heroooooooooooooo",hero);
+
   if (!hero) return null;
   return (
    

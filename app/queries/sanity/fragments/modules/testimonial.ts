@@ -1,5 +1,5 @@
+
 import groq from 'groq';
-import { IMAGE } from '../image';
 
 export const TESTIMONIAL = groq`
   headline,
@@ -8,35 +8,36 @@ export const TESTIMONIAL = groq`
     _key,
     type, // 'quote' or 'video'
 
-    // ⭐ Quote Testimonials
+    // ⭐ Star Rating (for both quote & video)
     rating,
-    starIcon {
-      svgFile,
-      svgCode
-    },
+
+    // Quote Testimonial
     quote,
     readMoreText,
     readMoreUrl,
+    starIcon {
+      "url": asset->url
+    },
 
-    // 🎥 Video Testimonials
+    // Video Testimonial
     videoUrl,
     videoThumbnail {
-      ${IMAGE}
+      "url": asset->url,
+      altText
     },
     playIcon {
-      playSvgFile,
-      playSvgCode
+      "url": asset->url
+    },
+   starIcon {
+      "url": asset->url
     },
 
     // 👤 Author Info
     authorName,
     authorTitle,
     authorImage {
-      ${IMAGE}
+      "url": asset->url,
+      altText
     }
-  },
-  navigation {
-    prevIcon,
-    nextIcon
   }
 `;
