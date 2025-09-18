@@ -34,9 +34,6 @@
 //     }
 // `;
 import groq from 'groq';
-import { IMAGE } from '../image';
-import { LINK_EXTERNAL } from '../linkExternal';
-import { LINK_INTERNAL } from '../linkInternal';
 
 export const HOME_SECTION_3 = groq`
   title,
@@ -48,7 +45,8 @@ export const HOME_SECTION_3 = groq`
     keyNeeds[],
     quote {
       avatar {
-        ${IMAGE}
+        "url": asset->url,
+        altText
       },
       author,
       text
@@ -56,7 +54,8 @@ export const HOME_SECTION_3 = groq`
     services[] {
       icon {
         upload {
-          ${IMAGE}
+          "url": asset->url,
+          altText
         },
         svgCode
       },
@@ -70,4 +69,5 @@ export const HOME_SECTION_3 = groq`
     }
   }
 `;
+
 

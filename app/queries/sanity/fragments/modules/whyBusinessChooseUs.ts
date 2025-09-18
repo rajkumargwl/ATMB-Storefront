@@ -9,8 +9,10 @@ export const WHY_BUSINESS_CHOOSE_US = groq`
     title,
     description,
     icon {
-      upload {
-        ${IMAGE}
+       upload {
+        "url": asset->url,
+        altText,
+        
       },
       svgCode
     }
