@@ -168,7 +168,7 @@
 //     </section>
 //   );
 // }
-import { useState } from "react";
+import { useRef, useState } from "react";
 import type { SanityWhoWeHelp } from "~/lib/sanity";
 import CheckArrow from "~/components/icons/CheckArrow";
 import WhiteChevron from "~/components/icons/WhiteChevron";
@@ -181,6 +181,21 @@ type Props = {
 export default function HomeHero({ data }: Props) {
   const [activeTab, setActiveTab] = useState(data?.tabs?.[0]?.label || "");
   const activeData = data?.tabs?.find((t) => t.label === activeTab);
+
+  // ref for scroll container
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scrollLeft = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: -200, behavior: "smooth" });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: 200, behavior: "smooth" });
+    }
+  };
 
   return (
     <section className="px-5 bg-white py-[40px] md:py-[60px] lg:py-[100px]">
@@ -197,11 +212,17 @@ export default function HomeHero({ data }: Props) {
 
         {/* Tabs */}
         <div className="flex gap-4 items-center">
-          <button className="w-10 h-10 hidden md:flex items-center justify-center rounded-full bg-[#F9F9F9] border border-LightWhite text-white shrink-0">
+          <button
+            onClick={scrollLeft}
+            className="w-10 h-10 hidden md:flex items-center justify-center rounded-full bg-[#F9F9F9] border border-LightWhite text-white shrink-0"
+          >
             <BlackChevron />
           </button>
 
-          <div className="flex items-center justify-start gap-4 overflow-x-auto whitespace-nowrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']">
+          <div
+            ref={scrollRef}
+            className="flex items-center justify-start gap-4 overflow-x-auto whitespace-nowrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']"
+          >
             {data?.tabs?.map((tab, idx) => (
               <button
                 key={idx}
@@ -217,7 +238,10 @@ export default function HomeHero({ data }: Props) {
             ))}
           </div>
 
-          <button className="w-10 h-10 hidden md:flex items-center justify-center rounded-full bg-DarkOrange text-white shrink-0">
+          <button
+            onClick={scrollRight}
+            className="w-10 h-10 hidden md:flex items-center justify-center rounded-full bg-DarkOrange text-white shrink-0"
+          >
             <WhiteChevron />
           </button>
         </div>
