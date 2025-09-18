@@ -391,23 +391,25 @@
 import React, { useState } from "react";
 import PlanBg from '~/components/icons/PlanBg';
 import Fire from '~/components/icons/Fire';
-import CheckBlack from '~/components/icons/CheckBlack';
-import Phone from '~/components/icons/Phone';
-
-/* ---------------- Dynamic Pricing Section ---------------- */
+ import CheckBlack from '~/components/icons/CheckBlack';
 type PlanType = {
   ctaBgColor: string | null;
   ctaText: string;
   ctaTextColor: string | null;
   ctaUrl: string | null;
-  features: string[];
-  icon: { svgFile: { url: string } } | null;
+  features: string[] | null;
+  icon: { svgCode: string | null; svgFile: { asset: { url: string } } | null } | null;
   isMostPopular: boolean;
   mostPopularLabel: string;
-  price: string;
+  pricing: { monthly: string; yearly: string } | null;
   startingFromText: string;
-  subheading: string;
+  subheading: string | null;
   title: string;
+};
+
+type TabType = {
+  tabName: string;
+  tabCards: PlanType[];
 };
 
 type PricingData = {
@@ -418,8 +420,7 @@ type PricingData = {
   };
   description: string;
   heading: string;
-  plans: PlanType[];
-  tabs: string[];
+  tabs: TabType[];
 };
 
 const Check = () => (
@@ -429,11 +430,12 @@ const Check = () => (
 );
 
 export default function PricingSection({ data }: { data: PricingData }) {
-  const [activeTab, setActiveTab] = useState<0 | 1>(0); // 0 -> Individual, 1 -> Bundles
+  const [activeTab, setActiveTab] = useState(0); // 0 -> Individual, 1 -> Bundles
   const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
 
   const isYearly = billing === "yearly";
-  const plans = data.plans;
+  const currentTab = data.tabs[activeTab];
+  const plans = currentTab?.tabCards || [];
 
   return (
     <section className="bg-[#F6F6F6] px-5 py-[40px] md:py-[60px] lg:py-[100px]">
@@ -459,14 +461,14 @@ export default function PricingSection({ data }: { data: PricingData }) {
               {data.tabs.map((tab, idx) => (
                 <button
                   key={idx}
-                  onClick={() => setActiveTab(idx as 0 | 1)}
+                  onClick={() => setActiveTab(idx)}
                   className={`px-6 py-3 font-Roboto text-[16px] leading-[24px] tracking-[0px] font-normal rounded-full border border-LightWhite transition ${
                     activeTab === idx
                       ? "border-PrimaryBlack text-white bg-PrimaryBlack"
                       : "text-PrimaryBlack"
                   }`}
                 >
-                  {tab}
+                  {tab.tabName}
                 </button>
               ))}
             </div>
@@ -477,7 +479,7 @@ export default function PricingSection({ data }: { data: PricingData }) {
             <button
               onClick={() => setBilling("monthly")}
               className={`font-Roboto text-PrimaryBlack font-normal leading-[21px] text-[14px] tracking-[0px] ${
-                !isYearly ? "text-text-PrimaryBlack" : "text-gray-500 hover:text-text-PrimaryBlack"
+                !isYearly ? "text-PrimaryBlack" : "text-gray-500 hover:text-PrimaryBlack"
               }`}
             >
               {data.billingToggle.monthlyLabel}
@@ -515,8 +517,11 @@ export default function PricingSection({ data }: { data: PricingData }) {
         {/* Cards */}
         <div className="mt-11 items-center justify-center grid gap-6 md:grid-cols-2 lg:grid-cols-3 w-full">
           {plans.map((plan, idx) => {
-            const price = plan.price;
-            const unit = "month"; // You can replace dynamically if Sanity provides yearly/monthly pricing
+            const price = plan.pricing
+              ? isYearly
+                ? plan.pricing.yearly
+                : plan.pricing.monthly
+              : null;
 
             return (
               <div
@@ -531,7 +536,12 @@ export default function PricingSection({ data }: { data: PricingData }) {
                   <div className="bg-white rounded-[20px] p-6 border border-[#EE6D2D] shadow-[0_6px_24px_0_rgba(0,0,0,0.05)]">
                     <div className="flex items-center justify-between">
                       <div className="w-12 h-12 rounded-full bg-[#F9F9F9] border border-[#DCDCDC] flex items-center justify-center">
-                        <Phone />
+                        {plan.icon?.svgFile?.asset?.url ? (
+                          
+                          <img src={plan.icon.svgFile.asset.url} alt={plan.title} className="w-6 h-6 bg-Dark" />
+                        ) : (
+                          <span className="text-xs text-gray-500">Icon</span>
+                        )}
                       </div>
                       {plan?.isMostPopular && (
                         <div className="flex gap-2 p-2 rounded-[100px] border border-[rgba(238,109,45,0.5)] bg-[#FFF1EA] font-Roboto text-PrimaryBlack font-normal leading-[18px] text-[12px]">
@@ -548,25 +558,31 @@ export default function PricingSection({ data }: { data: PricingData }) {
                     <div className="mt-6 flex flex-row justify-between items-center">
                       <div>
                         <p className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">{plan.startingFromText}</p>
-                        <div className="flex items-end mt-1">
-                          <span className="font-Roboto text-PrimaryBlack text-[24px] leading-[31.2px] font-semibold tracking-[-0.36px]">
-                            {price}
-                          </span>
-                          <span className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">/{unit}</span>
-                        </div>
+                        {price && (
+                          <div className="flex items-end mt-1">
+                            <span className="font-Roboto text-PrimaryBlack text-[24px] leading-[31.2px] font-semibold tracking-[-0.36px]">
+                              {price}
+                            </span>
+                            <span className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">
+                              /{isYearly ? "year" : "month"}
+                            </span>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
 
                   {/* Features */}
-                  <ul className="mt-7 mb-7 space-y-4 text-[16px] text-[#091019] pl-[7px] md:pl-6">
-                    {plan.features.map((f, i) => (
-                      <li key={i} className="flex items-center gap-3 font-Roboto text-PrimaryBlack font-normal leading-[24px] text-[16px]">
-                        <Check />
-                        {f}
-                      </li>
-                    ))}
-                  </ul>
+                  {plan.features && (
+                    <ul className="mt-7 mb-7 space-y-4 text-[16px] text-[#091019] pl-[7px] md:pl-6">
+                      {plan.features.map((f, i) => (
+                        <li key={i} className="flex items-center gap-3 font-Roboto text-PrimaryBlack font-normal leading-[24px] text-[16px]">
+                          <CheckBlack />
+                          {f}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
 
                   <button
                     className={`flex-shrink-0 flex items-center justify-center w-full md:w-[calc(100%-48px)] mx-auto h-[52px] rounded-full px-4 py-3 text-[16px] font-normal font-Roboto leading-[16px] tracking-[0.08px] transition ${
