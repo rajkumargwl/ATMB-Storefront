@@ -17,7 +17,7 @@ export default function Testimonials({ data }: Props) {
   const nextRef = useRef<HTMLButtonElement>(null);
 
   return (
-     <section className="py-[40px] md:py-[100px] bg-white px-5">
+     <section className="py-[40px] md:py-[60px] lg:py-[100px] bg-white px-5">
        <div className="max-w-[1240px] mx-auto flex flex-col gap-11 md:gap-14">
         {/* Badge */}
         {/* <div className="flex items-center gap-2 mb-4 bg-[#FFE5D8] px-3 py-2 rounded-full w-max">
@@ -93,17 +93,17 @@ export default function Testimonials({ data }: Props) {
                   </div>
                   <span className="mt-[28px] mb-[22px]"><Testimonial /></span>
                   {/* Quote */}
-                  <p className="font-Roboto text-PrimaryBlack font-normal leading-[27px] md:leading-[27px] text-[18px] md:text-[18px]">
+                  <p className="font-Roboto text-PrimaryBlack font-normal leading-[27px] md:leading-[27px] text-[18px]  md:text-[18px] tracking-[0px]">
                     {item.quote}
                   </p>
                   <a href="#" className="font-Roboto text-DarkOrange text-[14px] leading-[14px] tracking-[0.07px] font-normal mt-4 inline-block">Read More</a>
 
                   {/* Author */}
                     <div className="mt-[72px] pl-4 border-l border-LightWhite flex flex-col gap-1">
-                      <p className="font-Roboto text-PrimaryBlack text-[16px] leading-[24px] font-medium">
+                      <p className="font-Roboto text-PrimaryBlack text-[16px] leading-[24px] font-medium tracking-[0px]">
                         {item.authorName}
                       </p>
-                      <p className="font-Roboto text-LightGray text-[14px] leading-[21px] font-normal">{item.authorTitle}</p>
+                      <p className="font-Roboto text-LightGray text-[14px] leading-[21px] font-normal tracking-[0px]">{item.authorTitle}</p>
                     </div>
                 </div>
               </SwiperSlide>
