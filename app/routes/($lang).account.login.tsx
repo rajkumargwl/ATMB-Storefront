@@ -202,8 +202,14 @@ export default function Login() {
               >
                 Login with Microsoft Entra
               </a> */}
-               <a
+               {/* <a
                 href="https://store.xecurify.com/moas/broker/login/shopify/gwl-apps-demo.myshopify.com/account?idpname=custom_openidconnect_ncM"
+                className="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+              >
+                Login with Microsoft Entra
+              </a> */}
+              <a
+                href="http://0dv7ud-pz.myshopify.com/customer_identity/login?return_to=/hydrogen"
                 className="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
               >
                 Login with Microsoft Entra

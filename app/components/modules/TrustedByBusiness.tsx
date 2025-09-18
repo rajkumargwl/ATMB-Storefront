@@ -77,8 +77,15 @@ export default function Homedata({ data }: Props) {
     //    </section>
 
 
-    <section className="bg-PrimaryBlack text-white py-[40px] md:py-[60px] px-5 bg-no-repeat bg-right"  style={{ backgroundImage: `url(${TrustedBg})` }}>
-         <div className="max-w-[1240px] mx-auto">
+    <section className="relative bg-PrimaryBlack text-white py-[40px] md:py-[60px] px-5">
+         <div className="absolute z-[1] bottom-[0px] right-[0px]">
+            <img
+           src={TrustedBg}
+           alt="user"
+           className="w-[490px] h-[315px]"
+           />
+            </div>
+         <div className="relative z-[2] max-w-[1240px] mx-auto">
             <div className="flex flex-col lg:flex-row justify-between items-center w-full gap-8 lg:gap-0">
                 
                 {/* Left Content */}
@@ -86,13 +93,13 @@ export default function Homedata({ data }: Props) {
                     <h2 className="font-Roboto text-white font-semibold leading-[28px] md:leading-[31.2px] tracking-[-0.3px] md:tracking-[-0.12px] text-[20px] md:text-[24px]">
                         Trusted by Businesses Around the World
                     </h2>
-                    <p className="flex align-center justify-center lg:justify-start gap-2 font-Roboto text-LightWhite font-normal leading-[21px] text-[14px] text-center lg:text-left">
+                    <p className="flex align-center items-center justify-center lg:justify-start gap-2 font-Roboto text-LightWhite font-normal leading-[21px] text-[14px] text-center lg:text-left">
                         <span className="font-Roboto text-DarkOrange font-semibold leading-[28px] tracking-[-0.3px] text-[20px] relative">15+ Years 
                             <span className=' absolute bottom-[-4px] left-[11px]'> <img
                     src={spanBg}
                     alt="bg"
                     className="w-[64px] md:w-[64px] h-[6px] md:h-[6px]"/></span></span>
-                        <span className="font-Roboto text-LightWhite font-normal leading-[21px] text-[14px]">powering virtual operations</span>
+                        <span className="font-Roboto text-LightWhite font-normal leading-[21px] text-[14px] tracking-[0px]">powering virtual operations</span>
                     </p>
                 </div>
 
@@ -132,9 +139,9 @@ export default function Homedata({ data }: Props) {
                             alt="star"
                             className="w-5 h-5 hidden md:inline"
                         />
-                        <span className='font-Roboto text-PrimaryBlack font-medium leading-[21px] text-[14px] inline md:hidden'>4.5/5</span>
+                        <span className='font-Roboto text-PrimaryBlack font-medium leading-[21px] text-[14px] tracking-[0px] inline md:hidden'>4.5/5</span>
                     </div>
-                    <p className="font-Roboto text-PrimaryBlack font-normal leading-[18px] text-[12px]"><span className="hidden md:inline">4.5/5 on </span> <span>Google Review</span></p>
+                    <p className="font-Roboto text-PrimaryBlack font-normal leading-[18px] text-[12px] tracking-[0px]"><span className="hidden md:inline">4.5/5 on </span> <span className='font-Roboto text-PrimaryBlack font-normal leading-[18px] text-[12px] tracking-[0px]'>Google Review</span></p>
                     </div>
                 </div>
 
@@ -172,9 +179,9 @@ export default function Homedata({ data }: Props) {
                             alt="star"
                             className="w-5 h-5 hidden md:inline"
                         />
-                         <span className='font-Roboto text-PrimaryBlack font-medium leading-[21px] text-[14px] inline md:hidden'>4/5</span>
+                         <span className='font-Roboto text-PrimaryBlack font-medium leading-[21px] text-[14px] tracking-[0px] inline md:hidden'>4/5</span>
                     </div>
-                    <p className="font-Roboto text-PrimaryBlack font-normal leading-[18px] text-[12px]"><span className="hidden md:inline">4/5 on </span> Shopper Approved</p>
+                    <p className="font-Roboto text-PrimaryBlack font-normal leading-[18px] text-[12px] tracking-[0px]"><span className="hidden md:inline">4/5 on </span> Shopper Approved</p>
                     </div>
                 </div>
               
