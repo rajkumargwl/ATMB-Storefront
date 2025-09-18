@@ -96,9 +96,9 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
 
 
   return (
-    <header className="w-full bg-white shadow-sm px-5">
+    <header className="w-full bg-white px-5 border-b border-LightWhite lg:border-none">
       <div className="max-w-[1240px] mx-auto flex items-center justify-between py-5">
-        <div className="flex items-center gap-10">
+        <div className="flex items-center  gap-5 xl:gap-10">
           {/* Logo */}
           <div className="flex items-center">
             {logo?.url && (
@@ -106,14 +106,14 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
                 <img
                   src={logo.url}
                   alt="Logo"
-                  className="w-[80px] md:w-[100px] object-contain"
+                  className="w-[80px] md:w-[101px] object-contain"
                 />
               </Link>
             )}
           </div>
 
           {/* Menu (Desktop only) */}
-          <nav className="hidden md:flex space-x-3">
+          <nav className="hidden lg:flex space-x-2 xl:space-x-3">
             {menu?.map((item, idx) => (
               <div key={idx} className="relative group p-2">
                 <Link
@@ -122,7 +122,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
         : item.label === "Locations"
         ? "/locations"
         : item.url ?? "#"}
-                  className="text-PrimaryBlack hover:text-PrimaryBlack font-normal flex items-center gap-[6px] text-base leading-[24px]"
+                  className="text-PrimaryBlack hover:text-PrimaryBlack font-normal flex items-center gap-[6px] text-[14px] xl:text-base leading-[24px] tracking-[0px]"
                 >
                   {item.label}
                   {item.hasSubmenu && (
@@ -132,13 +132,13 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
 
                 {/* Dropdown submenu */}
                 {item.hasSubmenu && item.subMenu && (
-                  <div className="absolute left-0 mt-2 bg-white border shadow-md rounded-[6px] hidden group-hover:block min-w-[100px]">
+                  <div className="absolute z-[2] left-0 mt-2 bg-white border border-LightWhite shadow-md rounded-[6px] hidden group-hover:block min-w-[100px]">
                     <ul className="py-2">
                       {item.subMenu.map((sub, i) => (
                         <li key={i}>
                           <Link
                             to={sub.url ?? "#"}
-                            className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                            className="block px-4 py-[6px] text-PrimaryBlack hover:text-PrimaryBlack font-normal text-[14px] xl:text-base leading-[24px] tracking-[0px]"
                           >
                             {sub.label}
                           </Link>
@@ -153,7 +153,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
         </div>
 
         {/* Right section */}
-        <div className="flex items-center space-x-7">
+        <div className="flex items-center space-x-6 lg:space-x-4 xl:space-x-7">
           {/* Search */}
           {icon1?.url && (
             <button onClick={() => setIsSearchOpen(true)}>
@@ -177,7 +177,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
           )}
 
           {/* Login / Get Started (Desktop only) */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden lg:flex items-center space-x-4">
             {isLoggedIn ? (
                <Link
                to="/account"
@@ -207,7 +207,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
 
           {/* Mobile menu button */}
           <button
-            className="md:hidden"
+            className="lg:hidden"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             <MenuIcon />
@@ -250,7 +250,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
               {loginButton && (
                 <Link
                   to={loginButton.link ?? "#"}
-                  className="text-PrimaryBlack hover:text-PrimaryBlack font-normal text-base leading-[24px]"
+                  className="w-fit rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[11px]"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {loginButton.label}
@@ -260,7 +260,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
               {getStartedButton && (
                 <Link
                   to={getStartedButton.link ?? "#"}
-                  className="rounded-[100px] bg-[#F60] text-white px-4 py-2 font-normal text-base leading-[24px] flex items-center gap-2"
+                  className="w-fit rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-3 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {getStartedButton.label} 
@@ -278,7 +278,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
     <div className="bg-[#F9F9F9] rounded-md shadow-lg w-full max-w-[1208px] mt-5">
       
       {/* Header Row */}
-      <div className="flex items-center justify-between px-6 py-4">
+      <div className="flex flex-wrap items-center justify-between px-5 py-4">
         {/* Logo */}
         <div className="flex items-center">
           <img
@@ -289,7 +289,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
         </div>
 
         {/* Search Input */}
-        <div className="flex-1 mx-6 relative">
+        <div className="flex-1 ml-6 md:mx-6 relative">
           <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
             <SearchIcon />
           </span>
@@ -311,7 +311,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
               navigate(`?${params.toString()}`, { replace: true });
             }}
             placeholder="Enter location, product, or keyword"
-            className="w-full pl-9 pr-9 py-4 text-sm text-gray-700 placeholder-gray-500 border border-[#DCDCDC] rounded-xl focus:outline-none"
+            className="w-full pl-9 pr-9 py-4 font-Roboto text-PrimaryBlack font-normal leading-[24px] text-[16px] tracking-[0px] placeholder-gray-500 border border-[#DCDCDC] rounded-xl focus:outline-none"
           />
 
           {/* Close Icon inside input */}
@@ -332,21 +332,21 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
         </div>
 
         {/* Right Buttons */}
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-4 w-full md:w-auto justify-center mt-4 md:mt-[0px]">
           <button>
             <CartIcon />
           </button>
           <Link
             to={loginButton?.link ?? "/account/login"}
-            className="text-[#091019] font-medium px-6 py-3 text-[16px] rounded-sm border border-[#091019]"
+            className="rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[15px]"
           >
             {loginButton?.label || "Login"}
           </Link>
           <Link
             to={getStartedButton?.link ?? "/account/register"}
-            className="bg-[#EE6D2D] text-white px-4 py-3.5 text-[16px] rounded-md font-medium flex items-center gap-2"
+            className="rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-4 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2"
           >
-            {getStartedButton?.label || "Get Started"} <ArrowRightIcon />
+            {getStartedButton?.label || "Get Started"} 
           </Link>
         </div>
       </div>
@@ -360,7 +360,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
                 results.map((item) => (
                   <li
                     key={item._id}
-                    className="px-4 py-3 cursor-pointer hover:bg-gray-100 text-sm"
+                    className="px-4 py-3 cursor-pointer font-Roboto text-PrimaryBlack font-normal leading-[24px] text-[16px] tracking-[0px]"
                     onClick={() => handleResultClick(item)}
                   >
                     {item.type === "location" ? (
@@ -373,13 +373,13 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
                     ) : (
                       <>
                         <span className="font-medium text-black">{item.title}</span>
-                        <span className="ml-1 text-gray-600">(Product)</span>
+                        <span className="ml-1 font-Roboto text-PrimaryBlack font-normal leading-[24px] text-[16px] tracking-[0px]">(Product)</span>
                       </>
                     )}
                   </li>
                 ))
               ) : (
-                <li className="px-4 py-3 text-gray-500">No results found</li>
+                <li className="px-4 py-3 font-Roboto text-PrimaryBlack font-normal leading-[24px] text-[16px] tracking-[0px]">No results found</li>
               )}
             </ul>
           </div>

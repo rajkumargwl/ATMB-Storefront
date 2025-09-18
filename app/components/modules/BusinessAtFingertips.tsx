@@ -189,14 +189,14 @@ export default function BusinessAtFingerips({data}: Props) {
     //   </div>
     // </section>
 
-    <section className="bg-DarkOrange py-[40px] md:py-[100px] px-5 text-center">
+    <section className="bg-DarkOrange py-[40px] md:py-[60px] lg:py-[100px] px-5 text-center">
          <div className="max-w-[1240px] mx-auto">
         {/* Heading */}
         <div className="flex flex-col gap-5 max-w-[850px] mx-auto">
             <h2 className="font-Roboto text-white font-semibold leading-[31.2px] md:leading-[43.2px] text-[26px] md:text-[36px] tracking-[-0.39px] md:tracking-[-0.54px] text-center">
             Your Business, Anytime on Mobile 
             </h2>
-            <p className="font-Roboto text-white font-normal leading-[21px] md:leading-[27px] text-[14px] md:text-[18px] text-center">
+            <p className="font-Roboto text-white font-normal leading-[21px] md:leading-[27px] text-[14px] md:text-[18px] tracking-[0px] text-center">
             Whether you're on a flight, at a café, or in your home office, our mobile app and desktop portal keep you connected, in control, and ready to act instantly.
             </p>
         </div>
@@ -217,11 +217,11 @@ export default function BusinessAtFingerips({data}: Props) {
                 />
               </div>
               {/* Title */}
-              <h3 className="max-w-[100%] md:max-w-[238px] font-Roboto text-PrimaryBlack font-medium leading-[28px] md:leading-[33.6px] text-[20px] md:text-[24px] group-hover:text-white">
+              <h3 className="max-w-[100%] md:max-w-[238px] font-Roboto text-PrimaryBlack font-medium leading-[28px] md:leading-[33.6px] text-[20px] md:text-[24px] tracking-[0px] group-hover:text-white">
                 {item.title}
               </h3>
               {/* Description */}
-              <p className="mt-2 font-Roboto text-LightGray font-normal leading-[21px] text-[14px] group-hover:text-white">
+              <p className="mt-2 font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px] group-hover:text-white">
                 {item.description}
               </p>
             </div>
@@ -230,7 +230,7 @@ export default function BusinessAtFingerips({data}: Props) {
   
           {/* Right Large Card */}
           <div className="w-[100%] md:w-[32.5%]">
-          <div className="bg-PrimaryBlack relative rounded-[20px] p-5 md:p-6 text-left flex flex-col justify-between gap-[60px] transition-all md:min-h-[577px] lg:min-h-[501px]">
+          <div className="bg-PrimaryBlack relative rounded-[20px] p-6 md:p-6 text-left flex flex-col justify-between gap-[60px] transition-all md:min-h-[577px] lg:min-h-[501px]">
             <div className='absolute top-[0px] right-[3px]'>
                <img
                 src={businessBg}
@@ -246,10 +246,10 @@ export default function BusinessAtFingerips({data}: Props) {
                 className="w-5 md:w-6 h-5 md:h-6 object-cover rounded-lg"
                 />
             </div>
-              <h3 className="max-w-[100%] md:max-w-[238px] font-Roboto text-white font-medium leading-[28px] md:leading-[33.6px] text-[20px] md:text-[24px] group-hover:text-white">
+              <h3 className="max-w-[100%] md:max-w-[238px] font-Roboto text-white font-medium leading-[28px] md:leading-[33.6px] text-[20px] md:text-[24px] tracking-[0px] group-hover:text-white">
                 Real-Time Notifications
               </h3>
-              <p className="mt-2 font-Roboto text-white font-normal leading-[21px] text-[14px] group-hover:text-white">
+              <p className="mt-2 font-Roboto text-white font-normal leading-[21px] text-[14px] tracking-[0px] group-hover:text-white">
                 Instant alerts for new mail, calls, or accelerator updates.
               </p>
             </div>

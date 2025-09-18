@@ -94,14 +94,14 @@ export default function Locations({ data }: Props) {
     // </div>
 
 
-    <section className="bg-white text-white py-[40px] md:py-[100px] px-5">
+    <section className="bg-white text-white py-[40px] md:py-[60px] lg:py-[100px] px-5">
     <div className="max-w-[1240px] mx-auto">
       {/* Heading */}
       <div className="max-w-[744px] mx-auto pb-[44px] md:pb-[64px] flex flex-col align-center justify-center gap-4 md:gap-5">
         <h2 className="font-Roboto text-PrimaryBlack font-semibold leading-[33.8px] md:leading-[43.2px] text-[26px] md:text-[36px] tracking-[-0.39px] md:tracking-[-0.54px] text-center">
            Find a Virtual Mailbox Near You
         </h2>
-        <p className="font-Roboto text-PrimaryBlack font-normal leading-[21px] md:leading-[27px] text-[14px] md:text-[18px] text-center">
+        <p className="font-Roboto text-PrimaryBlack font-normal leading-[21px] md:leading-[27px] text-[14px] md:text-[18px] tracking-[0px] text-center">
         Search by city, browse all available locations, or choose from our most popular spots with the highest number of operators.
         </p>
       </div>
@@ -128,14 +128,14 @@ export default function Locations({ data }: Props) {
             <div className="flex flex-col gap-[2px]">
                 <span
                 className={`text-sm ${
-                    loc.active ? "text-gray-300" : "font-Roboto text-LightGray font-normal leading-[18px] md:leading-[21px] text-[12px] md:text-[14px] group-hover:text-white"
+                    loc.active ? "text-gray-300" : "font-Roboto text-LightGray font-normal leading-[18px] md:leading-[21px] text-[12px] md:text-[14px] tracking-[0px] group-hover:text-white"
                 }`}
                 >
                 <span className="text-DarkOrange w-1 h-1 inline-block group-hover:text-white">•</span> {loc.operators} Operators
                 </span>
 
                 {/* City */}
-                <h3 className="font-Roboto text-PrimaryBlack font-medium leading-[24px] md:leading-[28px] text-[16px] md:text-[20px] group-hover:text-white line-clamp-1">{loc.city}, <span className="inline font-Roboto text-LightGray font-medium leading-[24px] md:leading-[28px] text-[16px] md:text-[20px] group-hover:text-white">{loc.state}</span></h3>
+                <h3 className="font-Roboto text-PrimaryBlack font-medium leading-[24px] md:leading-[28px] text-[16px] md:text-[20px] tracking-[0px] group-hover:text-white line-clamp-1">{loc.city}, <span className="inline font-Roboto text-LightGray font-medium leading-[24px] md:leading-[28px] text-[16px] md:text-[20px] tracking-[0px] group-hover:text-white">{loc.state}</span></h3>
 
                  {/* City */}
                 
