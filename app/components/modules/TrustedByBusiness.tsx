@@ -168,11 +168,12 @@
 
 //   );
 // }
-import type { SanityTrustedByBusiness } from '~/lib/sanity';
+import { useRef } from "react";
+import type { SanityTrustedByBusiness } from "~/lib/sanity";
 import spanBg from "~/components/media/span-bg.svg";
 import TrustedBg from "~/components/media/Trusted-bg.png";
 
-// Static star icons (still local)
+// Static star icons
 import star1 from "~/components/media/Star1.svg";
 import star2 from "~/components/media/Star2.svg";
 import star3 from "~/components/media/Star3.svg";
@@ -183,6 +184,29 @@ type Props = {
 };
 
 export default function Homedata({ data }: Props) {
+  const logosRef = useRef<HTMLDivElement>(null);
+
+  // handle swipe (touch drag)
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const container = logosRef.current;
+    if (!container) return;
+
+    container.dataset.startX = e.touches[0].pageX.toString();
+    container.dataset.scrollLeft = container.scrollLeft.toString();
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    const container = logosRef.current;
+    if (!container || !container.dataset.startX || !container.dataset.scrollLeft) return;
+
+    const startX = parseInt(container.dataset.startX, 10);
+    const scrollLeft = parseInt(container.dataset.scrollLeft, 10);
+    const x = e.touches[0].pageX;
+    const walk = startX - x;
+
+    container.scrollLeft = scrollLeft + walk;
+  };
+
   if (!data) return null;
 
   return (
@@ -265,16 +289,35 @@ export default function Homedata({ data }: Props) {
           </div>
         </div>
 
-        {/* Logos */}
-        <div className="mt-9 flex flex-wrap justify-center md:justify-start items-center gap-[8px] xl:gap-[57px]">
-          {data.logos?.map((item, index) => (
-            <img
-              key={index}
-              src={item.logo?.url || ""}
-              alt={item.alt || item.logo?.altText || "logo"}
-              className="w-[139px] md:w-[156px]"
-            />
-          ))}
+        {/* Logos (swipeable on mobile, no global css) */}
+        <div className="mt-9">
+          <div
+            ref={logosRef}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            className="
+              flex md:flex-wrap 
+              overflow-x-auto md:overflow-x-visible 
+              space-x-4 md:space-x-0
+              snap-x snap-mandatory
+              md:justify-start 
+              justify-start 
+              items-center
+              [&::-webkit-scrollbar]:hidden
+              [-ms-overflow-style:none] 
+              [scrollbar-width:none]
+            "
+          >
+            {data.logos?.map((item, index) => (
+              <div key={index} className="flex-shrink-0 snap-start">
+                <img
+                  src={item.logo?.url || ""}
+                  alt={item.alt || item.logo?.altText || "logo"}
+                  className="w-[139px] md:w-[156px]"
+                />
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
