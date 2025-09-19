@@ -235,7 +235,7 @@ export const useRootLoaderData = () => {
 };
  
 export default function App() {
-  const {preview, header, footer, q, searchResults, ...data} =
+  const {preview, header, footer, q, searchResults, isLoggedIn, ...data} =
     useLoaderData<SerializeFrom<typeof loader>>();
   const locale = data.selectedLocale ?? DEFAULT_LOCALE;
   const hasUserConsent = true;
@@ -250,12 +250,12 @@ export default function App() {
         <Seo />
         <Meta />
         <Links />
-        <script src="//in.fw-cdn.com/32520975/1392281.js" chat="true"></script>
+        {/* <script src="//in.fw-cdn.com/32520975/1392281.js" chat="true"></script> */}
       </head>
       <body>
         <PreviewProvider previewConfig={preview} fallback={<PreviewLoading />}>
           {/* 🔹 Global Header with search support */}
-          <Header data={header} searchQuery={q} searchResults={searchResults} />
+          <Header data={header} searchQuery={q} searchResults={searchResults} isLoggedIn={isLoggedIn} />
 
           <Layout key={`${locale.language}-${locale.country}`}>
             <Outlet />
