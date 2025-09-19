@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import type { SanityHeroHome } from '~/lib/sanity';
 import SearchIconBanner from '~/components/icons/SearchIconBanner';
 import AmLogo from '~/components/icons/AmLogo';
+import RightArrowWhite from '~/components/icons/RightArrowWhite';
 
 type Props = {
   hero: SanityHeroHome;
@@ -15,7 +16,7 @@ export default function HomeHero({ hero }: Props) {
       <div className="max-w-[1240px] mx-auto">
         <div className="flex flex-col lg:flex-row gap-[43px]">
           {/* Left Content */}
-          <div className="w-full lg:w-[58%] relative">
+          <div className="w-full lg:w-[55.8%] relative">
             <div className="absolute top-[0px] xl:top-[35px] right-[-10px] hidden md:flex ">
               <AmLogo />
             </div>
@@ -48,8 +49,11 @@ export default function HomeHero({ hero }: Props) {
                 placeholder={hero.searchPlaceholder}
                 className="font-Roboto text-PrimaryBlack placeholder:text-PrimaryBlack font-normal leading-[24px] text-[16px] tracking-[0.08px] flex-1 py-[5px] md:py-[13px] focus:outline-none"
               />
-              <button className="bg-DarkOrange text-white px-[20px] md:px-[35.5px] py-[11px] md:py-[15px] font-normal leading-[14px] md:leading-[22px] text-[14px] md:text-[16px] tracking-[0.08px] rounded-full">
-                {hero.searchButtonText || 'Search'}
+              <button className="group bg-DarkOrange text-white px-[20px] md:px-[35.5px] py-[11px] md:py-[15px] font-normal leading-[14px] md:leading-[22px] text-[14px] md:text-[16px] tracking-[0.08px] rounded-full overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]">
+                
+                 <span className="relative flex items-center">{hero.searchButtonText || 'Search'} <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[25px] transition-all duration-300">
+                    <RightArrowWhite />
+                  </span></span>
               </button>
             </div>
 
@@ -99,16 +103,17 @@ export default function HomeHero({ hero }: Props) {
           </div>
 
           {/* Right Images (separate divs for image 1 and 2) */}
-          <div className="w-full lg:w-[42%] hidden md:flex gap-4 justify-center">
+          <div className="w-full lg:w-[44.2%] hidden md:flex gap-4 justify-center">
+            <div className="md:flex gap-4 justify-center">
             {/* Image 1 */}
             {hero.rightImage1?.image?.asset?.url && (
               <div className="relative">
                 <img
                   src={hero.rightImage1.image.asset.url}
                   alt="right image 1"
-                  className="w-full h-[603px] object-cover"
+                  className="w-full h-[603px] object-cover rounded-[124px_124px_124px_0]"
                 />
-                <div className="flex items-center gap-2 absolute bottom-[85px] left-[-85px] max-w-[242px] p-4 rounded-[12px] border border-[#DCDCDC] bg-[rgba(255,255,255,0.70)] backdrop-blur-[12px]">
+                <div className="flex items-center gap-2 absolute bottom-[85px] lg:bottom-[132px] left-[-85px] max-w-[242px] p-4 rounded-[12px] border border-[#DCDCDC] bg-[rgba(255,255,255,0.70)] backdrop-blur-[12px]">
                   {hero.rightImage1.icon?.asset?.url && (
                     <img
                       src={hero.rightImage1.icon.asset.url}
@@ -129,9 +134,9 @@ export default function HomeHero({ hero }: Props) {
                 <img
                   src={hero.rightImage2.image.asset.url}
                   alt="right image 2"
-                  className="w-full h-[603px] object-cover"
+                  className="w-full h-[603px] object-cover rounded-[0_124px_124px_124px]"
                 />
-                <div className="flex items-center gap-2 absolute bottom-[85px] left-[-85px] max-w-[242px] p-4 rounded-[12px] border border-[#DCDCDC] bg-[rgba(255,255,255,0.70)] backdrop-blur-[12px]">
+                <div className="flex items-center gap-2 absolute  bottom-[210px] lg:bottom-[255px] right-[-20px] xl:right-[-42px] max-w-[242px] p-4 rounded-[12px] border border-[#DCDCDC] bg-[rgba(255,255,255,0.70)] backdrop-blur-[12px]">
                   {hero.rightImage2.icon?.asset?.url && (
                     <img
                       src={hero.rightImage2.icon.asset.url}
@@ -145,6 +150,7 @@ export default function HomeHero({ hero }: Props) {
                 </div>
               </div>
             )}
+            </div>
           </div>
         </div>
       </div>

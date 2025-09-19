@@ -82,10 +82,12 @@
 //   );
 // }
 import { useState } from "react";
+ import { useRef } from "react";
 import ArrowRightIcon from "~/components/icons/ArrowRightIcon";
 import type { SanityFAQ } from "~/lib/sanity";
 import PlusFAQ from '~/components/icons/PlusFAQ';
 import CloseFAQ from '~/components/icons/CloseFAQ';
+import RightArrowWhite from '~/components/icons/RightArrowWhite';
 
 type Props = {
   data: SanityFAQ;
@@ -110,14 +112,14 @@ export default function FAQ({ data }: Props) {
 
           {/* FAQ Content */}
           <div className="space-y-4 max-w-[812px] lg:min-w-[812px] mx-auto">
-            {data?.faqs?.length > 0 ? (
+            {/* {data?.faqs?.length > 0 ? (
               data.faqs.map((faq, idx) => {
                 const isOpen = openIndex === idx;
                 return (
                   <div
                     key={idx}
                     className={`rounded-[12px] p-6 border border-LightWhite ${
-                      isOpen ? "bg-PrimaryBlack text-white" : "bg-[#F9F9F9]"
+                      isOpen ? "bg-[#F6F6F6] text-white" : "bg-white"
                     }`}
                   >
                     <button
@@ -125,7 +127,7 @@ export default function FAQ({ data }: Props) {
                       className="w-full flex justify-between items-center text-left gap-6"
                     >
                       <span className={`font-Roboto font-medium leading-[28px] text-[20px] tracking-[0px] ${
-                          isOpen ? "text-white" : ""
+                          isOpen ? "text-PrimaryBlack" : ""
                         } text-PrimaryBlack`}>{faq.question}</span>
                       <span
                         className={`text-2xl font-bold ${
@@ -137,7 +139,7 @@ export default function FAQ({ data }: Props) {
                     </button>
 
                     {isOpen && (
-                      <div className="pt-4 font-Roboto text-white font-normal leading-[24px] text-[16px] tracking-[0px]">
+                      <div className="pt-4 font-Roboto text-PrimaryBlack font-normal leading-[24px] text-[16px] tracking-[0px]">
                         {faq.answer}
                       </div>
                     )}
@@ -148,14 +150,69 @@ export default function FAQ({ data }: Props) {
               <p className="font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px] text-center">
                 No FAQs available.
               </p>
-            )}
+            )} */}
+           
+
+                {data?.faqs?.length > 0 ? (
+                  data.faqs.map((faq, idx) => {
+                    const isOpen = openIndex === idx;
+                    const contentRef = useRef(null);
+
+                    return (
+                      <div
+                        key={idx}
+                        className={`rounded-[12px] p-6 border border-LightWhite transition-colors duration-300 ${
+                          isOpen ? "bg-[#F6F6F6]" : "bg-white"
+                        }`}
+                      >
+                        <button
+                          onClick={() => setOpenIndex(isOpen ? null : idx)}
+                          className="w-full flex justify-between items-center text-left gap-6"
+                        >
+                          <span className="font-Roboto font-medium leading-[28px] text-[20px] text-PrimaryBlack">
+                            {faq.question}
+                          </span>
+                          <span
+                            className={`text-2xl font-bold transition-transform duration-300 ${
+                              isOpen ? "rotate-45" : "rotate-0"
+                            }`}
+                          >
+                            {isOpen ? <CloseFAQ /> : <PlusFAQ />}
+                          </span>
+                        </button>
+
+                        {/* Smooth auto height transition */}
+                        <div
+                          ref={contentRef}
+                          style={{
+                            maxHeight: isOpen ? `${contentRef.current?.scrollHeight}px` : "0px",
+                          }}
+                          className={`transition-[max-height] duration-500 ease-in-out overflow-hidden`}
+                        >
+                          <p className="pt-4 font-Roboto text-PrimaryBlack font-normal leading-[24px] text-[16px]">
+                            {faq.answer}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <p className="font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px] text-center">
+                    No FAQs available.
+                  </p>
+                )}
+
+
           </div>
 
           {/* View All FAQs Button */}
           <div className="flex justify-center mt-11 md:mt-14">
-            <button className="bg-DarkOrange text-white font-Roboto font-medium leading-[16px] text-[16px] tracking-[0.08px] py-3 md:py-[18px] px-4 md:px-[143px] rounded-[100px] min-w-[205px] md:min-w-aauto min-h-[52px] md:min-h-auto">
-              View All FAQs
-            </button>
+          <button className="group relative flex items-center justify-center bg-DarkOrange text-white font-Roboto font-medium leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-4 md:px-[143px] rounded-[100px] min-w-[205px] md:min-w-auto min-h-[52px] md:min-h-auto overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]">
+            <span className="relative flex items-center">View All FAQs <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
+              <RightArrowWhite />
+            </span></span>
+            
+          </button>
           </div>
         </div>
       </div>

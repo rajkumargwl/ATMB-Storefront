@@ -306,7 +306,7 @@ export default function BusinessAtFingerips({ data }: Props) {
               .map((item, index) => (
                 <div
                   key={index}
-                  className="group bg-white text-left rounded-[20px] p-5 md:p-6 border border-LightWhite hover:bg-PrimaryBlack hover:border-PrimaryBlack transition-all"
+                  className="bg-white text-left rounded-[20px] p-5 md:p-6 border border-LightWhite transition-all"
                 >
                   {/* Icon */}
                   <div className="bg-DarkOrange rounded-full p-[8px] md:p-[10px] mb-5 md:mb-6 inline-block">
@@ -317,11 +317,11 @@ export default function BusinessAtFingerips({ data }: Props) {
                     />
                   </div>
                   {/* Title */}
-                  <h3 className="max-w-[100%] md:max-w-[238px] font-Roboto text-PrimaryBlack font-medium leading-[28px] md:leading-[33.6px] text-[20px] md:text-[24px] tracking-[0px] group-hover:text-white">
+                  <h3 className="max-w-[100%] md:max-w-[238px] font-Roboto text-PrimaryBlack font-medium leading-[28px] md:leading-[33.6px] text-[20px] md:text-[24px] tracking-[0px]">
                     {item.title}
                   </h3>
                   {/* Description */}
-                  <p className="mt-2 font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px] group-hover:text-white">
+                  <p className="mt-2 font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">
                     {item.description}
                   </p>
                 </div>
