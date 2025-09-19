@@ -1,4 +1,5 @@
 import { Link } from '@remix-run/react';
+import CallWhite from '~/components/icons/CallWhite';
 
 type FooterProps = {
   data: {
@@ -53,7 +54,7 @@ export default function Footer({ data }: FooterProps) {
                     )}
                   </a>
                 ))}
-                <a className="rounded-[100px] bg-[#F60] font-Roboto text-white px-4 py-3 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2" href="/">+1 (775) 500 0579</a>
+                <a className="rounded-[100px] bg-[#F60] font-Roboto text-white px-4 py-3 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-3" href="/"><CallWhite /> +1 (775) 500 0579</a>
               </div>
             )}
           </div>
