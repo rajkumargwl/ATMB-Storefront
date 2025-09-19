@@ -296,11 +296,11 @@ export default function Homedata({ data }: Props) {
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             className="
-              flex md:flex-wrap 
-              overflow-x-auto md:overflow-x-visible 
-              space-x-4 md:space-x-0
+              flex gap-2 md:gap-2 xl:gap-[57px] lg:flex-wrap 
+              overflow-x-auto lg:overflow-x-visible 
+              lg:space-x-0
               snap-x snap-mandatory
-              md:justify-start 
+              lg:justify-start 
               justify-start 
               items-center
               [&::-webkit-scrollbar]:hidden
