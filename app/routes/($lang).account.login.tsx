@@ -25,12 +25,30 @@ export const handle = {
   isPublic: true,
 };
 
-export async function loader({context, params}: LoaderFunctionArgs) {
-  const customerAccessToken = await context.session.get('customerAccessToken');
-  console.log("customerAccessToken", customerAccessToken);
+export async function loader({context, params, request}: LoaderFunctionArgs) {
+  const {session, storefront, cart} = context;
 
-  if (customerAccessToken) {
+  const customerAccessToken2 = await context.session.get('customerAccessToken');
+  if (customerAccessToken2) {
     return redirect(params.lang ? `${params.lang}/account` : '/account');
+  }
+
+  const url = new URL(request.url);
+  const customerAccessToken = url.searchParams.get("token");
+  if (customerAccessToken) {
+    session.set('customerAccessToken', customerAccessToken);
+    
+    // Sync customerAccessToken with existing cart
+    const result = await cart.updateBuyerIdentity({ customerAccessToken });
+
+    // Update cart id in cookie
+    const headers = cart.setCartId(result.cart.id);
+
+    headers.append('Set-Cookie', await session.commit());
+
+    return redirect(params.lang ? `/${params.lang}/account` : '/account', {
+      headers,
+    });
   }
 
   return null;
@@ -60,6 +78,7 @@ export const action: ActionFunction = async ({request, context, params}) => {
   const {session, storefront, cart} = context;
 
   try {
+    // let customerAccessToken = "a0de2720bf15cbb431ba1441bebf4ea5";
     const customerAccessToken = await doLogin(context, {email, password});
     session.set('customerAccessToken', customerAccessToken);
 
