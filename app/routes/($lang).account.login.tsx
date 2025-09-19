@@ -35,6 +35,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
 
   const url = new URL(request.url);
   const customerAccessToken = url.searchParams.get("token");
+  console.log("customerAccessToken", customerAccessToken);
   if (customerAccessToken) {
     session.set('customerAccessToken', customerAccessToken);
     
