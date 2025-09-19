@@ -7,6 +7,9 @@ import Logo from "~/components/media/logo.png";
 import ArrowRightIcon from "~/components/icons/ArrowRightIcon";
 import MenuIcon from "~/components/icons/MenuIcon"; // you’ll need to create/import hamburger icon
 import ArrowDownIcon from '~/components/icons/ArrowDownIcon';
+import LeftArrowBlack from '~/components/icons/LeftArrowBlack';
+import CloseIconBlack from '~/components/icons/CloseIconBlack';
+import LeftChevron from '~/components/icons/LeftChevron';
 
 
 type HeaderProps = {
@@ -189,7 +192,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
               loginButton && (
                 <Link
                   to={loginButton.link ?? "/account/login"}
-                  className="rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[15px]"
+                  className="rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[15px] transition-all hover:scale-[1.02] hover:bg-[#F3F3F3]"
                 >
                   {loginButton.label}
                 </Link>
@@ -198,7 +201,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
             {!isLoggedIn && getStartedButton && (
               <Link
                 to={getStartedButton.link ?? "/account/register"}
-                className="rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-4 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2"
+                className="rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-4 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2 transition-all hover:scale-[1.02] hover:bg-[#DD5827]"
               >
                 {getStartedButton.label} 
               </Link>
@@ -260,7 +263,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
               {getStartedButton && (
                 <Link
                   to={getStartedButton.link ?? "#"}
-                  className="w-fit rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-3 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2"
+                  className="w-fit rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-3 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2 transition-all hover:scale-[1.02] hover:bg-[#DD5827]"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {getStartedButton.label} 
@@ -274,25 +277,31 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
      {/* Search Popup Modal */}
 {/* Search Popup Modal */}
 {isSearchOpen && (
-  <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50">
-    <div className="bg-[#F9F9F9] rounded-md shadow-lg w-full max-w-[1208px] mt-5">
+  <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 md:px-5">
+    <div className="h-[100vh] md:h-auto bg-white md:bg-[#F6F6F6] md:rounded-[20px] shadow-lg w-full max-w-[1010px] md:mt-5 md:px-4 md:pt-4 md:pb-6">
       
       {/* Header Row */}
-      <div className="flex flex-wrap items-center justify-between px-5 py-4">
+      <div className="relative flex flex-row flex-wrap items-center justify-betwee gap-[10px] rounded-[100px] bg-white m-5 ml-[60px] md:m-[0px] px-5 py-3 md:py-2 md:pl-5 md:pr-2 border border-LightWhite">
         {/* Logo */}
-        <div className="flex items-center">
+        {/* <div className="flex items-center">
           <img
             src={Logo}
             alt="Logo"
             className="h-13 w-auto"
           />
-        </div>
+        </div> */}
 
         {/* Search Input */}
-        <div className="flex-1 ml-6 md:mx-6 relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">
+        <button className="flex md:hidden absolute left-[-40px]">
+            <LeftChevron />
+          </button>
+        <div className="flex-1 gap-[10px] relative flex items-center justify-center">
+          <button className="hidden md:flex">
+            <LeftArrowBlack />
+          </button>
+          <button className="flex md:hidden">
             <SearchIcon />
-          </span>
+          </button>
 
           <input
             type="text"
@@ -311,11 +320,11 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
               navigate(`?${params.toString()}`, { replace: true });
             }}
             placeholder="Enter location, product, or keyword"
-            className="w-full pl-9 pr-9 py-4 font-Roboto text-PrimaryBlack font-normal leading-[24px] text-[16px] tracking-[0px] placeholder-gray-500 border border-[#DCDCDC] rounded-xl focus:outline-none"
+            className="w-full md:py-[11px] font-Roboto text-PrimaryBlack font-normal leading-[24px] text-[16px] tracking-[0px] placeholder:text-PrimaryBlack rounded-xl focus:outline-none placeholder:font-Roboto placeholder:font-normal placeholder:leading-[24px] placeholder:text-[16px] placeholder:tracking-[0px]"
           />
 
           {/* Close Icon inside input */}
-          {query && (
+          {/* {query && (
             <button
               onClick={() => {
                 setQuery("");
@@ -328,23 +337,30 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
             >
               <CloseIcon />
             </button>
-          )}
+          )} */}
         </div>
 
         {/* Right Buttons */}
-        <div className="flex items-center space-x-4 w-full md:w-auto justify-center mt-4 md:mt-[0px]">
-          <button>
-            <CartIcon />
+        <div className="flex items-center space-x-[10px] w-auto justify-center mt-[0px]">
+          
+          <button onClick={() => {
+                setQuery("");
+                setIsSearchOpen(false);
+                const params = new URLSearchParams(location.search);
+                params.delete("q");
+                navigate(`?${params.toString()}`, { replace: true });
+              }}>
+            <CloseIconBlack />
           </button>
-          <Link
+          {/* <Link
             to={loginButton?.link ?? "/account/login"}
             className="rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[15px]"
           >
             {loginButton?.label || "Login"}
-          </Link>
+          </Link> */}
           <Link
             to={getStartedButton?.link ?? "/account/register"}
-            className="rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-4 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2"
+            className="hidden md:flex rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-4 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2 transition-all hover:scale-[1.02] hover:bg-[#DD5827]"
           >
             {getStartedButton?.label || "Get Started"} 
           </Link>
@@ -353,27 +369,27 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
 
       {/* Results List */}
       {query && (
-        <div className="ml-[151px] max-w-[718px] pb-4">
-          <div className="bg-white border border-[#DCDCDC] rounded-lg shadow-md w-full">
-            <ul className="max-h-72 overflow-y-auto">
+        <div className="md:pt-2">
+          <div className="bg-white border-t md:border border-LightWhite md:rounded-[20px] shadow-md w-full p-5">
+            <ul className="max-h-72 overflow-y-auto space-y-6">
               {results.length > 0 ? (
                 results.map((item) => (
                   <li
                     key={item._id}
-                    className="px-4 py-3 cursor-pointer font-Roboto text-PrimaryBlack font-normal leading-[24px] text-[16px] tracking-[0px]"
+                    className="cursor-pointer font-Roboto leading-[27px] text-[18px] tracking-[0px]"
                     onClick={() => handleResultClick(item)}
                   >
                     {item.type === "location" ? (
                       <>
-                        <span className="font-medium text-black">{item.name}</span>
-                        <span className="ml-1 text-gray-600">
+                        <span className="mr-2 font-medium text-PrimaryBlack">{item.name}</span>
+                        <span className="text-LightGray font-normal">
                           {item.city}, {item.postalCode}
                         </span>
                       </>
                     ) : (
                       <>
-                        <span className="font-medium text-black">{item.title}</span>
-                        <span className="ml-1 font-Roboto text-PrimaryBlack font-normal leading-[24px] text-[16px] tracking-[0px]">(Product)</span>
+                        <span className="mr-2 font-medium text-PrimaryBlack">{item.title}</span>
+                        <span className="text-LightGray font-normal">(Product)</span>
                       </>
                     )}
                   </li>
