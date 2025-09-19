@@ -25,35 +25,74 @@ export const handle = {
   isPublic: true,
 };
 
-export async function loader({context, params, request}: LoaderFunctionArgs) {
-  const {session, storefront, cart} = context;
+export async function loader({ context, params, request }: LoaderFunctionArgs) {
+  const { session, cart } = context;
 
-  const customerAccessToken2 = await context.session.get('customerAccessToken');
-  if (customerAccessToken2) {
-    return redirect(params.lang ? `${params.lang}/account` : '/account');
+  // Get current token from session
+  const customerAccessTokenFromSession = await session.get("customerAccessToken");
+  if (customerAccessTokenFromSession) {
+    return redirect(params.lang ? `/${params.lang}/account` : "/account");
   }
 
+  // Get token from URL
   const url = new URL(request.url);
-  const customerAccessToken = url.searchParams.get("token");
-  console.log("customerAccessToken", customerAccessToken);
-  if (customerAccessToken) {
-    session.set('customerAccessToken', customerAccessToken);
-    
+  const tokenFromUrl = url.searchParams.get("token");
+  console.log("customerAccessToken (from URL)", tokenFromUrl);
+
+  if (tokenFromUrl) {
+    // Save token in session
+    session.set("customerAccessToken", tokenFromUrl);
+
     // Sync customerAccessToken with existing cart
-    const result = await cart.updateBuyerIdentity({ customerAccessToken });
+    const result = await cart.updateBuyerIdentity({ customerAccessToken: tokenFromUrl });
 
-    // Update cart id in cookie
-    const headers = cart.setCartId(result.cart.id);
+    // Build headers safely
+    const headers = new Headers();
 
-    headers.append('Set-Cookie', await session.commit());
+    // 1. Persist cart id
+    const cartHeaders = cart.setCartId(result.cart.id);
+    cartHeaders.forEach((value, key) => headers.append(key, value));
 
-    return redirect(params.lang ? `/${params.lang}/account` : '/account', {
+    // 2. Persist session
+    headers.append("Set-Cookie", await session.commit());
+
+    return redirect(params.lang ? `/${params.lang}/account` : "/account", {
       headers,
     });
   }
 
   return null;
 }
+
+// export async function loader({context, params, request}: LoaderFunctionArgs) {
+//   const {session, storefront, cart} = context;
+
+//   const customerAccessToken2 = await context.session.get('customerAccessToken');
+//   if (customerAccessToken2) {
+//     return redirect(params.lang ? `${params.lang}/account` : '/account');
+//   }
+
+//   const url = new URL(request.url);
+//   const customerAccessToken = url.searchParams.get("token");
+//   console.log("customerAccessToken", customerAccessToken);
+//   if (customerAccessToken) {
+//     session.set('customerAccessToken', customerAccessToken);
+    
+//     // Sync customerAccessToken with existing cart
+//     const result = await cart.updateBuyerIdentity({ customerAccessToken });
+
+//     // Update cart id in cookie
+//     const headers = cart.setCartId(result.cart.id);
+
+//     headers.append('Set-Cookie', await session.commit());
+
+//     return redirect(params.lang ? `/${params.lang}/account` : '/account', {
+//       headers,
+//     });
+//   }
+
+//   return null;
+// }
 
 type ActionData = {
   formError?: string;
