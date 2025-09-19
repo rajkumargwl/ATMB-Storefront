@@ -66,7 +66,7 @@ export const links: LinksFunction = () => {
   return [
     {rel: 'stylesheet', href: stylesheet},
     {
-      href: 'https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,500;0,700;1,500;1,700&display=swap',
+      href: 'https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap',
       rel: 'stylesheet',
     },
     {
@@ -235,7 +235,7 @@ export const useRootLoaderData = () => {
 };
  
 export default function App() {
-  const {preview, header, footer, q, searchResults, ...data} =
+  const {preview, header, footer, q, searchResults, isLoggedIn, ...data} =
     useLoaderData<SerializeFrom<typeof loader>>();
   const locale = data.selectedLocale ?? DEFAULT_LOCALE;
   const hasUserConsent = true;
@@ -250,12 +250,12 @@ export default function App() {
         <Seo />
         <Meta />
         <Links />
-        <script src="//in.fw-cdn.com/32520975/1392281.js" chat="true"></script>
+        {/* <script src="//in.fw-cdn.com/32520975/1392281.js" chat="true"></script> */}
       </head>
       <body>
         <PreviewProvider previewConfig={preview} fallback={<PreviewLoading />}>
           {/* 🔹 Global Header with search support */}
-          <Header data={header} searchQuery={q} searchResults={searchResults} />
+          <Header data={header} searchQuery={q} searchResults={searchResults} isLoggedIn={isLoggedIn} />
 
           <Layout key={`${locale.language}-${locale.country}`}>
             <Outlet />
