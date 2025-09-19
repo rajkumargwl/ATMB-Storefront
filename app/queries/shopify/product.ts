@@ -89,6 +89,53 @@ export const PRODUCT_FIELDS = `
 //     }
 //   }
 // `;
+// export const PRODUCT_QUERY = `#graphql
+//   ${PRODUCT_FIELDS}
+//   ${PRODUCT_VARIANT_FIELDS}
+
+//   query product(
+//     $country: CountryCode
+//     $language: LanguageCode
+//     $handle: String!
+//     $selectedOptions: [SelectedOptionInput!]!
+//   ) @inContext(country: $country, language: $language) {
+//     product(handle: $handle) {
+//       ...ProductFields
+//       media(first: 20) {
+//         nodes {
+//           ... on MediaImage {
+//             id
+//             mediaContentType
+//             image {
+//               id
+//               url
+//               altText
+//               width
+//               height
+//             }
+//           }
+//           ... on Model3d {
+//             id
+//             mediaContentType
+//             sources {
+//               mimeType
+//               url
+//             }
+//           }
+//         }
+//       }
+//       selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {
+//         ...ProductVariantFields
+//       }
+//       variants(first: 50) {
+//         nodes {
+//           ...ProductVariantFields
+//         }
+//       }
+//     }
+//   }
+// `;
+
 export const PRODUCT_QUERY = `#graphql
   ${PRODUCT_FIELDS}
   ${PRODUCT_VARIANT_FIELDS}
@@ -126,16 +173,27 @@ export const PRODUCT_QUERY = `#graphql
       }
       selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {
         ...ProductVariantFields
+        metafields(identifiers: [
+          {namespace: "custom", key: "plan_type"}
+        ]) {
+          key
+          value
+        }
       }
       variants(first: 50) {
         nodes {
           ...ProductVariantFields
+          metafields(identifiers: [
+            {namespace: "custom", key: "plan_type"}
+          ]) {
+            key
+            value
+          }
         }
       }
     }
   }
 `;
-
 
 
 
