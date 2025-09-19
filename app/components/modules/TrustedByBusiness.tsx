@@ -168,7 +168,11 @@
 
 //   );
 // }
-import { useRef } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { FreeMode } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/free-mode";
+
 import type { SanityTrustedByBusiness } from "~/lib/sanity";
 import spanBg from "~/components/media/span-bg.svg";
 import TrustedBg from "~/components/media/Trusted-bg.png";
@@ -184,29 +188,6 @@ type Props = {
 };
 
 export default function Homedata({ data }: Props) {
-  const logosRef = useRef<HTMLDivElement>(null);
-
-  // handle swipe (touch drag)
-  const handleTouchStart = (e: React.TouchEvent) => {
-    const container = logosRef.current;
-    if (!container) return;
-
-    container.dataset.startX = e.touches[0].pageX.toString();
-    container.dataset.scrollLeft = container.scrollLeft.toString();
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    const container = logosRef.current;
-    if (!container || !container.dataset.startX || !container.dataset.scrollLeft) return;
-
-    const startX = parseInt(container.dataset.startX, 10);
-    const scrollLeft = parseInt(container.dataset.scrollLeft, 10);
-    const x = e.touches[0].pageX;
-    const walk = startX - x;
-
-    container.scrollLeft = scrollLeft + walk;
-  };
-
   if (!data) return null;
 
   return (
@@ -289,33 +270,37 @@ export default function Homedata({ data }: Props) {
           </div>
         </div>
 
-        {/* Logos (swipeable on mobile, no global css) */}
+        {/* Logos (Swiper for mobile, flex-wrap for desktop) */}
         <div className="mt-9">
-          <div
-            ref={logosRef}
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            className="
-              flex gap-2 md:gap-2 xl:gap-[57px] lg:flex-wrap 
-              overflow-x-auto lg:overflow-x-visible 
-              lg:space-x-0
-              snap-x snap-mandatory
-              lg:justify-start 
-              justify-start 
-              items-center
-              [&::-webkit-scrollbar]:hidden
-              [-ms-overflow-style:none] 
-              [scrollbar-width:none]
-            "
-          >
+          <div className="block md:hidden">
+            <Swiper
+              modules={[FreeMode]}
+              freeMode={true}
+              slidesPerView={"auto"}
+              spaceBetween={16}
+              className="!overflow-visible"
+            >
+              {data.logos?.map((item, index) => (
+                <SwiperSlide key={index} className="!w-auto">
+                  <img
+                    src={item.logo?.url || ""}
+                    alt={item.alt || item.logo?.altText || "logo"}
+                    className="w-[139px]"
+                  />
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+
+          {/* Desktop (no swipe, same design) */}
+          <div className="hidden md:flex flex-wrap justify-start items-center gap-[8px] xl:gap-[57px]">
             {data.logos?.map((item, index) => (
-              <div key={index} className="flex-shrink-0 snap-start">
-                <img
-                  src={item.logo?.url || ""}
-                  alt={item.alt || item.logo?.altText || "logo"}
-                  className="w-[139px] md:w-[156px]"
-                />
-              </div>
+              <img
+                key={index}
+                src={item.logo?.url || ""}
+                alt={item.alt || item.logo?.altText || "logo"}
+                className="w-[139px] md:w-[156px]"
+              />
             ))}
           </div>
         </div>

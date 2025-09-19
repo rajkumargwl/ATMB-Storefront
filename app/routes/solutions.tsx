@@ -7,8 +7,7 @@ import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
 import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {SanityPreview} from 'hydrogen-sanity';
 import {Suspense} from 'react';
-import Header from '~/components/global/Header';
-import Footer from '~/components/global/Footer';
+
 import ModuleGrid from '~/components/modules/ModuleGrid';
 import {validateLocale, notFound, fetchGids} from '~/lib/utils';
 
@@ -47,19 +46,18 @@ export async function loader({context, params}: LoaderFunctionArgs) {
 
   return defer({
     page,
-    header,
-    footer,
+    
     gids,
     analytics: {pageType: AnalyticsPageType.page}, // pageType "page" since this is solutions
   });
 }
 
 export default function Solution() {
-  const {page, header, footer, gids} = useLoaderData<typeof loader>();
+  const {page, gids} = useLoaderData<typeof loader>();
 
   return (
     <>
-      <Header data={header} />
+    
       <SanityPreview data={page} query={SOLUTION_PAGE}>
         {(page) => (
           <Suspense>
@@ -70,7 +68,7 @@ export default function Solution() {
           </Suspense>
         )}
       </SanityPreview>
-      <Footer data={footer} />
+    
     </>
   );
 }
