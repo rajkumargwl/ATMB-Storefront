@@ -468,7 +468,7 @@ export default function PricingSection({ data }: { data: PricingData }) {
                       : "text-PrimaryBlack"
                   }`}
                 >
-                  {tab.tabName}
+                  {tab?.tabName}
                 </button>
               ))}
             </div>
@@ -482,19 +482,19 @@ export default function PricingSection({ data }: { data: PricingData }) {
                 !isYearly ? "text-PrimaryBlack" : "text-gray-500 hover:text-PrimaryBlack"
               }`}
             >
-              {data.billingToggle.monthlyLabel}
+              {data?.billingToggle?.monthlyLabel}
             </button>
 
             <button
               onClick={() => setBilling(isYearly ? "monthly" : "yearly")}
-              className={`relative h-8 w-16 rounded-full transition ${
-                isYearly ? "bg-[#74A038]" : "bg-[#BFBFBF]"
+              className={`relative h-[22px] w-10 rounded-full transition ${
+                isYearly ? "bg-[#ff6600]" : "bg-[#BFBFBF]"
               }`}
               aria-label="Toggle billing cycle"
             >
               <span
-                className={`absolute top-1 left-1 h-6 w-6 rounded-full bg-white shadow transition-transform ${
-                  isYearly ? "translate-x-8" : ""
+                className={`absolute top-[2px] left-[2px] h-[18px] w-[18px] rounded-full bg-white shadow transition-transform ${
+                  isYearly ? "translate-x-[18px]" : ""
                 }`}
               />
             </button>
@@ -505,11 +505,11 @@ export default function PricingSection({ data }: { data: PricingData }) {
                 isYearly ? "text-PrimaryBlack" : "text-gray-500 hover:text-PrimaryBlack"
               }`}
             >
-              {data.billingToggle.yearlyLabel}
+              {data?.billingToggle.yearlyLabel}
             </button>
 
             <span className="font-Roboto font-normal leading-[18px] text-[12px] tracking-[0px] text-[#ffffff] bg-[#74A038] px-2 py-1 rounded-full">
-              {data.billingToggle.discountLabel}
+              {data?.billingToggle.discountLabel}
             </span>
           </div>
         </div>
@@ -528,14 +528,22 @@ export default function PricingSection({ data }: { data: PricingData }) {
                 key={idx}
                 className={`relative ${
                   plan?.isMostPopular
-                    ? "px-[11px] bg-PrimaryBlack rounded-[32px]"
+                    ? "px-[7px] md:px-[11px] bg-PrimaryBlack rounded-[32px]"
                     : "p-[8px] pt-[8px] pb-[24px] border border-LightWhite bg-[#F6F6F6] rounded-[24px]"
                 }`}
               >
-                <div className={`${plan?.isMostPopular ? "bg-white rounded-[20px] px-[8px] pt-[8px] pb-[24px] mt-[11px] mb-[11px] border border-[#EE6D2D] shadow-[0_6px_24px_0_rgba(0,0,0,0.05)]" : "h-full" }`}>
-                  <div className="bg-white rounded-[20px] p-6 border border-[#EE6D2D] shadow-[0_6px_24px_0_rgba(0,0,0,0.05)]">
+                <div className={`${plan?.isMostPopular ? "bg-white rounded-[24px] md:rounded-[20px] px-[24px] md:px-[0px] pb-[24px] mt-[7px] md:mt-[11px] mb-[7px] md:mb-[11px] shadow-[0_6px_24px_0_rgba(0,0,0,0.05)] border border-[#ff6600]" : "h-full" }`}>
+                  <div className={`bg-white rounded-[20px] p-6  shadow-[0_6px_24px_0_rgba(0,0,0,0.05)] ${
+                      plan?.isMostPopular
+                        ? "border border-[#ffffff] pb-[0px] px-[0px] md:px-6"
+                        : "border border-[#EE6D2D]"
+                    }`}>
                     <div className="flex items-center justify-between">
-                      <div className="w-12 h-12 rounded-full bg-[#F9F9F9] border border-[#DCDCDC] flex items-center justify-center">
+                      <div className={`w-12 h-12 rounded-full  border border-[#DCDCDC] flex items-center justify-center ${
+                      plan?.isMostPopular
+                        ? "bg-DarkOrange"
+                        : "bg-[#F9F9F9]"
+                    }`}>
                         {plan.icon?.svgFile?.asset?.url ? (
                           
                           <img src={plan.icon.svgFile.asset.url} alt={plan.title} className="w-6 h-6 bg-Dark" />

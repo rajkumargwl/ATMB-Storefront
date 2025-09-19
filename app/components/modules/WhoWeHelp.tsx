@@ -173,6 +173,7 @@ import type { SanityWhoWeHelp } from "~/lib/sanity";
 import CheckArrow from "~/components/icons/CheckArrow";
 import WhiteChevron from "~/components/icons/WhiteChevron";
 import BlackChevron from "~/components/icons/BlackChevron";
+import RightArrowWhite from '~/components/icons/RightArrowWhite';
 
 type Props = {
   data: SanityWhoWeHelp;
@@ -227,10 +228,10 @@ export default function HomeHero({ data }: Props) {
               <button
                 key={idx}
                 onClick={() => setActiveTab(tab.label)}
-                className={`px-6 py-3 rounded-full border border-LightWhite text-base font-normal leading-[24px] tracking-[0px] shrink-0 ${
+                className={`px-6 py-3 rounded-full border border-LightWhite text-base font-normal leading-[24px] tracking-[0px] transition-all shrink-0 ${
                   activeTab === tab.label
                     ? "bg-PrimaryBlack text-white"
-                    : "bg-white text-LightGray"
+                    : "bg-white text-LightGray hover:border-PrimaryBlack hover:bg-[#f3f3f3]"
                 }`}
               >
                 {tab.label}
@@ -341,8 +342,11 @@ export default function HomeHero({ data }: Props) {
               </div>
 
               {activeData.button?.label && (
-                <button className="md:max-w-[386px] mt-6 w-full bg-DarkOrange text-white font-medium font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[14px] md:py-[18px] rounded-full">
-                  {activeData.button.label}
+                <button className="group flex items-center justify-center md:max-w-[386px] mt-6 w-full bg-DarkOrange text-white font-medium font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[14px] md:py-[18px] rounded-full overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]">
+                    
+                   <span className="relative flex items-center"> {activeData.button.label}  <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
+                    <RightArrowWhite />
+                  </span></span>               
                 </button>
               )}
             </div>
