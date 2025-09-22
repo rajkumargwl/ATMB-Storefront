@@ -218,8 +218,8 @@ useEffect(() => {
                 className="w-fit rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[11px]"
                 onClick={() => {
                   setIsMobileMenuOpen(false);
-                  // const ssoUrl = "https://store.xecurify.com/moas/broker/login/shopify/0dv7ud-pz.myshopify.com/account?idpname=custom_openidconnect_Okf";
-                  const ssoUrl = "http://localhost:3000/auth/callback?token=a0de2720bf15cbb431ba1441bebf4ea5"; // TODO: replace with your SSO URL
+                  const ssoUrl = "https://store.xecurify.com/moas/broker/login/shopify/0dv7ud-pz.myshopify.com/account?idpname=custom_openidconnect_Okf";
+                  // const ssoUrl = "http://localhost:3000/auth/callback?token=a0de2720bf15cbb431ba1441bebf4ea5"; // TODO: replace with your SSO URL
                   const width = 800;
                   const height = 600;
                   const left = (window.screen.width - width) / 2;
