@@ -1,0 +1,275 @@
+import {Form, useActionData, useNavigation} from '@remix-run/react';
+import type {SeoHandleFunction} from '@shopify/hydrogen';
+import type {CustomerCreatePayload} from '@shopify/hydrogen/storefront-api-types';
+import {
+  type ActionFunction,
+  type LoaderFunctionArgs,
+  redirect,
+} from '@shopify/remix-oxygen';
+import clsx from 'clsx';
+import {useState} from 'react';
+
+import FormCardWrapper from '~/components/account/FormCardWrapper';
+import FormFieldText from '~/components/account/FormFieldText';
+import Button from '~/components/elements/Button';
+import {Link} from '~/components/Link';
+import {badRequest} from '~/lib/utils';
+
+import {doLogin} from './($lang).account.login';
+import { fi } from 'date-fns/locale';
+
+const seo: SeoHandleFunction<typeof loader> = () => ({
+  title: 'Register',
+});
+
+export const handle = {
+  seo,
+};
+
+export async function loader({context, params}: LoaderFunctionArgs) {
+  const customerAccessToken = await context.session.get('customerAccessToken');
+
+  if (customerAccessToken) {
+    return redirect(params.lang ? `${params.lang}/account` : '/account');
+  }
+
+  return new Response(null);
+}
+
+type ActionData = {
+  formError?: string;
+};
+
+export const action: ActionFunction = async ({request, context, params}) => {
+  const {session, storefront} = context;
+  const formData = await request.formData();
+
+  const email = formData.get('email');
+  const first_name = formData.get('first_name');
+  const last_name = formData.get('last_name');
+  const phone = formData.get('phone');
+  const password = "12345678"; // default password for all users
+
+  if (!email || !first_name || !last_name || !phone || typeof email !== 'string' || typeof first_name !== 'string' || typeof last_name !== 'string' || typeof phone !== 'string') {
+    return badRequest<ActionData>({
+      formError: 'Please provide First Name, Last Name, Email and Phone Number.',
+    });
+  }
+
+  try {
+    // 1️ Create Shopify customer
+    const data = await storefront.mutate<{
+      customerCreate: CustomerCreatePayload;
+    }>(CUSTOMER_CREATE_MUTATION, {
+      variables: {
+        input: {email, password, firstName: first_name, lastName: last_name, phone},
+      },
+    });
+
+    if (!data?.customerCreate?.customer?.id) {
+      const userErrors = data?.customerCreate?.customerUserErrors ?? [];
+      const message = userErrors.map((e) => e.message).join(', ') || 'Customer creation failed';
+      throw new Error(message);
+    }
+
+    // 2️ Get Microsoft Entra Token
+    const tokenResponse = await fetch(
+      `https://login.anytimehq.co/${context.env.MS_ENTRA_TENANT_ID}/oauth2/v2.0/token`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          client_id: context.env.MS_ENTRA_CLIENT_ID!,
+          client_secret: context.env.MS_ENTRA_CLIENT_SECRET!,
+          scope: 'api://anytimeapi.com/customer/.default',
+          grant_type: 'client_credentials',
+        }),
+      }
+    );
+
+    if (!tokenResponse.ok) {
+      console.error('Failed to get Microsoft Entra token', await tokenResponse.text());
+      throw new Error('Could not get Microsoft Entra access token');
+    }
+
+    const tokenData = await tokenResponse.json();
+    const accessToken = tokenData.access_token;
+
+    // 3️ Call External API to Create User
+    const userResponse = await fetch('https://anytimeapi.com/customer/', {
+      method: 'POST',
+      headers: {
+        'API-Version': 'v1',
+        'Api-Environment': 'STG',
+        'Ocp-Apim-Subscription-Key': context.env.ANYTIME_SUBSCRIPTION_KEY!,
+        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email,
+        first_name,
+        last_name,
+        phone,
+        status: 'Active',
+        type: 'Customer',
+      }),
+    });
+
+    const userResponses = await userResponse.json();
+    if (userResponses.success === false) {
+      // console.error('External API failed', await userResponses.errors);
+      throw new Error('Could not create user in external API: ' + userResponses.errors.map((err: any) => err.message).join(', '));
+    }
+
+    // 4️⃣ Login customer in Shopify
+    const customerAccessToken = await doLogin(context, {email, password});
+    if (!customerAccessToken) throw new Error('Login failed');
+
+    session.set('customerAccessToken', customerAccessToken);
+
+    return redirect(params.lang ? `/${params.lang}/account` : '/account', {
+      headers: {
+        'Set-Cookie': await session.commit(),
+      },
+    });
+  } catch (error: any) {
+    console.error('Register action failed:', error);
+    return badRequest({
+      formError:
+        error?.message ||
+        'Sorry. We could not create an account. Please try again or login if you already have an account.',
+    });
+  }
+};
+
+export default function Register() {
+  const actionData = useActionData<ActionData>();
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === 'submitting';
+  const [nativeEmailError, setNativeEmailError] = useState<null | string>(null);
+  const [firstNameError, setFirstNameError] = useState<string | null>(null);
+  const [lastNameError, setLastNameError] = useState<string | null>(null);
+  const [phoneError, setPhoneError] = useState<string | null>(null);
+
+
+  return (
+    <div className={clsx('my-32 px-4', 'md:px-8')}>
+      <div className="flex justify-center">
+        <FormCardWrapper title="Create an account">
+          <Form method="post" noValidate>
+            {actionData?.formError && (
+              <div className="mb-6 flex items-center justify-center rounded-sm border border-red p-4 text-sm text-red">
+                <p>{actionData.formError}</p>
+              </div>
+            )}
+
+            <div className="space-y-4">
+              <FormFieldText
+                id="first_name"
+                name="first_name"
+                type="text"
+                required
+                aria-label="First Name"
+                label="First Name"
+                error={firstNameError || ''}
+                onBlur={(event) => {
+                  setFirstNameError(
+                    event.currentTarget.value.length && !event.currentTarget.validity.valid
+                      ? 'Invalid First Name'
+                      : null,
+                  );
+                }}
+              />
+
+              <FormFieldText
+                id="last_name"
+                name="last_name"
+                type="text"
+                required
+                aria-label="Last Name"
+                label="Last Name"
+                error={lastNameError || ''}
+                onBlur={(event) => {
+                    setLastNameError(
+                    event.currentTarget.value.length && !event.currentTarget.validity.valid
+                        ? 'Invalid Last Name'
+                        : null,
+                    );
+                }}
+              />
+
+              {/* Email */}
+              <FormFieldText
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required
+                aria-label="Email address"
+                label="Email address"
+                error={nativeEmailError || ''}
+                onBlur={(event) => {
+                  setNativeEmailError(
+                    event.currentTarget.value.length &&
+                      !event.currentTarget.validity.valid
+                      ? 'Invalid email address'
+                      : null,
+                  );
+                }}
+              />
+
+             <FormFieldText
+                id="phone"
+                name="phone"
+                type="text"
+                required
+                aria-label="Phone"
+                label="Phone"
+                error={phoneError || ''}
+                onBlur={(event) => {
+                    // simple phone validation: only digits & length >= 10
+                    const value = event.currentTarget.value;
+                    const isValid = /^[0-9]{10,}$/.test(value);
+
+                    setPhoneError(
+                    value.length && !isValid ? 'Invalid Phone Number' : null,
+                    );
+                }}
+              />
+              
+            </div>
+
+            {/* Footer */}
+            <div className="mt-4 space-y-4">
+              <Button
+                type="submit"
+                disabled={!!(firstNameError || lastNameError || phoneError || nativeEmailError) || isSubmitting}
+              >
+                {isSubmitting ? 'Creating account...' : 'Create account'}
+              </Button>
+
+             
+            </div>
+          </Form>
+        </FormCardWrapper>
+      </div>
+    </div>
+  );
+}
+
+const CUSTOMER_CREATE_MUTATION = `#graphql
+  mutation customerCreate($input: CustomerCreateInput!) {
+    customerCreate(input: $input) {
+      customer {
+        id
+      }
+      customerUserErrors {
+        code
+        field
+        message
+      }
+    }
+  }
+`;
