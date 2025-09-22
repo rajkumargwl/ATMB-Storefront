@@ -6,8 +6,7 @@ export const aboutUsModule = defineType({
   type: 'object',
   fields: [
     defineField({
-      name: 'sections',
-      title: 'Sections',
+      name: 'modules',
       type: 'array',
       of: [
         {type: 'aboutIntroSection'},          // 1st
