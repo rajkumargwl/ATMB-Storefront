@@ -97,6 +97,24 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
   setResults(searchResults || []); // new results from loader
 }, [location.search, searchResults]);
 
+useEffect(() => {
+  function handleMessage(event: MessageEvent) {
+    // Only accept from your domain
+    if (event.origin !== "https://shopifystage.anytimehq.co") return;
+
+    if (event.data?.token) {
+      console.log("Received token:", event.data.token);
+
+      // Redirect parent window with token in URL
+      window.location.href = `/account/login?token=${event.data.token}`;
+    }
+  }
+
+  window.addEventListener("message", handleMessage);
+  return () => window.removeEventListener("message", handleMessage);
+}, []);
+
+
 
   return (
     <header className="w-full bg-white px-5 border-b border-LightWhite lg:border-none">
@@ -190,12 +208,31 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
              </Link>
             ) : (
               loginButton && (
-                <Link
-                  to={loginButton.link ?? "/account/login"}
-                  className="rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[15px] transition-all hover:scale-[1.02] hover:bg-[#F3F3F3]"
-                >
-                  {loginButton.label}
-                </Link>
+                // <Link
+                //   to={loginButton.link ?? "/account/login"}
+                //   className="rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[15px] transition-all hover:scale-[1.02] hover:bg-[#F3F3F3]"
+                // >
+                //   {loginButton.label}
+                // </Link>
+                <button
+                className="w-fit rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[11px]"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  // const ssoUrl = "https://store.xecurify.com/moas/broker/login/shopify/0dv7ud-pz.myshopify.com/account?idpname=custom_openidconnect_Okf";
+                  const ssoUrl = "http://localhost:3000/auth/callback?token=a0de2720bf15cbb431ba1441bebf4ea5"; // TODO: replace with your SSO URL
+                  const width = 800;
+                  const height = 600;
+                  const left = (window.screen.width - width) / 2;
+                  const top = (window.screen.height - height) / 2;
+                  window.open(
+                    ssoUrl,
+                    "SSO Login",
+                    `width=${width},height=${height},top=${top},left=${left},resizable,scrollbars=yes,status=1`
+                  );
+                }}
+              >
+                {loginButton.label}
+              </button>
               )
             )}
             {!isLoggedIn && getStartedButton && (
