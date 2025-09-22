@@ -59,6 +59,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
     return redirect(params.lang ? `/${params.lang}/account` : "/account", {
       headers,
     });
+    
   }
 
   return null;
