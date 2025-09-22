@@ -76,6 +76,7 @@ export const pageType = defineType({
     }),
     
     // 👇 Page Modules
+        // 👇 Page Modules
     defineField({
       name: 'modules',
       title: 'Modules',
@@ -83,6 +84,7 @@ export const pageType = defineType({
       group: 'editorial',
       of: [
         { type: 'aboutUsModule' },
+         { type: 'solutionsMailbox' },
         // add more modules if needed
       ],
     }),
