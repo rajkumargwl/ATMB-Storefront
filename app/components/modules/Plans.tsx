@@ -392,6 +392,7 @@ import React, { useState } from "react";
 import PlanBg from '~/components/icons/PlanBg';
 import Fire from '~/components/icons/Fire';
  import CheckBlack from '~/components/icons/CheckBlack';
+ import RightArrowWhite from '~/components/icons/RightArrowWhite';
 type PlanType = {
   ctaBgColor: string | null;
   ctaText: string;
@@ -515,7 +516,7 @@ export default function PricingSection({ data }: { data: PricingData }) {
         </div>
 
         {/* Cards */}
-        <div className="mt-11 items-center justify-center grid gap-6 md:grid-cols-2 lg:grid-cols-3 w-full">
+        <div className="mt-11 items-start justify-center grid gap-6 md:grid-cols-2 lg:grid-cols-3 w-full">
           {plans.map((plan, idx) => {
             const price = plan.pricing
               ? isYearly
@@ -526,23 +527,24 @@ export default function PricingSection({ data }: { data: PricingData }) {
             return (
               <div
                 key={idx}
-                className={`relative ${
+                className={`relative group transition-all duration-500 ease-in-out ${
                   plan?.isMostPopular
-                    ? "px-[7px] md:px-[11px] bg-PrimaryBlack rounded-[32px]"
-                    : "p-[8px] pt-[8px] pb-[24px] border border-LightWhite bg-[#F6F6F6] rounded-[24px]"
+                    ? "p-[8px] pt-[8px] pb-[24px] border border-LightWhite bg-white rounded-[24px]"
+                    : "p-[8px] pt-[8px] pb-[24px] border border-LightWhite bg-white rounded-[24px]"
                 }`}
               >
-                <div className={`${plan?.isMostPopular ? "bg-white rounded-[24px] md:rounded-[20px] px-[24px] md:px-[0px] pb-[24px] mt-[7px] md:mt-[11px] mb-[7px] md:mb-[11px] shadow-[0_6px_24px_0_rgba(0,0,0,0.05)] border border-[#ff6600]" : "h-full" }`}>
+                <div className={` relative  ${plan?.isMostPopular ? "" : "h-full" }`}>
+                  <div className="absolute left-0 top-0 w-full h-[260px] rounded-[20px] border border-[#EE6D2D] transition-all duration-500 ease-in-out group-hover:h-[calc(100%+16px)]"></div>
                   <div className={`bg-white rounded-[20px] p-6  shadow-[0_6px_24px_0_rgba(0,0,0,0.05)] ${
-                      plan?.isMostPopular
-                        ? "border border-[#ffffff] pb-[0px] px-[0px] md:px-6"
-                        : "border border-[#EE6D2D]"
+                      plan.isMostPopular
+                        ? ""
+                        : ""
                     }`}>
                     <div className="flex items-center justify-between">
-                      <div className={`w-12 h-12 rounded-full  border border-[#DCDCDC] flex items-center justify-center ${
-                      plan?.isMostPopular
-                        ? "bg-DarkOrange"
-                        : "bg-[#F9F9F9]"
+                      <div className={`transition-all duration-500 ease-in-out w-12 h-12 rounded-full  border border-[#DCDCDC] flex items-center justify-center group-hover:bg-DarkOrange ${
+                      plan.isMostPopular
+                        ? ""
+                        : ""
                     }`}>
                         {plan.icon?.svgFile?.asset?.url ? (
                           
@@ -593,13 +595,16 @@ export default function PricingSection({ data }: { data: PricingData }) {
                   )}
 
                   <button
-                    className={`flex-shrink-0 flex items-center justify-center w-full md:w-[calc(100%-48px)] mx-auto h-[52px] rounded-full px-4 py-3 text-[16px] font-normal font-Roboto leading-[16px] tracking-[0.08px] transition ${
+                    className={`relative z-[8] flex-shrink-0 flex items-center justify-center w-full md:w-[calc(100%-48px)] mx-auto h-[52px] border border-PrimaryBlack  rounded-full px-4 py-3 text-[16px] text-PrimaryBlack font-normal font-Roboto leading-[16px] tracking-[0.08px] transition-all group-hover:bg-DarkOrange group-hover:text-white group-hover:border-DarkOrange hover:scale-[1.01] hover:bg-[#DD5827] group ${
                       plan.isMostPopular
-                        ? "bg-DarkOrange text-white"
-                        : "border border-PrimaryBlack text-PrimaryBlack"
+                        ? "hover:bg-[#DD5827]"
+                        : "hover:bg-[#DD5827]"
                     }`}
                   >
-                    {plan.ctaText}
+                    
+                    <span className="relative flex items-center">{plan.ctaText} <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
+                      <RightArrowWhite />
+                    </span></span>
                   </button>
                 </div>
               </div>
