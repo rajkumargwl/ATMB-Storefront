@@ -27,7 +27,9 @@ export async function loader({ context, request }) {
     // 2. Persist session
     headers.append("Set-Cookie", await session.commit());
     return redirect("/account", { headers });
+    
   }
+
   return redirect("/account");
   
 }
