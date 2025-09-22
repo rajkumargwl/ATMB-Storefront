@@ -23,7 +23,7 @@ export async function doLogout(context: AppLoadContext) {
 
   headers.append('Set-Cookie', await session.commit());
 
-  return redirect(`${context.storefront.i18n.pathPrefix}/account/login`, {
+  return redirect(`${context.storefront.i18n.pathPrefix}/`, {
     headers,
   });
 }
