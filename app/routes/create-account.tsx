@@ -229,14 +229,15 @@ export default function Register() {
                 label="Phone"
                 error={phoneError || ''}
                 onBlur={(event) => {
-                    // simple phone validation: only digits & length >= 10
-                    const value = event.currentTarget.value;
-                    const isValid = /^[0-9]{10,}$/.test(value);
-
+                    const value = event.currentTarget.value.trim();
+                
+                    // E.164 format: starts with +, followed by 10–15 digits
+                    const isValid = /^\+[1-9]\d{9,14}$/.test(value);
+                
                     setPhoneError(
-                    value.length && !isValid ? 'Invalid Phone Number' : null,
+                      value.length && !isValid ? 'Invalid phone number. Use format +1234567890' : null,
                     );
-                }}
+                  }}
               />
               
             </div>
