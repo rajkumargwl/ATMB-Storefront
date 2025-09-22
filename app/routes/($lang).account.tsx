@@ -48,6 +48,31 @@ export const handle = {
 };
 
 export async function loader({request, context, params}: LoaderFunctionArgs) {
+  const { session, cart } = context;
+
+  // Get token from URL
+  const url = new URL(request.url);
+  const tokenFromUrl = url.searchParams.get("token");
+  console.log("customerAccessToken (from URL)", tokenFromUrl);
+
+  if (tokenFromUrl) {
+    // Save token in session
+    session.set("customerAccessToken", tokenFromUrl);
+
+    // Sync customerAccessToken with existing cart
+    const result = await cart.updateBuyerIdentity({ customerAccessToken: tokenFromUrl });
+
+    // Build headers safely
+    const headers = new Headers();
+
+    // 1. Persist cart id
+    const cartHeaders = cart.setCartId(result.cart.id);
+    cartHeaders.forEach((value, key) => headers.append(key, value));
+
+    // 2. Persist session
+    headers.append("Set-Cookie", await session.commit());
+  }
+
   const {pathname} = new URL(request.url);
   const lang = params.lang;
   const customerAccessToken = await context.session.get('customerAccessToken');
