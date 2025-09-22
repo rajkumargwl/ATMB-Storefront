@@ -69,7 +69,9 @@ import {aboutDetailedFeaturesSection} from './objects/module/aboutDetailedFeatur
 import {aboutFoundersSection} from './objects/module/aboutFoundersSection'
 import {aboutResourceAuthorsSection} from './objects/module/aboutResourceAuthorsSection'
 import {aboutUsModule} from './objects/module/aboutUsModule'
-
+import { solutionsMailbox } from './objects/module/solutionsMailbox'
+import { prefectvirtualbox } from './objects/module/prefectvirtualbox'
+import {whyChooseVirtualMailbox} from './objects/module/whyChooseVirtualMailbox'
 // Objects used as annotations must be imported first
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
 
@@ -137,7 +139,10 @@ const objects = [
       aboutFeaturesSection,
       aboutDetailedFeaturesSection,
        aboutFoundersSection, 
-       aboutResourceAuthorsSection
+       aboutResourceAuthorsSection,
+       solutionsMailbox,
+prefectvirtualbox,
+whyChooseVirtualMailbox,
 ]
 
 import {portableTextType} from './portableText/portableTextType'
