@@ -28,6 +28,7 @@ export async function loader({ context, request }) {
     headers.append("Set-Cookie", await session.commit());
     return redirect("/account", { headers });
   }
+  
   return redirect("/account");
   
 }
