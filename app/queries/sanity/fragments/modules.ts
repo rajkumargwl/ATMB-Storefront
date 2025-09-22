@@ -1,23 +1,23 @@
 import groq from 'groq';
 
-import {MODULE_ACCORDION} from './modules/accordion';
-import {MODULE_CALLOUT} from './modules/callout';
-import {MODULE_CALL_TO_ACTION} from './modules/callToAction';
-import {MODULE_COLLECTION} from './modules/collection';
-import {MODULE_IMAGE} from './modules/image';
-import {MODULE_INSTAGRAM} from './modules/instagram';
-import {MODULE_PRODUCT} from './modules/product';
-// import {HERO_HOME} from './heroes/home';
-import {MODULE_HERO_BANNER} from './modules/herobanner';
-import {HOME_SECTION_2} from './modules/homeSection2';
-import {HOME_SECTION_3} from './modules/homeSection3';
-import {HOME_SECTION_4} from './modules/homeSection4';
-import {PLANS} from './modules/plans';
-import {BUNDLES} from './modules/bundles';
-import {WHY_BUSINESS_CHOOSE_US} from './modules/whyBusinessChooseUs';
-import {BUSINESS_AT_FINGERTIPS} from './modules/businessAtFingertips';
-import {TESTIMONIAL} from './modules/testimonial';
-import {FAQ} from './modules/faq';
+import { MODULE_ACCORDION } from './modules/accordion';
+import { MODULE_CALLOUT } from './modules/callout';
+import { MODULE_CALL_TO_ACTION } from './modules/callToAction';
+import { MODULE_COLLECTION } from './modules/collection';
+import { MODULE_IMAGE } from './modules/image';
+import { MODULE_INSTAGRAM } from './modules/instagram';
+import { MODULE_PRODUCT } from './modules/product';
+import { MODULE_HERO_BANNER } from './modules/herobanner';
+import { HOME_SECTION_2 } from './modules/homeSection2';
+import { HOME_SECTION_3 } from './modules/homeSection3';
+import { HOME_SECTION_4 } from './modules/homeSection4';
+import { PLANS } from './modules/plans';
+import { BUNDLES } from './modules/bundles';
+import { WHY_BUSINESS_CHOOSE_US } from './modules/whyBusinessChooseUs';
+import { BUSINESS_AT_FINGERTIPS } from './modules/businessAtFingertips';
+import { TESTIMONIAL } from './modules/testimonial';
+import { FAQ } from './modules/faq';
+import { ABOUT_US_MODULE } from './modules/aboutus'; // 👈 import your About Us GROQ
 
 export const MODULES = groq`
   _key,
@@ -43,7 +43,7 @@ export const MODULES = groq`
   (_type == "module.product") => {
     ${MODULE_PRODUCT}
   },
-   (_type == "hero") => {
+  (_type == "hero") => {
     ${MODULE_HERO_BANNER}
   },
   (_type == "homeSection2") => {
@@ -67,10 +67,13 @@ export const MODULES = groq`
   (_type == "businessAtFingertips") => {
     ${BUSINESS_AT_FINGERTIPS}
   },
-   (_type == "testimonial") => {
+  (_type == "testimonial") => {
     ${TESTIMONIAL}
   },
   (_type == "faq") => {
     ${FAQ}
-  }
+  },
+ (_type == "aboutUsModule") => {
+  ${ABOUT_US_MODULE}
+},
 `;
