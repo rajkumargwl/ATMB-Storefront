@@ -17,6 +17,11 @@ import BusinessAtFingertips from '~/components/modules/BusinessAtFingertips';
 import FAQ from '~/components/modules/FAQ';
 import Home from '~/components/heroes/Home';
 import FeaturesModule from '~/components/modules/FeaturesModule';
+import AboutHowItStartedSection from '~/components/modules/AboutHowItStartedSection';
+// import AboutIntroSection from '~/components/modules/AboutHowItStartedSection';
+import AboutIntroSection from '~/components/modules/AboutIntroSection';
+// import AboutIntroSection from '~/components/modules/AboutIntroSection';
+// import AboutIntroSection from '~/components/modules/AboutIntroSection';
 import Pricingmodule from '~/components/modules/Pricingmodule';
 import HowItWorks from '~/components/modules/Howitworks'; // Add this import
 import WhyChooseUs from '~/components/modules/WhyChooseUs'; // Add this import
@@ -28,17 +33,50 @@ type Props = {
 
 export default function Module({imageAspectClassName, module}: Props) {
   switch (module._type) {
-    case 'heroType':       // <-- add this
+    // -----------------------
+    // About Us nested sections
+    // -----------------------
+    case 'aboutUsModule':
+      return (
+        <>
+          {module.modules?.map((sub: any) => (
+            <Module key={sub._key} module={sub} />
+          ))}
+        </>
+      );
+
+    case 'aboutIntroSection':
+      return <AboutIntroSection {...module} />;
+
+    case 'aboutHowItStartedSection':
+      return <AboutHowItStartedSection {...module} />;
+
+    // case 'aboutFeaturesSection':
+    //   return <AboutFeaturesSection {...module} />;
+
+    // case 'aboutDetailedFeaturesSection':
+    //   return <AboutDetailedFeaturesSection {...module} />;
+
+    // case 'aboutFoundersSection':
+    //   return <AboutFoundersSection {...module} />;
+
+    // case 'aboutResourceAuthorsSection':
+    //   return <AboutResourceAuthorsSection {...module} />;
+
+    // -----------------------
+    // Existing cases
+    // -----------------------
+    case 'heroType':
       return <Home data={module} />;
-    case 'featuresModule':   // ✅ new case for features
+    case 'featuresModule':
       return <FeaturesModule {...module} />;
-       case 'pricingModule':       // <-- add this
+    case 'pricingModule':
       return <Pricingmodule data={module} />;
-    case 'howItWorks': // Add this case
+    case 'howItWorks':
       return <HowItWorks data={module} />;
-    case 'whyChooseAnytimePhones': // Add this case
+    case 'whyChooseAnytimePhones':
       return <WhyChooseUs data={module} />;
-    case 'review': // Add this case
+    case 'review':
       return <CustomerReviews data={module} />;
     case 'module.callout':
       return <CalloutModule module={module} />;
@@ -50,25 +88,25 @@ export default function Module({imageAspectClassName, module}: Props) {
       return <ImageModule module={module} />;
     case 'module.instagram':
       return <InstagramModule module={module} />;
-    case "hero":
+    case 'hero':
       return <HomeHero hero={module} />;
-    case "homeSection2":
+    case 'homeSection2':
       return <TrustedByBusiness data={module} />;
-    case "homeSection3":
+    case 'homeSection3':
       return <WhoWeHelp data={module} />;
-    case "homeSection4":
-        return <Locations data={module} />;
-    case "plans":
+    case 'homeSection4':
+      return <Locations data={module} />;
+    case 'plans':
       return <Plans data={module} />;
-    case "bundles":
+    case 'bundles':
       return <Bundles data={module} />;
-    case "whyBusinessChooseUs":
+    case 'whyBusinessChooseUs':
       return <WhyBusinessChooseUs data={module} />;
-    case "testimonial":
+    case 'testimonial':
       return <Testimonial data={module} />;
-    case "businessAtFingertips":
+    case 'businessAtFingertips':
       return <BusinessAtFingertips data={module} />;
-    case "faq":
+    case 'faq':
       return <FAQ data={module} />;
     case 'module.product':
       return (
