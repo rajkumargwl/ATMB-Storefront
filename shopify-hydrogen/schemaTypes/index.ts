@@ -72,6 +72,12 @@ import {aboutUsModule} from './objects/module/aboutUsModule'
 import { solutionsMailbox } from './objects/module/solutionsMailbox'
 import { prefectvirtualbox } from './objects/module/prefectvirtualbox'
 import {whyChooseVirtualMailbox} from './objects/module/whyChooseVirtualMailbox'
+import {careerPromotion} from './objects/module/careerPromotion'
+import {whyWorkSection} from './objects/module/whyWorkSection'
+import {aboutCompanySection} from './objects/module/aboutCompanySection'
+import {coreValuesSection} from './objects/module/coreValuesSection'
+import {joinTeamSection} from './objects/module/joinTeamSection'
+import {careersPageModule} from './objects/module/careersPageModule'
 // Objects used as annotations must be imported first
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
 
@@ -143,6 +149,13 @@ const objects = [
        solutionsMailbox,
 prefectvirtualbox,
 whyChooseVirtualMailbox,
+ // Careers Page Modules
+  careerPromotion,
+  whyWorkSection,
+  aboutCompanySection,
+  coreValuesSection,
+  joinTeamSection,
+  careersPageModule,
 ]
 
 import {portableTextType} from './portableText/portableTextType'

@@ -85,6 +85,7 @@ export const pageType = defineType({
       of: [
         { type: 'aboutUsModule' },
          { type: 'solutionsMailbox' },
+          { type: 'careersPageModule' },
         // add more modules if needed
       ],
     }),

@@ -47,12 +47,12 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
   
   });
 
-  console.log("Sanity About Us result:", page);
+  
     const aboutUsModule = page?.modules?.find(
     (mod: any) => mod._type === 'aboutUsModule'
   );
 
-  console.log("About Us Module:", aboutUsModule);
+  
 
   // if (!page) throw notFound();
 
