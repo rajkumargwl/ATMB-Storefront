@@ -18,10 +18,11 @@ import FAQ from '~/components/modules/FAQ';
 import Home from '~/components/heroes/Home';
 import FeaturesModule from '~/components/modules/FeaturesModule';
 import AboutHowItStartedSection from '~/components/modules/AboutHowItStartedSection';
-// import AboutIntroSection from '~/components/modules/AboutHowItStartedSection';
+import AboutFeaturesSection from '~/components/modules/AboutFeaturesSection';
+import AboutResourceAuthorsSection from '~/components/modules/AboutResourceAuthorsSection';
 import AboutIntroSection from '~/components/modules/AboutIntroSection';
-// import AboutIntroSection from '~/components/modules/AboutIntroSection';
-// import AboutIntroSection from '~/components/modules/AboutIntroSection';
+import AboutDetailedFeaturesSection from '~/components/modules/AboutDetailedFeaturesSection';
+import AboutFoundersSection from '~/components/modules/AboutFoundersSection';
 import Pricingmodule from '~/components/modules/Pricingmodule';
 import HowItWorks from '~/components/modules/Howitworks'; // Add this import
 import WhyChooseUs from '~/components/modules/WhyChooseUs'; // Add this import
@@ -51,17 +52,17 @@ export default function Module({imageAspectClassName, module}: Props) {
     case 'aboutHowItStartedSection':
       return <AboutHowItStartedSection {...module} />;
 
-    // case 'aboutFeaturesSection':
-    //   return <AboutFeaturesSection {...module} />;
+    case 'aboutFeaturesSection':
+      return <AboutFeaturesSection {...module} />;
 
-    // case 'aboutDetailedFeaturesSection':
-    //   return <AboutDetailedFeaturesSection {...module} />;
+    case 'aboutDetailedFeaturesSection':
+      return <AboutDetailedFeaturesSection {...module} />;
 
-    // case 'aboutFoundersSection':
-    //   return <AboutFoundersSection {...module} />;
+    case 'aboutFoundersSection':
+      return <AboutFoundersSection {...module} />;
 
-    // case 'aboutResourceAuthorsSection':
-    //   return <AboutResourceAuthorsSection {...module} />;
+    case 'aboutResourceAuthorsSection':
+      return <AboutResourceAuthorsSection {...module} />;
 
     // -----------------------
     // Existing cases

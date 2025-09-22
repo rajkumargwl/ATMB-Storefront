@@ -33,7 +33,7 @@ export const ABOUT_US_MODULE = groq`
         title,
         subtitle,
         icon {
-          asset->{url, metadata{lqip}}
+          "url": asset->url,
         }
       }
     },
@@ -42,14 +42,14 @@ export const ABOUT_US_MODULE = groq`
       heading,
       description,
       rightImage {
-        asset->{url, metadata{lqip}}
+        "url": asset->url,
       },
       backgroundColor,
       features[] {
         title,
         subtitle,
         icon {
-          asset->{url, metadata{lqip}}
+          "url": asset->url,
         }
       }
     },
@@ -63,7 +63,7 @@ export const ABOUT_US_MODULE = groq`
         bio,
         linkedin,
         image {
-          asset->{url, metadata{lqip}}
+          "url": asset->url,
         }
       }
     },
@@ -75,7 +75,7 @@ export const ABOUT_US_MODULE = groq`
         name,
         role,
         image {
-          asset->{url, metadata{lqip}}
+          "url": asset->url,
         }
       }
     }
