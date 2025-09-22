@@ -68,6 +68,12 @@ export const pageType = defineType({
       type: 'string',
       validation: (Rule) => Rule.required(),
     }),
+    defineField({
+      name: 'slug',
+      group: 'editorial',
+      type: 'string',
+      validation: (Rule) => Rule.required(),
+    }),
     
     // 👇 Page Modules
     defineField({
