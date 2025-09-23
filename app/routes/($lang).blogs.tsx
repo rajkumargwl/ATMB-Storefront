@@ -36,6 +36,9 @@ export async function loader({context, request}: LoaderFunctionArgs) {
   
   return defer({posts, offset});
 }
+function stripHtml(html: string): string {
+  return html.replace(/<[^>]+>/g, ''); // remove all HTML tags
+}
 
 export default function BlogIndex() {
   const {posts: initialPosts, offset: initialOffset} = useLoaderData<typeof loader>();
@@ -77,7 +80,7 @@ export default function BlogIndex() {
               <a href={`/blog/${post.slug.current}`}>
                 <h2 className="font-semibold text-lg mb-1">{post.title}</h2>
               </a>
-              <p className="text-gray-600 text-sm">{post.content.slice(0, 120)}...</p>
+              <p className="text-gray-600 text-sm">{stripHtml(post.content).slice(0, 120)}...</p>
             </div>
           </div>
         ))}
@@ -90,12 +93,12 @@ export default function BlogIndex() {
             {post.mainImage && <img src={post.mainImage} alt={post.title} className="w-full h-48 object-cover"/>}
             <div className="p-4">
               <p className="text-gray-500 text-sm mb-2">
-                By {post.author || 'Unknown'} | {new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                By {post.authorName || 'Unknown'} | {new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
               </p>
               <a href={`/blog/${post.slug.current}`}>
                 <h2 className="font-semibold text-lg mb-1">{post.title}</h2>
               </a>
-              <p className="text-gray-600 text-sm">{post.content.slice(0, 120)}...</p>
+              <p className="text-gray-600 text-sm">{stripHtml(post.content).slice(0, 120)}...</p>
             </div>
           </div>
         ))}
