@@ -174,7 +174,7 @@ export default function FAQ({ data }: Props) {
                           </span>
                           <span
                             className={`text-2xl font-bold transition-transform duration-300 ${
-                              isOpen ? "rotate-45" : "rotate-0"
+                              isOpen ? "rotate-0" : "rotate-0"
                             }`}
                           >
                             {isOpen ? <CloseFAQ /> : <PlusFAQ />}
