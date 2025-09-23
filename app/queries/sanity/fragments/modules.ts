@@ -19,6 +19,7 @@ import { TESTIMONIAL } from './modules/testimonial';
 import { FAQ } from './modules/faq';
 import { ABOUT_US_MODULE } from './modules/aboutus'; // 👈 import your About Us GROQ
 import { CAREER_PAGE_MODULE } from './modules/careerpage';
+import { FAQ_MODULES } from './modules/faqcategory';
 
 export const MODULES = groq`
   _key,
@@ -79,5 +80,8 @@ export const MODULES = groq`
 },
 (_type == "careersPageModule") => {
   ${CAREER_PAGE_MODULE}
+},
+(_type == "faqPageModule") => {
+  ${FAQ_MODULES}
 },
 `;
