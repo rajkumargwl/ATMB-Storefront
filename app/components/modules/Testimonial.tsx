@@ -249,7 +249,7 @@ export default function Testimonials({ data }: Props) {
             {data?.testimonials?.map((item, idx) =>
               item.type === "quote" ? (
                 <SwiperSlide key={item._key} className="!h-auto !flex-shrink-0">
-                  <div className="bg-white rounded-[20px] border border-LightWhite p-6 flex flex-col justify-between">
+                  <div className="transition-all duration-500 ease-in-out group bg-white rounded-[20px] border border-LightWhite p-6 flex flex-col justify-between hover:bg-PrimaryBlack">
 
                     {/* Top: Quote + Rating */}
                     <div className="flex items-center justify-between">
@@ -264,7 +264,7 @@ export default function Testimonials({ data }: Props) {
                         {item.starIcon?.url && (
                           <img src={item.starIcon.url} alt="Star Icon" className="w-5 h-5" />
                         )}
-                        <span className="font-Roboto text-base font-normal leading-[24px]">
+                        <span className="transition-all duration-500 ease-in-out font-Roboto text-base font-normal leading-[24px] group-hover:text-white">
                           {item.rating || "4.5"}
                         </span>
                       </div>
@@ -273,7 +273,7 @@ export default function Testimonials({ data }: Props) {
                     <span className="mt-[28px] mb-[22px]"><Testimonial /></span>
 
                     {/* Quote */}
-                    <p className="font-Roboto text-PrimaryBlack font-normal leading-[27px] md:leading-[27px] text-[18px] md:text-[18px] tracking-[0px]">
+                    <p className="transition-all duration-500 ease-in-out font-Roboto text-PrimaryBlack font-normal leading-[27px] md:leading-[27px] text-[18px] md:text-[18px] tracking-[0px] group-hover:text-white">
                       {item.quote}
                     </p>
                     {item.readMoreText && (
@@ -287,10 +287,10 @@ export default function Testimonials({ data }: Props) {
 
                     {/* Author */}
                     <div className="mt-[72px] pl-4 border-l border-LightWhite flex flex-col gap-1">
-                      <p className="font-Roboto text-PrimaryBlack text-[16px] leading-[24px] font-medium tracking-[0px]">
+                      <p className="transition-all duration-500 ease-in-out font-Roboto text-PrimaryBlack text-[16px] leading-[24px] font-medium tracking-[0px] group-hover:text-white">
                         {item.authorName}
                       </p>
-                      <p className="font-Roboto text-LightGray text-[14px] leading-[21px] font-normal tracking-[0px]">
+                      <p className="transition-all duration-500 ease-in-out font-Roboto text-LightGray text-[14px] leading-[21px] font-normal tracking-[0px] group-hover:text-white">
                         {item.authorTitle}
                       </p>
                     </div>
@@ -298,7 +298,7 @@ export default function Testimonials({ data }: Props) {
                 </SwiperSlide>
               ) : (
                 <SwiperSlide key={item._key} className="!h-auto !flex-shrink-0">
-                  <div className="bg-white rounded-[20px] border border-LightWhite p-6 flex flex-col justify-between">
+                  <div className="transition-all duration-500 ease-in-out group bg-white rounded-[20px] border border-LightWhite p-6 flex flex-col justify-between hover:bg-PrimaryBlack">
 
                     {/* Top: Author */}
                     <div className="flex items-center justify-between">
@@ -313,7 +313,7 @@ export default function Testimonials({ data }: Props) {
                         {item.starIcon?.url && (
                           <img src={item.starIcon.url} alt="Star Icon" className="w-5 h-5" />
                         )}
-                        <span className="font-Roboto text-base font-normal leading-[24px]">
+                        <span className="transition-all duration-500 ease-in-out font-Roboto text-base font-normal leading-[24px] group-hover:text-white">
                           {item.rating || "4.5"}
                         </span>
                       </div>
@@ -346,10 +346,10 @@ export default function Testimonials({ data }: Props) {
 
                     {/* Author */}
                     <div className="mt-[62px] pl-4 border-l border-LightWhite flex flex-col gap-1">
-                      <p className="font-Roboto text-PrimaryBlack text-[16px] leading-[24px] font-medium">
+                      <p className="transition-all duration-500 ease-in-out font-Roboto text-PrimaryBlack text-[16px] leading-[24px] font-medium group-hover:text-white">
                         {item.authorName}
                       </p>
-                      <p className="font-Roboto text-LightGray text-[14px] leading-[21px] font-normal">
+                      <p className="transition-all duration-500 ease-in-out font-Roboto text-LightGray text-[14px] leading-[21px] font-normal group-hover:text-white">
                         {item.authorTitle}
                       </p>
                     </div>

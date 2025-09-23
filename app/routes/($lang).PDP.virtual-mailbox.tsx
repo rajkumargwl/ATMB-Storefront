@@ -63,9 +63,9 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     },
   });
   if (!product) throw notFound();
+  console.log('Product fetched:', JSON.stringify(product));
 
   // Fetch Sanity location dynamically
-  // Assume the location id comes from query param or default
   const locationId = new URL(request.url).searchParams.get('locationId') ?? '101';
   const location = await context.sanity.query({
     query: LOCATION_QUERY,
@@ -86,8 +86,18 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
 export default function Plans() {
   const {location, header, footer, product} = useLoaderData<typeof loader>();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
+  const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
 
-  const variants = product?.variants?.nodes as ProductVariant[];
+  const variants = (product?.variants?.nodes ?? []) as ProductVariant[];
+
+  // ✅ Filter by billing cycle from metafields
+  const filteredVariants = variants.filter((variant) => {
+    const planTypeField = variant.metafields?.find((m) => m.key === 'plan_type');
+    return planTypeField?.value?.toLowerCase() === billingCycle;
+  });
+
+  // ✅ Sort by Shopify's built-in `position`
+  const sortedVariants = filteredVariants.sort((a, b) => a.position - b.position);
 
   const productAnalytics: ShopifyAnalyticsProduct | null = selectedVariant
     ? {
@@ -103,13 +113,11 @@ export default function Plans() {
 
   return (
     <>
-
       <div className="flex flex-col min-h-screen">
         <main className="flex-1 p-8">
+          {/* Breadcrumb + Title */}
           <div className="mb-8">
-            <p className="text-sm text-gray-500">
-              Virtual Mailbox &gt; Locations &gt; Plans
-            </p>
+            <p className="text-sm text-gray-500">Virtual Mailbox &gt; Locations &gt; Plans</p>
             <h2 className="text-2xl font-bold mt-2">{product.title}</h2>
             <p className="text-lg font-semibold">{location.displayName}</p>
             <p className="text-gray-600">{location.addressLine1}</p>
@@ -118,21 +126,50 @@ export default function Plans() {
             </p>
           </div>
 
+          {/* Billing cycle toggle */}
+          <div className="flex justify-center items-center gap-4 mb-8">
+            <span
+              onClick={() => setBillingCycle('monthly')}
+              className={`cursor-pointer px-4 py-2 rounded-full font-medium ${
+                billingCycle === 'monthly'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-200 text-gray-700'
+              }`}
+            >
+              Monthly
+            </span>
+            <span
+              onClick={() => setBillingCycle('yearly')}
+              className={`cursor-pointer px-4 py-2 rounded-full font-medium ${
+                billingCycle === 'yearly'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-200 text-gray-700'
+              }`}
+            >
+              Yearly
+            </span>
+          </div>
+
+          {/* Plans Grid */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {variants?.map((variant) => {
+            {sortedVariants.map((variant) => {
               const isSelected = selectedVariant?.id === variant.id;
               return (
                 <div
                   key={variant.id}
                   className={`rounded-2xl border p-6 shadow-sm relative bg-white cursor-pointer ${
-                    isSelected ? 'border-blue-500 ring-2 ring-blue-300' : 'border-gray-200'
+                    isSelected
+                      ? 'border-blue-500 ring-2 ring-blue-300'
+                      : 'border-gray-200'
                   }`}
                   onClick={() => setSelectedVariant(variant)}
                 >
                   <h3 className="text-xl font-bold">{variant.title}</h3>
                   <p className="text-2xl font-semibold mt-2">
                     {variant.price.amount} {variant.price.currencyCode}
-                    <span className="text-base font-normal">/month</span>
+                    <span className="text-base font-normal">
+                      /{billingCycle}
+                    </span>
                   </p>
 
                   <ul className="mt-4 space-y-2">
@@ -183,7 +220,6 @@ export default function Plans() {
             />
           </div>
         </main>
-
       </div>
     </>
   );
