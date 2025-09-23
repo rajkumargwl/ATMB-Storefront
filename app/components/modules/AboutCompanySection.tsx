@@ -24,18 +24,23 @@ export default function AboutCompanySection({
         </div>
 
         {/* Items */}
-        <div className="grid md:grid-cols-3 gap-12">
+        <div className="grid md:grid-cols-3 gap-6 md:gap-12">
           {items?.map((item, idx) => (
             <div
               key={idx}
-              className="flex flex-col items-start text-left"
+              className="flex flex-row md:flex-col items-start text-left gap-[22px] md:gap-0 relative after:content-[''] after:absolute after:top-[44px] after:left-[16px] after:w-[1px] after:h-[calc(100%-44px)] after:bg-LightWhite md:after:content-none last:after:content-none 
+               before:content-none md:before:content-[''] before:absolute before:top-[22px] before:left-[60px] before:w-[calc(100%-28px)] before:h-[1px] before:bg-LightWhite  last:before:content-none"
             >
+             
               {item.icon?.url && (
-                <img
-                  src={item.icon.url}
-                  alt="icon"
-                  className="mb-6 w-10 h-10 object-contain"
-                />
+                 <div className="md:mb-6 flex flex-col md:flex-row items-center gap-5 min-w-[32px] w-[32px] min-h-[32px] md:w-full">
+                  <img
+                    src={item.icon.url}
+                    alt="icon"
+                    className="w-8 md:w-10 h-8 md:h-10 object-contain"
+                  />
+                  <span className="hidden w-[1px] md:w-full h-full md:h-[1px] bg-LightWhite flex"></span>
+                 </div>
               )}
               <p className="text-[16px] text[#091019] leading-[24px] font-[500]">{item.description}</p>
             </div>
