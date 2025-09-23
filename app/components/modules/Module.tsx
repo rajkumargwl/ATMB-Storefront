@@ -27,6 +27,12 @@ import Pricingmodule from '~/components/modules/Pricingmodule';
 import HowItWorks from '~/components/modules/Howitworks'; // Add this import
 import WhyChooseUs from '~/components/modules/WhyChooseUs'; // Add this import
 import CustomerReviews from '~/components/modules/CustomerReviews'; // Add this import
+import CareerPromotionSection from '~/components/modules/CareerPromotionSection';
+import WhyWorkSection from '~/components/modules/WhyWorkSection';
+import AboutCompanySection from '~/components/modules/AboutCompanySection';
+import CoreValuesSection from '~/components/modules/CoreValuesSection';
+import JoinTeamSection from '~/components/modules/JoinTeamSection';
+
 type Props = {
   imageAspectClassName?: string;
   module: SanityModule;
@@ -45,6 +51,27 @@ export default function Module({imageAspectClassName, module}: Props) {
           ))}
         </>
       );
+        case 'careersPageModule':
+      return (
+        <>
+          {module.modules?.map((sub: any) => (
+            <Module key={sub._key} module={sub} />
+          ))}
+        </>
+      );
+      case 'careerPromotionSection':
+      return <CareerPromotionSection {...module} />;
+
+      case 'whyWorkSection':
+  return <WhyWorkSection {...module} />;
+  
+
+   case 'aboutCompanySection':
+  return <AboutCompanySection {...module} />;
+    case 'coreValuesSection':
+  return <CoreValuesSection {...module} />;
+  case 'joinTeamSection':
+  return <JoinTeamSection {...module} />;
 
     case 'aboutIntroSection':
       return <AboutIntroSection {...module} />;
