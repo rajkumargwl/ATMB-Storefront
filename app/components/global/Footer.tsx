@@ -25,7 +25,7 @@ export default function Footer({ data }: FooterProps) {
         {/* Top Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 md:gap-5">
           {/* Logo + Title + Description */}
-          <div className="lg:col-span-2 max-w-[306px] flex items-center md:items-start flex-col justify-between gap-6">
+          <div className="lg:col-span-2 md:max-w-[306px] flex items-center md:items-start flex-col justify-between gap-6">
             <div className="block">
               {data.logo?.asset?.url && (
                 <img
