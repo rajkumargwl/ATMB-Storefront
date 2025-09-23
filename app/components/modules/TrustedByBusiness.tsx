@@ -201,7 +201,7 @@ export default function Homedata({ data }: Props) {
         />
       </div>
 
-      <div className="relative z-[2] max-w-[1240px] mx-auto">
+      <div className="relative z-[2] max-w-[1240px] mx-auto overflow-hidden">
         <div className="flex flex-col lg:flex-row justify-between items-center w-full gap-8 lg:gap-0">
 
           {/* Left */}
@@ -272,7 +272,7 @@ export default function Homedata({ data }: Props) {
 
         {/* Logos (Swiper for mobile, flex-wrap for desktop) */}
         <div className="mt-9">
-          <div className="block md:hidden">
+          <div className="block lg:hidden">
             <Swiper
               modules={[FreeMode]}
               freeMode={true}
@@ -293,7 +293,7 @@ export default function Homedata({ data }: Props) {
           </div>
 
           {/* Desktop (no swipe, same design) */}
-          <div className="hidden md:flex flex-wrap justify-start items-center gap-[8px] xl:gap-[57px]">
+          <div className="hidden lg:flex flex-wrap justify-start items-center gap-[8px] lg:gap-[9px] xl:gap-[57px]">
             {data.logos?.map((item, index) => (
               <img
                 key={index}
