@@ -67,7 +67,7 @@ export async function loader({request, context, params}: LoaderFunctionArgs) {
 
   const heading = customer
     ? customer.firstName
-      ? `Welcome, ${customer.firstName}.`
+      ? `Hi, ${customer.firstName}.`
       : `Welcome to your account.`
     : 'Account Details';
 
@@ -143,9 +143,8 @@ interface Account {
 
 function Account({customer, orders, heading, addresses}: Account) {
   return (
-    <div className="divide-y divide-gray pb-24 pt-28">
+    <div className="divide-y divide-gray pb-24 pt-10">
       <AccountSection>
-        <div className="mb-4 text-sm font-bold">Account</div>
         <h1
           className={clsx([
             'mb-4 text-2xl', //
