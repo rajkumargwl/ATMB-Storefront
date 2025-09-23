@@ -7,6 +7,7 @@ type WhyWorkSectionProps = {
     description: string;
   }[];
 };
+import whyChooseBg from "~/components/media/why-choose-bg.png";
 
 export default function WhyWorkSection({
   title,
@@ -14,7 +15,14 @@ export default function WhyWorkSection({
   features,
 }: WhyWorkSectionProps) {
   return (
-    <section className="bg-[#0D0D0D] text-white py-25">
+    <section className="relative overflow-hidden bg-PrimaryBlack text-white py-[40px] md:py-[60px] lg:py-[100px] px-5 bg-no-repeat bg-bottom-left">
+      <div className="absolute z-1 bottom-[-250px] left-0">
+        <img
+          src={whyChooseBg}
+          alt="Background"
+          className="w-[530px] h-[782px]"
+        />
+      </div>
       <div className="max-w-7xl mx-auto px-4 md:px-8 grid md:grid-cols-2 gap-1">
         {/* Left side */}
         <div className="max-w-[361px]">
@@ -23,7 +31,7 @@ export default function WhyWorkSection({
         </div>
 
         {/* Right side */}
-        <div className="grid sm:grid-cols-2 gap-8 gap-y-15">
+        <div className="grid grid-cols-2 md:grid-cols-2 gap-8 gap-y-15 mt-10 md:mt-0">
           {features?.map((item, idx) => (
             <div key={idx} className="flex flex-col">
               {item.icon?.url && (
