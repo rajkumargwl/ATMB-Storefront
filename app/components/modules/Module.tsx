@@ -32,6 +32,8 @@ import WhyWorkSection from '~/components/modules/WhyWorkSection';
 import AboutCompanySection from '~/components/modules/AboutCompanySection';
 import CoreValuesSection from '~/components/modules/CoreValuesSection';
 import JoinTeamSection from '~/components/modules/JoinTeamSection';
+import FAQSection from './FAQSection';
+import FAQWithCategory from './FAQWithCategory';
 
 type Props = {
   imageAspectClassName?: string;
@@ -90,7 +92,21 @@ export default function Module({imageAspectClassName, module}: Props) {
 
     case 'aboutResourceAuthorsSection':
       return <AboutResourceAuthorsSection {...module} />;
+   
 
+
+      case 'faqPageModule':
+      return (
+        <>
+          {module.modules?.map((sub: any) => (
+            <Module key={sub._key} module={sub} />
+          ))}
+        </>
+      );
+      case 'faqCoverModule':
+      return <FAQSection {...module} />;
+      case 'faqWithCategory':
+      return <FAQWithCategory {...module} />;
     // -----------------------
     // Existing cases
     // -----------------------
