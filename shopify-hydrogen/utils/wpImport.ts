@@ -159,16 +159,19 @@ async function importPosts() {
   for (const post of posts) {
     
     const mainImage = await fetchFeaturedImage(post)
-   
+    const authorName = post.author_name || (post.author_info?.display_name) || null;
+
     const doc = {
       _id: `wpPost-${post.slug}`,
       _type: 'wpPost',
       title: post.title.rendered,
       slug: { _type: 'slug', current: post.slug },
-      content: post.content.rendered.replace(/<[^>]*>/g, ''), // strip HTML
+     // content: post.content.rendered.replace(/<[^>]*>/g, ''), 
+      content: post.content.rendered,
       date: post.date,
       link: post.link,
-      mainImage
+      mainImage,
+      authorName
     }
     
 
