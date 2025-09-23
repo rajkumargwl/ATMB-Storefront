@@ -13,13 +13,13 @@ export default function AboutCompanySection({
   items,
 }: AboutCompanySectionProps) {
   return (
-    <section className="bg-white text-gray-900 py-16">
-      <div className="max-w-6xl mx-auto px-4 md:px-8">
+    <section className="bg-white text-gray-900 py-25">
+      <div className="max-w-7xl mx-auto px-4 md:px-8">
         {/* Heading */}
-        <div className="text-center max-w-3xl mx-auto mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">{title}</h2>
+        <div className="max-w-3xl mb-16">
+          <h2 className="mb-6 font-Roboto text-PrimaryBlack font-bold text-[36px] leading-[43.2px] tracking-[-0.54px]  sm:text-[32px] sm:leading-[42px] sm:tracking-[-0.48px]  max-w-[523px]">{title}</h2>
           {subtitle && (
-            <p className="text-lg text-gray-600">{subtitle}</p>
+            <p className="text-[18px] text-[#091019] font-[400] leading-[27px]">{subtitle}</p>
           )}
         </div>
 
@@ -34,10 +34,10 @@ export default function AboutCompanySection({
                 <img
                   src={item.icon.url}
                   alt="icon"
-                  className="mb-4 w-10 h-10 object-contain"
+                  className="mb-6 w-10 h-10 object-contain"
                 />
               )}
-              <p className="text-gray-700 leading-relaxed">{item.description}</p>
+              <p className="text-[16px] text[#091019] leading-[24px] font-[500]">{item.description}</p>
             </div>
           ))}
         </div>
