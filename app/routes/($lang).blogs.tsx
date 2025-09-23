@@ -28,12 +28,6 @@ export async function loader({context, request}: LoaderFunctionArgs) {
 
   if (!posts) throw notFound();
   
-  // const slugData = await context.sanity.query({
-  //   query: `*[_type == "wpPost"]{slug}`
-  // });
-  // console.log('All slugs in Sanity:', slugData);
-  
-  
   return defer({posts, offset});
 }
 function stripHtml(html: string): string {
