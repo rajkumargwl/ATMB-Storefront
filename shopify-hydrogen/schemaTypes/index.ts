@@ -78,6 +78,9 @@ import {aboutCompanySection} from './objects/module/aboutCompanySection'
 import {coreValuesSection} from './objects/module/coreValuesSection'
 import {joinTeamSection} from './objects/module/joinTeamSection'
 import {careersPageModule} from './objects/module/careersPageModule'
+import {faqCoverModule} from './objects/module/faqCoverModule'
+import {faqWithCategory} from './objects/module/faqWithCategory'
+import {faqPageModule} from './objects/module/faqPageModule'
 // Objects used as annotations must be imported first
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
 
@@ -156,6 +159,9 @@ whyChooseVirtualMailbox,
   coreValuesSection,
   joinTeamSection,
   careersPageModule,
+  faqCoverModule,
+  faqWithCategory,
+  faqPageModule
 ]
 
 import {portableTextType} from './portableText/portableTextType'
@@ -174,6 +180,7 @@ const documents = [collectionType, colorThemeType, pageType, productType, produc
 
 import {homeType} from './singletons/homeType'
 import {settingsType} from './singletons/settingsType'
+
 
 const singletons = [homeType, settingsType,solutions,]
 
