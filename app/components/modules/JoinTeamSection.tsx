@@ -17,23 +17,24 @@ export default function JoinTeamSection({
 }: JoinTeamSectionProps) {
   return (
     <section
-      className="py-16 text-center"
+      className="py-25 text-center"
       style={{ backgroundColor, color: textColor }}
     >
-      <div className="max-w-3xl mx-auto px-4">
+      <div className="max-w-5xl mx-auto px-4">
         {/* Title */}
-        <h2 className="text-3xl md:text-4xl font-bold mb-4">{title}</h2>
+        <h2 className="text-[56px] font-[600] leading-[61.6px] tracking-[-1.12px] mb-4">{title}</h2>
 
         {/* Subtitle */}
         {subtitle && (
-          <p className="text-lg mb-8 opacity-90">{subtitle}</p>
+          <p className="text-[18px] font-[400] leading-[27px] mb-8 opacity-90">{subtitle}</p>
         )}
 
         {/* Button */}
         {buttonText && (
           <a
             href={buttonLink || "#"}
-            className="inline-block bg-white text-black px-6 py-3 rounded-full font-medium shadow hover:shadow-md transition"
+            target="_blank"
+            className="inline-block bg-white text-black text-[16px] leading-[16px] px-10 py-3 rounded-full font-medium shadow hover:shadow-md transition"
           >
             {buttonText}
           </a>
