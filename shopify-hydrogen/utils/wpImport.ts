@@ -166,7 +166,6 @@ async function importPosts() {
       _type: 'wpPost',
       title: post.title.rendered,
       slug: { _type: 'slug', current: post.slug },
-     // content: post.content.rendered.replace(/<[^>]*>/g, ''), 
       content: post.content.rendered,
       date: post.date,
       link: post.link,
