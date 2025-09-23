@@ -20,6 +20,7 @@
     "@sanity/icons": "^2.11.0",
     "@sanity/ui": "^2.0.0",
     "@sanity/vision": "^4.9.0",
+    "axios": "^1.12.2",
     "lodash.get": "^4.4.2",
     "pluralize-esm": "^9.0.2",
     "react": "^19.1",
