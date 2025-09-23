@@ -1,11 +1,11 @@
 import { defineType, defineField } from 'sanity'
-import { EnvelopeIcon } from '@sanity/icons'
+
 
 export const solutionsMailbox = defineType({
   name: 'solutionsMailbox',
   title: 'Solutions - Mailbox',
   type: 'object',
-  icon: EnvelopeIcon,
+
   fields: [
    
     // 👇 Sub Modules

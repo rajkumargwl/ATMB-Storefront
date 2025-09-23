@@ -18,6 +18,7 @@ import { BUSINESS_AT_FINGERTIPS } from './modules/businessAtFingertips';
 import { TESTIMONIAL } from './modules/testimonial';
 import { FAQ } from './modules/faq';
 import { ABOUT_US_MODULE } from './modules/aboutus'; // 👈 import your About Us GROQ
+import { CAREER_PAGE_MODULE } from './modules/careerpage';
 
 export const MODULES = groq`
   _key,
@@ -75,5 +76,8 @@ export const MODULES = groq`
   },
  (_type == "aboutUsModule") => {
   ${ABOUT_US_MODULE}
+},
+(_type == "careersPageModule") => {
+  ${CAREER_PAGE_MODULE}
 },
 `;

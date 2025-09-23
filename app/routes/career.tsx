@@ -14,19 +14,17 @@ import { Suspense } from 'react';
 import ModuleGrid from '~/components/modules/ModuleGrid';
 import { fetchGids, notFound, validateLocale } from '~/lib/utils';
 
-// 👇 import the generic PAGE query
-//import { PAGE } from '~/queries/sanity/fragments/pages/page';
-
-import { ABOUT_US_PAGE_QUERY } from '~/queries/sanity/fragments/pages/aboutus';
+// 👇 import your Career Page query
+import { CAREER_PAGE_QUERY } from '~/queries/sanity/fragments/pages/careerpage';
 
 // -----------------
 // SEO
 // -----------------
 const seo: SeoHandleFunction = ({ data }) => ({
-  title: data?.page?.seo?.title || 'About Us - Sanity x Hydrogen',
+  title: data?.page?.seo?.title || 'Careers - Anytime Mailbox',
   description:
     data?.page?.seo?.description ||
-    'Learn more about our story, vision, and team.',
+    'Explore exciting career opportunities at Anytime Mailbox and grow with us.',
 });
 export const handle = { seo };
 
@@ -36,25 +34,12 @@ export const handle = { seo };
 export async function loader({ context, params }: LoaderFunctionArgs) {
   validateLocale({ context, params });
 
-  // const cache = context.storefront.CacheCustom({
-  //   mode: 'public',
-  //   maxAge: 60,
-  //   staleWhileRevalidate: 60,
-  // });
-  
   const page = await context.sanity.query({
-    query: ABOUT_US_PAGE_QUERY, // ✅ reusing the PAGE query
-  
+    query: CAREER_PAGE_QUERY,
   });
-
-  
-    const aboutUsModule = page?.modules?.find(
-    (mod: any) => mod._type === 'aboutUsModule'
-  );
-
-  
-
-  // if (!page) throw notFound();
+ 
+    console.log('Modules:', JSON.stringify(page.modules, null, 2));
+//   if (!page) throw notFound();
 
   const gids = fetchGids({ page, context });
 
@@ -68,11 +53,11 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
 // -----------------
 // Component
 // -----------------
-export default function AboutUs() {
+export default function Careers() {
   const { page, gids } = useLoaderData<typeof loader>();
 
   return (
-    <SanityPreview data={page} query={ABOUT_US_PAGE_QUERY}>
+    <SanityPreview data={page} query={CAREER_PAGE_QUERY}>
       {(page) => (
         <Suspense>
           <Await resolve={gids}>
