@@ -23,7 +23,7 @@ export default function WhyWorkSection({
         </div>
 
         {/* Right side */}
-        <div className="grid sm:grid-cols-2 gap-8 gap-y-15">
+        <div className="grid grid-cols-2 md:grid-cols-2 gap-8 gap-y-15 mt-10 md:mt-0">
           {features?.map((item, idx) => (
             <div key={idx} className="flex flex-col">
               {item.icon?.url && (
