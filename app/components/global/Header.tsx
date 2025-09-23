@@ -112,23 +112,27 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
             )}
           </div>
 
+
           {/* Menu (Desktop only) */}
           <nav className="hidden md:flex space-x-3">
             {menu?.map((item, idx) => (
               <div key={idx} className="relative group p-2">
-                <Link
+                 <Link
                   to={item.label === "Solutions"
         ? "/solutions"
         : item.label === "Locations"
         ? "/locations"
+          : item.label === "Blog"
+          ? "/blogs"
         : item.url ?? "#"}
                   className="text-PrimaryBlack hover:text-PrimaryBlack font-normal flex items-center gap-[6px] text-base leading-[24px]"
                 >
-                  {item.label}
+                  {item.label} 
                   {item.hasSubmenu && (
                   <ArrowDownIcon />
                   )}
-                </Link>
+                </Link> 
+
 
                 {/* Dropdown submenu */}
                 {item.hasSubmenu && item.subMenu && (
@@ -351,7 +355,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
         </div>
       </div>
 
-      {/* Results List */}
+      {/* Results List */} gdgdgd
       {query && (
         <div className="ml-[151px] max-w-[718px] pb-4">
           <div className="bg-white border border-[#DCDCDC] rounded-lg shadow-md w-full">

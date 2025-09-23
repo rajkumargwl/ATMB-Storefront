@@ -2,7 +2,7 @@
 import {json, type LoaderFunctionArgs, defer} from '@shopify/remix-oxygen';
 import {useLoaderData, useFetcher} from '@remix-run/react';
 import {notFound} from '~/lib/utils';
-import {WPPost} from '../../../shopify-hydrogen/schemaTypes/wpPost';
+import {WPPost} from '../../shopify-hydrogen/schemaTypes/wpPost';
 import {useState, useEffect} from 'react';
 
 const FIRST_PAGE_SIZE = 11;
@@ -21,13 +21,19 @@ export async function loader({context, request}: LoaderFunctionArgs) {
       content,
       date,
       "mainImage": mainImage.asset->url,
-      "author": author->name,
+      authorName,
       link
     }`,
   });
 
   if (!posts) throw notFound();
-
+  
+  // const slugData = await context.sanity.query({
+  //   query: `*[_type == "wpPost"]{slug}`
+  // });
+  // console.log('All slugs in Sanity:', slugData);
+  
+  
   return defer({posts, offset});
 }
 
@@ -66,9 +72,9 @@ export default function BlogIndex() {
             {post.mainImage && <img src={post.mainImage} alt={post.title} className="w-full h-48 object-cover"/>}
             <div className="p-4">
               <p className="text-gray-500 text-sm mb-2">
-                By {post.author || 'Unknown'} | {new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                By {post.authorName || 'Unknown'} | {new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
               </p>
-              <a href={`/blogs/${post.slug.current}`}>
+              <a href={`/blog/${post.slug.current}`}>
                 <h2 className="font-semibold text-lg mb-1">{post.title}</h2>
               </a>
               <p className="text-gray-600 text-sm">{post.content.slice(0, 120)}...</p>
@@ -86,7 +92,7 @@ export default function BlogIndex() {
               <p className="text-gray-500 text-sm mb-2">
                 By {post.author || 'Unknown'} | {new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
               </p>
-              <a href={`/blogs/${post.slug.current}`}>
+              <a href={`/blog/${post.slug.current}`}>
                 <h2 className="font-semibold text-lg mb-1">{post.title}</h2>
               </a>
               <p className="text-gray-600 text-sm">{post.content.slice(0, 120)}...</p>

@@ -40,11 +40,10 @@ export default {
       title: 'Original Link',
       type: 'url',
     },
-    // {
-    //   name: 'author',
-    //   title: 'Author',
-    //   type: 'reference',
-    //   to: [{type: 'author'}], 
-    // },
+    {
+      name: 'authorName',
+      title: 'Author',
+      type: 'string',
+    },
   ],
 };
