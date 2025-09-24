@@ -7,6 +7,7 @@ type WhyWorkSectionProps = {
     description: string;
   }[];
 };
+import whyChooseBg from "~/components/media/why-choose-bg.png";
 
 export default function WhyWorkSection({
   title,
@@ -14,27 +15,34 @@ export default function WhyWorkSection({
   features,
 }: WhyWorkSectionProps) {
   return (
-    <section className="bg-[#0D0D0D] text-white py-16">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 grid md:grid-cols-2 gap-12">
+    <section className="relative overflow-hidden bg-PrimaryBlack text-white py-[40px] md:py-[60px] lg:py-[100px] px-5 bg-no-repeat bg-bottom-left">
+      <div className="absolute z-1 bottom-[-250px] left-0">
+        <img
+          src={whyChooseBg}
+          alt="Background"
+          className="w-[530px] h-[782px]"
+        />
+      </div>
+      <div className="max-w-7xl mx-auto px-4 md:px-8 grid md:grid-cols-2 gap-1">
         {/* Left side */}
-        <div>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">{title}</h2>
-          {subtitle && <p className="text-lg text-gray-300">{subtitle}</p>}
+        <div className="max-w-[361px]">
+          <h2 className="text-[36px] leading-[43.2px] tracking-[-0.54px] font-Roboto font-semibold mb-4">{title}</h2>
+          {subtitle && <p className="font-Roboto text-[18px] text-[#DCDCDC] leading-[27px]">{subtitle}</p>}
         </div>
 
         {/* Right side */}
-        <div className="grid sm:grid-cols-2 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-2 gap-8 gap-y-15 mt-10 md:mt-0">
           {features?.map((item, idx) => (
             <div key={idx} className="flex flex-col">
               {item.icon?.url && (
                 <img
                   src={item.icon.url}
                   alt={item.title}
-                  className="mb-4 w-10 h-10 object-contain"
+                  className="mb-6 w-10 h-10 object-contain"
                 />
               )}
-              <h3 className="text-lg font-semibold mb-2">{item.title}</h3>
-              <p className="text-gray-300">{item.description}</p>
+              <h3 className="text-[18px] font-[500] leading-[27px] mb-2">{item.title}</h3>
+              <p className="text-[14px] text-[#DCDCDC] font-[400] leading-[21px] mb-2">{item.description}</p>
             </div>
           ))}
         </div>

@@ -833,9 +833,21 @@ export default function PricingSection({ data }: { data: PricingData }) {
                   {plan.associatedProducts.map((product, productIdx) => (
                     <div key={productIdx} className="flex items-center justify-between">
                       <div>
-                        <p className="font-Roboto text-[#333333] text-sm font-medium">{product.productName}</p>
-                        {product.subheading && (
-                          <p className="font-Roboto text-[#666666] text-xs">{product.subheading}</p>
+                        <p className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">
+                          {plan.startingFromText || "Starting from"}
+                        </p>
+                        {price && (
+                          <div className="flex items-end mt-1">
+                            {plan.originalPrice && (
+                              <span className="line-through text-gray-400 text-sm mr-2">{plan.originalPrice}</span>
+                            )}
+                            <span className="font-Roboto text-PrimaryBlack text-[24px] leading-[31.2px] font-semibold tracking-[-0.36px]">
+                              {price}
+                            </span>
+                            <span className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">
+                              /{isYearly ? "year" : "month"}
+                            </span>
+                          </div>
                         )}
                       </div>
                       {product.level && (
@@ -880,6 +892,7 @@ export default function PricingSection({ data }: { data: PricingData }) {
               )}
             </div>
           </div>
+
 
           {/* Features - different styling for bundles */}
           {plan.features && plan.features.length > 0 && (

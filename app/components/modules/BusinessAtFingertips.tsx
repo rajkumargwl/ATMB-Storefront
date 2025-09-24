@@ -459,7 +459,7 @@ export default function BusinessAtFingerips({ data }: Props) {
                 onClick={() => handleClick(index)}
                 className={`flex flex-col items-start justify-between text-left rounded-[20px] p-5 md:p-6 border transition-all duration-500
                   ${isActive ? "md:row-span-2 bg-PrimaryBlack border-PrimaryBlack cursor-pointer" 
-                            : "md:row-span-1 bg-white border-LightWhite cursor-pointer"}`}
+                            : "md:row-span-1 bg-white border-LightWhite cursor-pointer"} ${index === 0 ? "nth-4:bg-red-500" : ""}`}
               >
                 {/* Icon */}
                 <div className="w-full">
