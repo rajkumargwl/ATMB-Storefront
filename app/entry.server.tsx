@@ -46,7 +46,8 @@ export default async function handleRequest(
       'https://in.fw-cdn.com/32520975/1392281.js',
       'https://atmb-team-c26e0b650c4d16117551675.freshchat.com',
       'https://maps.googleapis.com',
-      'https://www.youtube.com/',
+      'https://www.youtube.com',
+      'https://www.youtube-nocookie.com',
     ],
     fontSrc: [
       `'self'`,
@@ -65,6 +66,8 @@ export default async function handleRequest(
       'https://mail.google.com/mail/u/0/',
       'https://js.stripe.com/',
       'https://www.google.com/',
+      'https://www.youtube.com',
+      'https://www.youtube-nocookie.com',
     ],
     connectSrc: [
       `'self'`,
