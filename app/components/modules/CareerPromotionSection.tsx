@@ -23,13 +23,13 @@ export default function CareerPromotionSection({
         {/* Left side: text content */}
         <div className="space-y-6">
           {smallHeading && (
-            <p className="text-sm font-medium text-gray-600">
+            <p className="font-Roboto text-[#4D4E4F] font-medium leading-[28px] text-[20px]">
               {smallHeading}
             </p>
           )}
 
           {mainHeading && (
-            <h2 className="text-2xl font-bold text-gray-900 md:text-3xl leading-snug">
+            <h2 className="mt-6 font-Roboto text-PrimaryBlack font-semibold text-[28px] leading-[36px] tracking-[-0.4px]  sm:text-[32px] sm:leading-[42px] sm:tracking-[-0.48px]  max-w-[523px]">
               {mainHeading.split(" ").map((word, idx) => {
                 const isHighlighted = highlightedWords?.includes(word);
                 return (
@@ -48,7 +48,8 @@ export default function CareerPromotionSection({
             <div>
               <a
                 href={buttonLink || "#"}
-                className="inline-block rounded-full bg-[#FF6600] px-6 py-3 text-white font-semibold hover:bg-orange-600 transition-colors"
+                target="_blank"
+                className="font-Roboto inline-block rounded-full bg-[#FF6600] text-[20px] leading-[16px] px-6 py-3 text-white font-normal hover:bg-orange-600 transition-colors"
               >
                 {buttonText}
               </a>

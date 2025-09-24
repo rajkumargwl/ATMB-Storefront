@@ -12,14 +12,14 @@ export default function FAQSection({
   image,
 }: FAQSectionProps) {
   return (
-    <section className="bg-white text-gray-900 py-16">
+    <section className="bg-[#F6F6F6] text-gray-900 py-14">
       <div className="max-w-6xl mx-auto px-4 md:px-8 grid md:grid-cols-2 gap-8 items-center">
         {/* Left: Text Content */}
         <div>
           {label && (
-            <p className="text-sm text-gray-500 mb-2">{label}</p>
+            <p className="font-Roboto text-[#4D4E4F] font-medium leading-[28px] text-[20px]">{label}</p>
           )}
-          <h2 className="text-2xl md:text-3xl font-bold mb-4">{title}</h2>
+          <h2 className="mt-6 font-Roboto text-PrimaryBlack font-semibold text-[28px] leading-[36px] tracking-[-0.4px]  sm:text-[32px] sm:leading-[42px] sm:tracking-[-0.48px]  max-w-[523px]">{title}</h2>
           {subtitle && (
             <p className="text-lg text-gray-600">{subtitle}</p>
           )}
