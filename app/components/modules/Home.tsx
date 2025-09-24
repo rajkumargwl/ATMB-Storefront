@@ -36,7 +36,7 @@ export default function HomeHero({ hero }: Props) {
             </h1>
 
             {hero.subtitle && (
-              <p className="mt-4 md:mt-5 md:max-w-[526px] font-Roboto text-PrimaryBlack font-normal md:font-medium leading-[21px] md:leading-[27px] text-[14px] md:text-[18px]">
+              <p className="mt-4 md:mt-5 md:max-w-[526px] font-Roboto text-PrimaryBlack font-normal md:font-medium leading-[21px] md:leading-[27px] text-[14px] md:text-[18px] tracking-[0px]">
                 {hero.subtitle}
               </p>
             )}
@@ -70,7 +70,7 @@ export default function HomeHero({ hero }: Props) {
                 ))}
               </div>
               {hero.trustedText && (
-                <p className="font-Roboto text-PrimaryBlack font-medium text-[14px] md:text-[16px] leading-[21px] md:leading-[24px]">
+                <p className="font-Roboto tracking-[0px] text-PrimaryBlack font-medium text-[14px] md:text-[16px] leading-[21px] md:leading-[24px]">
                   {hero.trustedText}
                 </p>
               )}
@@ -94,7 +94,7 @@ export default function HomeHero({ hero }: Props) {
                       className="w-6 h-6 object-contain"
                     />
                   )}
-                  <span className="font-Roboto text-PrimaryBlack text-[16px] leading-[24px]">
+                  <span className="font-Roboto tracking-[0] font-normal  text-PrimaryBlack text-[16px] leading-[24px]">
                     {feature.title}
                   </span>
                 </div>
