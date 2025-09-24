@@ -70,7 +70,7 @@ export const action: ActionFunction = async ({request, context, params}) => {
 
     // 2️ Get Microsoft Entra Token
     const tokenResponse = await fetch(
-      `https://login.microsoftonline.com/${context.env.MS_ENTRA_TENANT_ID}/oauth2/v2.0/token`,
+      `https://login.anytimehq.co/${context.env.MS_ENTRA_TENANT_ID}/oauth2/v2.0/token`,
       {
         method: 'POST',
         headers: {
@@ -79,7 +79,7 @@ export const action: ActionFunction = async ({request, context, params}) => {
         body: new URLSearchParams({
           client_id: context.env.MS_ENTRA_CLIENT_ID!,
           client_secret: context.env.MS_ENTRA_CLIENT_SECRET!,
-          scope: 'api://development.anytimeapi.com/customer/.default',
+          scope: 'api://anytimeapi.com/customer/.default',
           grant_type: 'client_credentials',
         }),
       }
@@ -94,11 +94,11 @@ export const action: ActionFunction = async ({request, context, params}) => {
     const accessToken = tokenData.access_token;
 
     // 3️ Call External API to Create User
-    const userResponse = await fetch('https://development.anytimeapi.com/customer', {
+    const userResponse = await fetch('https://anytimeapi.com/customer/', {
       method: 'POST',
       headers: {
         'API-Version': 'v1',
-        'Api-Environment': 'DEV',
+        'Api-Environment': 'STG',
         'Ocp-Apim-Subscription-Key': context.env.ANYTIME_SUBSCRIPTION_KEY!,
         Authorization: `Bearer ${accessToken}`,
         'Content-Type': 'application/json',

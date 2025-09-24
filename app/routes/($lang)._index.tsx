@@ -67,9 +67,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
 export default function Index() {
   //const { page, gids,  header, footer, mergedResults, q } = useLoaderData<typeof loader>();
    const { page, gids} = useLoaderData<typeof loader>();
-   console.log('Page Data:', JSON.stringify(page, null, 2));
-   
-console.log("Preview Hero Data:", page?.hero);
+
   return (
     <>
      {/* <Header data={header} searchResults={mergedResults} searchQuery={q} /> */}
