@@ -46,6 +46,7 @@ export default async function handleRequest(
       'https://in.fw-cdn.com/32520975/1392281.js',
       'https://atmb-team-c26e0b650c4d16117551675.freshchat.com',
       'https://maps.googleapis.com',
+      'https://www.youtube.com/',
     ],
     fontSrc: [
       `'self'`,
