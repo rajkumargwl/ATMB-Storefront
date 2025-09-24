@@ -133,23 +133,27 @@ useEffect(() => {
             )}
           </div>
 
+
           {/* Menu (Desktop only) */}
           <nav className="hidden lg:flex space-x-2 xl:space-x-3">
             {menu?.map((item, idx) => (
               <div key={idx} className="relative group p-2">
-                <Link
+                 <Link
                   to={item.label === "Solutions"
         ? "/solutions"
         : item.label === "Locations"
         ? "/locations"
+          : item.label === "Blog"
+          ? "/blogs"
         : item.url ?? "#"}
                   className="text-PrimaryBlack hover:text-PrimaryBlack font-normal flex items-center gap-[6px] text-[14px] md:text-[14px] xl:text-[16px] leading-[24px] tracking-[0px]"
                 >
-                  {item.label}
+                  {item.label} 
                   {item.hasSubmenu && (
                   <ArrowDownIcon />
                   )}
-                </Link>
+                </Link> 
+
 
                 {/* Dropdown submenu */}
                 {item.hasSubmenu && item.subMenu && (
@@ -404,7 +408,7 @@ useEffect(() => {
         </div>
       </div>
 
-      {/* Results List */}
+      {/* Results List */} gdgdgd
       {query && (
         <div className="md:pt-2">
           <div className="bg-white border-t md:border border-LightWhite md:rounded-[20px] shadow-md w-full p-5">
