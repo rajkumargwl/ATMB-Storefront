@@ -47,7 +47,7 @@ export default async function handleRequest(
       'https://atmb-team-c26e0b650c4d16117551675.freshchat.com',
       'https://maps.googleapis.com',
       'https://www.youtube.com',
-      'https://www.youtube.com/embed/TJArEqaZgnA?autoplay=1&rel=0',
+      'https://www.youtube-nocookie.com',
     ],
     fontSrc: [
       `'self'`,
@@ -66,6 +66,8 @@ export default async function handleRequest(
       'https://mail.google.com/mail/u/0/',
       'https://js.stripe.com/',
       'https://www.google.com/',
+      'https://www.youtube.com',
+      'https://www.youtube-nocookie.com',
     ],
     connectSrc: [
       `'self'`,
