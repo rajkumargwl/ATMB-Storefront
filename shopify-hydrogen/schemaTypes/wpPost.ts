@@ -45,5 +45,11 @@ export default {
       title: 'Author',
       type: 'string',
     },
+    {
+      name: 'categories',
+      title: 'Categories',
+      type: 'array',
+      of: [{ type: 'number' }], 
+    },
   ],
 };
