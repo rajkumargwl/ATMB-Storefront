@@ -54,8 +54,11 @@ import {menu} from './objects/shopify/menu'
 import {keyHighlights} from './objects/module/keyHighlights'
 import {detailedFeatureType} from './objects/module/detailedFeature'
 import solutions from './singletons/solutions'
+//import { heroBanner } from "./objects/module/heroBanner";
 // import { heroBanner } from "./objects/module/heroBanner";
 import location from './location'
+import wpPost from './wpPost'
+
 import { featuresModule } from "./objects/module/featuresModule";
 import { pricingModule } from "./objects/module/pricingModule";
 import { extraFeatures } from "./objects/module/extraFeatures";
@@ -91,6 +94,7 @@ const objects = [
   extraFeatures,
   pricingModule,
   featuresModule,
+  //heroBanner,
   aboutUsModule,
   detailedFeatureType,
   keyHighlights,
@@ -176,7 +180,7 @@ import {productType} from './documents/product'
 import {productVariantType} from './documents/productVariant'
 import {plansType} from './documents/plans'
 
-const documents = [collectionType, colorThemeType, pageType, productType, productVariantType,plansType]
+const documents = [collectionType, colorThemeType, pageType, productType, productVariantType,plansType,wpPost]
 
 import {homeType} from './singletons/homeType'
 import {settingsType} from './singletons/settingsType'
