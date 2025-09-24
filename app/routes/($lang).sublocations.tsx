@@ -1,7 +1,7 @@
 // app/routes/locations.tsx
 import {json, type LoaderFunctionArgs, defer} from '@shopify/remix-oxygen';
 import {useLoaderData, useNavigate} from '@remix-run/react';
-import {useState, useEffect, useMemo, useRef} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
 import Header from '~/components/global/Header';
 import Footer from '~/components/global/Footer';
@@ -152,6 +152,73 @@ export async function loader({context, request}: LoaderFunctionArgs) {
   });
 }
 
+// --- Smooth Zoom ---
+const smoothZoom = (
+  map: google.maps.Map,
+  targetZoom: number,
+  currentZoom?: number,
+  onComplete?: () => void,
+) => {
+  currentZoom = currentZoom || map.getZoom() || 4;
+  if (currentZoom === targetZoom) {
+    if (onComplete) onComplete();
+    return;
+  }
+
+  google.maps.event.addListenerOnce(map, 'zoom_changed', () => {
+    smoothZoom(
+      map,
+      targetZoom,
+      currentZoom! + (targetZoom > currentZoom ? 1 : -1),
+      onComplete,
+    );
+  });
+
+  setTimeout(() => map.setZoom(currentZoom!), 80);
+};
+
+// --- Smooth Pan ---
+const smoothPanTo = (
+  map: google.maps.Map,
+  target: google.maps.LatLngLiteral,
+  duration = 1000,
+  onComplete?: () => void,
+) => {
+  const start = map.getCenter();
+  if (!start) return;
+
+  const startLat = start.lat();
+  const startLng = start.lng();
+  const deltaLat = target.lat - startLat;
+  const deltaLng = target.lng - startLng;
+
+  let startTime: number | null = null;
+
+  const step = (timestamp: number) => {
+    if (!startTime) startTime = timestamp;
+    const progress = Math.min((timestamp - startTime) / duration, 1);
+
+    // ease-in-out
+    const easeInOut =
+      progress < 0.5
+        ? 2 * progress * progress
+        : -1 + (4 - 2 * progress) * progress;
+
+    const lat = startLat + deltaLat * easeInOut;
+    const lng = startLng + deltaLng * easeInOut;
+
+    map.setCenter({lat, lng});
+
+    if (progress < 1) {
+      requestAnimationFrame(step);
+    } else if (onComplete) {
+      onComplete();
+    }
+  };
+
+  requestAnimationFrame(step);
+};
+
 export default function LocationsPage() {
   const navigate = useNavigate();
   const {locations, header, footer} = useLoaderData<typeof loader>();
@@ -241,10 +308,13 @@ export default function LocationsPage() {
 
     mapRef.current = map;
 
+    // Clear old markers
     markersRef.current.forEach((m) => m.setMap(null));
     markersRef.current = [];
 
+    // Add new markers
     filtered.forEach((loc) => {
+      console.log(loc.latitude, loc.longitude);
       if (loc.latitude && loc.longitude) {
         const marker = new google.maps.Marker({
           position: {lat: loc.latitude, lng: loc.longitude},
@@ -254,10 +324,14 @@ export default function LocationsPage() {
             url:
               'data:image/svg+xml;utf-8,' +
               encodeURIComponent(`
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32">
-                <path fill="#FF6600" d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5c-1.4 0-2.5-1.1-2.5-2.5S10.6 6.5 12 6.5s2.5 1.1 2.5 2.5S13.4 11.5 12 11.5z"/>
-              </svg>
-            `),
+                <svg xmlns="http://www.w3.org/2000/svg" 
+                     viewBox="0 0 24 24" width="32" height="32">
+                  <path fill="#FF6600" 
+                    d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 
+                    7-13c0-3.9-3.1-7-7-7zm0 9.5c-1.4 0-2.5-1.1-2.5-2.5
+                    S10.6 6.5 12 6.5s2.5 1.1 2.5 2.5S13.4 11.5 12 11.5z"/>
+                </svg>
+              `),
             scaledSize: new google.maps.Size(32, 32),
             anchor: new google.maps.Point(16, 32),
           },
@@ -266,6 +340,7 @@ export default function LocationsPage() {
       }
     });
 
+    // Fit to bounds
     const bounds = new google.maps.LatLngBounds();
     markersRef.current.forEach((m) => bounds.extend(m.getPosition()!));
     map.fitBounds(bounds);
@@ -274,8 +349,16 @@ export default function LocationsPage() {
 
   const zoomToLocation = (loc: LocationAPI) => {
     if (mapRef.current && loc.latitude && loc.longitude) {
-      mapRef.current.setZoom(12);
-      mapRef.current.panTo({lat: loc.latitude, lng: loc.longitude});
+      const target = {lat: loc.latitude, lng: loc.longitude};
+
+      // Step 1: Zoom OUT a bit first
+      smoothZoom(mapRef.current, 8, undefined, () => {
+        // Step 2: Pan while zoomed out
+        smoothPanTo(mapRef.current!, target, 1200, () => {
+          // Step 3: Zoom back IN to final level
+          smoothZoom(mapRef.current!, 12);
+        });
+      });
     }
   };
 
@@ -287,7 +370,7 @@ export default function LocationsPage() {
 
   return (
     <>
-     {/* <Header data={header} searchResults={mergedResults} searchQuery={q} /> */}
+      {/* <Header data={header} searchResults={mergedResults} searchQuery={q} /> */}
 
       <div className="flex flex-col md:flex-row mt-10 max-w-6xl mx-auto">
         {/* Left Side */}
@@ -340,7 +423,6 @@ export default function LocationsPage() {
                 onMouseEnter={() => zoomToLocation(loc)}
               >
                 {/* Top Row: Badges + Distance */}
-                
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex gap-2">
                     {loc.ratingList?.some(
@@ -470,22 +552,17 @@ export default function LocationsPage() {
               </div>
             </div>
 
-            {/* Buttons */}
-            <div className="mt-6 flex justify-end gap-2">
+            {/* Footer Actions */}
+            <div className="flex justify-between mt-6">
               <button
-                onClick={() => {
-                  setPlanTier('');
-                  setMinPrice(Math.min(...locations.map((loc) => loc.priceRange || 0)));
-                  setMaxPrice(Math.max(...locations.map((loc) => loc.priceRange || 999)));
-                  setSelectedFeatures([]);
-                }}
-                className="px-4 py-2 border rounded"
+                onClick={() => setShowFilters(false)}
+                className="px-4 py-2 bg-gray-200 rounded"
               >
-                Reset
+                Cancel
               </button>
               <button
                 onClick={() => setShowFilters(false)}
-                className="px-4 py-2 bg-black text-white rounded"
+                className="px-4 py-2 bg-orange-500 text-white rounded"
               >
                 Apply Filters
               </button>

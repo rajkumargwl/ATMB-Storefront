@@ -31,7 +31,7 @@ export default function Navigation({menuLinks}: Props) {
       {
         _key: 'static-home',
         title: 'Locations',
-        slug: '/locations',
+        slug: '/sublocations',
         _type: 'linkInternal',
       },
       {
