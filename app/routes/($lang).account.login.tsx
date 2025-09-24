@@ -25,15 +25,75 @@ export const handle = {
   isPublic: true,
 };
 
-export async function loader({context, params}: LoaderFunctionArgs) {
-  const customerAccessToken = await context.session.get('customerAccessToken');
+export async function loader({ context, params, request }: LoaderFunctionArgs) {
+  const { session, cart } = context;
 
-  if (customerAccessToken) {
-    return redirect(params.lang ? `${params.lang}/account` : '/account');
+  // Get current token from session
+  const customerAccessTokenFromSession = await session.get("customerAccessToken");
+  if (customerAccessTokenFromSession) {
+    return redirect(params.lang ? `/${params.lang}/account` : "/account");
+  }
+
+  // Get token from URL
+  const url = new URL(request.url);
+  const tokenFromUrl = url.searchParams.get("token");
+  console.log("customerAccessToken (from URL)", tokenFromUrl);
+
+  if (tokenFromUrl) {
+    // Save token in session
+    session.set("customerAccessToken", tokenFromUrl);
+
+    // Sync customerAccessToken with existing cart
+    const result = await cart.updateBuyerIdentity({ customerAccessToken: tokenFromUrl });
+
+    // Build headers safely
+    const headers = new Headers();
+
+    // 1. Persist cart id
+    const cartHeaders = cart.setCartId(result.cart.id);
+    cartHeaders.forEach((value, key) => headers.append(key, value));
+
+    // 2. Persist session
+    headers.append("Set-Cookie", await session.commit());
+
+    return redirect(params.lang ? `/${params.lang}/account` : "/account", {
+      headers,
+    });
+    
   }
 
   return null;
 }
+
+// export async function loader({context, params, request}: LoaderFunctionArgs) {
+//   const {session, storefront, cart} = context;
+
+//   const customerAccessToken2 = await context.session.get('customerAccessToken');
+//   if (customerAccessToken2) {
+//     return redirect(params.lang ? `${params.lang}/account` : '/account');
+//   }
+
+//   const url = new URL(request.url);
+//   const customerAccessToken = url.searchParams.get("token");
+//   console.log("customerAccessToken", customerAccessToken);
+//   if (customerAccessToken) {
+//     session.set('customerAccessToken', customerAccessToken);
+    
+//     // Sync customerAccessToken with existing cart
+//     const result = await cart.updateBuyerIdentity({ customerAccessToken });
+
+//     // Update cart id in cookie
+//     const headers = cart.setCartId(result.cart.id);
+
+//     headers.append('Set-Cookie', await session.commit());
+
+//     return redirect(params.lang ? `/${params.lang}/account` : '/account', {
+//       headers,
+//     });
+//   }
+
+//   return null;
+// }
 
 type ActionData = {
   formError?: string;
@@ -59,6 +119,7 @@ export const action: ActionFunction = async ({request, context, params}) => {
   const {session, storefront, cart} = context;
 
   try {
+    // let customerAccessToken = "a0de2720bf15cbb431ba1441bebf4ea5";
     const customerAccessToken = await doLogin(context, {email, password});
     session.set('customerAccessToken', customerAccessToken);
 
@@ -202,8 +263,14 @@ export default function Login() {
               >
                 Login with Microsoft Entra
               </a> */}
-               <a
+               {/* <a
                 href="https://store.xecurify.com/moas/broker/login/shopify/gwl-apps-demo.myshopify.com/account?idpname=custom_openidconnect_ncM"
+                className="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+              >
+                Login with Microsoft Entra
+              </a> */}
+              <a
+                href="https://store.xecurify.com/moas/broker/login/shopify/0dv7ud-pz.myshopify.com/account?idpname=custom_openidconnect_Okf"
                 className="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
               >
                 Login with Microsoft Entra

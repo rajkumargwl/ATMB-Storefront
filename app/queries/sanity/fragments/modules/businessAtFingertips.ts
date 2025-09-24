@@ -1,16 +1,19 @@
 import groq from 'groq';
-import { IMAGE } from '../image';
+
 
 export const BUSINESS_AT_FINGERTIPS = groq`
   headline,
   subheadline,
   phoneImage {
-    ${IMAGE}
+    "url": asset->url,
+    altText
   },
   features[] {
     icon {
-      iconFile,
-      iconCode
+      iconFile {
+        "url": asset->url,
+        originalFilename
+      }
     },
     title,
     description,

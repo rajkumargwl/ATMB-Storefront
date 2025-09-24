@@ -1,5 +1,4 @@
 import groq from 'groq';
-import { IMAGE } from '../image';
 
 export const HOME_SECTION_4 = groq`
   heading,
@@ -11,7 +10,11 @@ export const HOME_SECTION_4 = groq`
     state,
     operatorCount,
     image {
-      ${IMAGE}
+      "url": asset->url,
+      altText,
+      "width": asset->metadata.dimensions.width,
+      "height": asset->metadata.dimensions.height,
+      blurDataURL
     },
     locationUrl
   },
