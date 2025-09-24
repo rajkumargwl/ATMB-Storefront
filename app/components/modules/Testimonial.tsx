@@ -417,7 +417,7 @@ export default function Testimonials({ data }: Props) {
               title="Video Player"
               className="w-full h-[400px] md:h-[500px] rounded-lg"
               frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;"
               allowFullScreen
             ></iframe>
           </div>
