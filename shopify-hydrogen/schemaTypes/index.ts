@@ -81,6 +81,9 @@ import {careersPageModule} from './objects/module/careersPageModule'
 import {faqCoverModule} from './objects/module/faqCoverModule'
 import {faqWithCategory} from './objects/module/faqWithCategory'
 import {faqPageModule} from './objects/module/faqPageModule'
+import { uspsForm1583Type } from './objects/module/uspsForm1583Type'
+import { uspsForm1583Guide } from './objects/module/uspsForm1583Guide'
+import { uspsForm1583Content } from "./objects/module/uspsForm1583Content"
 // Objects used as annotations must be imported first
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
 
@@ -161,7 +164,10 @@ whyChooseVirtualMailbox,
   careersPageModule,
   faqCoverModule,
   faqWithCategory,
-  faqPageModule
+  faqPageModule,
+  uspsForm1583Type,
+uspsForm1583Guide,
+uspsForm1583Content
 ]
 
 import {portableTextType} from './portableText/portableTextType'
