@@ -88,6 +88,7 @@ import type { SanityFAQ } from "~/lib/sanity";
 import PlusFAQ from '~/components/icons/PlusFAQ';
 import CloseFAQ from '~/components/icons/CloseFAQ';
 import RightArrowWhite from '~/components/icons/RightArrowWhite';
+import { Link } from "@remix-run/react";
 
 type Props = {
   data: SanityFAQ;
@@ -206,13 +207,25 @@ export default function FAQ({ data }: Props) {
           </div>
 
           {/* View All FAQs Button */}
-          <div className="flex justify-center mt-11 md:mt-14">
+          {/* <div className="flex justify-center mt-11 md:mt-14">
           <button className="group relative flex items-center justify-center bg-DarkOrange text-white font-Roboto font-medium leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-4 md:px-[143px] rounded-[100px] min-w-[205px] md:min-w-auto min-h-[52px] md:min-h-auto overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]">
             <span className="relative flex items-center">View All FAQs <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
               <RightArrowWhite />
             </span></span>
             
           </button>
+          </div> */}
+          <div className="flex justify-center mt-11 md:mt-14">
+            <Link to="/faq">
+              <button className="group relative flex items-center justify-center bg-DarkOrange text-white font-Roboto font-medium leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-4 md:px-[143px] rounded-[100px] min-w-[205px] md:min-w-auto min-h-[52px] md:min-h-auto overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]">
+                <span className="relative flex items-center">
+                  View All FAQs
+                  <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
+                    <RightArrowWhite />
+                  </span>
+                </span>
+              </button>
+            </Link>
           </div>
         </div>
       </div>
