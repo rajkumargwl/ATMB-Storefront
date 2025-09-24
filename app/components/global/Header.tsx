@@ -143,7 +143,7 @@ useEffect(() => {
         : item.label === "Locations"
         ? "/locations"
         : item.url ?? "#"}
-                  className="text-PrimaryBlack hover:text-PrimaryBlack font-normal flex items-center gap-[6px] text-[14px] xl:text-base leading-[24px] tracking-[0px]"
+                  className="text-PrimaryBlack hover:text-PrimaryBlack font-normal flex items-center gap-[6px] text-[14px] md:text-[14px] xl:text-[16px] leading-[24px] tracking-[0px]"
                 >
                   {item.label}
                   {item.hasSubmenu && (
@@ -159,7 +159,7 @@ useEffect(() => {
                         <li key={i}>
                           <Link
                             to={sub.url ?? "#"}
-                            className="block px-4 py-[6px] text-PrimaryBlack hover:text-PrimaryBlack font-normal text-[14px] xl:text-base leading-[24px] tracking-[0px]"
+                            className="block px-4 py-[6px] text-PrimaryBlack hover:text-PrimaryBlack font-normal text-[14px] md:text-[14px] xl:text-[16px] leading-[24px] tracking-[0px]"
                           >
                             {sub.label}
                           </Link>

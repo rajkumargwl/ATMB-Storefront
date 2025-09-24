@@ -12,7 +12,7 @@ export default function FAQSection({
   image,
 }: FAQSectionProps) {
   return (
-    <section className="bg-white text-gray-900 py-16">
+    <section className="bg-[#F6F6F6] text-gray-900 py-16">
       <div className="max-w-6xl mx-auto px-4 md:px-8 grid md:grid-cols-2 gap-8 items-center">
         {/* Left: Text Content */}
         <div>
