@@ -416,11 +416,14 @@ export default function Testimonials({ data }: Props) {
               src={activeVideo}
               title="Video Player"
               className="w-full h-[400px] md:h-[500px] rounded-lg"
-              allow="autoplay; fullscreen"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowFullScreen
             ></iframe>
           </div>
         </div>
       )}
+
     </section>
   );
 }
