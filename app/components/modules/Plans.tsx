@@ -745,7 +745,7 @@ export default function PricingSection({ data }: { data: PricingData }) {
               {data?.billingToggle.yearlyLabel}
             </button>
 
-            <span className="font-Roboto font-normal leading-[18px] text-[12px] tracking-[0px] text-[#ffffff] bg-[#74A038] px-2 py-1 rounded-full">
+            <span className="font-Roboto font-normal leading-[18px] text-[12px] tracking-[0px] text-[#ffffff] bg-[#537D1B] px-2 py-1 rounded-full">
               {data?.billingToggle.discountLabel}
             </span>
           </div>
@@ -773,9 +773,9 @@ export default function PricingSection({ data }: { data: PricingData }) {
                   <div className="absolute left-0 top-0 w-full h-[260px] rounded-[20px] border border-[#EE6D2D] transition-all duration-500 ease-in-out group-hover:h-[calc(100%+16px)]"></div>
                   <div className={`bg-white rounded-[20px] p-6  shadow-[0_6px_24px_0_rgba(0,0,0,0.05)]`}>
                     <div className="flex items-center justify-between">
-                      <div className="transition-all duration-500 ease-in-out w-12 h-12 rounded-full border border-[#DCDCDC] flex items-center justify-center group-hover:bg-DarkOrange">
+                      <div className="transition-all duration-500 ease-in-out w-12 h-12 rounded-full border border-[#DCDCDC] flex items-center justify-center bg-[#F6F6F6] group-hover:bg-DarkOrange group-hover:border-DarkOrange">
                         {plan.icon?.svgFile?.asset?.url ? (
-                          <img src={plan.icon.svgFile.asset.url} alt={plan.title} className="w-6 h-6 bg-Dark" />
+                          <img src={plan.icon.svgFile.asset.url} alt={plan.title} className="w-6 h-6 bg-Dark transition-all group-hover:invert" />
                         ) : (
                           <span className="text-xs text-gray-500">Icon</span>
                         )}
@@ -821,7 +821,7 @@ export default function PricingSection({ data }: { data: PricingData }) {
 
                   {/* Features */}
                   {plan.features && (
-                    <ul className="mt-7 mb-7 space-y-4 text-[16px] text-[#091019] pl-[7px] md:pl-6">
+                    <ul className="mt-7 mb-7 space-y-4 text-[16px] text-[#091019] pl-[24px] md:pl-6">
                       {plan.features.map((f, i) => (
                         <li key={i} className="flex items-center gap-3 font-Roboto text-PrimaryBlack font-normal leading-[24px] text-[16px]">
                           <CheckBlack />
@@ -832,7 +832,7 @@ export default function PricingSection({ data }: { data: PricingData }) {
                   )}
 
                   <button
-                    className={`relative z-[8] flex-shrink-0 flex items-center justify-center w-full md:w-[calc(100%-48px)] mx-auto h-[52px] border border-PrimaryBlack  rounded-full px-4 py-3 text-[16px] text-PrimaryBlack font-normal font-Roboto leading-[16px] tracking-[0.08px] transition-all group-hover:bg-DarkOrange group-hover:text-white group-hover:border-DarkOrange hover:scale-[1.01] hover:bg-[#DD5827] group`}
+                    className={`relative z-[8] flex-shrink-0 flex items-center justify-center w-[calc(100%-48px)] mx-auto h-[52px] border border-PrimaryBlack  rounded-full px-4 py-3 text-[16px] text-PrimaryBlack font-normal font-Roboto leading-[16px] tracking-[0.08px] transition-all group-hover:bg-DarkOrange group-hover:text-white group-hover:border-DarkOrange hover:scale-[1.01] hover:bg-[#DD5827] group`}
                   >
                     <span className="relative flex items-center">{plan.ctaText} 
                       <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
@@ -840,6 +840,7 @@ export default function PricingSection({ data }: { data: PricingData }) {
                       </span>
                     </span>
                   </button>
+                  
                 </div>
               </div>
             );

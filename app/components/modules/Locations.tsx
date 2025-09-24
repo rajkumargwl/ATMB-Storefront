@@ -205,7 +205,7 @@ export default function Locations({ data }: Props) {
               <img
                 src={loc.image?.url || ""}
                 alt={loc.image?.altText || loc.city}
-                className="w-11 md:w-16 h-11 md:h-16 object-cover rounded-lg transition-all duration-500 ease-in-out"
+                className="w-11 md:w-16 h-11 md:h-16 object-cover rounded-[10px] md:rounded-[12px] transition-all duration-500 ease-in-out"
               />
 
               {/* Operators + City */}
@@ -218,7 +218,7 @@ export default function Locations({ data }: Props) {
                 {/* City + State */}
                 <h3 className="transition-all duration-500 ease-in-out font-Roboto text-PrimaryBlack font-medium leading-[24px] md:leading-[28px] text-[16px] md:text-[20px] tracking-[0px] group-hover:text-white line-clamp-1">
                   {loc.city},{" "}
-                  <span className="transition-all duration-500 ease-in-out inline font-Roboto text-LightGray font-medium leading-[24px] md:leading-[28px] text-[16px] md:text-[20px] tracking-[0px] group-hover:text-white">
+                  <span className="transition-all duration-500 ease-in-out inline font-Roboto text-LightGray font-medium leading-[24px] md:leading-[28px] text-[16px] md:text-[16px] tracking-[0px] group-hover:text-white">
                     {loc.state}
                   </span>
                 </h3>
