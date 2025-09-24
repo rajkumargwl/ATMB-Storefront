@@ -1,32 +1,63 @@
 import groq from 'groq';
-import { IMAGE } from '../image';
 
 export const PLANS = groq`
-  heading,
-  description,
-  tabs[],
+  // Individual Products Tab
+  individualProductsTab {
+    heading,
+    description,
+    plans[] {
+      icon {
+        svgCode,
+        svgFile {
+          asset->{
+            url
+          }
+        }
+      },
+      title,
+      subheading,
+      startingFromText,
+      pricing {
+        monthly,
+        yearly
+      },
+      features[],
+      ctaText,
+      ctaUrl,
+      isMostPopular,
+      mostPopularLabel
+    }
+  },
+
+  // Bundles Tab
+  bundlesTab {
+    heading,
+    description,
+    plans[] {
+      title,
+      subheading,
+      pricing {
+        originalPrice,
+        discountedPrice,
+        saveLabel,
+        monthly,
+        yearly
+      },
+      associatedProducts[] {
+        productName,
+        subheading,
+        level
+      },
+      features[],
+      ctaText,
+      ctaUrl
+    }
+  },
+
+  // Billing Toggle
   billingToggle {
     monthlyLabel,
     yearlyLabel,
     discountLabel
-  },
-  plans[] {
-    icon {
-      svgCode,
-      svgFile {
-        ${IMAGE}
-      }
-    },
-    title,
-    subheading,
-    startingFromText,
-    price,
-    features[],
-    ctaText,
-    ctaUrl,
-    ctaTextColor,
-    ctaBgColor,
-    isMostPopular,
-    mostPopularLabel
   }
 `;

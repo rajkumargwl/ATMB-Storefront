@@ -2,8 +2,7 @@ import {SVGAttributes} from 'react';
 
 const CloseFAQ: React.FC = (props: SVGAttributes<SVGElement>) => (
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-  <path d="M6 18L18 6" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M18 18L6 6" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M19.0266 5.82363C19.2591 5.59113 19.2591 5.20863 19.0266 4.97613C18.7941 4.74363 18.4116 4.74363 18.1791 4.97613L12.0028 11.1524L5.82656 4.97613C5.59406 4.74363 5.21156 4.74363 4.97906 4.97613C4.74656 5.20863 4.74656 5.59113 4.97906 5.82363L11.1553 11.9999L4.97906 18.1761C4.74656 18.4086 4.74656 18.7911 4.97906 19.0236C5.21156 19.2561 5.59406 19.2561 5.82656 19.0236L12.0028 12.8474L18.1791 19.0236C18.4116 19.2561 18.7941 19.2561 19.0266 19.0236C19.2591 18.7911 19.2591 18.4086 19.0266 18.1761L12.8503 11.9999L19.0266 5.82363Z" fill="#091019"/>
 </svg>
 );
 

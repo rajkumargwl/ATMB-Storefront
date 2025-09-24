@@ -18,7 +18,7 @@ export const loader: LoaderFunction = async ({ context, params }) => {
   const customerAccessToken = await context.session.get('customerAccessToken');
   
   if (customerAccessToken === null || customerAccessToken === undefined || customerAccessToken === '') {
-    return redirect(params.lang ? `${params.lang}/register` : '/account/register');
+    return redirect('/create-account');
   }
 
   return new Response(

@@ -5,14 +5,14 @@ export const heroType = defineType({
   title: 'Mail. Calls. Growth',
   type: 'object',
   fields: [
-     defineField({
+    defineField({
       name: "smallheading",
       title: "Small Heading",
       type: "string",
       description: "",
       validation: (Rule) => Rule.required(),
     }),
-   defineField({
+    defineField({
       name: "title",
       title: "Title",
       type: "string",
@@ -87,38 +87,58 @@ export const heroType = defineType({
         }),
       ],
     }),
-    // Right Side Images
+    // Right Side Image 1
     defineField({
-      name: "rightImages",
-      title: "Right Side Images",
-      type: "array",
-      of: [
-        defineField({
-          name: "imageBlock",
-          title: "Image Block",
-          type: "object",
-          fields: [
-            {
-              name: "image",
-              title: "Image",
-              type: "image",
-              options: { hotspot: true },
-            },
-            {
-              name: "overlayText",
-              title: "Overlay Text",
-              type: "string",
-              description: "Optional floating text (e.g., Your Cheques is cleared successfully)",
-            },
-            {
-              name: "icon",
-              title: "Icon",
-              type: "image",
-              description: "Text icon",
-              options: { hotspot: true },
-            }
-          ],
-        }),
+      name: "rightImage1",
+      title: "Right Side Image 1",
+      type: "object",
+      fields: [
+        {
+          name: "image",
+          title: "Image",
+          type: "image",
+          options: { hotspot: true },
+        },
+        {
+          name: "overlayText",
+          title: "Overlay Text",
+          type: "string",
+          description: "Optional floating text (e.g., Your Cheques is cleared successfully)",
+        },
+        {
+          name: "icon",
+          title: "Icon",
+          type: "image",
+          description: "Text icon",
+          options: { hotspot: true },
+        }
+      ],
+    }),
+    // Right Side Image 2
+    defineField({
+      name: "rightImage2",
+      title: "Right Side Image 2",
+      type: "object",
+      fields: [
+        {
+          name: "image",
+          title: "Image",
+          type: "image",
+          options: { hotspot: true },
+        },
+        {
+          name: "overlayText",
+          title: "Overlay Text",
+          type: "string",
+          description: "Optional floating text (e.g., Your Cheques is cleared successfully)",
+        },
+        {
+          name: "icon",
+          title: "Icon",
+          type: "image",
+          description: "Text icon",
+          options: { hotspot: true },
+        }
       ],
     }),
   ],

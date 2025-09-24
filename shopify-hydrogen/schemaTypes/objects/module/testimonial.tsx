@@ -1,4 +1,4 @@
-import {defineType, defineField} from 'sanity'
+import { defineType, defineField } from 'sanity';
 
 export const testimonial = defineType({
   name: 'testimonial',
@@ -42,33 +42,23 @@ export const testimonial = defineType({
               },
             }),
 
-            // ⭐ Quote-based testimonial
+            // ⭐ Star Rating (for both quote & video)
             defineField({
               name: 'rating',
               title: 'Star Rating',
               type: 'number',
               validation: (Rule) => Rule.min(1).max(5),
-              hidden: ({ parent }) => parent?.type !== 'quote',
             }),
+
+            // Star Icon (for both types)
             defineField({
               name: 'starIcon',
-              title: 'Star Icon (SVG Upload/Code)',
-              type: 'object',
-              fields: [
-                { 
-                  name: 'svgFile', 
-                  title: 'Upload SVG File', 
-                  type: 'file', 
-                  options: { accept: '.svg' } 
-                },
-                { 
-                  name: 'svgCode', 
-                  title: 'Inline SVG Code', 
-                  type: 'text' 
-                },
-              ],
-              hidden: ({ parent }) => parent?.type !== 'quote',
+              title: 'Star Icon',
+              type: 'file',
+              options: { accept: '.svg,.png' },
             }),
+
+            // Quote Testimonial
             defineField({
               name: 'quote',
               title: 'Quote',
@@ -89,7 +79,7 @@ export const testimonial = defineType({
               hidden: ({ parent }) => parent?.type !== 'quote',
             }),
 
-            // 🎥 Video-based testimonial
+            // Video Testimonial
             defineField({
               name: 'videoUrl',
               title: 'Video URL',
@@ -105,21 +95,9 @@ export const testimonial = defineType({
             }),
             defineField({
               name: 'playIcon',
-              title: 'Play Icon (SVG or Image)',
-              type: 'object',
-              fields: [
-                { 
-                  name: 'playSvgFile', 
-                  title: 'Upload Play Icon (SVG)', 
-                  type: 'file', 
-                  options: { accept: '.svg' } 
-                },
-                { 
-                  name: 'playSvgCode', 
-                  title: 'Play Icon Inline SVG Code', 
-                  type: 'text' 
-                },
-              ],
+              title: 'Play Icon',
+              type: 'file',
+              options: { accept: '.svg,.png' },
               hidden: ({ parent }) => parent?.type !== 'video',
             }),
 
@@ -151,27 +129,6 @@ export const testimonial = defineType({
         }),
       ],
     }),
-
-    // Navigation (arrows)
-    defineField({
-      name: 'navigation',
-      title: 'Navigation Arrows',
-      type: 'object',
-      fields: [
-        {
-          name: 'prevIcon',
-          title: 'Previous Arrow Icon',
-          type: 'string',
-          initialValue: '←',
-        },
-        {
-          name: 'nextIcon',
-          title: 'Next Arrow Icon',
-          type: 'string',
-          initialValue: '→',
-        },
-      ],
-    }),
   ],
   preview: {
     select: {
@@ -179,4 +136,4 @@ export const testimonial = defineType({
       subtitle: 'subheadline',
     },
   },
-})
+});

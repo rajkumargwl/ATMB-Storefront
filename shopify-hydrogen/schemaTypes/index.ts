@@ -55,6 +55,7 @@ import {keyHighlights} from './objects/module/keyHighlights'
 import {detailedFeatureType} from './objects/module/detailedFeature'
 import solutions from './singletons/solutions'
 //import { heroBanner } from "./objects/module/heroBanner";
+// import { heroBanner } from "./objects/module/heroBanner";
 import location from './location'
 import wpPost from './wpPost'
 
@@ -64,6 +65,25 @@ import { extraFeatures } from "./objects/module/extraFeatures";
 import { howItWorks } from "./objects/module/howItWorks";
 import { whyChooseAnytimePhones } from "./objects/module/whyChooseAnytimePhones";
 import { review } from "./objects/module/review";
+import {aboutIntroSection} from './objects/module/aboutIntroSection'
+import {aboutHowItStartedSection} from './objects/module/aboutHowItStartedSection'
+import {aboutFeaturesSection} from './objects/module/aboutFeaturesSection'
+import {aboutDetailedFeaturesSection} from './objects/module/aboutDetailedFeaturesSection'
+import {aboutFoundersSection} from './objects/module/aboutFoundersSection'
+import {aboutResourceAuthorsSection} from './objects/module/aboutResourceAuthorsSection'
+import {aboutUsModule} from './objects/module/aboutUsModule'
+import { solutionsMailbox } from './objects/module/solutionsMailbox'
+import { prefectvirtualbox } from './objects/module/prefectvirtualbox'
+import {whyChooseVirtualMailbox} from './objects/module/whyChooseVirtualMailbox'
+import {careerPromotion} from './objects/module/careerPromotion'
+import {whyWorkSection} from './objects/module/whyWorkSection'
+import {aboutCompanySection} from './objects/module/aboutCompanySection'
+import {coreValuesSection} from './objects/module/coreValuesSection'
+import {joinTeamSection} from './objects/module/joinTeamSection'
+import {careersPageModule} from './objects/module/careersPageModule'
+import {faqCoverModule} from './objects/module/faqCoverModule'
+import {faqWithCategory} from './objects/module/faqWithCategory'
+import {faqPageModule} from './objects/module/faqPageModule'
 // Objects used as annotations must be imported first
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
 
@@ -75,6 +95,7 @@ const objects = [
   pricingModule,
   featuresModule,
   //heroBanner,
+  aboutUsModule,
   detailedFeatureType,
   keyHighlights,
   header,
@@ -125,7 +146,26 @@ const objects = [
   shopifyProductType,
   shopifyProductVariantType,
   spotType,
-  menu
+  menu,
+  aboutIntroSection,
+    aboutHowItStartedSection,
+      aboutFeaturesSection,
+      aboutDetailedFeaturesSection,
+       aboutFoundersSection, 
+       aboutResourceAuthorsSection,
+       solutionsMailbox,
+prefectvirtualbox,
+whyChooseVirtualMailbox,
+ // Careers Page Modules
+  careerPromotion,
+  whyWorkSection,
+  aboutCompanySection,
+  coreValuesSection,
+  joinTeamSection,
+  careersPageModule,
+  faqCoverModule,
+  faqWithCategory,
+  faqPageModule
 ]
 
 import {portableTextType} from './portableText/portableTextType'
@@ -144,6 +184,7 @@ const documents = [collectionType, colorThemeType, pageType, productType, produc
 
 import {homeType} from './singletons/homeType'
 import {settingsType} from './singletons/settingsType'
+
 
 const singletons = [homeType, settingsType,solutions,]
 

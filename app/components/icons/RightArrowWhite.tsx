@@ -1,0 +1,9 @@
+import {SVGAttributes} from 'react';
+
+const RightArrowWhite: React.FC = (props: SVGAttributes<SVGElement>) => (
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" transform="rotate(180)">
+  <path d="M2.57623 11.5761C2.34373 11.8086 2.34373 12.1911 2.57623 12.4236L9.17623 19.0236C9.40873 19.2561 9.79123 19.2561 10.0237 19.0236C10.2562 18.7911 10.2562 18.4086 10.0237 18.1761L4.44748 12.5999H21C21.33 12.5999 21.6 12.3299 21.6 11.9999C21.6 11.6699 21.33 11.3999 21 11.3999H4.44748L10.0237 5.82363C10.2562 5.59113 10.2562 5.20863 10.0237 4.97613C9.79123 4.74363 9.40873 4.74363 9.17623 4.97613L2.57623 11.5761Z" fill="#FFFFFF"></path>
+</svg>
+);
+
+export default RightArrowWhite;

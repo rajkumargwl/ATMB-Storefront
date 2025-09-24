@@ -22,26 +22,32 @@
 //   },
 // `;
 import groq from 'groq';
-import { IMAGE } from '../image';
 
 export const HOME_SECTION_2 = groq`
   heading,
   highlight {
     value,
-    label
+    label,
+    underlineImage {
+      "url": asset->url,
+      altText
+    }
   },
   ratings[] {
     platform,
-    logo {
-      ${IMAGE}
-    },
     score,
-    label
+    label,
+    logo {
+      "url": asset->url,
+      altText
+    }
   },
   logos[] {
+    alt,
     logo {
-      ${IMAGE}
-    },
-    alt
+      "url": asset->url,
+      altText
+    }
   }
 `;
+
