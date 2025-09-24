@@ -87,6 +87,7 @@ export const pageType = defineType({
          { type: 'solutionsMailbox' },
           { type: 'careersPageModule' },
           { type: 'faqPageModule' },
+            { type: 'uspsForm1583' },
           
         // add more modules if needed
       ],
