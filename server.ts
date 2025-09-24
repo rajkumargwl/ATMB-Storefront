@@ -118,7 +118,7 @@ export default {
         }),
       });
 
-      const response = await handleRequest(request);
+      let response = await handleRequest(request);
 
       if (response.status === 404) {
         /**
@@ -128,6 +128,21 @@ export default {
          */
         return storefrontRedirect({request, response, storefront});
       }
+
+      const newHeaders = new Headers(response.headers);
+      newHeaders.set(
+        'Content-Security-Policy',
+        "frame-src https://www.youtube.com https://www.youtube-nocookie.com; " +
+          "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.youtube.com https://www.youtube-nocookie.com; " +
+          "style-src 'self' 'unsafe-inline'; " +
+          "img-src * blob: data:; media-src *; connect-src *;"
+      );
+
+      response = new Response(response.body, {
+        status: response.status,
+        statusText: response.statusText,
+        headers: newHeaders,
+      });
 
       return response;
     } catch (error) {
