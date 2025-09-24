@@ -170,7 +170,8 @@ async function importPosts() {
       date: post.date,
       link: post.link,
       mainImage,
-      authorName
+      authorName,
+      categories: post.categories || [],
     }
     
 
