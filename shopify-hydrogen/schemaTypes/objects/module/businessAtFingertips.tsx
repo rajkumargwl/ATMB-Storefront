@@ -40,7 +40,7 @@ export const businessAtFingertips = defineType({
               title: 'Icon (SVG Upload / Code)',
               type: 'object',
               fields: [
-                { name: 'iconFile', title: 'SVG File', type: 'file', options: { accept: '.svg' } },
+                { name: 'iconFile', title: 'SVG File', type: 'file', options: { accept: '.svg,.png' },},
                 { name: 'iconCode', title: 'SVG Code', type: 'text' },
               ],
             },

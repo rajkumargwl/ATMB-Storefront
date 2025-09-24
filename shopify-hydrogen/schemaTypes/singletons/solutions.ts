@@ -11,6 +11,7 @@ export default defineType({
       type: "array",
       of: [
        
+     
         { type: "featuresModule" },
         { type: "pricingModule" },
         { type: "extraFeatures" },

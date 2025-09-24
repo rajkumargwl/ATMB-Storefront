@@ -1,10 +1,61 @@
-import {DocumentIcon} from '@sanity/icons'
-import {defineField} from 'sanity'
+// import {DocumentIcon} from '@sanity/icons'
+// import {defineField, defineType} from 'sanity'
 
-import {validateSlug} from '../../utils/validateSlug'
+// import {validateSlug} from '../../utils/validateSlug'
+// import {GROUPS} from '../../constants'
+
+// export const pageType = defineType({
+//   name: 'page',
+//   title: 'Page',
+//   type: 'document',
+//   icon: DocumentIcon,
+//   groups: GROUPS,
+//   fields: [
+//     defineField({
+//       name: 'title',
+//       group: 'editorial',
+//       type: 'string',
+//       validation: (Rule) => Rule.required(),
+//     }),
+  
+
+//     // 👇 Add Page Modules (with About Us module)
+//     defineField({
+//       name: 'modules',
+//       title: 'Modules',
+//       type: 'array',
+//       group: 'editorial',
+//       of: [
+//         { type: 'aboutUsModule' }, // new module
+//         // you can add more like contactUsModule, cmsPageModule, etc.
+//       ],
+//     }),
+
+//     defineField({
+//       name: 'seo',
+//       title: 'SEO',
+//       type: 'seo',
+//       group: 'seo',
+//     }),
+//   ],
+//   preview: {
+//     select: {
+//       seoImage: 'seo.image',
+//       title: 'title',
+//     },
+//     prepare({seoImage, title}) {
+//       return {
+//         media: seoImage ?? DocumentIcon,
+//         title,
+//       }
+//     },
+//   },
+// })
+import { DocumentIcon } from '@sanity/icons'
+import { defineField, defineType } from 'sanity'
 import { GROUPS } from '../../constants'
 
-export const pageType = defineField({
+export const pageType = defineType({
   name: 'page',
   title: 'Page',
   type: 'document',
@@ -20,47 +71,34 @@ export const pageType = defineField({
     defineField({
       name: 'slug',
       group: 'editorial',
-      type: 'slug',
-      options: {source: 'title'},
-      validation: validateSlug,
+      type: 'string',
+      validation: (Rule) => Rule.required(),
     }),
+    
+    // 👇 Page Modules
+        // 👇 Page Modules
     defineField({
-      name: 'colorTheme',
-      type: 'reference',
-      to: [{type: 'colorTheme'}],
-      group: 'theme',
-    }),
-    defineField({
-      name: 'showHero',
-      type: 'boolean',
-      description: 'If disabled, page title will be displayed instead',
-      initialValue: false,
+      name: 'modules',
+      title: 'Modules',
+      type: 'array',
       group: 'editorial',
+      of: [
+        { type: 'aboutUsModule' },
+         { type: 'solutionsMailbox' },
+          { type: 'careersPageModule' },
+          { type: 'faqPageModule' },
+          
+        // add more modules if needed
+      ],
     }),
-    defineField({
-      name: 'hero',
-      type: 'hero',
-      hidden: ({document}) => !document?.showHero,
-      group: 'editorial',
-    }),
-    defineField({
-      name: 'body',
-      type: 'portableText',
-      group: 'editorial',
-    }),
-    defineField({
-      name: 'seo',
-      title: 'SEO',
-      type: 'seo',
-      group: 'seo',
-    }),
+   
   ],
   preview: {
     select: {
       seoImage: 'seo.image',
       title: 'title',
     },
-    prepare({seoImage, title}) {
+    prepare({ seoImage, title }) {
       return {
         media: seoImage ?? DocumentIcon,
         title,

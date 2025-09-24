@@ -25,7 +25,22 @@ export const MODULE_HERO_BANNER = groq`
     },
     title
   },
-  rightImages[]{
+  rightImage1{
+    image{
+      asset->{
+        _id,
+        url
+      }
+    },
+    overlayText,
+    icon{
+      asset->{
+        _id,
+        url
+      }
+    }
+  },
+  rightImage2{
     image{
       asset->{
         _id,
