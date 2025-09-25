@@ -753,54 +753,90 @@ export default function PricingSection({ data }: { data: PricingData }) {
 
         {/* Cards */}
         <div className="mt-11 items-start justify-center grid gap-6 md:grid-cols-2 lg:grid-cols-3 w-full">
-          {plans.map((plan, idx) => {
-            const price = plan.pricing
-              ? isYearly
-                ? plan.pricing.yearly
-                : plan.pricing.monthly
-              : plan.discountedPrice || null; // bundles fallback
+  {plans.map((plan, idx) => {
+    const price = plan.pricing
+      ? isYearly
+        ? plan.pricing.yearly
+        : plan.pricing.monthly
+      : plan.pricing?.discountedPrice || null;
 
-            return (
-              <div
-                key={idx}
-                className={`relative group transition-all duration-500 ease-in-out ${
-                  plan?.isMostPopular
-                    ? "p-[8px] pt-[8px] pb-[24px] border border-LightWhite bg-white rounded-[24px]"
-                    : "p-[8px] pt-[8px] pb-[24px] border border-LightWhite bg-white rounded-[24px]"
-                }`}
-              >
-                <div className={` relative  ${plan?.isMostPopular ? "" : "h-full" }`}>
-                  <div className="absolute left-0 top-0 w-full h-[260px] rounded-[20px] border border-[#EE6D2D] transition-all duration-500 ease-in-out group-hover:h-[calc(100%+16px)]"></div>
-                  <div className={`bg-white rounded-[20px] p-6  shadow-[0_6px_24px_0_rgba(0,0,0,0.05)]`}>
-                    <div className="flex items-center justify-between">
-                      <div className="transition-all duration-500 ease-in-out w-12 h-12 rounded-full border border-[#DCDCDC] flex items-center justify-center bg-[#F6F6F6] group-hover:bg-DarkOrange group-hover:border-DarkOrange">
-                        {plan.icon?.svgFile?.asset?.url ? (
-                          <img src={plan.icon.svgFile.asset.url} alt={plan.title} className="w-6 h-6 bg-Dark transition-all group-hover:invert" />
-                        ) : (
-                          <span className="text-xs text-gray-500">Icon</span>
-                        )}
-                      </div>
-                      {plan?.isMostPopular && (
-                        <div className="flex gap-2 p-2 rounded-[100px] border border-[rgba(238,109,45,0.5)] bg-[#FFF1EA] font-Roboto text-PrimaryBlack font-normal leading-[18px] text-[12px]">
-                          <Fire /> {plan.mostPopularLabel}
-                        </div>
-                      )}
-                      {plan.saveLabel && (
-                        <div className="px-2 py-1 rounded-full bg-[#74A038] text-white text-xs font-Roboto">
-                          {plan.saveLabel}
-                        </div>
-                      )}
-                    </div>
+    const isBundlesTab = activeTab == 'bundles';
+    
+    return (
+      <div
+        key={idx}
+        className={`relative group transition-all duration-500 ease-in-out ${
+          isBundlesTab 
+            ? plan?.isMostPopular
+              ? "p-[2px] pt-[2px] pb-[16px] border border-[#EE6D2D] bg-gradient-to-b from-[#EE6D2D] to-transparent rounded-[24px]"
+              : "p-[2px] pt-[2px] pb-[16px] border border-LightWhite bg-white rounded-[24px]"
+            : plan?.isMostPopular
+              ? "p-[8px] pt-[8px] pb-[24px] border border-LightWhite bg-white rounded-[24px]"
+              : "p-[8px] pt-[8px] pb-[24px] border border-LightWhite bg-white rounded-[24px]"
+        }`}
+      >
+        <div className={`relative ${plan?.isMostPopular ? "" : "h-full"}`}>
+          {/* Orange border effect - only for individual products tab */}
+          {!isBundlesTab && (
+            <div className="absolute left-0 top-0 w-full h-[260px] rounded-[20px] border border-[#EE6D2D] transition-all duration-500 ease-in-out group-hover:h-[calc(100%+16px)]"></div>
+          )}
+           {isBundlesTab && (
+            <div className="absolute left-0 top-0 w-full h-[260px] rounded-[20px] border border-[#EE6D2D] transition-all duration-500 ease-in-out group-hover:h-[calc(100%+16px)]"></div>
+          )}
+          
+          <div className={`bg-white rounded-[20px] p-6 shadow-[0_6px_24px_0_rgba(0,0,0,0.05)] ${
+            isBundlesTab && plan?.isMostPopular ? "border border-[#EE6D2D]" : ""
+          }`}>
+            <div className="flex items-center justify-between">
+              <div className={`transition-all duration-500 ease-in-out w-12 h-12 rounded-full border ${
+                isBundlesTab ? "border-[#E5E5E5] bg-[#F9F9F9]" : "border-[#DCDCDC]"
+              } flex items-center justify-center bg-[#F6F6F6] group-hover:bg-DarkOrange group-hover:border-DarkOrange`}>
+                {plan.icon?.svgFile?.asset?.url ? (
+                  <img src={plan.icon.svgFile.asset.url} alt={plan.title} className="w-6 h-6 bg-Dark transition-all  group-hover:invert" />
+                ) : (
+                  <span className="text-xs text-gray-500">Icon</span>
+                )}
+              </div>
+              
+              {/* Most Popular Badge - different styling for bundles */}
+              {plan?.isMostPopular && (
+                <div className={`flex gap-2 p-2 rounded-[100px] border ${
+                  isBundlesTab 
+                    ? "border-[rgba(238,109,45,0.3)] bg-[#FFF1EA]"
+                    : "border-[rgba(238,109,45,0.5)] bg-[#FFF1EA]"
+                } font-Roboto text-PrimaryBlack font-normal leading-[18px] text-[12px]`}>
+                  <Fire /> {plan.mostPopularLabel}
+                </div>
+              )}
+              
+              {/* Save Label - bundles specific */}
+              {plan.pricing?.saveLabel && isBundlesTab && (
+                <div className="px-2 py-1 rounded-full bg-[#74A038] text-white text-xs font-Roboto">
+                  {plan.pricing.saveLabel}
+                </div>
+              )}
+            </div>
 
-                    <h3 className="font-Roboto text-PrimaryBlack text-[22px] md:text-[24px] leading-[28.6px] md:leading-[31.2px] font-semibold tracking-[-0.33px] md:tracking-[-0.36px] mt-6 mb-2">
-                      {plan.title}
-                    </h3>
-                    <p className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">{plan.subheading}</p>
+            <h3 className="font-Roboto text-PrimaryBlack text-[22px] md:text-[24px] leading-[28.6px] md:leading-[31.2px] font-semibold tracking-[-0.33px] md:tracking-[-0.36px] mt-6 mb-2">
+              {plan.title}
+            </h3>
+            
+            {/* Bundle-specific subheading styling */}
+            <p className={`font-Roboto ${
+              isBundlesTab ? "text-[#666666]" : "text-LightGray"
+            } font-normal leading-[21px] text-[14px] tracking-[0px]`}>
+              {plan.subheading}
+            </p>
 
-                    <div className="mt-6 flex flex-row justify-between items-center">
+            {/* Associated Products for Bundles */}
+            {isBundlesTab && plan.associatedProducts && plan.associatedProducts.length > 0 && (
+              <div className="mt-4 p-3 bg-[#F9F9F9] rounded-lg">                
+                <div className="space-y-2">
+                  {plan.associatedProducts.map((product, productIdx) => (
+                    <div key={productIdx} className="flex items-center justify-between">
                       <div>
                         <p className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">
-                          {plan.startingFromText || "Starting from"}
+                          {plan.subheading || "Starting from"}
                         </p>
                         {price && (
                           <div className="flex items-end mt-1">
@@ -816,35 +852,97 @@ export default function PricingSection({ data }: { data: PricingData }) {
                           </div>
                         )}
                       </div>
+                      {product.level && (
+                        <span className="px-2 py-1 bg-[#E5E5E5] text-[#333333] text-xs rounded-full">
+                          {product.level}
+                        </span>
+                      )}
                     </div>
-                  </div>
-
-                  {/* Features */}
-                  {plan.features && (
-                    <ul className="mt-7 mb-7 space-y-4 text-[16px] text-[#091019] pl-[24px] md:pl-6">
-                      {plan.features.map((f, i) => (
-                        <li key={i} className="flex items-center gap-3 font-Roboto text-PrimaryBlack font-normal leading-[24px] text-[16px]">
-                          <CheckBlack />
-                          {f}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-
-                  <button
-                    className={`relative z-[8] flex-shrink-0 flex items-center justify-center w-[calc(100%-48px)] mx-auto h-[52px] border border-PrimaryBlack  rounded-full px-4 py-3 text-[16px] text-PrimaryBlack font-normal font-Roboto leading-[16px] tracking-[0.08px] transition-all group-hover:bg-DarkOrange group-hover:text-white group-hover:border-DarkOrange hover:scale-[1.01] hover:bg-[#DD5827] group`}
-                  >
-                    <span className="relative flex items-center">{plan.ctaText} 
-                      <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
-                        <RightArrowWhite />
-                      </span>
-                    </span>
-                  </button>
-                  
+                  ))}
                 </div>
               </div>
-            );
-          })}
+            )}
+
+            <div className="mt-6 flex flex-row justify-between items-center">
+              <div>
+                <p className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">
+                  {plan.startingFromText || "Starting from"}
+                </p>
+                {price && (
+                  <div className="flex items-end mt-1">
+                    {/* Show original price for bundles if available */}
+                    {isBundlesTab && plan.pricing?.originalPrice && (
+                      <span className="line-through text-gray-400 text-sm mr-2">{plan.pricing.originalPrice}</span>
+                    )}
+                    <span className="font-Roboto text-PrimaryBlack text-[24px] leading-[31.2px] font-semibold tracking-[-0.36px]">
+                      {price}
+                    </span>
+                    <span className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">
+                      /{isYearly ? "year" : "month"}
+                    </span>
+                  </div>
+                )}
+              </div>
+              
+              {/* Bundle-specific additional info */}
+              {isBundlesTab && plan.additionalInfo && (
+                <div className="text-right">
+                  <p className="font-Roboto text-[#666666] text-[12px] leading-[18px]">
+                    {plan.additionalInfo}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+
+
+          {/* Features - different styling for bundles */}
+          {plan.features && plan.features.length > 0 && (
+            <ul className={`mt-7 mb-7 space-y-4 text-[16px] text-[#091019] ${
+              isBundlesTab ? "pl-0" : "pl-[24px] md:pl-6"
+            }`}>
+              {plan.features.map((f, i) => (
+                <li key={i} className={`flex items-center gap-3 font-Roboto ${
+                  isBundlesTab ? "text-[#333333]" : "text-PrimaryBlack"
+                } font-normal leading-[24px] text-[16px]`}>
+                  {isBundlesTab ? (
+                    <div className="w-5 h-5 rounded-full bg-[#74A038] flex items-center justify-center">
+                      <span className="text-white text-xs">✓</span>
+                    </div>
+                  ) : (
+                    <CheckBlack />
+                  )}
+                  {f}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {/* Button - different styling for bundles */}
+          <button
+            className={`relative z-[8] flex-shrink-0 flex items-center justify-center w-[calc(100%-48px)] mx-auto h-[52px] border rounded-full px-4 py-3 text-[16px] font-normal font-Roboto leading-[16px] tracking-[0.08px] transition-all hover:scale-[1.01] group ${
+              isBundlesTab
+                ? "border-[#EE6D2D] bg-[#EE6D2D] text-white hover:bg-[#DD5827] hover:border-[#DD5827]"
+                : "border-PrimaryBlack text-PrimaryBlack group-hover:bg-DarkOrange group-hover:text-white group-hover:border-DarkOrange hover:bg-[#DD5827]"
+            }`}
+          >
+            <span className="relative flex items-center">
+              {plan.ctaText}
+              <span className={`absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300 ${
+                isBundlesTab ? "text-white" : ""
+              }`}>
+                {isBundlesTab ? (
+                  <span className="text-white">→</span>
+                ) : (
+                  <RightArrowWhite />
+                )}
+              </span>
+            </span>
+          </button>
+        </div>
+      </div>
+    );
+  })}
         </div>
       </div>
     </section>
