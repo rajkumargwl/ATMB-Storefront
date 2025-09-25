@@ -24,76 +24,33 @@ export const USPS_FORM_1583 = groq`
     },
     (_type == "uspsForm1583Content") => {
       title,
+      textField,  
       contentBlocks[] {
         mainContent,
         leftImage {
-          asset-> {
-            _id,
-            url,
-            metadata {
-              dimensions {
-                width,
-                height
-              }
-            }
-          },
+          asset-> { _id, url, metadata { dimensions { width, height } } },
           alt
         },
         rightImage {
-          asset-> {
-            _id,
-            url,
-            metadata {
-              dimensions {
-                width,
-                height
-              }
-            }
-          },
+          asset-> { _id, url, metadata { dimensions { width, height } } },
           alt
         },
+        textField,
         textField1,
         image2 {
-          asset-> {
-            _id,
-            url,
-            metadata {
-              dimensions {
-                width,
-                height
-              }
-            }
-          },
+          asset-> { _id, url, metadata { dimensions { width, height } } },
           alt
         },
         textField2,
         textField4,
         image3 {
-          asset-> {
-            _id,
-            url,
-            metadata {
-              dimensions {
-                width,
-                height
-              }
-            }
-          },
+          asset-> { _id, url, metadata { dimensions { width, height } } },
           alt
         },
         textField5,
         extraContent,
         image4 {
-          asset-> {
-            _id,
-            url,
-            metadata {
-              dimensions {
-                width,
-                height
-              }
-            }
-          },
+          asset-> { _id, url, metadata { dimensions { width, height } } },
           alt
         },
         textField6,
@@ -102,3 +59,4 @@ export const USPS_FORM_1583 = groq`
     }
   }
 `;
+ 
