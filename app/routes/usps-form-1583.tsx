@@ -24,7 +24,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
     query: USPS_FORM_1583_PAGE_QUERY,
   });
 
-  console.log("Sanity USPS Form 1583 result:", page);
+
   
   const pageData = page && page.length > 0 ? page[0] : null;
 

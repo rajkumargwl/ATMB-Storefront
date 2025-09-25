@@ -11,17 +11,14 @@ import clsx from 'clsx';
 import {SanityPreview} from 'hydrogen-sanity';
 import {Suspense, useState, useEffect} from 'react';
 // import Search from '~/components/Search';
-import HomeHero from '~/components/heroes/Home';
 import ModuleGrid from '~/components/modules/ModuleGrid';
-import Header from '~/components/global/Header'; 
-import Footer from '~/components/global/Footer'; 
 import type {SanityHomePage} from '~/lib/sanity';
 import {fetchGids, notFound, validateLocale} from '~/lib/utils';
 import {HOME_PAGE_QUERY} from '~/queries/sanity/home';
 import {HEADER_QUERY} from '~/queries/sanity/header';
 import {FOOTER_QUERY} from '~/queries/sanity/footer';
 const seo: SeoHandleFunction = ({data}) => ({
-  title: data?.page?.seo?.title || 'Sanity x Hydrogen',
+  title: data?.page?.seo?.title || 'Anytime HQ',
   description:
     data?.page?.seo?.description ||
     'A custom storefront powered by Hydrogen and Sanity',
@@ -46,9 +43,9 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
     context.sanity.query({ query: HEADER_QUERY, cache }),
     context.sanity.query({ query: FOOTER_QUERY, cache }),
   ]);
-
+  console.log("trustedby", page.modules[1]);
   if (!page) throw notFound();
-
+ 
 
   
   const gids = fetchGids({ page, context });

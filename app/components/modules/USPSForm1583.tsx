@@ -1,7 +1,22 @@
+
 import {PortableText} from '@portabletext/react';
  
 type Props = {
   module: any;
+};
+ 
+const getPlainText = (portableText: any): string | null => {
+  if (!portableText || !Array.isArray(portableText) || portableText.length === 0) {
+    return null;
+  }
+  const firstBlock = portableText[0];
+  if (firstBlock._type !== 'block' || !firstBlock.children) {
+    return null;
+  }
+  
+  return firstBlock.children
+    .map((span: any) => span.text)
+    .join('');
 };
  
 export default function USPSForm1583Module({module}: Props) {
@@ -27,24 +42,26 @@ export default function USPSForm1583Module({module}: Props) {
           <div className="rounded-lg border bg-white p-6 shadow-sm">
             <h3 className="mb-4 text-lg font-bold text-slate-900">In This Guide</h3>
             
-            {/* ✅ CHANGE: Display textField from each content block as table of contents */}
             {contentModule?.contentBlocks?.length > 0 ? (
               <nav>
                 <ul className="space-y-3">
-                  {contentModule.contentBlocks.map((block: any, index: number) => (
-                    <li key={block._key || index}>
-                      <a
-                        href={`#block-${index}`}
-                        className="block text-sm text-orange-500 transition-colors duration-200"
-                      >
-                        <div className="">
-                          <span className="font-medium">
-                            {block.textField || `Section ${index + 1}`}
-                          </span>
-                        </div>
-                      </a>
-                    </li>
-                  ))}
+                  {contentModule.contentBlocks.map((block: any, index: number) => {
+                    const blockTitle = getPlainText(block.textField);
+                    return (
+                      <li key={block._key || index}>
+                        <a
+                          href={`#block-${index}`}
+                          className="block text-sm text-orange-500 transition-colors duration-200"
+                        >
+                          <div className="">
+                            <span className="font-medium">
+                              {blockTitle || `Section ${index + 1}`}
+                            </span>
+                          </div>
+                        </a>
+                      </li>
+                    );
+                  })}
                 </ul>
               </nav>
             ) : (
@@ -58,8 +75,6 @@ export default function USPSForm1583Module({module}: Props) {
     </>
   );
 }
- 
-// --- Sub-Components ---
  
 function GuideModule({module}: {module: any}) {
   return (
@@ -95,17 +110,6 @@ function GuideModule({module}: {module: any}) {
 function ContentModule({module}: {module: any}) {
   return (
     <div className="content-module rounded-lg border bg-white p-6 shadow-sm sm:p-8">
-      <h2 className="mb-6 border-b border-slate-200 pb-4 text-3xl font-bold text-slate-900">
-        {module.title}
-      </h2>
- 
-      {/* Display the main textField from content module (if exists) */}
-      {module.textField && (
-        <p className="mb-8 text-lg text-slate-700  p-4 rounded-lg border-l-4 ">
-          {module.textField}
-        </p>
-      )}
- 
       {module.contentBlocks?.map((block: any, index: number) => (
         <div key={block._key || index} id={`block-${index}`}>
           <ContentBlock block={block} />
@@ -121,12 +125,9 @@ function ContentModule({module}: {module: any}) {
 function ContentBlock({block}: {block: any}) {
   return (
     <div className="content-block">
-      {/* ✅ CHANGE: Display textField at the top of each content block */}
       {block.textField && (
-        <div className="mb-6">
-          <p className="text-xl font-semibold text-slate-800 ">
-            {block.textField}
-          </p>
+        <div className="mb-6 prose prose-xl max-w-none prose-slate">
+          <PortableText value={block.textField} />
         </div>
       )}
  
@@ -228,3 +229,5 @@ function ContentBlock({block}: {block: any}) {
     </div>
   );
 }
+ 
+ 

@@ -780,6 +780,9 @@ export default function PricingSection({ data }: { data: PricingData }) {
           {!isBundlesTab && (
             <div className="absolute left-0 top-0 w-full h-[260px] rounded-[20px] border border-[#EE6D2D] transition-all duration-500 ease-in-out group-hover:h-[calc(100%+16px)]"></div>
           )}
+           {isBundlesTab && (
+            <div className="absolute left-0 top-0 w-full h-[260px] rounded-[20px] border border-[#EE6D2D] transition-all duration-500 ease-in-out group-hover:h-[calc(100%+16px)]"></div>
+          )}
           
           <div className={`bg-white rounded-[20px] p-6 shadow-[0_6px_24px_0_rgba(0,0,0,0.05)] ${
             isBundlesTab && plan?.isMostPopular ? "border border-[#EE6D2D]" : ""
@@ -787,9 +790,9 @@ export default function PricingSection({ data }: { data: PricingData }) {
             <div className="flex items-center justify-between">
               <div className={`transition-all duration-500 ease-in-out w-12 h-12 rounded-full border ${
                 isBundlesTab ? "border-[#E5E5E5] bg-[#F9F9F9]" : "border-[#DCDCDC]"
-              } flex items-center justify-center group-hover:bg-DarkOrange`}>
+              } flex items-center justify-center bg-[#F6F6F6] group-hover:bg-DarkOrange group-hover:border-DarkOrange`}>
                 {plan.icon?.svgFile?.asset?.url ? (
-                  <img src={plan.icon.svgFile.asset.url} alt={plan.title} className="w-6 h-6 bg-Dark" />
+                  <img src={plan.icon.svgFile.asset.url} alt={plan.title} className="w-6 h-6 bg-Dark transition-all  group-hover:invert" />
                 ) : (
                   <span className="text-xs text-gray-500">Icon</span>
                 )}
@@ -827,14 +830,13 @@ export default function PricingSection({ data }: { data: PricingData }) {
 
             {/* Associated Products for Bundles */}
             {isBundlesTab && plan.associatedProducts && plan.associatedProducts.length > 0 && (
-              <div className="mt-4 p-3 bg-[#F9F9F9] rounded-lg">
-                <h4 className="font-Roboto text-[#333333] text-sm font-semibold mb-2">Includes:</h4>
+              <div className="mt-4 p-3 bg-[#F9F9F9] rounded-lg">                
                 <div className="space-y-2">
                   {plan.associatedProducts.map((product, productIdx) => (
                     <div key={productIdx} className="flex items-center justify-between">
                       <div>
                         <p className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">
-                          {plan.startingFromText || "Starting from"}
+                          {plan.subheading || "Starting from"}
                         </p>
                         {price && (
                           <div className="flex items-end mt-1">
@@ -897,7 +899,7 @@ export default function PricingSection({ data }: { data: PricingData }) {
           {/* Features - different styling for bundles */}
           {plan.features && plan.features.length > 0 && (
             <ul className={`mt-7 mb-7 space-y-4 text-[16px] text-[#091019] ${
-              isBundlesTab ? "pl-0" : "pl-[7px] md:pl-6"
+              isBundlesTab ? "pl-0" : "pl-[24px] md:pl-6"
             }`}>
               {plan.features.map((f, i) => (
                 <li key={i} className={`flex items-center gap-3 font-Roboto ${
@@ -918,7 +920,7 @@ export default function PricingSection({ data }: { data: PricingData }) {
 
           {/* Button - different styling for bundles */}
           <button
-            className={`relative z-[8] flex-shrink-0 flex items-center justify-center w-full md:w-[calc(100%-48px)] mx-auto h-[52px] border rounded-full px-4 py-3 text-[16px] font-normal font-Roboto leading-[16px] tracking-[0.08px] transition-all hover:scale-[1.01] group ${
+            className={`relative z-[8] flex-shrink-0 flex items-center justify-center w-[calc(100%-48px)] mx-auto h-[52px] border rounded-full px-4 py-3 text-[16px] font-normal font-Roboto leading-[16px] tracking-[0.08px] transition-all hover:scale-[1.01] group ${
               isBundlesTab
                 ? "border-[#EE6D2D] bg-[#EE6D2D] text-white hover:bg-[#DD5827] hover:border-[#DD5827]"
                 : "border-PrimaryBlack text-PrimaryBlack group-hover:bg-DarkOrange group-hover:text-white group-hover:border-DarkOrange hover:bg-[#DD5827]"
