@@ -65,6 +65,7 @@ export default function HomeHero({ hero }: Props) {
                     key={i}
                     src={avatar.asset.url}
                     alt="trusted avatar"
+                   
                     className="w-10 h-10 rounded-full"
                   />
                 ))}

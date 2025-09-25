@@ -5,12 +5,7 @@ export const uspsForm1583Content = defineType({
   title: "USPS Form 1583 Content",
   type: "object",
   fields: [
-    defineField({
-      name: "title",
-      title: "Page Title",
-      type: "string",
-      validation: (Rule) => Rule.required(),
-    }),
+  
  
     defineField({
       name: "contentBlocks",
@@ -26,7 +21,8 @@ export const uspsForm1583Content = defineType({
             defineField({
               name: "textField",
               title: "Text Field ",
-              type: "string",
+               type: "array",
+              of: [{ type: "block" }],
             }),
  
             // 1. Unified Editor (heading + description + link)

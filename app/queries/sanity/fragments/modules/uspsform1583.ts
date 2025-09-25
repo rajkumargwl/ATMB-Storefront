@@ -23,8 +23,6 @@ export const USPS_FORM_1583 = groq`
       }
     },
     (_type == "uspsForm1583Content") => {
-      title,
-      textField,  
       contentBlocks[] {
         mainContent,
         leftImage {
@@ -59,4 +57,3 @@ export const USPS_FORM_1583 = groq`
     }
   }
 `;
- 
