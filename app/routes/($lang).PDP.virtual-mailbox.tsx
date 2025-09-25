@@ -110,6 +110,20 @@ export default function Plans() {
         quantity: 1,
       }
     : null;
+    const locationProperties = Object.entries(location).map(([key, value]) => ({
+      key,
+      value: String(value), // Shopify requires string values
+    }));
+
+  //  const locationProperties={
+  //   locationId: location.locationId,
+  //   displayName: location.displayName,
+  //   addressLine1: location.addressLine1,
+  //   city: location.city,
+  //   state: location.state,
+  //   postalCode: location.postalCode,
+  //   country: location.country,
+  //  } 
 
   return (
     <>
@@ -202,6 +216,7 @@ export default function Plans() {
                       {
                         merchandiseId: selectedVariant.id,
                         quantity: 1,
+                        attributes: locationProperties,
                       },
                     ]
                   : []

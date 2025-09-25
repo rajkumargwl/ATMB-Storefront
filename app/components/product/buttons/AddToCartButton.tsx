@@ -25,7 +25,8 @@ export default function AddToCartButton({
   ...props
 }: {
   children?: React.ReactNode;
-  lines: CartLineInput[];
+  //lines: CartLineInput[];
+  lines: (CartLineInput & { properties?: Record<string, any> })[]; // ✅ allow properties
   analytics?: unknown;
   mode?: FormMode;
   buttonClassName?: string;
@@ -150,7 +151,7 @@ function AddToCartAnalytics({
         // do nothing
       }
 
-      if (Object.keys(cartData).length && fetcherData) {
+      if (Object.keys(cartData).length && fetcherData?.cart) {
         const addToCartPayload: ShopifyAddToCartPayload = {
           ...getClientBrowserParameters(),
           ...pageAnalytics,

@@ -126,7 +126,8 @@ useEffect(() => {
               <Link to="/">
                 <img
                   src={logo.url}
-                  alt="Logo"
+                  alt="ATMB-Logo"
+                
                   className="w-[80px] md:w-[101px] object-contain"
                 />
               </Link>
@@ -185,6 +186,7 @@ useEffect(() => {
               <img
                 src={icon1.url}
                 alt="Search"
+                title="Search"
                 className="h-6 w-6 object-contain"
               />
             </button>
@@ -196,6 +198,7 @@ useEffect(() => {
               <img
                 src={icon2.url}
                 alt="Cart"
+                title="Cart"
                 className="h-6 w-6 object-contain"
               />
             </button>
