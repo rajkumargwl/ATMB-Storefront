@@ -13,7 +13,7 @@ export default function FAQSection({
 }: FAQSectionProps) {
   return (
     <section className="bg-[#F6F6F6] text-gray-900 py-14">
-      <div className="max-w-6xl mx-auto px-4 md:px-8 grid md:grid-cols-2 gap-8 items-center">
+      <div className="max-w-[1240px] mx-auto px-4 md:px-0 grid md:grid-cols-2 gap-8 items-center">
         {/* Left: Text Content */}
         <div>
           {label && (
