@@ -18,8 +18,8 @@ export default function CareerPromotionSection({
   image,
 }: Props) {
   return (
-    <section className="w-full py-16 bg-white">
-      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-6 md:grid-cols-2 items-center">
+    <section className="max-w-[1240px] mx-auto px-6 md:px-0 items-center justify-between py-16 bg-white">
+      <div className="grid grid-cols-1 gap-10 md:grid-cols-2 items-center">
         {/* Left side: text content */}
         <div className="space-y-6">
           {smallHeading && (
