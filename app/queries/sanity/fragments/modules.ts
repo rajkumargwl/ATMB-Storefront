@@ -18,7 +18,9 @@ import { BUSINESS_AT_FINGERTIPS } from './modules/businessAtFingertips';
 import { TESTIMONIAL } from './modules/testimonial';
 import { FAQ } from './modules/faq';
 import { ABOUT_US_MODULE } from './modules/aboutus'; // 👈 import your About Us GROQ
-
+import { CAREER_PAGE_MODULE } from './modules/careerpage';
+import { FAQ_MODULES } from './modules/faqcategory';
+import { USPS_FORM_1583 } from './modules/uspsform1583';
 export const MODULES = groq`
   _key,
   _type,
@@ -76,4 +78,13 @@ export const MODULES = groq`
  (_type == "aboutUsModule") => {
   ${ABOUT_US_MODULE}
 },
+(_type == "careersPageModule") => {
+  ${CAREER_PAGE_MODULE}
+},
+(_type == "faqPageModule") => {
+  ${FAQ_MODULES}
+},
+(_type == "uspsForm1583") => {
+    ${USPS_FORM_1583}
+  },
 `;

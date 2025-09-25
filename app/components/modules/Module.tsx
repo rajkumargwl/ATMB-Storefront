@@ -18,14 +18,23 @@ import FAQ from '~/components/modules/FAQ';
 import Home from '~/components/heroes/Home';
 import FeaturesModule from '~/components/modules/FeaturesModule';
 import AboutHowItStartedSection from '~/components/modules/AboutHowItStartedSection';
-// import AboutIntroSection from '~/components/modules/AboutHowItStartedSection';
+import AboutFeaturesSection from '~/components/modules/AboutFeaturesSection';
+import AboutResourceAuthorsSection from '~/components/modules/AboutResourceAuthorsSection';
 import AboutIntroSection from '~/components/modules/AboutIntroSection';
-// import AboutIntroSection from '~/components/modules/AboutIntroSection';
-// import AboutIntroSection from '~/components/modules/AboutIntroSection';
+import AboutDetailedFeaturesSection from '~/components/modules/AboutDetailedFeaturesSection';
+import AboutFoundersSection from '~/components/modules/AboutFoundersSection';
 import Pricingmodule from '~/components/modules/Pricingmodule';
 import HowItWorks from '~/components/modules/Howitworks'; // Add this import
 import WhyChooseUs from '~/components/modules/WhyChooseUs'; // Add this import
 import CustomerReviews from '~/components/modules/CustomerReviews'; // Add this import
+import CareerPromotionSection from '~/components/modules/CareerPromotionSection';
+import WhyWorkSection from '~/components/modules/WhyWorkSection';
+import AboutCompanySection from '~/components/modules/AboutCompanySection';
+import CoreValuesSection from '~/components/modules/CoreValuesSection';
+import JoinTeamSection from '~/components/modules/JoinTeamSection';
+import FAQSection from './FAQSection';
+import FAQWithCategory from './FAQWithCategory';
+
 type Props = {
   imageAspectClassName?: string;
   module: SanityModule;
@@ -44,6 +53,27 @@ export default function Module({imageAspectClassName, module}: Props) {
           ))}
         </>
       );
+        case 'careersPageModule':
+      return (
+        <>
+          {module.modules?.map((sub: any) => (
+            <Module key={sub._key} module={sub} />
+          ))}
+        </>
+      );
+      case 'careerPromotionSection':
+      return <CareerPromotionSection {...module} />;
+
+      case 'whyWorkSection':
+  return <WhyWorkSection {...module} />;
+  
+
+   case 'aboutCompanySection':
+  return <AboutCompanySection {...module} />;
+    case 'coreValuesSection':
+  return <CoreValuesSection {...module} />;
+  case 'joinTeamSection':
+  return <JoinTeamSection {...module} />;
 
     case 'aboutIntroSection':
       return <AboutIntroSection {...module} />;
@@ -51,18 +81,32 @@ export default function Module({imageAspectClassName, module}: Props) {
     case 'aboutHowItStartedSection':
       return <AboutHowItStartedSection {...module} />;
 
-    // case 'aboutFeaturesSection':
-    //   return <AboutFeaturesSection {...module} />;
+    case 'aboutFeaturesSection':
+      return <AboutFeaturesSection {...module} />;
 
-    // case 'aboutDetailedFeaturesSection':
-    //   return <AboutDetailedFeaturesSection {...module} />;
+    case 'aboutDetailedFeaturesSection':
+      return <AboutDetailedFeaturesSection {...module} />;
 
-    // case 'aboutFoundersSection':
-    //   return <AboutFoundersSection {...module} />;
+    case 'aboutFoundersSection':
+      return <AboutFoundersSection {...module} />;
 
-    // case 'aboutResourceAuthorsSection':
-    //   return <AboutResourceAuthorsSection {...module} />;
+    case 'aboutResourceAuthorsSection':
+      return <AboutResourceAuthorsSection {...module} />;
+   
 
+
+      case 'faqPageModule':
+      return (
+        <>
+          {module.modules?.map((sub: any) => (
+            <Module key={sub._key} module={sub} />
+          ))}
+        </>
+      );
+      case 'faqCoverModule':
+      return <FAQSection {...module} />;
+      case 'faqWithCategory':
+      return <FAQWithCategory {...module} />;
     // -----------------------
     // Existing cases
     // -----------------------

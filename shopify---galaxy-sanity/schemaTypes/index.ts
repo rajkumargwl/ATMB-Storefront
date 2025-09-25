@@ -40,22 +40,16 @@ import {shopifyCollectionType} from './objects/shopify/shopifyCollectionType'
 import {shopifyProductType} from './objects/shopify/shopifyProductType'
 import {shopifyProductVariantType} from './objects/shopify/shopifyProductVariantType'
 import {spotType} from './objects/hotspot/spotType'
-<<<<<<< HEAD
 
-=======
 // import {detailedFeatures} from './objects/module/detailedFeature'
 import keyHighlightsType from './objects/module/keyHighlightsType'
->>>>>>> 9d8d655 (Pushing code of header and footer 02/09)
 // Objects used as annotations must be imported first
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
 
 const objects = [
   accordionGroupType,
-<<<<<<< HEAD
-=======
   //  detailedFeature,
    keyHighlightsType,
->>>>>>> 9d8d655 (Pushing code of header and footer 02/09)
   accordionType,
   calloutType,
   callToActionType,

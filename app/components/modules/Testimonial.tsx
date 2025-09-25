@@ -182,7 +182,7 @@
 //     </section>
 //   );
 // }
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
@@ -199,6 +199,35 @@ type Props = {
 export default function Testimonials({ data }: Props) {
   const prevRef = useRef<HTMLButtonElement>(null);
   const nextRef = useRef<HTMLButtonElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeVideo, setActiveVideo] = useState<string | null>(null);
+
+  const openVideo = (url: string) => {
+    if (!url) return;
+  
+    let embedUrl = url;
+  
+    // Convert YouTube watch link to embed link
+    if (url.includes("youtube.com/watch")) {
+      const videoId = url.split("v=")[1].split("&")[0];
+      embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+    }
+  
+    // Handle youtu.be short links
+    if (url.includes("youtu.be")) {
+      const videoId = url.split("youtu.be/")[1];
+      embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+    }
+  
+    setActiveVideo(embedUrl);
+    setIsOpen(true);
+  };
+  
+
+  const closeVideo = () => {
+    setActiveVideo(null);
+    setIsOpen(false);
+  };
 
   return (
     <section className="py-[40px] md:py-[60px] lg:py-[100px] bg-white px-5">
@@ -327,7 +356,7 @@ export default function Testimonials({ data }: Props) {
                           alt={item.videoThumbnail.altText || "Video Thumbnail"}
                           className="w-full h-[250px] object-cover"
                         />
-                        {item.playIcon?.url && (
+                        {/* {item.playIcon?.url && (
                           <div className="absolute inset-0 flex items-center justify-center">
                             <a
                               href={item.videoUrl || "#"}
@@ -339,6 +368,18 @@ export default function Testimonials({ data }: Props) {
                                 <img src={item.playIcon.url} alt="Play Icon" className="w-10 h-10" />
                               </div>
                             </a>
+                          </div>
+                        )} */}
+                         {item.playIcon?.url && (
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <button
+                              onClick={() => openVideo(item.videoUrl || "")}
+                              className="cursor-pointer"
+                            >
+                              <div className="bg-[#FFFFFFB2] rounded-full p-2 shadow-lg flex items-center justify-center">
+                                <img src={item.playIcon.url} alt="Play Icon" className="w-10 h-10" />
+                              </div>
+                            </button>
                           </div>
                         )}
                       </div>
@@ -360,6 +401,29 @@ export default function Testimonials({ data }: Props) {
           </Swiper>
         </div>
       </div>
+
+      {/* Video Popup */}
+      {isOpen && activeVideo && (
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+          <div className="relative w-[90%] md:w-[70%] lg:w-[60%]">
+            <button
+              onClick={closeVideo}
+              className="absolute top-[-20px] right-[-10px] text-white text-2xl"
+            >
+              ✕
+            </button>
+            <iframe
+              src={activeVideo}
+              title="Video Player"
+              className="w-full h-[400px] md:h-[500px] rounded-lg"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;"
+              allowFullScreen
+            ></iframe>
+          </div>
+        </div>
+      )}
+
     </section>
   );
 }

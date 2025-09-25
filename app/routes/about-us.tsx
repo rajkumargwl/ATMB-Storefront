@@ -15,7 +15,9 @@ import ModuleGrid from '~/components/modules/ModuleGrid';
 import { fetchGids, notFound, validateLocale } from '~/lib/utils';
 
 // 👇 import the generic PAGE query
-import { PAGE } from '~/queries/sanity/fragments/pages/page';
+//import { PAGE } from '~/queries/sanity/fragments/pages/page';
+
+import { ABOUT_US_PAGE_QUERY } from '~/queries/sanity/fragments/pages/aboutus';
 
 // -----------------
 // SEO
@@ -34,23 +36,23 @@ export const handle = { seo };
 export async function loader({ context, params }: LoaderFunctionArgs) {
   validateLocale({ context, params });
 
-  const cache = context.storefront.CacheCustom({
-    mode: 'public',
-    maxAge: 60,
-    staleWhileRevalidate: 60,
-  });
-
+  // const cache = context.storefront.CacheCustom({
+  //   mode: 'public',
+  //   maxAge: 60,
+  //   staleWhileRevalidate: 60,
+  // });
+  
   const page = await context.sanity.query({
-    query: PAGE, // ✅ reusing the PAGE query
-    cache,
+    query: ABOUT_US_PAGE_QUERY, // ✅ reusing the PAGE query
+  
   });
 
-  console.log("Sanity About Us result:", page);
+  
     const aboutUsModule = page?.modules?.find(
     (mod: any) => mod._type === 'aboutUsModule'
   );
 
-  console.log("About Us Module:", aboutUsModule);
+  
 
   // if (!page) throw notFound();
 
@@ -70,7 +72,7 @@ export default function AboutUs() {
   const { page, gids } = useLoaderData<typeof loader>();
 
   return (
-    <SanityPreview data={page} query={PAGE}>
+    <SanityPreview data={page} query={ABOUT_US_PAGE_QUERY}>
       {(page) => (
         <Suspense>
           <Await resolve={gids}>

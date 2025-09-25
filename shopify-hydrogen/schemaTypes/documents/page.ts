@@ -68,8 +68,15 @@ export const pageType = defineType({
       type: 'string',
       validation: (Rule) => Rule.required(),
     }),
+    defineField({
+      name: 'slug',
+      group: 'editorial',
+      type: 'string',
+      validation: (Rule) => Rule.required(),
+    }),
     
     // 👇 Page Modules
+        // 👇 Page Modules
     defineField({
       name: 'modules',
       title: 'Modules',
@@ -77,6 +84,11 @@ export const pageType = defineType({
       group: 'editorial',
       of: [
         { type: 'aboutUsModule' },
+         { type: 'solutionsMailbox' },
+          { type: 'careersPageModule' },
+          { type: 'faqPageModule' },
+            { type: 'uspsForm1583' },
+          
         // add more modules if needed
       ],
     }),

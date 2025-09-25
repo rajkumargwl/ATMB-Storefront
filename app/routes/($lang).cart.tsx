@@ -1,18 +1,34 @@
-import {Await} from '@remix-run/react';
+// app/routes/($lang).cart.tsx
+
+import {Await, useLoaderData} from '@remix-run/react';
+import {Suspense} from 'react';
+import {useRootLoaderData} from '~/root'; 
+import {
+  CartActions,
+  CartLineItems,
+  CartSummary,
+} from '~/components/cart/Cart';
 import {
   CartForm,
   type CartQueryData,
   type SeoHandleFunction,
 } from '@shopify/hydrogen';
-import {ActionFunctionArgs, json} from '@shopify/remix-oxygen';
-import clsx from 'clsx';
-import {Suspense} from 'react';
-import invariant from 'tiny-invariant';
-
-import {CartActions, CartLineItems, CartSummary} from '~/components/cart/Cart';
 import SpinnerIcon from '~/components/icons/Spinner';
+import CartBundleSection from '~/components/cart/CartBundleSection';
+import CartEssentialsSection from '~/components/cart/CartEssentialsSection';
+
+import {
+  defer,
+  json,
+  type LoaderFunctionArgs,
+  type ActionFunctionArgs,
+  redirect,
+} from '@shopify/remix-oxygen';
+import type {Product} from '@shopify/hydrogen/storefront-api-types';
+import {PRODUCT_QUERY} from '~/queries/shopify/product';
+import {notFound} from '~/lib/utils';
 import {isLocalPath} from '~/lib/utils';
-import {useRootLoaderData} from '~/root';
+import invariant from 'tiny-invariant';
 
 const seo: SeoHandleFunction = () => ({
   title: 'Cart',
@@ -95,34 +111,55 @@ export async function action({request, context}: ActionFunctionArgs) {
     {status, headers},
   );
 }
+export async function loader({context}: LoaderFunctionArgs) {
+  const [virtualMailbox, virtualPhone, BusinessAcc] = await Promise.all([
+    context.storefront.query<{product: Product}>(PRODUCT_QUERY, {
+      variables: {handle: 'virtual-mailbox', selectedOptions: []},
+    }),
+    context.storefront.query<{product: Product}>(PRODUCT_QUERY, {
+      variables: {handle: 'virtual-phone-number', selectedOptions: []},
+    }),
+    context.storefront.query<{product: Product}>(PRODUCT_QUERY, {
+      variables: {handle: 'business-accelerato', selectedOptions: []},
+    }),
+  ]);
 
+  if (!virtualMailbox?.product || !virtualPhone?.product || !BusinessAcc?.product) {
+    throw notFound();
+  }
+
+  return defer({
+    bundleProducts: [virtualMailbox.product, virtualPhone.product],
+    essentialsProducts: [BusinessAcc.product],
+  });
+}
 export default function Cart() {
   const rootData = useRootLoaderData();
+  const { bundleProducts, essentialsProducts} = useLoaderData<typeof loader>();
+
 
   return (
-    <section
-      className={clsx(
-        'rounded-b-xl px-4 pb-4 pt-24', //
-        'md:px-8 md:pb-8 md:pt-34',
-      )}
-    >
-      <Suspense
-        fallback={
-          <div className="flex justify-center overflow-hidden">
-            <SpinnerIcon />
-          </div>
-        }
-      >
+    <section className="px-4 pb-20 pt-10 md:px-8 md:pb-8 md:pt-20">
+      <Suspense fallback={<div className="flex justify-center"><SpinnerIcon /></div>}>
         <Await resolve={rootData?.cart}>
           {(cart) => (
             <>
               {cart && (
-                <div className="mx-auto grid w-full max-w-6xl gap-8 pb-12 md:grid-cols-2 md:items-start md:gap-8 lg:gap-12">
-                  <div className="flex-grow md:translate-y-4">
+                <div className="mx-auto grid w-full max-w-6xl gap-8 md:grid-cols-3 lg:gap-12">
+                  
+                  {/* LEFT SIDE */}
+                  <div className="col-span-2 space-y-8">
+                    <h1 className="text-2xl font-semibold mb-4">Your Cart</h1>
+                    
                     <CartLineItems linesObj={cart.lines} />
+
+                    <CartBundleSection bundleProducts={bundleProducts} />
+                    <CartEssentialsSection essentialsProducts={essentialsProducts} />
                   </div>
-                  <div className="fixed bottom-0 left-0 right-0 grid w-full gap-6 p-4 md:sticky md:top-[65px] md:translate-y-4 md:px-6">
-                    <CartSummary cost={cart.cost} />
+
+                  {/* RIGHT SIDE */}
+                  <div className="md:sticky md:top-[80px] space-y-6">
+                    <CartSummary cart={cart} cost={cart.cost} />
                     <CartActions cart={cart} />
                   </div>
                 </div>
