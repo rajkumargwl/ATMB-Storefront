@@ -210,21 +210,25 @@ export default function Homedata({ data }: Props) {
               {data.heading}
             </h2>
 
-            <p className="flex align-center items-center justify-center lg:justify-start gap-2 font-Roboto text-LightWhite font-normal leading-[21px] text-[14px] text-center lg:text-left">
-              <span className="font-Roboto text-DarkOrange font-semibold leading-[28px] tracking-[-0.3px] text-[20px] relative">
-                {data.highlight?.value} {data.highlight?.label}
-                <span className="absolute bottom-[-4px] left-[11px]">
-                  <img
-                    src={spanBg}
-                    alt="highlight-bg"
-                    className="w-[64px] md:w-[64px] h-[6px] md:h-[6px]"
-                  />
-                </span>
-              </span>
-              <span className="font-Roboto text-LightWhite font-normal leading-[21px] text-[14px] tracking-[0px]">
-                {data.heading}
-              </span>
-            </p>
+     <p className="flex align-center items-center justify-center lg:justify-start gap-2 font-Roboto text-LightWhite font-normal leading-[21px] text-[14px] text-center lg:text-left">
+  {/* Highlight only the value */}
+  <span className="font-Roboto text-DarkOrange font-semibold leading-[28px] tracking-[-0.3px] text-[20px] relative">
+    {data.highlight?.value}
+    <span className="absolute bottom-[-4px] left-[11px]">
+      <img
+        src={spanBg}
+        alt="highlight-bg"
+        className="w-[64px] md:w-[64px] h-[6px] md:h-[6px]"
+      />
+    </span>
+  </span>
+
+  {/* Normal label */}
+  <span className="font-Roboto text-LightWhite font-normal leading-[21px] text-[14px] tracking-[0px]">
+    {data.highlight?.label}
+  </span>
+</p>
+
           </div>
 
           {/* Ratings */}

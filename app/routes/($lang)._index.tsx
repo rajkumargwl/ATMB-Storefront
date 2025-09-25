@@ -18,7 +18,7 @@ import {HOME_PAGE_QUERY} from '~/queries/sanity/home';
 import {HEADER_QUERY} from '~/queries/sanity/header';
 import {FOOTER_QUERY} from '~/queries/sanity/footer';
 const seo: SeoHandleFunction = ({data}) => ({
-  title: data?.page?.seo?.title || 'Anytime HQ',
+  title: data?.page?.seo?.title || 'Anytime Mailbox',
   description:
     data?.page?.seo?.description ||
     'A custom storefront powered by Hydrogen and Sanity',
