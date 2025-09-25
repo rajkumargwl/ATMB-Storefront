@@ -44,7 +44,7 @@ export function CartLineItems({
 }
 
 function LineItem({lineItem}: {lineItem: CartLine | ComponentizableCartLine}) {
-  const {merchandise} = lineItem;
+  const {merchandise, attributes} = lineItem;
 
   const updatingItems = useCartFetchers(CartForm.ACTIONS.LinesUpdate);
   const removingItems = useCartFetchers(CartForm.ACTIONS.LinesRemove);
@@ -84,6 +84,15 @@ function LineItem({lineItem}: {lineItem: CartLine | ComponentizableCartLine}) {
   const firstVariant = merchandise.selectedOptions[0];
   const hasDefaultVariantOnly =
     firstVariant.name === 'Title' && firstVariant.value === 'Default Title';
+    const VISIBLE_ATTRIBUTES = [
+      'locationId',
+      'displayName',
+      'addressLine1',
+      'city',
+      'state',
+      'postalCode',
+      'country',
+    ];
 
   return (
     <div
@@ -112,13 +121,27 @@ function LineItem({lineItem}: {lineItem: CartLine | ComponentizableCartLine}) {
       <div
         role="cell"
         className="flex-grow-1 mr-4 flex w-full flex-col items-start"
+      > {(merchandise.product.handle==='virtual-mailbox')? <Link
+        to={`/PDP/${merchandise.product.handle}?locationId=${attributes?.find(attr => attr.key === 'locationId')?.value}`}
+        className="text-sm font-bold hover:underline"
       >
-        <Link
+        {merchandise.product.title}
+      </Link>
+:<Link
+to={`/PDP/${merchandise.product.handle}`}
+className="text-sm font-bold hover:underline"
+>
+{merchandise.product.title}
+</Link>
+
+
+      }
+        {/* <Link
           to={`/products/${merchandise.product.handle}`}
           className="text-sm font-bold hover:underline"
         >
           {merchandise.product.title}
-        </Link>
+        </Link> */}
 
         {/* Options */}
         {!hasDefaultVariantOnly && (
@@ -130,10 +153,45 @@ function LineItem({lineItem}: {lineItem: CartLine | ComponentizableCartLine}) {
             ))}
           </ul>
         )}
+          {attributes?.length > 0 && (
+  <div className="mt-2 text-xs text-gray-600 space-y-1">
+    {attributes
+      .filter((attr) => VISIBLE_ATTRIBUTES.includes(attr.key))
+      .map((attr) => (
+        <p key={attr.key}>
+           {attr.value}
+        </p>
+      ))}
+       <Link
+          to={`/sublocations`}
+          className="text-sm font-bold hover:underline"
+        >
+         Change Location
+        </Link>
+
+  </div>
+  
+)}
+ {(merchandise.product.handle==='virtual-mailbox')? <Link
+        to={`/PDP/${merchandise.product.handle}?locationId=${attributes?.find(attr => attr.key === 'locationId')?.value}`}
+        className="text-sm font-bold hover:underline"
+      >
+        Change Plan
+      </Link>
+:<Link
+to={`/PDP/${merchandise.product.handle}`}
+className="text-sm font-bold hover:underline"
+>
+Change Plan
+</Link>
+
+
+      }
+
       </div>
 
       {/* Quantity */}
-      <CartItemQuantity line={lineItem} submissionQuantity={updating} />
+      {/* <CartItemQuantity line={lineItem} submissionQuantity={updating} /> */}
 
       {/* Price */}
       <div className="ml-4 mr-6 flex min-w-[4rem] justify-end text-sm font-bold leading-none">
@@ -227,10 +285,47 @@ function ItemRemoveButton({lineIds}: {lineIds: CartLine['id'][]}) {
   );
 }
 
-export function CartSummary({cost}: {cost: CartCost}) {
+export function CartSummary({cart,cost}: {cart: Cart,cost: CartCost}) {
+  const lines = flattenConnection(cart.lines);
+  const VISIBLE_ATTRIBUTES = [
+    'locationId',
+    'displayName',
+    'addressLine1',
+    'city',
+    'state',
+    'postalCode',
+    'country',
+  ];
   return (
     <>
       <div role="table" aria-label="Cost summary" className="text-sm">
+      {lines.map((line) => (
+        <div
+          key={line.id}
+          className="flex flex-col border-b border-gray p-2 last:border-b-0"
+        >
+          <div className="flex justify-between">
+            <span className="text-darkGray">{line.merchandise.product.title}</span>
+            <span className="font-bold">
+              <Money data={line.cost.totalAmount} />
+            </span>
+          </div>
+
+          {/* ✅ Show selective attributes */}
+          {line.attributes?.length > 0 && (
+            <div className="mt-1 text-xs text-gray-600 space-y-1">
+              {line.attributes
+                .filter((attr) => VISIBLE_ATTRIBUTES.includes(attr.key))
+                .map((attr) => (
+                  <p key={attr.key}>
+                    <span className="font-semibold">{attr.key}:</span> {attr.value}
+                  </p>
+                ))}
+            </div>
+          )}
+        </div>
+      ))}
+
         <div
           className="flex justify-between border-t border-gray p-4"
           role="row"

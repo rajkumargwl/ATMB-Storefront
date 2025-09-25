@@ -97,6 +97,24 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
   setResults(searchResults || []); // new results from loader
 }, [location.search, searchResults]);
 
+useEffect(() => {
+  function handleMessage(event: MessageEvent) {
+    // Only accept from your domain
+    if (event.origin !== "https://shopifystage.anytimehq.co") return;
+
+    if (event.data?.token) {
+      console.log("Received token:", event.data.token);
+
+      // Redirect parent window with token in URL
+      window.location.href = `/account/login?token=${event.data.token}`;
+    }
+  }
+
+  window.addEventListener("message", handleMessage);
+  return () => window.removeEventListener("message", handleMessage);
+}, []);
+
+
 
   return (
     <header className="w-full bg-white px-5 border-b border-LightWhite lg:border-none">
@@ -108,30 +126,35 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
               <Link to="/">
                 <img
                   src={logo.url}
-                  alt="Logo"
+                  alt="ATMB-Logo"
+                
                   className="w-[80px] md:w-[101px] object-contain"
                 />
               </Link>
             )}
           </div>
 
+
           {/* Menu (Desktop only) */}
           <nav className="hidden lg:flex space-x-2 xl:space-x-3">
             {menu?.map((item, idx) => (
               <div key={idx} className="relative group p-2">
-                <Link
+                 <Link
                   to={item.label === "Solutions"
         ? "/solutions"
         : item.label === "Locations"
         ? "/locations"
+          : item.label === "Blog"
+          ? "/blogs"
         : item.url ?? "#"}
-                  className="text-PrimaryBlack hover:text-PrimaryBlack font-normal flex items-center gap-[6px] text-[14px] xl:text-base leading-[24px] tracking-[0px]"
+                  className="text-PrimaryBlack hover:text-PrimaryBlack font-normal flex items-center gap-[6px] text-[14px] md:text-[14px] xl:text-[16px] leading-[24px] tracking-[0px]"
                 >
-                  {item.label}
+                  {item.label} 
                   {item.hasSubmenu && (
                   <ArrowDownIcon />
                   )}
-                </Link>
+                </Link> 
+
 
                 {/* Dropdown submenu */}
                 {item.hasSubmenu && item.subMenu && (
@@ -141,7 +164,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
                         <li key={i}>
                           <Link
                             to={sub.url ?? "#"}
-                            className="block px-4 py-[6px] text-PrimaryBlack hover:text-PrimaryBlack font-normal text-[14px] xl:text-base leading-[24px] tracking-[0px]"
+                            className="block px-4 py-[6px] text-PrimaryBlack hover:text-PrimaryBlack font-normal text-[14px] md:text-[14px] xl:text-[16px] leading-[24px] tracking-[0px]"
                           >
                             {sub.label}
                           </Link>
@@ -163,6 +186,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
               <img
                 src={icon1.url}
                 alt="Search"
+                title="Search"
                 className="h-6 w-6 object-contain"
               />
             </button>
@@ -174,6 +198,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
               <img
                 src={icon2.url}
                 alt="Cart"
+                title="Cart"
                 className="h-6 w-6 object-contain"
               />
             </button>
@@ -190,17 +215,36 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
              </Link>
             ) : (
               loginButton && (
-                <Link
-                  to={loginButton.link ?? "/account/login"}
-                  className="rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[15px] transition-all hover:scale-[1.02] hover:bg-[#F3F3F3]"
-                >
-                  {loginButton.label}
-                </Link>
+                // <Link
+                //   to={loginButton.link ?? "/account/login"}
+                //   className="rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[15px] transition-all hover:scale-[1.02] hover:bg-[#F3F3F3]"
+                // >
+                //   {loginButton.label}
+                // </Link>
+                <button
+                className="w-fit rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[11px] md:py-[15px]"
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  const ssoUrl = "https://store.xecurify.com/moas/broker/login/shopify/0dv7ud-pz.myshopify.com/account?idpname=custom_openidconnect_Okf";
+                  // const ssoUrl = "http://localhost:3000/auth/callback?token=a0de2720bf15cbb431ba1441bebf4ea5"; // TODO: replace with your SSO URL
+                  const width = 800;
+                  const height = 600;
+                  const left = (window.screen.width - width) / 2;
+                  const top = (window.screen.height - height) / 2;
+                  window.open(
+                    ssoUrl,
+                    "SSO Login",
+                    `width=${width},height=${height},top=${top},left=${left},resizable,scrollbars=yes,status=1`
+                  );
+                }}
+              >
+                {loginButton.label}
+              </button>
               )
             )}
             {!isLoggedIn && getStartedButton && (
               <Link
-                to={getStartedButton.link ?? "/account/register"}
+                to="create-account"
                 className="rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-4 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2 transition-all hover:scale-[1.02] hover:bg-[#DD5827]"
               >
                 {getStartedButton.label} 
@@ -262,7 +306,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
 
               {getStartedButton && (
                 <Link
-                  to={getStartedButton.link ?? "#"}
+                  to="create-account"
                   className="w-fit rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-3 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2 transition-all hover:scale-[1.02] hover:bg-[#DD5827]"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
@@ -367,7 +411,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
         </div>
       </div>
 
-      {/* Results List */}
+      {/* Results List */} gdgdgd
       {query && (
         <div className="md:pt-2">
           <div className="bg-white border-t md:border border-LightWhite md:rounded-[20px] shadow-md w-full p-5">

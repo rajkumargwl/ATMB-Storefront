@@ -54,6 +54,7 @@ export const structure: StructureResolver = (S, context) =>
       header(S),
       footer(S),
       pages(S, context),
+      // S.documentTypeList('page').title('Pages'),
       S.divider(),
       collections(S, context),
       products(S, context),

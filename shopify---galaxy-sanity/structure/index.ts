@@ -6,10 +6,7 @@ import pages from './pageStructure'
 import products from './productStructure'
 import settings from './settingStructure'
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 9d8d655 (Pushing code of header and footer 02/09)
 /**
  * Structure overrides
  *
@@ -40,10 +37,7 @@ const hiddenDocTypes = (listItem: ListItemBuilder) => {
     'product',
     'productVariant',
     'settings',
-<<<<<<< HEAD
-=======
     'pdpPage',
->>>>>>> 9d8d655 (Pushing code of header and footer 02/09)
   ].includes(id)
 }
 
@@ -53,10 +47,7 @@ export const structure: StructureResolver = (S, context) =>
     .items([
       home(S, context),
       pages(S, context),
-<<<<<<< HEAD
-=======
     
->>>>>>> 9d8d655 (Pushing code of header and footer 02/09)
       S.divider(),
       collections(S, context),
       products(S, context),

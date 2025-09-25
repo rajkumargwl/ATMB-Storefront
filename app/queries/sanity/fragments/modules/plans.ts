@@ -1,11 +1,11 @@
 import groq from 'groq';
 
 export const PLANS = groq`
-  heading,
-  description,
-  tabs[] {
-    tabName,
-    tabCards[] {
+  // Individual Products Tab
+  individualProductsTab {
+    heading,
+    description,
+    plans[] {
       icon {
         svgCode,
         svgFile {
@@ -24,12 +24,37 @@ export const PLANS = groq`
       features[],
       ctaText,
       ctaUrl,
-      ctaTextColor,
-      ctaBgColor,
       isMostPopular,
       mostPopularLabel
     }
   },
+
+  // Bundles Tab
+  bundlesTab {
+    heading,
+    description,
+    plans[] {
+      title,
+      subheading,
+      pricing {
+        originalPrice,
+        discountedPrice,
+        saveLabel,
+        monthly,
+        yearly
+      },
+      associatedProducts[] {
+        productName,
+        subheading,
+        level
+      },
+      features[],
+      ctaText,
+      ctaUrl
+    }
+  },
+
+  // Billing Toggle
   billingToggle {
     monthlyLabel,
     yearlyLabel,

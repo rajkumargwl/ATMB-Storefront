@@ -235,7 +235,7 @@ export const useRootLoaderData = () => {
 };
  
 export default function App() {
-  const {preview, header, footer, q, searchResults, isLoggedIn, ...data} =
+  const {preview, header, footer, q, searchResults, isLoggedIn, customer, ...data} =
     useLoaderData<SerializeFrom<typeof loader>>();
   const locale = data.selectedLocale ?? DEFAULT_LOCALE;
   const hasUserConsent = true;
@@ -255,7 +255,7 @@ export default function App() {
       <body>
         <PreviewProvider previewConfig={preview} fallback={<PreviewLoading />}>
           {/* 🔹 Global Header with search support */}
-          <Header data={header} searchQuery={q} searchResults={searchResults} isLoggedIn={isLoggedIn} />
+          <Header data={header} searchQuery={q} searchResults={searchResults} isLoggedIn={isLoggedIn} customer={customer} />
 
           <Layout key={`${locale.language}-${locale.country}`}>
             <Outlet />
