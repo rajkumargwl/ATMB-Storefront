@@ -144,7 +144,7 @@ export default function Cart() {
         <Await resolve={rootData?.cart}>
           {(cart) => (
             <>
-              {cart && (
+              {cart && cart.lines.edges.length > 0 && (
                 <div className="mx-auto grid w-full max-w-6xl gap-8 md:grid-cols-3 lg:gap-12">
                   
                   {/* LEFT SIDE */}
@@ -162,6 +162,18 @@ export default function Cart() {
                     <CartSummary cart={cart} cost={cart.cost} />
                     <CartActions cart={cart} />
                   </div>
+                </div>
+              )}
+              {!cart?.lines?.edges?.length && (
+                <div className="mx-auto max-w-3xl text-center">
+                  <h1 className="text-2xl font-semibold mb-4">Your Cart is Empty</h1>
+                  <p className="mb-8">Looks like you haven't added anything to your cart yet.</p>
+                  <a
+                    href="/"
+                    className="inline-block rounded bg-blue-600 px-6 py-3 text-white hover:bg-blue-700"
+                  >
+                    Continue Shopping
+                  </a>
                 </div>
               )}
             </>

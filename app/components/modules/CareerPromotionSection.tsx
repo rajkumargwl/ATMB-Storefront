@@ -1,3 +1,5 @@
+import React from "react";
+
 type Props = {
   smallHeading?: string;
   mainHeading?: string;
@@ -30,17 +32,25 @@ export default function CareerPromotionSection({
 
           {mainHeading && (
             <h2 className="mt-6 font-Roboto text-PrimaryBlack font-semibold text-[28px] leading-[36px] tracking-[-0.4px]  sm:text-[32px] sm:leading-[42px] sm:tracking-[-0.48px]  max-w-[523px]">
-              {mainHeading.split(" ").map((word, idx) => {
-                const isHighlighted = highlightedWords?.includes(word);
-                return (
-                  <span
-                    key={idx}
-                    className={isHighlighted ? "text-[#FF6600]" : ""}
-                  >
-                    {word}{" "}
-                  </span>
-                );
-              })}
+             {mainHeading.split(/(\s+)/).map((chunk, idx) => {
+              if (chunk.trim() === "") {
+                return chunk; // preserve spaces
+              }
+
+              const cleanWord = chunk.replace(/[.,!?—]/g, "");
+              const isHighlighted = highlightedWords?.some(
+                (w) => w.toLowerCase() === cleanWord.toLowerCase()
+              );
+
+              return isHighlighted ? (
+                <span key={idx} className="text-[#FF6600]">
+                  {chunk}
+                </span>
+              ) : (
+                chunk
+              );
+            })}
+
             </h2>
           )}
 
