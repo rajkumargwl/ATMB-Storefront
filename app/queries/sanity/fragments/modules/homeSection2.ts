@@ -43,11 +43,12 @@ export const HOME_SECTION_2 = groq`
     }
   },
   logos[] {
-    alt,
-    logo {
-      "url": asset->url,
-      altText
-    }
+   "alt": coalesce(alt, logo.asset->altText),
+  logo {
+    "url": asset->url,
+    "alt": asset->altText
   }
+}
+
 `;
 
