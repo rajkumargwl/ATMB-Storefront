@@ -1,7 +1,8 @@
 import { useRef, useState } from "react";
 import PlusFAQ from '~/components/icons/PlusFAQ';
 import CloseFAQ from '~/components/icons/CloseFAQ';
-import RightArrowWhite from '~/components/icons/RightArrowWhite';
+import '~/styles/tailwind.css';
+
 
 type FAQ = {
   question: string;
@@ -25,16 +26,16 @@ export default function FAQWithCategory({ categories }: FAQWithCategoryProps) {
   const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   return (
-    <section className="bg-white text-gray-900 py-25">
+    <section className="bg-white text-gray-900 md:py-25 py-10">
       <div className="max-w-4xl mx-auto px-4">
         {/* Tabs */}
-        <div className="flex flex-wrap gap-3 mb-8">
+        <div className="flex overflow-x-auto gap-3 mb-11 scrollbar-hide border-LightWhite">
           {categories.map((cat, idx) => (
             <button
               key={idx}
               onClick={() => {
                 setActiveCategory(idx);
-                setOpenIndex(null); // reset open faq when switching category
+                setOpenIndex(null);
               }}
               className={`px-6 py-3 rounded-full border border-LightWhite text-base font-normal leading-[24px] tracking-[0px] transition-all shrink-0 ${
                 activeCategory === idx
@@ -46,6 +47,7 @@ export default function FAQWithCategory({ categories }: FAQWithCategoryProps) {
             </button>
           ))}
         </div>
+
 
         {/* FAQ Accordions */}
         <div className="space-y-4">
