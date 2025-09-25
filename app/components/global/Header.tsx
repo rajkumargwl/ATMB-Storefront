@@ -126,7 +126,7 @@ useEffect(() => {
               <Link to="/">
                 <img
                   src={logo.url}
-                  alt="ATMB-Logo"
+                  alt="Anytime Mailbox"
                 
                   className="w-[80px] md:w-[101px] object-contain"
                 />
