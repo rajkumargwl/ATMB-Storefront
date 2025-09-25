@@ -81,6 +81,7 @@ html {
   position: relative;
   flex: 0 0 100%;
 }
+
  
  
 /* usps page css */
@@ -245,4 +246,18 @@ html {
     font-size: 12px;
     line-height: 18px;
   }
+
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Remove bottom scrollbar/border bleed */
+.scrollbar-hide {
+  overscroll-behavior-x: contain;
+  scroll-behavior: smooth;
 }
