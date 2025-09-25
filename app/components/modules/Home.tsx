@@ -44,6 +44,7 @@ export default function HomeHero({ hero }: Props) {
             {/* Search Box */}
             <div className="mt-[40px] md:mt-[64px] mb-4 md:mb-5 flex items-center gap-[10px] w-full max-w-[546px] pt-[8px] md:pt-[6px] pr-[8px] md:pr-[6px] pb-[8px] md:pb-[6px] pl-[16px] md:pl-[20px] bg-white border border-LightGray rounded-full shadow-sm overflow-hidden">
               <SearchIconBanner />
+              test
               <input
                 type="text"
                 placeholder={hero.searchPlaceholder}

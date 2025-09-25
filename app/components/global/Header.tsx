@@ -411,7 +411,7 @@ useEffect(() => {
         </div>
       </div>
 
-      {/* Results List */} gdgdgd
+      {/* Results List */}
       {query && (
         <div className="md:pt-2">
           <div className="bg-white border-t md:border border-LightWhite md:rounded-[20px] shadow-md w-full p-5">
