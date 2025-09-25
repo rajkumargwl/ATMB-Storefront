@@ -2,10 +2,14 @@ import { json, type LoaderFunctionArgs } from "@shopify/remix-oxygen";
 import { useLoaderData } from "@remix-run/react";
 import { notFound } from "~/lib/utils";
 import { WPPost } from "../../shopify-hydrogen/schemaTypes/wpPost";
-
+import { toHTML } from '@portabletext/to-html';
+import type { PortableTextBlock } from '@portabletext/types';
 export async function loader({ context, params }: LoaderFunctionArgs) {
   const { slug } = params;
   if (!slug) throw notFound();
+
+  const projectId = context.env.SANITY_PROJECT_ID;
+  const dataset = context.env.SANITY_DATASET;
 
   const post = await context.sanity.query<WPPost>({
     query: `*[_type == "wpPost" && slug.current == $slug][0]{
@@ -25,7 +29,6 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
   if (!post) throw notFound();
 
   const catIds = Array.isArray(post.categories) ? post.categories : [];
-
   const relatedPosts = await context.sanity.query<WPPost[]>({
     query: `*[_type == "wpPost" && count(categories[@ in $catIds]) > 0 && slug.current != $slug][0...4]{
       _id,
@@ -39,12 +42,19 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
     params: { catIds, slug },
   });
 
-  return json({ post, relatedPosts });
+  return json({ post, relatedPosts, projectId, dataset });
 }
 
-function stripHtml(html: string) {
-  if (!html) return "";
-  return html.replace(/<[^>]*>/g, "");
+
+function getPlainText(content: PortableTextBlock[] | undefined): string {
+  if (!Array.isArray(content)) return "";
+  return content
+    .map(block =>
+      block._type === "block" && Array.isArray(block.children)
+        ? block.children.map(c => c.text).join("")
+        : ""
+    )
+    .join(" ");
 }
 
 // To render author + date 
@@ -73,10 +83,45 @@ const renderAuthorDate = (author: string | undefined, date: string | undefined) 
     </span>
   </p>
 );
-
 export default function BlogPost() {
-  const { post, relatedPosts } = useLoaderData<typeof loader>();
+  const { post, relatedPosts, projectId, dataset } = useLoaderData<typeof loader>();
   const [featured, ...others] = relatedPosts || [];
+
+  const htmlContent = post.content
+    ? toHTML(post.content as PortableTextBlock[], {
+      components: {
+        types: {
+          image: ({ value }) => {
+            const ref = value?.asset?._ref;
+            const src = ref
+              ? `https://cdn.sanity.io/images/${projectId}/${dataset}/${ref
+                  .replace('image-', '')
+                  .replace(/-(jpg|jpeg|png|webp)$/, '.$1')}`
+              : '';
+            const alt = value?.alt || '';
+            return `<img src="${src}" alt="${alt}" class="my-6 rounded-md w-full" />`;
+          },
+        },
+        block: {
+          h1: ({ children }) =>
+            `<h1 class="text-4xl font-bold my-6">${children ?? ''}</h1>`,
+          h2: ({ children }) =>
+            `<h2 class="text-3xl font-semibold my-5">${children ?? ''}</h2>`,
+          h3: ({ children }) =>
+            `<h3 class="text-2xl font-semibold my-4">${children ?? ''}</h3>`,
+          normal: ({ children }) =>
+            `<p class="mb-4">${children ?? ''}</p>`,
+        },
+        marks: {
+          strong: ({ children }) => `<strong>${children ?? ''}</strong>`,
+          em: ({ children }) => `<em>${children ?? ''}</em>`,
+          link: ({ children, value }) =>
+            `<a href="${value?.href ?? '#'}" target="_blank" rel="noopener noreferrer">${children ?? ''}</a>`,
+        },
+      }
+      
+      })
+    : '<p>No content available</p>';
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
@@ -87,11 +132,11 @@ export default function BlogPost() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Blog Content */}
         <div className="md:col-span-2">
-          {post.mainImage && (
-            <img src={post.mainImage} alt={post.title} className="w-full h-auto object-cover mb-6 rounded-md" />
-          )}
-          <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: post.content }} />
-        </div>
+        {post.mainImage && (
+          <img src={post.mainImage} alt={post.title} className="w-full h-auto object-cover mb-6 rounded-md" />
+        )}
+        <div className="prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: htmlContent }} />
+      </div>
 
         {/* Featured Related Post */}
         {featured && (
@@ -118,7 +163,9 @@ export default function BlogPost() {
                   <h3 className="text-lg font-semibold">{rp.title}</h3>
                 </a>
                 <p className="line-clamp-2 mt-3 font-Roboto text-LightGray font-normal leading-[21px] md:leading-[27px] text-[14px] md:text-[18px] tracking-[0px]">
-                  {rp.content ? stripHtml(rp.content).slice(0, 120) : ""}...
+                 
+                  {getPlainText(rp.content).slice(0, 120)}...
+
                 </p>
               </li>
             ))}

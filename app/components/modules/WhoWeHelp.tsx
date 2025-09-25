@@ -78,11 +78,14 @@ export default function HomeHero({ data }: Props) {
  
           <div
             ref={scrollRef}
+             role="tablist"
             className="flex items-center justify-start gap-4 overflow-x-auto whitespace-nowrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']"
           >
             {data?.tabs?.map((tab, idx) => (
               <button
                 key={idx}
+                 role="tab"
+                 
                 onClick={() => setActiveTab(tab.label)}
                 className={`px-6 py-3 rounded-full border border-LightWhite text-base font-normal leading-[24px] tracking-[0px] transition-all shrink-0 ${
                   activeTab === tab.label

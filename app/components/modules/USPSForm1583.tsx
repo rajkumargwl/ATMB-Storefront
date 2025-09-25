@@ -1,4 +1,3 @@
-
 import {PortableText} from '@portabletext/react';
  
 type Props = {
@@ -32,29 +31,29 @@ export default function USPSForm1583Module({module}: Props) {
   return (
     <>
       {guideModule && <GuideModule module={guideModule} />}
- 
-      <div className="container mx-auto flex flex-col gap-8 px-4 py-12 md:flex-row md:px-8 lg:gap-12">
-        <main className="md:w-2/3">
+<section className="px-5 py-[40px] md:py-[100px] bg-white">
+      <div className="max-w-[1240px] mx-auto flex flex-col md:flex-row gap-[24px] md:gap-[24px]">
+         <main className="w-full md:w-[70.5%] border border-LightWhite rounded-[12px] order-2 md:order-1 main-content-left">
           {contentModule && <ContentModule module={contentModule} />}
         </main>
  
-        <aside className="top-24 h-full md:sticky md:w-1/3">
-          <div className="rounded-lg border bg-white p-6 shadow-sm">
-            <h3 className="mb-4 text-lg font-bold text-slate-900">In This Guide</h3>
+        <aside className="w-full md:w-[29.5%] relative order-1 md:order-2">
+          <div className="p-6 md:py-10 md:px-8 rounded-[12px] bg-[#F6F6F6]">
+            <h3 className="mb-4 font-Roboto text-LightGray font-medium leading-[28px] md:leading-[28px] text-[20px] md:text-[20px] tracking-[0px]">In This Guide</h3>
             
             {contentModule?.contentBlocks?.length > 0 ? (
               <nav>
-                <ul className="space-y-3">
+                <ul className="space-y-4 pl-5 font-Roboto text-DarkOrange font-medium text-[18px] leading-[27px] tracking-[0px]">
                   {contentModule.contentBlocks.map((block: any, index: number) => {
                     const blockTitle = getPlainText(block.textField);
                     return (
-                      <li key={block._key || index}>
+                      <li key={block._key || index} className='list-decimal list-outside'>
                         <a
                           href={`#block-${index}`}
-                          className="block text-sm text-orange-500 transition-colors duration-200"
+                          className="font-Roboto text-DarkOrange font-medium text-[18px] leading-[27px] tracking-[0px]"
                         >
                           <div className="">
-                            <span className="font-medium">
+                            <span className="font-Roboto text-DarkOrange font-medium text-[18px] leading-[27px] tracking-[0px]">
                               {blockTitle || `Section ${index + 1}`}
                             </span>
                           </div>
@@ -72,26 +71,27 @@ export default function USPSForm1583Module({module}: Props) {
           </div>
         </aside>
       </div>
+      </section>
     </>
   );
 }
  
 function GuideModule({module}: {module: any}) {
   return (
-    <section className="guide-module overflow-hidden bg-slate-50 py-16 sm:py-24">
-      <div className="container mx-auto flex flex-col items-center gap-8 px-4 text-center md:flex-row md:text-left lg:gap-12">
-        <div className="md:w-1/2">
-          <h1 className="mb-4 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
+    <section className="px-5 py-[40px] md:py-[54px] bg-[#F6F6F6]">
+       <div className="max-w-[1240px] mx-auto flex flex-col md:flex-row gap-[44px] md:gap-[62px] items-center ">
+         <div className="w-full md:w-[48%] space-y-4 md:space-y-5">
+           <h1 className="font-Roboto text-LightGray font-medium leading-[27px] md:leading-[28px] text-[18px] md:text-[20px] tracking-[0px]">
             {module.title}
           </h1>
           {module.description && (
-            <p className="mb-10 text-lg text-slate-600 sm:text-xl">
+            <p className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px]">
               {module.description}
             </p>
           )}
         </div>
         {module.image?.asset?.url && (
-          <div className="md:w-1/2">
+          <div className="w-full md:w-[52%] relative">
             <img
               src={module.image.asset.url}
               alt={module.image.alt || module.title}
@@ -138,14 +138,14 @@ function ContentBlock({block}: {block: any}) {
       )}
  
       {(block.leftImage?.asset?.url || block.rightImage?.asset?.url) && (
-        <div className="my-8 flex flex-wrap gap-6">
+        <div className="my-6 md:my-10 flex flex-wrap gap-6 md:gap-[136px]">
           {block.leftImage?.asset?.url && (
             <div className="flex-1 min-w-[200px]">
               <img
                 src={block.leftImage.asset.url}
                 alt={block.leftImage.alt || ''}
                 loading="lazy"
-                className="rounded-xl shadow-lg w-full h-auto"
+                className="rounded-[12px] border border-LightWhite w-full h-auto"
               />
             </div>
           )}
@@ -155,7 +155,7 @@ function ContentBlock({block}: {block: any}) {
                 src={block.rightImage.asset.url}
                 alt={block.rightImage.alt || ''}
                 loading="lazy"
-                className="rounded-xl shadow-lg w-full h-auto"
+                className="rounded-[12px] w-full h-auto"
               />
             </div>
           )}
@@ -167,12 +167,12 @@ function ContentBlock({block}: {block: any}) {
       )}
  
       {block.image2?.asset?.url && (
-        <div className="my-8">
+        <div className="my-6 md:my-10">
           <img
             src={block.image2.asset.url}
             alt={block.image2.alt || ''}
             loading="lazy"
-            className="rounded-xl shadow-lg w-full h-auto"
+            className="rounded-[12px] w-full h-auto"
           />
         </div>
       )}
@@ -186,12 +186,12 @@ function ContentBlock({block}: {block: any}) {
       )}
  
       {block.image3?.asset?.url && (
-        <div className="my-8">
+        <div className="my-6 md:my-10">
           <img
             src={block.image3.asset.url}
             alt={block.image3.alt || ''}
             loading="lazy"
-            className="rounded-xl shadow-lg w-full h-auto"
+            className="rounded-[12px] w-full h-auto"
           />
         </div>
       )}
@@ -201,18 +201,18 @@ function ContentBlock({block}: {block: any}) {
       )}
  
       {block.extraContent && (
-        <div className="prose prose-lg max-w-none prose-slate my-6">
+        <div className="prose prose-lg max-w-none prose-slate">
           <PortableText value={block.extraContent} />
         </div>
       )}
  
       {block.image4?.asset?.url && (
-        <div className="my-8">
+        <div className="my-6 md:my-10">
           <img
             src={block.image4.asset.url}
             alt={block.image4.alt || ''}
             loading="lazy"
-            className="rounded-xl shadow-lg w-full h-auto"
+            className="rounded-[12px] w-full h-auto"
           />
         </div>
       )}
@@ -222,12 +222,11 @@ function ContentBlock({block}: {block: any}) {
       )}
  
       {block.extraContent2 && (
-        <div className="prose prose-lg max-w-none prose-slate my-6">
+        <div className="prose prose-lg max-w-none prose-slate">
           <PortableText value={block.extraContent2} />
         </div>
       )}
     </div>
   );
 }
- 
  
