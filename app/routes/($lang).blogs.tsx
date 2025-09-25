@@ -30,9 +30,18 @@ export async function loader({context, request}: LoaderFunctionArgs) {
 
   return defer({posts, offset});
 }
-function stripHtml(html: string): string {
-  return html.replace(/<[^>]+>/g, ''); // remove all HTML tags
+function portableTextToPlainText(blocks: any[]): string {
+  if (!Array.isArray(blocks)) return "";
+  return blocks
+    .map((block) => {
+      if (block._type === "block" && Array.isArray(block.children)) {
+        return block.children.map((child) => child.text).join("");
+      }
+      return "";
+    })
+    .join("\n");
 }
+
 export default function BlogIndex() {
   const {posts: initialPosts, offset: initialOffset} = useLoaderData<typeof loader>();
   const [posts, setPosts] = useState<WPPost[]>(initialPosts);
@@ -102,7 +111,7 @@ export default function BlogIndex() {
                   <a href={`/blog/${post.slug.current}`}>
                     <h2 className="line-clamp-2 font-Roboto text-PrimaryBlack font-semibold leading-[28px] md:leading-[43.2px] text-[20px] md:text-[36px] tracking-[-0.3px] md:tracking-[-0.54px]">{post.title}</h2>
                   </a>
-                  <p className="line-clamp-2 mt-3 font-Roboto text-LightGray font-normal leading-[21px] md:leading-[27px] text-[14px] md:text-[18px] tracking-[0px]">{stripHtml(post.content).slice(0, 120)}...</p>
+                  <p className="line-clamp-2 mt-3 font-Roboto text-LightGray font-normal leading-[21px] md:leading-[27px] text-[14px] md:text-[18px] tracking-[0px]">{portableTextToPlainText(post.content).slice(0, 120)}...</p>
                 </div>
               </div>
             ))}
@@ -141,7 +150,7 @@ export default function BlogIndex() {
                     <a href={`/blog/${post.slug.current}`}>
                       <h2 className="line-clamp-2 font-Roboto text-PrimaryBlack font-semibold leading-[28px] md:leading-[31.2px] text-[20px] md:text-[24px] tracking-[-0.3px] md:tracking-[-0.36px]">{post.title}</h2>
                     </a>
-                    <p className="line-clamp-2 mt-2 font-Roboto text-LightGray font-normal leading-[21px] md:leading-[24px] text-[14px] md:text-[16px] tracking-[0px]">{stripHtml(post.content).slice(0, 120)}...</p>
+                    <p className="line-clamp-2 mt-2 font-Roboto text-LightGray font-normal leading-[21px] md:leading-[24px] text-[14px] md:text-[16px] tracking-[0px]">{portableTextToPlainText(post.content).slice(0, 120)}...</p>
                   </div>
                 </div>
               ))}
