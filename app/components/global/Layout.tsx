@@ -14,14 +14,14 @@ export function Layout({backgroundColor, children}: LayoutProps) {
 
   return (
     <>
-      <div className="absolute left-0 top-0">
+      {/* <div className="absolute left-0 top-0">
         <a
           href="#mainContent"
           className="sr-only p-4 focus:not-sr-only focus:block"
         >
           Skip to content
         </a>
-      </div>
+      </div> */}
 
       <div
         className="max-w-screen flex min-h-screen flex-col"

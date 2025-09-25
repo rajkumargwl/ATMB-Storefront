@@ -45,6 +45,7 @@ export default function HomeHero({ hero }: Props) {
             <div className="mt-[40px] md:mt-[64px] mb-4 md:mb-5 flex items-center gap-[10px] w-full max-w-[546px] pt-[8px] md:pt-[6px] pr-[8px] md:pr-[6px] pb-[8px] md:pb-[6px] pl-[16px] md:pl-[20px] bg-white border border-LightGray rounded-full shadow-sm overflow-hidden">
               <SearchIconBanner />
               <input
+                id="mainContent"
                 type="text"
                 placeholder={hero.searchPlaceholder}
                 className="font-Roboto text-PrimaryBlack placeholder:text-PrimaryBlack font-normal leading-[24px] text-[16px] tracking-[0.08px] flex-1 py-[5px] md:py-[13px] focus:outline-none"

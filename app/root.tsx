@@ -254,6 +254,20 @@ export default function App() {
       </head>
       <body>
         <PreviewProvider previewConfig={preview} fallback={<PreviewLoading />}>
+           {/* 🔹 Skip link should be FIRST */}
+          <div className="absolute left-0 top-0">
+            <a
+              href="#mainContent"
+              className="sr-only p-4 focus:not-sr-only focus:block"
+              onClick={(e) => {
+                e.preventDefault();
+                const mainEl = document.getElementById("mainContent");
+                mainEl?.focus();
+              }}
+            >
+              Skip to content
+            </a>
+          </div>
           {/* 🔹 Global Header with search support */}
           <Header data={header} searchQuery={q} searchResults={searchResults} isLoggedIn={isLoggedIn} customer={customer} />
 
