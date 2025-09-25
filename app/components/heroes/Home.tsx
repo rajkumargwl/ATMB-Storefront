@@ -46,7 +46,8 @@ export default function HomeHero({ hero }: Props) {
               <SearchIconBanner />
               <input
                 type="text"
-                placeholder={hero.searchPlaceholder}
+                id="mainContent" 
+                placeholder={hero.searchPlaceholder||"Address and zip"}
                 className="font-Roboto text-PrimaryBlack placeholder:text-PrimaryBlack font-normal leading-[24px] text-[16px] tracking-[0.08px] flex-1 py-[5px] md:py-[13px] focus:outline-none"
               />
               <button className="group bg-DarkOrange text-white px-[20px] md:px-[35.5px] py-[11px] md:py-[15px] font-normal leading-[14px] md:leading-[22px] text-[14px] md:text-[16px] tracking-[0.08px] rounded-full overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]">

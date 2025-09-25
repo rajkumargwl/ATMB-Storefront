@@ -713,14 +713,14 @@ export default function PricingSection({ data }: { data: PricingData }) {
 
           {/* Billing Toggle */}
           <div className="flex items-center gap-2">
-            <button
+            <span
               onClick={() => setBilling("monthly")}
               className={`font-Roboto text-PrimaryBlack font-normal leading-[21px] text-[14px] tracking-[0px] ${
                 !isYearly ? "text-PrimaryBlack" : "text-gray-500 hover:text-PrimaryBlack"
               }`}
             >
               {data?.billingToggle?.monthlyLabel}
-            </button>
+            </span>
 
             <button
               onClick={() => setBilling(isYearly ? "monthly" : "yearly")}
@@ -736,14 +736,14 @@ export default function PricingSection({ data }: { data: PricingData }) {
               />
             </button>
 
-            <button
+            <span
               onClick={() => setBilling("yearly")}
               className={`font-Roboto text-PrimaryBlack font-normal leading-[21px] text-[14px] tracking-[0px] ${
                 isYearly ? "text-PrimaryBlack" : "text-gray-500 hover:text-PrimaryBlack"
               }`}
             >
               {data?.billingToggle.yearlyLabel}
-            </button>
+            </span>
 
             <span className="font-Roboto font-normal leading-[18px] text-[12px] tracking-[0px] text-[#ffffff] bg-[#537D1B] px-2 py-1 rounded-full">
               {data?.billingToggle.discountLabel}

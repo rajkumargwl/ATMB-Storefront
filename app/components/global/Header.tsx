@@ -126,7 +126,7 @@ useEffect(() => {
               <Link to="/">
                 <img
                   src={logo.url}
-                  alt="ATMB-Logo"
+                  alt="Anytime Mailbox"
                 
                   className="w-[80px] md:w-[101px] object-contain"
                 />
@@ -282,7 +282,7 @@ useEffect(() => {
             </button>
 
             {/* Navigation */}
-            <nav className="flex flex-col space-y-4">
+            <nav className="flex flex-col space-y-4 overflow-auto">
               {menu?.map((item, idx) => (
                 <Link
                   key={idx}
@@ -452,4 +452,3 @@ useEffect(() => {
     </header>
   );
 }
-
