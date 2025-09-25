@@ -259,11 +259,7 @@ export default function App() {
             <a
               href="#mainContent"
               className="sr-only p-4 focus:not-sr-only focus:block"
-              onClick={(e) => {
-                e.preventDefault();
-                const mainEl = document.getElementById("mainContent");
-                mainEl?.focus();
-              }}
+              
             >
               Skip to content
             </a>
