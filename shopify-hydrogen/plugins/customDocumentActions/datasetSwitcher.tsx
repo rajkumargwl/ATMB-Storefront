@@ -1,5 +1,5 @@
 import {definePlugin} from 'sanity'
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import {Flex, Box} from '@sanity/ui'
 
 export const datasetSwitcherPlugin = definePlugin<{datasets: string[]}>(
@@ -8,16 +8,14 @@ export const datasetSwitcherPlugin = definePlugin<{datasets: string[]}>(
       name: 'dataset-switcher',
       studio: {
         components: {
-          layout: (props) => {
-            return (
-              <>
-                <div style={{marginRight: '1rem'}}>
-                  <DatasetSwitcher datasets={datasets} />
-                </div>
-                {props.renderDefault(props)}
-              </>
-            )
-          },
+          layout: (props) => (
+            <>
+              <div style={{marginRight: '1rem'}}>
+                <DatasetSwitcher datasets={datasets} />
+              </div>
+              {props.renderDefault(props)}
+            </>
+          ),
         },
       },
     }
@@ -25,29 +23,33 @@ export const datasetSwitcherPlugin = definePlugin<{datasets: string[]}>(
 )
 
 export function DatasetSwitcher({datasets}: {datasets: string[]}) {
-  const stored =
-    typeof window !== 'undefined'
-      ? localStorage.getItem('sanity-dataset')
-      : null
-
-  const [active, setActive] = useState<string>(stored || datasets[0])
+  const [active, setActive] = useState(datasets[0])
   const [loading, setLoading] = useState(false)
+
+  // Load from localStorage (client only)
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem('sanity-dataset')
+      if (stored && datasets.includes(stored)) {
+        setActive(stored)
+      }
+    }
+  }, [datasets])
 
   const handleSwitch = () => {
     const next = active === datasets[0] ? datasets[1] : datasets[0]
-    localStorage.setItem('sanity-dataset', next)
-    setActive(next)
-    setLoading(true)
-    setTimeout(() => {
-      window.location.reload()
-    }, 500) // short delay so toggle shows instantly before reload
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('sanity-dataset', next)
+      setActive(next)
+      setLoading(true)
+      setTimeout(() => window.location.reload(), 300)
+    }
   }
 
   const isProd = active === 'production'
 
   return (
     <Flex align="center" gap={3}>
-      {/* Toggle switch */}
       <Box
         onClick={handleSwitch}
         style={{
@@ -75,17 +77,16 @@ export function DatasetSwitcher({datasets}: {datasets: string[]}) {
         />
       </Box>
 
-      {/* Label */}
       <Box
         style={{
-            fontSize: '12px',
-            fontWeight: 'bold',
-            textTransform: 'uppercase',
-            color: isProd ? '#e63946' : '#2a9d8f',
+          fontSize: '12px',
+          fontWeight: 'bold',
+          textTransform: 'uppercase',
+          color: isProd ? '#e63946' : '#2a9d8f',
         }}
-        >
+      >
         {loading ? 'Switching…' : active}
-        </Box>
+      </Box>
     </Flex>
   )
 }
