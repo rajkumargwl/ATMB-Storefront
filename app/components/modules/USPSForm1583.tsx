@@ -37,17 +37,17 @@ export default function USPSForm1583Module({module}: Props) {
           {contentModule && <ContentModule module={contentModule} />}
         </main>
  
-        <aside className="w-full md:w-[29.5%] relative order-1 md:order-2">
-          <div className="p-6 md:py-10 md:px-8 rounded-[12px] bg-[#F6F6F6]">
+        <aside className="w-full md:w-[29.5%] md:sticky md:top-0 h-fit z-10 order-1 md:order-2">
+          <div className="p-6 md:py-[40px] md:px-8 rounded-[12px] bg-[#F6F6F6]">
             <h3 className="mb-4 font-Roboto text-LightGray font-medium leading-[28px] md:leading-[28px] text-[20px] md:text-[20px] tracking-[0px]">In This Guide</h3>
             
             {contentModule?.contentBlocks?.length > 0 ? (
               <nav>
-                <ul className="space-y-4 pl-5 font-Roboto text-DarkOrange font-medium text-[18px] leading-[27px] tracking-[0px]">
+                <ul className="space-y-4  font-Roboto text-DarkOrange font-medium text-[18px] leading-[27px] tracking-[0px]">
                   {contentModule.contentBlocks.map((block: any, index: number) => {
                     const blockTitle = getPlainText(block.textField);
                     return (
-                      <li key={block._key || index} className='list-decimal list-outside'>
+                      <li key={block._key || index} className='pl-5 indent-[-20px]'>
                         <a
                           href={`#block-${index}`}
                           className="font-Roboto text-DarkOrange font-medium text-[18px] leading-[27px] tracking-[0px]"
@@ -138,7 +138,7 @@ function ContentBlock({block}: {block: any}) {
       )}
  
       {(block.leftImage?.asset?.url || block.rightImage?.asset?.url) && (
-        <div className="my-6 md:my-10 flex flex-wrap gap-6 md:gap-[136px]">
+        <div className="my-6 md:my-[30px] flex flex-wrap gap-6 md:gap-[136px]">
           {block.leftImage?.asset?.url && (
             <div className="flex-1 min-w-[200px]">
               <img
@@ -167,7 +167,7 @@ function ContentBlock({block}: {block: any}) {
       )}
  
       {block.image2?.asset?.url && (
-        <div className="my-6 md:my-10">
+        <div className="my-6 md:my-[30px]">
           <img
             src={block.image2.asset.url}
             alt={block.image2.alt || ''}
@@ -186,7 +186,7 @@ function ContentBlock({block}: {block: any}) {
       )}
  
       {block.image3?.asset?.url && (
-        <div className="my-6 md:my-10">
+        <div className="my-6 md:my-[30px]">
           <img
             src={block.image3.asset.url}
             alt={block.image3.alt || ''}
@@ -207,7 +207,7 @@ function ContentBlock({block}: {block: any}) {
       )}
  
       {block.image4?.asset?.url && (
-        <div className="my-6 md:my-10">
+        <div className="my-6 md:my-[30px]">
           <img
             src={block.image4.asset.url}
             alt={block.image4.alt || ''}
