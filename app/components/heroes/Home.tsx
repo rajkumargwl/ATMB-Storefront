@@ -84,7 +84,7 @@ export default function HomeHero({ hero }: Props) {
                 <div
                   key={i}
                   className={clsx(
-                    'flex items-center gap-3 md:gap-2 min-w-[195px]',
+                    'flex items-center gap-3 md:gap-2 min-w-[260px] xl:min-w-[195px]',
                     i !== hero.features.length - 1 &&
                       'relative after:content-[""] after:hidden md:after:block md:after:right-0 md:after:absolute md:after:w-[1px] md:after:h-[20px] md:after:bg-LightWhite'
                   )}
