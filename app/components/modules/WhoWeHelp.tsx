@@ -110,48 +110,64 @@ export default function HomeHero({ data }: Props) {
                 : "bg-[#E6E6E6]"
             }`}
           >
+             <span className="sr-only">(scroll left)</span>
             <BlackChevron />
           </button>
 
           <div
             ref={scrollRef}
             role="tablist"
+            aria-label="Who we help categories"
             className="flex items-center justify-start gap-4 overflow-x-auto whitespace-nowrap [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none']"
           >
-            {data?.tabs?.map((tab, idx) => (
-              <button
-                key={idx}
-                role="tab"
-                
-                onClick={() => setActiveTab(tab.label)}
-                className={`px-6 py-3 rounded-full border border-LightWhite text-base font-normal leading-[24px] tracking-[0px] transition-all shrink-0 ${
-                  activeTab === tab.label
-                    ? "bg-PrimaryBlack text-white"
-                    : "bg-white text-LightGray hover:border-PrimaryBlack hover:bg-[#f3f3f3]"
-                }`}
-              >
-                {tab.label}
-              </button>
-            ))}
+            {data?.tabs?.map((tab, idx) => {
+              const isSelected = activeTab === tab.label;
+              return (
+                <button
+                  key={idx}
+                  role="tab"
+                  aria-selected={isSelected}
+                  aria-controls={`tabpanel-${idx}`}
+                  id={`tab-${idx}`}
+                  onClick={() => setActiveTab(tab.label)}
+                  className={`px-6 py-3 rounded-full border border-LightWhite text-base font-normal leading-[24px] tracking-[0px] transition-all shrink-0 ${
+                    isSelected
+                      ? "bg-PrimaryBlack text-white"
+                      : "bg-white text-LightGray hover:border-PrimaryBlack hover:bg-[#f3f3f3]"
+                  }`}
+                >
+                   {isSelected && (
+                      <span className="sr-only">(selected tab is)</span>
+                    )}
+                   
+                  {tab.label}
+                </button>
+              );
+            })}
           </div>
 
           <button
-  onClick={scrollRight}
-  className={`w-10 h-10 hidden md:flex items-center justify-center rounded-full shrink-0 ${
-    canScrollRight ? "bg-DarkOrange text-white" : "bg-[#E6E6E6] text-black"
-  }`}
-  disabled={!canScrollRight} // optional, prevents click when inactive
->
-  {canScrollRight ? <WhiteChevron /> : <BlackwhiteChevron />}
-</button>
-
+            onClick={scrollRight}
+            className={`w-10 h-10 hidden md:flex items-center justify-center rounded-full shrink-0 ${
+              canScrollRight ? "bg-DarkOrange text-white" : "bg-[#E6E6E6] text-black"
+            }`}
+            
+            disabled={!canScrollRight} // optional, prevents click when inactive
+          ><span className="sr-only">(scroll right )</span>
+            {canScrollRight ? <WhiteChevron /> : <BlackwhiteChevron />}
+          </button>
         </div>
 
         {/* Content Grid */}
         {activeData && (
           <div className="flex flex-col md:flex-row gap-[40px] lg:gap-[124px] max-w-[1214px] mx-auto pt-[44px] md:pt-[56px]">
             {/* Left Content */}
-            <div className="w-full md:w-[57%]">
+            <div 
+              id={`tabpanel-${data?.tabs?.findIndex((t) => t.label === activeTab)}`}
+              role="tabpanel"
+              aria-labelledby={`tab-${data?.tabs?.findIndex((t) => t.label === activeTab)}`}
+              className="w-full md:w-[57%]"
+            >
               <h3 className="font-Roboto text-PrimaryBlack font-semibold leading-[28px] md:leading-[31.2px] text-[20px] md:text-[24px] tracking-[-0.3px] md:tracking-[-0.36px] mb-3 md:mb-4">
                 {activeData.heading}
               </h3>
@@ -261,7 +277,8 @@ export default function HomeHero({ data }: Props) {
 
               {activeData.button?.label && (
                 <button className="group flex items-center justify-center md:max-w-[386px] mt-6 w-full bg-DarkOrange text-white font-medium font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[14px] md:py-[18px] rounded-full overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]">
-                  <span className="relative flex items-center"> {activeData.button.label}  <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
+                  
+                  <span className="relative flex items-center"> {activeData.button.label} <span className="sr-only">(Explore More services)</span> <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
                     <RightArrowWhite />
                   </span></span>               
                 </button>
