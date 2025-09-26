@@ -359,7 +359,7 @@ export default function PricingSection({ data }: { data: PricingData }) {
                         <span className={`arrow-show absolute right-0 opacity-0 translate-x-[-8px] transition-all duration-300 ${
                           isBundlesTab ? "text-white" : ""
                         }`}>
-                           <span className="sr-only">(Click to Buy this Product)</span>
+                           <span className="sr-only">(Click to Buy this Product) {plan.title}</span>
                           {isBundlesTab ? (
                             <span className="text-white">→</span>
                           ) : (
