@@ -324,6 +324,7 @@ export default function Testimonials({ data }: Props) {
                         href={item.readMoreUrl || "#"}
                         className="font-Roboto text-DarkOrange text-[14px] leading-[14px] tracking-[0.07px] font-normal mt-4 inline-block"
                       >
+                         <span className="sr-only">(click to Read Full Article)</span>
                         {item.readMoreText}
                       </a>
                     )}
@@ -379,6 +380,7 @@ export default function Testimonials({ data }: Props) {
                               <div className="bg-[#FFFFFFB2] rounded-full p-2 shadow-lg flex items-center justify-center">
                                 <img src={item.playIcon.url} alt="Play Icon" className="w-10 h-10" />
                               </div>
+                               <span className="sr-only">(click to play video)</span>
                             </button>
                           </div>
                         )}

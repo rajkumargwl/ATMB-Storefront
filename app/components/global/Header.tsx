@@ -114,7 +114,13 @@ useEffect(() => {
   return () => window.removeEventListener("message", handleMessage);
 }, []);
 
-
+useEffect(() => {
+  if (isMobileMenuOpen) {
+    document.body.classList.add("no-scroll");
+  } else {
+    document.body.classList.remove("no-scroll");
+  }
+}, [isMobileMenuOpen]);
 
 
   return (
