@@ -722,19 +722,27 @@ export default function PricingSection({ data }: { data: PricingData }) {
               {data?.billingToggle?.monthlyLabel}
             </span>
 
-            <button
-              onClick={() => setBilling(isYearly ? "monthly" : "yearly")}
-              className={`relative h-[22px] w-10 rounded-full transition ${
-                isYearly ? "bg-[#ff6600]" : "bg-[#BFBFBF]"
-              }`}
-              aria-label="Toggle billing cycle"
-            >
-              <span
-                className={`absolute top-[2px] left-[2px] h-[18px] w-[18px] rounded-full bg-white shadow transition-transform ${
-                  isYearly ? "translate-x-[18px]" : ""
-                }`}
-              />
-            </button>
+       <button
+  onClick={() => setBilling(isYearly ? "monthly" : "yearly")}
+  className={`relative h-[22px] w-10 rounded-full transition ${
+    isYearly ? "bg-[#ff6600]" : "bg-[#BFBFBF]"
+  }`}
+  role="switch"
+  aria-checked={isYearly}
+  aria-label="Toggle billing cycle"
+>
+  <span
+    className={`absolute top-[2px] left-[2px] h-[18px] w-[18px] rounded-full bg-white shadow transition-transform ${
+      isYearly ? "translate-x-[18px]" : ""
+    }`}
+  />
+</button>
+
+{/* 🔊 Live announcement */}
+<span className="sr-only" aria-live="assertive">
+  Billing cycle is now {isYearly ? "Yearly" : "Monthly"}
+</span>
+
 
             <span
               onClick={() => setBilling("yearly")}
