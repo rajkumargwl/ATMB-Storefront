@@ -1,8 +1,9 @@
+
 // /queries/sanity/header.ts
 import groq from "groq";
-
+ 
 export const HEADER_QUERY = groq`
-*[_type == "header"][0]{
+*[_type == "header"]  | order(_updatedAt desc)[0]{
   logo{
     "url": asset->url
   },
@@ -21,3 +22,4 @@ export const HEADER_QUERY = groq`
   getStartedButton{ label, link }
 }
 `;
+ 

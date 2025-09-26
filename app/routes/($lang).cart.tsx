@@ -170,7 +170,7 @@ export default function Cart() {
                   <p className="mb-8">Looks like you haven't added anything to your cart yet.</p>
                   <a
                     href="/"
-                    className="inline-block rounded bg-blue-600 px-6 py-3 text-white hover:bg-blue-700"
+                    className="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600"
                   >
                     Continue Shopping
                   </a>
