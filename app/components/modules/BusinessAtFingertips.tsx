@@ -467,7 +467,7 @@ export default function BusinessAtFingerips({ data }: Props) {
                     <img
                       src={item.icon?.iconFile?.url || ""}
                       alt={item.title}
-                      className="w-5 md:w-6 h-5 md:h-6 object-cover rounded-lg"
+                      className="w-5 md:w-6 h-5 md:h-6 object-cover "
                     />
                   </div>
                   {/* Title */}

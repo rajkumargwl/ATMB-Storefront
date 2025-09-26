@@ -116,6 +116,7 @@ useEffect(() => {
 
 
 
+
   return (
     <header className="w-full bg-white px-5 border-b border-LightWhite lg:border-none">
       <div className="max-w-[1240px] mx-auto flex items-center justify-between py-5">
@@ -126,7 +127,7 @@ useEffect(() => {
               <Link to="/">
                 <img
                   src={logo.url}
-                  alt="ATMB-Logo"
+                  alt="Anytime Mailbox"
                 
                   className="w-[80px] md:w-[101px] object-contain"
                 />
@@ -282,7 +283,7 @@ useEffect(() => {
             </button>
 
             {/* Navigation */}
-            <nav className="flex flex-col space-y-4">
+            <nav className="flex flex-col space-y-4 overflow-auto">
               {menu?.map((item, idx) => (
                 <Link
                   key={idx}
@@ -411,7 +412,7 @@ useEffect(() => {
         </div>
       </div>
 
-      {/* Results List */} gdgdgd
+      {/* Results List */}
       {query && (
         <div className="md:pt-2">
           <div className="bg-white border-t md:border border-LightWhite md:rounded-[20px] shadow-md w-full p-5">
@@ -452,4 +453,3 @@ useEffect(() => {
     </header>
   );
 }
-

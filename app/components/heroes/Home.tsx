@@ -46,7 +46,8 @@ export default function HomeHero({ hero }: Props) {
               <SearchIconBanner />
               <input
                 type="text"
-                placeholder={hero.searchPlaceholder}
+                id="mainContent" 
+                placeholder={hero.searchPlaceholder||"Address and zip"}
                 className="font-Roboto text-PrimaryBlack placeholder:text-PrimaryBlack font-normal leading-[24px] text-[16px] tracking-[0.08px] flex-1 py-[5px] md:py-[13px] focus:outline-none"
               />
               <button className="group bg-DarkOrange text-white px-[20px] md:px-[35.5px] py-[11px] md:py-[15px] font-normal leading-[14px] md:leading-[22px] text-[14px] md:text-[16px] tracking-[0.08px] rounded-full overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]">
@@ -83,7 +84,7 @@ export default function HomeHero({ hero }: Props) {
                 <div
                   key={i}
                   className={clsx(
-                    'flex items-center gap-3 md:gap-2 min-w-[195px]',
+                    'flex items-center gap-3 md:gap-2 min-w-[260px] xl:min-w-[195px]',
                     i !== hero.features.length - 1 &&
                       'relative after:content-[""] after:hidden md:after:block md:after:right-0 md:after:absolute md:after:w-[1px] md:after:h-[20px] md:after:bg-LightWhite'
                   )}
