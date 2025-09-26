@@ -182,6 +182,7 @@ export default function LocationsPage() {
   const {locations, header, footer} = useLoaderData<typeof loader>();
   const [selectedCity, setSelectedCity] = useState<string>('');
   const [searchCity, setSearchCity] = useState<string>('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<LocationAPI | null>(
     locations[0] || null,
   );
@@ -272,6 +273,7 @@ export default function LocationsPage() {
 
     filtered.forEach((loc) => {
       console.log(loc.latitude, loc.longitude);
+      console.log(loc.featureList);
       if (loc.latitude && loc.longitude) {
         const marker = new google.maps.Marker({
           position: {lat: loc.latitude, lng: loc.longitude},
@@ -395,7 +397,7 @@ export default function LocationsPage() {
           </h1>
 
           {/* City Dropdown + Filter Icon */}
-          <div className="flex items-center  justify-between gap-3 mb-4 md:mb-6">
+          {/* <div className="flex items-center  justify-between gap-3 mb-4 md:mb-6">
              <div className="flex items-center justify-between gap-3 w-full">  
               <button className="rounded-full md:border md:border-LightWhite p-2 md:p-[11px]"
                onClick={() => navigate("/")}>
@@ -446,12 +448,96 @@ export default function LocationsPage() {
               <span className='hidden md:flex font-Roboto text-PrimaryBlack font-normal text-[16px] leading-[24px] tracking-[0px]'>Filters</span>
             </div>
             
-          </div>
+          </div> */}
+ <div className="flex items-center justify-between gap-3 mb-4 md:mb-6">
+  <div className="flex items-center gap-3 w-full relative">  
+    <button
+      className="rounded-full md:border md:border-LightWhite p-2 md:p-[11px]"
+      onClick={() => navigate("/")}
+    >
+      <LeftArrowBlack />
+    </button>  
+
+    <div className="flex flex-col w-full relative">
+  <div className="flex items-center gap-[10px] w-full rounded-full border border-LightWhite py-[4px] md:py-[3px] pl-3 md:pl-4 pr-[4px] md:pr-[3px] shadow-[0_6px_24px_0_rgba(0,0,0,0.05)] md:shadow-none bg-white">
+    <input
+      type="text"
+      value={searchCity}
+      onChange={(e) => {
+        setSearchCity(e.target.value);
+        setShowSuggestions(true); // show suggestions when typing
+      }}
+      placeholder="Type a city"
+      className="flex-1 py-[3px] md:py-2 bg-white font-Roboto text-PrimaryBlack font-normal text-[14px] md:text-[16px] leading-[20px] md:leading-[24px] tracking-[0px] border-none outline-none"
+    />
+    {searchCity && (
+      <button
+        className="flex"
+        onClick={() => {
+          setSelectedCity("");
+          setSearchCity("");
+          setShowSuggestions(false); // hide suggestions when cleared
+        }}
+      >
+        <CloseIconBlack />
+      </button>
+    )}
+    <button
+      className="flex items-center justify-center min-w-[32px] md:min-w-[48px] w-[32px] md:w-12 h-[32px] md:h-12 bg-DarkOrange rounded-full"
+      onClick={() => setSelectedCity(searchCity)}
+    >
+      <img
+        src={SearchWhite}
+        alt="Logo"
+        className="w-[16px] md:w-[21px] h-[16px] md:h-[21px] object-contain"
+      />
+    </button>
+  </div>
+
+  {/* Autocomplete suggestions */}
+  {showSuggestions && searchCity && cities.filter(city =>
+      city.toLowerCase().includes(searchCity.toLowerCase())
+    ).length > 0 && (
+    <ul className="absolute z-50 w-full bg-white border border-LightWhite rounded-b-md max-h-40 overflow-y-auto mt-12 shadow-md">
+      {cities
+        .filter((city) =>
+          city.toLowerCase().includes(searchCity.toLowerCase())
+        )
+        .map((city) => (
+          <li
+            key={city}
+            className="px-3 py-2 cursor-pointer hover:bg-gray-100"
+            onClick={() => {
+              setSearchCity(city);
+              setSelectedCity(city);
+              setShowSuggestions(false); // hide suggestions on select
+            }}
+          >
+            {city}
+          </li>
+        ))}
+    </ul>
+  )}
+</div>
+  </div>
+
+  <div className="flex items-center gap-[10px] px-[9px] md:px-4 py-[9px] md:py-3 border border-LightWhite rounded-full">
+    <button onClick={() => setShowFilters(true)}>
+      {/* SVG Icon */}
+    </button>
+    <span className="hidden md:flex font-Roboto text-PrimaryBlack font-normal text-[16px] leading-[24px] tracking-[0px]">
+      Filters
+    </span>
+  </div>
+</div>
+
+
 
           <p className="font-Roboto text-PrimaryBlack font-normal text-[14px] leading-[21px] tracking-[0px] mb-4">{filtered.length} locations found</p>
 
           {/* Locations List */}
           <div className="space-y-4 max-h-[605px] overflow-y-auto">
+           
             {filtered.map((loc) => (
               <div
                 key={loc._id}
@@ -522,16 +608,15 @@ export default function LocationsPage() {
                   </div>                 
 
                 </div>
-               
-
-                
 
                 {/* Feature Icons */}
                 <div className="flex flex-col md:flex-row md:justify-between mt-4">
-                <div className="hidden flex-wrap gap-4 text-sm text-gray-700">
+                <div className="flex-wrap gap-4 text-sm text-gray-700">
+                  
                   {loc.featureList?.slice(0, 3).map((feature) => (
+                    
                     <div
-                      key={feature.feature_id}
+                      key={loc._id + feature.label}
                       className="flex items-center gap-3 font-Roboto text-PrimaryBlack font-normal text-[14px] leading-[21px] tracking-[0px]"
                     >
                       <span className='flex items-center w-[20px] h-[20px]'><Map /> </span> {feature.label}
@@ -546,7 +631,7 @@ export default function LocationsPage() {
 
                 <div className="flex items-center flex-wrap gap-3 relative">
                     {/* Show first 3 */}
-                    {visibleItems.map((service, idx) => (
+                    {/* {visibleItems.map((service, idx) => (
                       <div key={idx} className="flex items-center gap-2 font-Roboto text font-normal text-[14px] leading-[21px] tracking-[0px]">
                          <img
                           src={Location}
@@ -555,10 +640,10 @@ export default function LocationsPage() {
                         />
                                 <span className='font-Roboto text-PrimaryBlack font-normal text-[14px] leading-[21px] tracking-[0px]'>{service.name}</span>
                       </div>
-                    ))}
+                    ))} */}
 
                     {/* +N button */}
-                    {hiddenItems.length > 0 && (
+                    {/* {hiddenItems.length > 0 && (
                       <div className="relative">
                         <button
                           onClick={() => setShowMore(!showMore)}
@@ -569,10 +654,10 @@ export default function LocationsPage() {
                               }`}
                         >
                           +{hiddenItems.length}
-                        </button>
+                        </button> */}
 
                         {/* Popover */}
-                        {showMore && (
+                        {/* {showMore && (
                           <div className="absolute left-[-75px] bottom-10 min-w-[184px] bg-PrimaryBlack rounded-[12px] p-4 z-10 flex flex-col gap-3">
                             {hiddenItems.map((service, idx) => (
                               <div key={idx} className="flex items-center gap-2 text-sm hover:bg-gray-100 rounded-md cursor-pointer">
@@ -587,7 +672,7 @@ export default function LocationsPage() {
                           </div>
                         )}
                       </div>
-                    )}
+                    )} */}
                   </div>
 
                 {/* CTA Button */}
