@@ -51,12 +51,12 @@ export default function AboutCompanySection({
                 value={item.description}
                 components={{
                   block: ({ children }) => (
-                    <p className="text-[16px] text-[#091019] leading-[24px] font-[500]">
+                    <p className="text-[16px] text-[#091019] leading-[24px] font-[400]">
                       {children}
                     </p>
                   ),
                   marks: {
-                    strong: ({ children }) => <strong className="font-bold">{children}</strong>,
+                    strong: ({ children }) => <strong className="font-[500]">{children}</strong>,
                     em: ({ children }) => <em className="italic">{children}</em>,
                     underline: ({ children }) => <span className="underline">{children}</span>,
                   },
