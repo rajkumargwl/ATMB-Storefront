@@ -87,6 +87,7 @@ import {faqPageModule} from './objects/module/faqPageModule'
 import { uspsForm1583Type } from './objects/module/uspsForm1583Type'
 import { uspsForm1583Guide } from './objects/module/uspsForm1583Guide'
 import { uspsForm1583Content } from "./objects/module/uspsForm1583Content"
+import {contactUsSection} from './objects/module/contactUsSection'
 // Objects used as annotations must be imported first
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
 
@@ -171,7 +172,8 @@ whyChooseVirtualMailbox,
   faqPageModule,
   uspsForm1583Type,
 uspsForm1583Guide,
-uspsForm1583Content
+uspsForm1583Content,
+contactUsSection
 ]
 
 import {portableTextType} from './portableText/portableTextType'

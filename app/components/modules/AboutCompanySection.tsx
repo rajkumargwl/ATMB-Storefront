@@ -1,3 +1,5 @@
+import {PortableText} from '@portabletext/react';
+
 type AboutCompanySectionProps = {
   title: string;
   subtitle?: string;
@@ -44,7 +46,22 @@ export default function AboutCompanySection({
                   <span className="hidden w-[1px] md:w-full h-full md:h-[1px] bg-LightWhite flex"></span>
                  </div>
               )}
-              <p className="text-[16px] text[#091019] leading-[24px] font-[500]">{item.description}</p>
+              {/* <p className="text-[16px] text[#091019] leading-[24px] font-[500]"></p> */}
+              <PortableText
+                value={item.description}
+                components={{
+                  block: ({ children }) => (
+                    <p className="text-[16px] text-[#091019] leading-[24px] font-[400]">
+                      {children}
+                    </p>
+                  ),
+                  marks: {
+                    strong: ({ children }) => <strong className="font-[500]">{children}</strong>,
+                    em: ({ children }) => <em className="italic">{children}</em>,
+                    underline: ({ children }) => <span className="underline">{children}</span>,
+                  },
+                }}
+              />
             </div>
           ))}
         </div>
