@@ -13,13 +13,13 @@ export default function FAQSection({
 }: FAQSectionProps) {
   return (
     <section className="bg-[#F6F6F6] text-gray-900 py-14">
-      <div className="max-w-[1240px] mx-auto px-4 md:px-0 grid md:grid-cols-2 gap-8 items-center">
+      <div className="max-w-[1240px] mx-auto  max-1265px:px-4 grid lg:grid-cols-2 items-center">
         {/* Left: Text Content */}
         <div>
           {label && (
             <p className="font-Roboto text-[#4D4E4F] font-medium leading-[28px] text-[20px]">{label}</p>
           )}
-          <h2 className="mt-6 font-Roboto text-PrimaryBlack font-semibold text-[28px] leading-[36px] tracking-[-0.4px]  sm:text-[32px] sm:leading-[42px] sm:tracking-[-0.48px]  max-w-[523px]">{title}</h2>
+          <h1 className="mt-5 font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] tracking-[-0.36px] text-[24px] lg:text-[36px] lg:leading-[43.2px] lg:tracking-[-0.54px]">{title}</h1>
           {subtitle && (
             <p className="text-lg text-gray-600">{subtitle}</p>
           )}
@@ -27,11 +27,11 @@ export default function FAQSection({
 
         {/* Right: Image */}
         {image?.url && (
-          <div className="flex justify-center md:justify-end">
+          <div className="flex justify-center lg:justify-end">
             <img
               src={image.url}
               alt={image.alt || "FAQ image"}
-              className="rounded-lg shadow-md max-w-full h-auto"
+              className="rounded-lg shadow-md w-full h-auto lg:max-w-[611px] lg:h-[400px] object-cover"
             />
           </div>
         )}
