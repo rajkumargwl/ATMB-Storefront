@@ -11,7 +11,6 @@ import {imageHotspotArrayPlugin} from 'sanity-plugin-hotspot-array'
 import {media, mediaAssetSource} from 'sanity-plugin-media'
 import {customDocumentActions} from './plugins/customDocumentActions'
 import Navbar from './components/studio/Navbar'
-import {CustomLayout} from './plugins/customDocumentActions/customFooter'
 
 const devOnlyPlugins = [visionTool()]
 
@@ -32,6 +31,7 @@ export default defineConfig({
     imageHotspotArrayPlugin(),
     customDocumentActions(),
     media(),
+    datasetSwitcherPlugin({datasets: ['production', 'development']}), 
     ...(isDev ? devOnlyPlugins : []),
   ],
 
@@ -54,8 +54,7 @@ export default defineConfig({
 
   studio: {
     components: {
-      // navbar: Navbar,
-      layout: CustomLayout,
+      navbar: Navbar,
     },
   },
 })
