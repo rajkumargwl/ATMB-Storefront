@@ -5,6 +5,7 @@ type Feature = {
   icon?: {
     url?: string;
   };
+  tooltipTitle?: string; // ADD THIS
 };
 
 type Props = {
@@ -31,6 +32,7 @@ export default function AboutFeaturesSection({ backgroundColor, features }: Prop
                 src={feature.icon.url}
                 alt={feature.title}
                 className="w-10 h-10"
+     title={feature.tooltipTitle} 
               />
             )}
             <h3 className="font-semibold text-white text-lg">

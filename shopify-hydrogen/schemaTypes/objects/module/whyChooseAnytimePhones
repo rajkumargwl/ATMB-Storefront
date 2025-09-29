@@ -43,6 +43,13 @@ export const whyChooseAnytimePhones = defineType({
               type: "image",
               options: { hotspot: true },
             },
+               {
+          name: "tooltipTitle",
+          title: "Tooltip Title",
+          type: "string",
+          description: "Title that appears on hover (tooltip) for this icon",
+        },
+          
             {
               name: "title",
               title: "Feature Title",

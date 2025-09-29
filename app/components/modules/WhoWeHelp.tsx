@@ -234,7 +234,7 @@ export default function HomeHero({ data }: Props) {
                             <img
                               src={service.icon.upload.url}
                               alt={service.icon.upload.altText || service.title}
-                              className="w-[28px] h-[28px] object-contain"
+                              className="w-[28px] h-[28px] object-contain" title={service.icon?.tooltipTitle}
                             />
                           ) : (
                             <span className="w-[28px] h-[28px] block" />

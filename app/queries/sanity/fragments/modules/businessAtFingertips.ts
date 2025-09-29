@@ -1,5 +1,5 @@
-import groq from 'groq';
 
+import groq from 'groq';
 
 export const BUSINESS_AT_FINGERTIPS = groq`
   headline,
@@ -13,7 +13,9 @@ export const BUSINESS_AT_FINGERTIPS = groq`
       iconFile {
         "url": asset->url,
         originalFilename
-      }
+      },
+   
+      tooltipTitle // ADD THIS LINE
     },
     title,
     description,

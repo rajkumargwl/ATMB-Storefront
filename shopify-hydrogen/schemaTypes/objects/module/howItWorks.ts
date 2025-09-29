@@ -44,6 +44,13 @@ export const howItWorks = defineType({
               options: { hotspot: true },
             },
             {
+          name: "tooltipTitle",
+          title: "Tooltip Title",
+          type: "string",
+          description: "Title that appears on hover (tooltip) for this icon",
+        },
+
+            {
               name: 'title',
               title: 'Step Title',
               type: 'string',
