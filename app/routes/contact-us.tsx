@@ -37,7 +37,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
   const page = await context.sanity.query({
     query: CONTACT_US_PAGE_QUERY,
   });
-  console.log("pageeeeeeeeee", JSON.stringify(page, null, 2));
+ 
 
   // If no page found in Sanity
   if (!page) throw notFound();
