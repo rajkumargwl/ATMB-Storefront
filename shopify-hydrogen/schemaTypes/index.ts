@@ -88,6 +88,11 @@ import { uspsForm1583Type } from './objects/module/uspsForm1583Type'
 import { uspsForm1583Guide } from './objects/module/uspsForm1583Guide'
 import { uspsForm1583Content } from "./objects/module/uspsForm1583Content"
 import {contactUsSection} from './objects/module/contactUsSection'
+import {affiliateProgramSection} from './objects/module/affiliateProgramSection'
+import {whyJoinSection} from './objects/module/whyJoinSection'
+import {stepsSection} from './objects/module/stepsSection'
+import {affiliatedProgramPageModule} from './objects/module/affiliatedProgramPageModule'
+
 // Objects used as annotations must be imported first
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
 
@@ -173,7 +178,13 @@ whyChooseVirtualMailbox,
   uspsForm1583Type,
 uspsForm1583Guide,
 uspsForm1583Content,
-contactUsSection
+contactUsSection,
+  // Affiliate Program Page Modules
+  affiliateProgramSection,
+  whyJoinSection,
+  stepsSection,
+  affiliatedProgramPageModule,
+
 ]
 
 import {portableTextType} from './portableText/portableTextType'
