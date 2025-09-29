@@ -9,9 +9,27 @@ type FooterProps = {
     companyColumn?: { title?: string; links?: { label: string; link?: string }[] };
     servicesColumn?: { title?: string; links?: { label: string; link?: string }[] };
     locationsColumn?: { title?: string; links?: { label: string; link?: string; highlight?: boolean }[] };
-    contactColumn?: { title?: string; links?: { label: string; value?: string; link?: string }[] };
-    appButtons?: { icon?: { asset?: { url?: string } }; link?: string }[];
-    socialLinks?: { icon?: { asset?: { url?: string } }; link?: string }[];
+    contactColumn?: { 
+      title?: string; 
+      address?: string;
+      links?: { 
+        icon?: { asset?: { url?: string } }; 
+        label: string; 
+        value?: string;
+        link?: string;
+        tooltipTitle?: string; // ADD THIS
+      }[] 
+    };
+    appButtons?: { 
+      icon?: { asset?: { url?: string } }; 
+      link?: string;
+      tooltipTitle?: string; // ADD THIS
+    }[];
+    socialLinks?: { 
+      icon?: { asset?: { url?: string } }; 
+      link?: string;
+      tooltipTitle?: string; // ADD THIS
+    }[];
     bottomLinks?: { label: string; link?: string }[];
   };
 };
@@ -50,7 +68,9 @@ export default function Footer({ data }: FooterProps) {
                         src={btn.icon.asset.url}
                         alt="App button"
                         className="h-10"
+                        title={btn.tooltipTitle}
                       />
+
                     )}
                   </a>
                 ))}
@@ -190,8 +210,9 @@ export default function Footer({ data }: FooterProps) {
                       {item?.icon?.asset?.url && (
                       <img
                         src={item.icon.asset.url}
-                        alt="App button"
+                        alt={item.label}
                         className="w-[24px]"
+ title={item.tooltipTitle} 
                       />
                     )}
                       {item?.link ? (
@@ -268,6 +289,7 @@ export default function Footer({ data }: FooterProps) {
                     src={social.icon.asset.url}
                     alt="Social"
                     className="h-6 w-6"
+  title={social.tooltipTitle} 
                   />
                 )}
               </a>

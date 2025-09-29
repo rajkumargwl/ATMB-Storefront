@@ -14,7 +14,8 @@ export const WHY_BUSINESS_CHOOSE_US = groq`
         altText,
         
       },
-      svgCode
+      svgCode,
+       tooltipTitle 
     }
   }
 `;
