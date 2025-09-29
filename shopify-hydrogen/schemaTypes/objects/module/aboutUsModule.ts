@@ -14,7 +14,8 @@ export const aboutUsModule = defineType({
         {type: 'aboutFeaturesSection'},       
         {type: 'aboutDetailedFeaturesSection'},
         {type: 'aboutFoundersSection'},
-        {type: 'aboutResourceAuthorsSection'}
+        {type: 'aboutResourceAuthorsSection'},
+        {type: 'coreValuesSection'}, 
       ],
     }),
   ],
