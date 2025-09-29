@@ -88,6 +88,7 @@ export const pageType = defineType({
           { type: 'careersPageModule' },
           { type: 'faqPageModule' },
             { type: 'uspsForm1583' },
+             {type: 'contactUsSection'},
           
         // add more modules if needed
       ],
