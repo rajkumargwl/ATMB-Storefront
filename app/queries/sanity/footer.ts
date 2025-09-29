@@ -34,7 +34,8 @@ export const FOOTER_QUERY = `*[_type == "footer"] | order(_updatedAt desc)[0] {
         url
       }
     },
-    link
+    link,
+    tooltipTitle // ADD THIS
   },
   socialLinks[] {
     icon {
@@ -42,12 +43,22 @@ export const FOOTER_QUERY = `*[_type == "footer"] | order(_updatedAt desc)[0] {
         url
       }
     },
-    link
+    link,
+    tooltipTitle // ADD THIS
   },
-    contactColumn{
+  contactColumn{
     title,
     address,
-    links[]{icon{asset->{url}}, label, link}
+    links[]{
+      icon{
+        asset->{
+          url
+        }
+      }, 
+      label, 
+      link,
+      tooltipTitle // ADD THIS
+    }
   },
   bottomLinks[] {
     label,

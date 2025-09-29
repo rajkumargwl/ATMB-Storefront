@@ -221,7 +221,8 @@ export default function PricingSection({ data }: { data: PricingData }) {
                           isBundlesTab ? "border-[#E5E5E5] bg-[#F9F9F9]" : "border-[#DCDCDC]"
                         } flex items-center justify-center bg-[#F6F6F6] group-hover:bg-DarkOrange group-hover:border-DarkOrange`}>
                           {plan.icon?.svgFile?.asset?.url ? (
-                            <img src={plan.icon.svgFile.asset.url} alt={plan.title} className="w-6 h-6 bg-Dark transition-all  group-hover:invert" />
+                            <img src={plan.icon.svgFile.asset.url} alt={plan.title} className="w-6 h-6 bg-Dark transition-all  group-hover:invert  "title={plan.icon?.tooltipTitle}   />
+                            
                           ) : (
                             <span className="text-xs text-gray-500">Icon</span>
                           )}

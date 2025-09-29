@@ -90,6 +90,12 @@ export const homeSection3 = defineType({
                           type: 'text',
                           description: 'Paste raw SVG markup if no upload',
                         },
+                          {
+          name: "tooltipTitle",
+          title: "Tooltip Title",
+          type: "string",
+          description: "Title that appears on hover (tooltip) for this icon",
+        },
                       ],
                     },
                     {name: 'title', title: 'Service Title', type: 'string'},

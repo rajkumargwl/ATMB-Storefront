@@ -28,6 +28,13 @@ export const aboutFeaturesSection = defineType({
               type: 'image',
               options: {hotspot: true},
             }),
+              defineField({
+                      name: "tooltipTitle",
+                      title: "Tooltip Title",
+                      type: "string",
+                      description: "Title that appears on hover (tooltip) for this icon",
+                    }),
+            
             defineField({
               name: 'title',
               title: 'Title',
