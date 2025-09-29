@@ -8,6 +8,7 @@ interface Feature {
       url: string;
     };
   };
+  tooltipTitle?: string; // ADD THIS
 }
 
 interface FeaturesModuleProps {
@@ -43,7 +44,7 @@ const FeaturesModule: React.FC<FeaturesModuleProps> = ({ label, title, features 
         : "bg-white text-black hover:shadow-lg"
     }`}
   >
-    <img src={feature.icon.asset.url} alt={feature.title} className="w-8 h-8 mb-3" />
+    <img src={feature.icon.asset.url} alt={feature.title} className="w-8 h-8 mb-3"  title={feature.tooltipTitle}/>
     <h3 className="font-semibold">{feature.title}</h3>
     <p className="text-sm">{feature.description}</p>
   </div>

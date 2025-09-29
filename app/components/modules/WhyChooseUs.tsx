@@ -32,6 +32,7 @@ const WhyChooseUs = ({ data }) => {
                       src={feature.icon.asset.url} 
                       alt={feature.title} 
                       className="w-12 h-12 object-contain"
+                      title={feature.tooltipTitle} // Browser tooltip
                     />
                   </div>
                 )}
