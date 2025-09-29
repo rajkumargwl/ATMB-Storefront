@@ -29,7 +29,7 @@ export default function FAQWithCategory({ categories }: FAQWithCategoryProps) {
     <section className="bg-white text-gray-900 md:py-25 py-10">
       <div className="max-w-4xl mx-auto px-4">
         {/* Tabs */}
-        <div className="flex overflow-x-auto gap-3 mb-11 scrollbar-hide border-LightWhite">
+        <div className="flex overflow-x-auto gap-3 mb-11 scrollbar-hide border-LightWhite" role="tablist">
           {categories.map((cat, idx) => (
             <button
               key={idx}
@@ -42,6 +42,10 @@ export default function FAQWithCategory({ categories }: FAQWithCategoryProps) {
                   ? "bg-PrimaryBlack text-white"
                   : "bg-white text-LightGray hover:border-PrimaryBlack hover:bg-[#f3f3f3]"
               }`}
+              role="tab"
+              aria-selected={activeCategory === idx}
+              aria-controls={`tabpanel-${idx}`}
+              tabIndex={activeCategory === idx ? 0 : -1}
             >
               {cat.title}
             </button>
@@ -65,6 +69,9 @@ export default function FAQWithCategory({ categories }: FAQWithCategoryProps) {
                   <button
                     onClick={() => setOpenIndex(isOpen ? null : idx)}
                     className="w-full flex justify-between items-center text-left gap-6"
+                    aria-expanded={isOpen}
+                    aria-controls={`faq-content-${idx}`}
+                    id={`faq-header-${idx}`}
                   >
                     <span className="font-Roboto font-medium leading-[28px] text-[20px] text-PrimaryBlack">
                       {faq.question}
@@ -87,6 +94,9 @@ export default function FAQWithCategory({ categories }: FAQWithCategoryProps) {
                         : "0px",
                     }}
                     className="transition-[max-height] duration-500 ease-in-out overflow-hidden"
+                    id={`faq-content-${idx}`}
+                    role="region"
+                    aria-labelledby={`faq-header-${idx}`}
                   >
                     <p className="pt-4 font-Roboto text-PrimaryBlack font-normal leading-[24px] text-[16px]">
                       {faq.answer}
