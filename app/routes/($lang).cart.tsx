@@ -25,7 +25,7 @@ import {
   redirect,
 } from '@shopify/remix-oxygen';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
-import {PRODUCT_QUERY} from '~/queries/shopify/product';
+import {PRODUCT_QUERY, ALL_PRODUCTS_QUERY} from '~/queries/shopify/product';
 import {notFound} from '~/lib/utils';
 import {isLocalPath} from '~/lib/utils';
 import invariant from 'tiny-invariant';
@@ -112,7 +112,7 @@ export async function action({request, context}: ActionFunctionArgs) {
   );
 }
 export async function loader({context}: LoaderFunctionArgs) {
-  const [virtualMailbox, virtualPhone, BusinessAcc] = await Promise.all([
+  const [virtualMailbox, virtualPhone, BusinessAcc,AllProducts] = await Promise.all([
     context.storefront.query<{product: Product}>(PRODUCT_QUERY, {
       variables: {handle: 'virtual-mailbox', selectedOptions: []},
     }),
@@ -122,63 +122,79 @@ export async function loader({context}: LoaderFunctionArgs) {
     context.storefront.query<{product: Product}>(PRODUCT_QUERY, {
       variables: {handle: 'business-accelerato', selectedOptions: []},
     }),
+    context.storefront.query(ALL_PRODUCTS_QUERY, {
+      variables: {first: 50}, // fetch first 50 products, adjust as needed
+    })
   ]);
 
   if (!virtualMailbox?.product || !virtualPhone?.product || !BusinessAcc?.product) {
     throw notFound();
   }
-
+ 
   return defer({
     bundleProducts: [virtualMailbox.product, virtualPhone.product],
-    essentialsProducts: [BusinessAcc.product],
+    essentialsProducts: AllProducts.products.nodes ?? [],
   });
 }
 export default function Cart() {
   const rootData = useRootLoaderData();
   const { bundleProducts, essentialsProducts} = useLoaderData<typeof loader>();
-
+  
 
   return (
     <section className="px-4 pb-20 pt-10 md:px-8 md:pb-8 md:pt-20">
       <Suspense fallback={<div className="flex justify-center"><SpinnerIcon /></div>}>
-        <Await resolve={rootData?.cart}>
-          {(cart) => (
-            <>
-              {cart && cart.lines.edges.length > 0 && (
-                <div className="mx-auto grid w-full max-w-6xl gap-8 md:grid-cols-3 lg:gap-12">
-                  
-                  {/* LEFT SIDE */}
-                  <div className="col-span-2 space-y-8">
-                    <h1 className="text-2xl font-semibold mb-4">Your Cart</h1>
-                    
-                    <CartLineItems linesObj={cart.lines} />
+      <Await resolve={rootData?.cart}>
+  {(cart) => {
+   const availableEssentials = essentialsProducts.filter(
+    (product) =>
+      !cart.lines.edges.some(
+        (line) => line.node.merchandise.product.handle === product.handle
+      )
+  );
+  const firstEssential = availableEssentials.length
+  ? availableEssentials[Math.floor(Math.random() * availableEssentials.length)]
+  : null;
 
-                    <CartBundleSection bundleProducts={bundleProducts} />
-                    <CartEssentialsSection essentialsProducts={essentialsProducts} />
-                  </div>
+    return (
+      <>
+        {cart && cart.lines.edges.length > 0 && (
+          <div className="mx-auto grid w-full max-w-6xl gap-8 md:grid-cols-3 lg:gap-12">
+            {/* LEFT SIDE */}
+            <div className="col-span-2 space-y-8">
+              <h1 className="text-2xl font-semibold mb-4">Your Cart</h1>
+              
+              <CartLineItems linesObj={cart.lines} />
 
-                  {/* RIGHT SIDE */}
-                  <div className="md:sticky md:top-[80px] space-y-6">
-                    <CartSummary cart={cart} cost={cart.cost} />
-                    <CartActions cart={cart} />
-                  </div>
-                </div>
-              )}
-              {!cart?.lines?.edges?.length && (
-                <div className="mx-auto max-w-3xl text-center">
-                  <h1 className="text-2xl font-semibold mb-4">Your Cart is Empty</h1>
-                  <p className="mb-8">Looks like you haven't added anything to your cart yet.</p>
-                  <a
-                    href="/"
-                    className="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600"
-                  >
-                    Continue Shopping
-                  </a>
-                </div>
-              )}
-            </>
-          )}
-        </Await>
+              <CartBundleSection bundleProducts={bundleProducts} />
+              <CartEssentialsSection essentialsProducts={firstEssential ? [firstEssential] : []} />
+            </div>
+
+            {/* RIGHT SIDE */}
+            <div className="md:sticky md:top-[80px] space-y-6">
+              <CartSummary cart={cart} cost={cart.cost} />
+              <CartActions cart={cart} />
+            </div>
+          </div>
+        )}
+
+        {!cart?.lines?.edges?.length && (
+          <div className="mx-auto max-w-3xl text-center">
+            <h1 className="text-2xl font-semibold mb-4">Your Cart is Empty</h1>
+            <p className="mb-8">Looks like you haven't added anything to your cart yet.</p>
+            <a
+              href="/"
+              className="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600"
+            >
+              Continue Shopping
+            </a>
+          </div>
+        )}
+      </>
+    );
+  }}
+</Await>
+
       </Suspense>
     </section>
   );

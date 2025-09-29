@@ -7,6 +7,7 @@ export default function CartEssentialsSection({
 }: {
   essentialsProducts: any[];
 }) {
+  console.log("essentialsProducts in CartEssentialsSection", essentialsProducts);
   return (
     <div >
       <h2 className="text-lg font-semibold mb-2">

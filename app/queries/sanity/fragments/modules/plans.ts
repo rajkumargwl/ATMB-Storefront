@@ -12,7 +12,8 @@ export const PLANS = groq`
           asset->{
             url
           }
-        }
+        },
+        tooltipTitle // ADD THIS LINE
       },
       title,
       subheading,
