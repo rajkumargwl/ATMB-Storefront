@@ -44,6 +44,13 @@ export const whyBusinessChooseUs = defineType({
                   type: 'text',
                   description: 'Paste raw SVG markup here if not using upload',
                 },
+                                  {
+          name: "tooltipTitle",
+          title: "Tooltip Title",
+          type: "string",
+          description: "Title that appears on hover (tooltip) for this icon",
+        },
+            
               ],
             }),
             {name: 'title', title: 'Title', type: 'string'},

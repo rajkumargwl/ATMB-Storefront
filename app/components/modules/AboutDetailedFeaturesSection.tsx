@@ -7,6 +7,7 @@ type Feature = {
   icon?: {
     url?: string;
   };
+  tooltipTitle?: string; // ADD THIS
 };
 
 type Props = {
@@ -57,6 +58,7 @@ export default function AboutDetailedFeaturesSection({
                       src={feature.icon.url}
                       alt={feature.title}
                       className="w-5 h-5"
+                      title={feature.tooltipTitle} // Browser tooltip
                     />
                   </div>
                 )}

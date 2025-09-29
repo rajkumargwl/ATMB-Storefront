@@ -23,6 +23,7 @@ export const MODULE_WHY_CHOOSE_ANYTIME_PHONES = groq`
       }
     },
     title,
-    description
+    description,
+    tooltipTitle // ADD THIS LINE - THIS WAS MISSING
   }
 `;

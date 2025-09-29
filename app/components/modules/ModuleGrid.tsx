@@ -90,15 +90,21 @@ const PRODUCT_LAYOUT = [
 
 type Props = {
   items: (SanityModule | ProductWithNodes)[];
+  homeSearchResults: any;
+  searchQuery: string | null;
 };
 
-export default function ModuleGrid({items}: Props) {
+export default function ModuleGrid({items, homeSearchResults, searchQuery}: Props) {
+
+    console.log("homeSearchResults in modulegrid", homeSearchResults);
   return (
     <>
        {items.map((item, index) => {
          return (
            <Module
            module={item}
+           homeSearchResults={homeSearchResults}
+           searchQuery={searchQuery}
          />
          );
        })}

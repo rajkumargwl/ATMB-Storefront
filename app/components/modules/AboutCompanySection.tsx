@@ -5,6 +5,7 @@ type AboutCompanySectionProps = {
     icon?: { url?: string };
     description: string;
   }[];
+  tooltipTitle?: string; 
 };
 
 export default function AboutCompanySection({
@@ -17,7 +18,7 @@ export default function AboutCompanySection({
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         {/* Heading */}
         <div className="max-w-3xl mb-16">
-          <h2 className="mb-6 font-Roboto text-PrimaryBlack font-bold text-[36px] leading-[43.2px] tracking-[-0.54px]  sm:text-[32px] sm:leading-[42px] sm:tracking-[-0.48px]  max-w-[523px]">{title}</h2>
+          <h2 className="mb-6 font-Roboto text-PrimaryBlack font-bold text-[24px] leading-[31.2px] tracking-[-0.36px]  lg:text-[36px] lg:leading-[43.2px] lg:tracking-[-0.54px]  max-w-[523px]">{title}</h2>
           {subtitle && (
             <p className="text-[18px] text-[#091019] font-[400] leading-[27px]">{subtitle}</p>
           )}
@@ -37,7 +38,8 @@ export default function AboutCompanySection({
                   <img
                     src={item.icon.url}
                     alt="icon"
-                    className="w-8 md:w-10 h-8 md:h-10 object-contain"
+                    className="w-8 h-8 object-contain"
+                    title={item?.tooltipTitle} 
                   />
                   <span className="hidden w-[1px] md:w-full h-full md:h-[1px] bg-LightWhite flex"></span>
                  </div>
