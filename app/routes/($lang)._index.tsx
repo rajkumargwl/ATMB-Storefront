@@ -26,6 +26,7 @@ const seo: SeoHandleFunction = ({data}) => ({
 
 export const handle = { seo };
 
+
 export async function loader({ context, params, request }: LoaderFunctionArgs) {
   validateLocale({ context, params });
 
@@ -49,13 +50,49 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
 
   
   const gids = fetchGids({ page, context });
+  // 🔹 Handle home search param
+    const url = new URL(request.url);
+   const p = url.searchParams.get('p') || '';
+  
+   let mergedSearchResults: any[] = [];
+   if (p) {
+     try {
+       const searchParam = `${p}*`;
+       const searchresults = await context.sanity.query({
+         query: `{
+           "locations": *[_type == "location" && (
+             name match $search ||
+             city match $search ||
+             postalCode match $search
+           )][0...5]{
+             _id,
+             _type,
+             name,
+             city,
+             postalCode,
+             "slug": slug.current
+           }
+         }`,
+         params: {search: searchParam},
+       });
+       mergedSearchResults = [
+         ...(searchresults.locations || []).map((item: any) => ({
+           ...item,
+           type: 'location',
+         }))
+       ];
+     } catch (err) {
+       console.error('Search error:', err);
+     }
+   }
 
   return defer({
-     page,                           
+    page,                           
     header,
     footer,
     gids,
-  
+    p,
+    homeSearchResults: mergedSearchResults, 
     analytics: { pageType: AnalyticsPageType.home },
   });
 }
@@ -63,8 +100,9 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
 
 export default function Index() {
   //const { page, gids,  header, footer, mergedResults, q } = useLoaderData<typeof loader>();
-   const { page, gids} = useLoaderData<typeof loader>();
+   const { page, gids, p, homeSearchResults} = useLoaderData<typeof loader>();
 
+  console.log("homeSearchResults in index", homeSearchResults);
   return (
     <>
      {/* <Header data={header} searchResults={mergedResults} searchQuery={q} /> */}
@@ -87,7 +125,7 @@ export default function Index() {
               {/* Page modules */}
               {page?.modules && (
                 // <div className={clsx('mb-32 mt-24 px-4', 'md:px-8')}>
-                  <ModuleGrid items={page.modules} />
+                  <ModuleGrid items={page.modules} searchQuery={p} homeSearchResults={homeSearchResults}  />
                 // </div>
               )}
             </Await>

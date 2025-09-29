@@ -307,3 +307,29 @@ export const RECOMMENDED_PRODUCTS_QUERY = `#graphql
     }
   }
 `;
+export const ALL_PRODUCTS_QUERY =`#graphql
+  query AllProducts($first: Int!) {
+    products(first: $first) {
+      nodes {
+        id
+        handle
+        title
+        description
+        featuredImage {
+          url
+          altText
+        }
+        variants(first: 1) {
+          nodes {
+            id
+            price {
+              amount
+              currencyCode
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
