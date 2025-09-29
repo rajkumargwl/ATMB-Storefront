@@ -18,7 +18,7 @@ export default function CoreValuesSection({
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         {/* Heading */}
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <h2 className="mb-6 font-Roboto text-PrimaryBlack font-bold text-[36px] leading-[43.2px] tracking-[-0.54px]  sm:text-[32px] sm:leading-[42px] sm:tracking-[-0.48px]">{title}</h2>
+          <h2 className="mb-6 font-Roboto text-PrimaryBlack font-bold text-[24px] leading-[31.2px] tracking-[-0.36px]  lg:text-[36px] lg:leading-[43.2px] lg:tracking-[-0.54px] ">{title}</h2>
           {subtitle && (
             <p className="font-[400] text-[18px] leading-[27px]">{subtitle}</p>
           )}
