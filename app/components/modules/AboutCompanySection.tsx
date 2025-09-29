@@ -4,6 +4,7 @@ type AboutCompanySectionProps = {
   items: {
     icon?: { url?: string };
     description: string;
+    tooltipTitle?: string; // ADD THIS
   }[];
 };
 
@@ -38,6 +39,7 @@ export default function AboutCompanySection({
                     src={item.icon.url}
                     alt="icon"
                     className="w-8 md:w-10 h-8 md:h-10 object-contain"
+                    title={item.tooltipTitle} 
                   />
                   <span className="hidden w-[1px] md:w-full h-full md:h-[1px] bg-LightWhite flex"></span>
                  </div>

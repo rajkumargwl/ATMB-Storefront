@@ -23,7 +23,8 @@ export const MODULE_HERO_BANNER = groq`
         url
       }
     },
-    title
+    title,
+    tooltipTitle // ADD THIS LINE
   },
   rightImage1{
     image{

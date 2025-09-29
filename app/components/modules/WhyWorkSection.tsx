@@ -5,6 +5,7 @@ type WhyWorkSectionProps = {
     icon?: { url?: string };
     title: string;
     description: string;
+    tooltipTitle?: string; // ADD THIS
   }[];
 };
 import whyChooseBg from "~/components/media/why-choose-bg.png";
@@ -39,6 +40,7 @@ export default function WhyWorkSection({
                   src={item.icon.url}
                   alt={item.title}
                   className="mb-6 w-10 h-10 object-contain"
+                  title={item.tooltipTitle} 
                 />
               )}
               <h3 className="text-[18px] font-[500] leading-[27px] mb-2">{item.title}</h3>

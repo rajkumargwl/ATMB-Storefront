@@ -1,5 +1,5 @@
 import groq from 'groq';
-
+ 
 export const ABOUT_US_MODULE = groq`
   _type,
   _key,
@@ -34,7 +34,8 @@ export const ABOUT_US_MODULE = groq`
         subtitle,
         icon {
           "url": asset->url,
-        }
+        },
+        tooltipTitle // ADD THIS
       }
     },
     // Detailed Features Section
@@ -50,7 +51,8 @@ export const ABOUT_US_MODULE = groq`
         subtitle,
         icon {
           "url": asset->url,
-        }
+        },
+        tooltipTitle // ADD THIS
       }
     },
     // Founders Section

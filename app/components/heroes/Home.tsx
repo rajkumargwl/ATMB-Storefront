@@ -119,9 +119,11 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
                 placeholder={hero.searchPlaceholder||"Address and zip"}
                 className="font-Roboto text-PrimaryBlack placeholder:text-PrimaryBlack font-normal leading-[24px] text-[16px] tracking-[0.08px] flex-1 py-[5px] md:py-[13px] focus:outline-none"
               />
-              <button className="group bg-DarkOrange text-white px-[20px] md:px-[35.5px] py-[11px] md:py-[15px] font-normal leading-[14px] md:leading-[22px] text-[14px] md:text-[16px] tracking-[0.08px] rounded-full overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]">
+              <button className="group bg-DarkOrange text-white px-[20px] md:px-[35.5px] py-[11px] md:py-[15px] font-normal leading-[14px] md:leading-[22px] text-[14px] md:text-[16px] tracking-[0.08px] rounded-full overflow-hidden transition-all hover:scale-[1.01] 
+              hover:bg-[#DD5827] "  aria-label="You can search location" >
+                 <span className="sr-only">(You can search location)</span>
                 
-                 <span className="relative flex items-center">{hero.searchButtonText || 'Search'} <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[25px] transition-all duration-300">
+                 <span className="relative flex items-center">{hero.searchButtonText} <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[25px] transition-all duration-300">
                     <RightArrowWhite />
                   </span></span>
               </button>
@@ -186,7 +188,7 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
                 <div
                   key={i}
                   className={clsx(
-                    'flex items-center gap-3 md:gap-2 min-w-[195px]',
+                    'flex items-center gap-3 md:gap-2 min-w-[260px] xl:min-w-[195px]',
                     i !== hero.features.length - 1 &&
                       'relative after:content-[""] after:hidden md:after:block md:after:right-0 md:after:absolute md:after:w-[1px] md:after:h-[20px] md:after:bg-LightWhite'
                   )}
