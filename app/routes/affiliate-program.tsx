@@ -14,19 +14,17 @@ import { Suspense } from 'react';
 import ModuleGrid from '~/components/modules/ModuleGrid';
 import { fetchGids, notFound, validateLocale } from '~/lib/utils';
 
-// 👇 import the generic PAGE query
-//import { PAGE } from '~/queries/sanity/fragments/pages/page';
-
-import { ABOUT_US_PAGE_QUERY } from '~/queries/sanity/fragments/pages/aboutus';
+// 👇 import the Affiliate PAGE query
+import { AFFILIATE_PAGE_QUERY } from '~/queries/sanity/fragments/pages/affiliatedprogrampage';
 
 // -----------------
 // SEO
 // -----------------
 const seo: SeoHandleFunction = ({ data }) => ({
-  title: data?.page?.seo?.title || 'About Us - Sanity x Hydrogen',
+  title: data?.page?.seo?.title || 'Affiliate Program - Sanity x Hydrogen',
   description:
     data?.page?.seo?.description ||
-    'Learn more about our story, vision, and team.',
+    'Join our affiliate program and start earning today.',
 });
 export const handle = { seo };
 
@@ -36,25 +34,15 @@ export const handle = { seo };
 export async function loader({ context, params }: LoaderFunctionArgs) {
   validateLocale({ context, params });
 
-  // const cache = context.storefront.CacheCustom({
-  //   mode: 'public',
-  //   maxAge: 60,
-  //   staleWhileRevalidate: 60,
-  // });
-  
   const page = await context.sanity.query({
-    query: ABOUT_US_PAGE_QUERY, // ✅ reusing the PAGE query
-  
+    query: AFFILIATE_PAGE_QUERY,
   });
 
-  
-    const aboutUsModule = page?.modules?.find(
-    (mod: any) => mod._type === 'aboutUsModule'
-  );
+   console.log("Sanity page:", JSON.stringify(page, null, 2));
 
-  
-  
-  // if (!page) throw notFound();
+  // if (!page) {
+  //   throw notFound(); // fallback if page doesn't exist
+  // }
 
   const gids = fetchGids({ page, context });
 
@@ -65,14 +53,15 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
   });
 }
 
+
 // -----------------
 // Component
 // -----------------
-export default function AboutUs() {
+export default function AffiliateProgram() {
   const { page, gids } = useLoaderData<typeof loader>();
 
   return (
-    <SanityPreview data={page} query={ABOUT_US_PAGE_QUERY}>
+    <SanityPreview data={page} query={AFFILIATE_PAGE_QUERY}>
       {(page) => (
         <Suspense>
           <Await resolve={gids}>
