@@ -34,7 +34,7 @@ import CoreValuesSection from '~/components/modules/CoreValuesSection';
 import JoinTeamSection from '~/components/modules/JoinTeamSection';
 import FAQSection from './FAQSection';
 import FAQWithCategory from './FAQWithCategory';
-
+import ContactUsSection from '~/components/modules/ContactUsSection';
 type Props = {
   imageAspectClassName?: string;
   module: SanityModule;
@@ -61,13 +61,15 @@ export default function Module({imageAspectClassName, module}: Props) {
           ))}
         </>
       );
+      
       case 'careerPromotionSection':
       return <CareerPromotionSection {...module} />;
 
       case 'whyWorkSection':
   return <WhyWorkSection {...module} />;
   
-
+   case 'contactUsSection':
+  return <ContactUsSection data={module} />;
    case 'aboutCompanySection':
   return <AboutCompanySection {...module} />;
     case 'coreValuesSection':
