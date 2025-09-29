@@ -21,6 +21,7 @@ import { ABOUT_US_MODULE } from './modules/aboutus'; // 👈 import your About U
 import { CAREER_PAGE_MODULE } from './modules/careerpage';
 import { FAQ_MODULES } from './modules/faqcategory';
 import { USPS_FORM_1583 } from './modules/uspsform1583';
+import { CONTACT_US_MODULE } from './modules/contactus'; 
 export const MODULES = groq`
   _key,
   _type,
@@ -86,5 +87,8 @@ export const MODULES = groq`
 },
 (_type == "uspsForm1583") => {
     ${USPS_FORM_1583}
+  },
+  (_type == "contactUsSection") => {
+    ${CONTACT_US_MODULE}
   },
 `;
