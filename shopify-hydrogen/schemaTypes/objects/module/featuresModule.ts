@@ -37,6 +37,13 @@ export const featuresModule = defineType({
               options: { hotspot: true },
               description: "Upload or select an icon for the feature",
             }),
+          {
+          name: "tooltipTitle",
+          title: "Tooltip Title",
+          type: "string",
+          description: "Title that appears on hover (tooltip) for this icon",
+        },
+
             defineField({
               name: "title",
               title: "Title",

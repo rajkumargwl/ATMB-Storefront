@@ -38,6 +38,7 @@ const HowItWorks = ({ data }) => {
                   src={step.icon.asset.url} 
                   alt={step.title} 
                   className="w-16 h-16 object-contain mx-auto"
+                  title={step.tooltipTitle} // Browser tooltip
                 />
               </div>
             )}
