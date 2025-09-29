@@ -38,9 +38,13 @@ import FAQWithCategory from './FAQWithCategory';
 type Props = {
   imageAspectClassName?: string;
   module: SanityModule;
+  homeSearchResults?: any;
+  searchQuery?: string | null;
 };
 
-export default function Module({imageAspectClassName, module}: Props) {
+export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery}: Props) {
+
+    console.log("homeSearchResults in module", homeSearchResults);
   switch (module._type) {
     // -----------------------
     // About Us nested sections
@@ -111,7 +115,7 @@ export default function Module({imageAspectClassName, module}: Props) {
     // Existing cases
     // -----------------------
     case 'heroType':
-      return <Home data={module} />;
+      return <Home data={module}  />;
     case 'featuresModule':
       return <FeaturesModule {...module} />;
     case 'pricingModule':
@@ -133,7 +137,7 @@ export default function Module({imageAspectClassName, module}: Props) {
     case 'module.instagram':
       return <InstagramModule module={module} />;
     case 'hero':
-      return <HomeHero hero={module} />;
+      return <HomeHero hero={module} homeSearchResults={homeSearchResults} searchQuery={searchQuery ?? ''} />;
     case 'homeSection2':
       return <TrustedByBusiness data={module} />;
     case 'homeSection3':

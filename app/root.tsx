@@ -194,6 +194,7 @@ export async function loader({request, context}: LoaderFunctionArgs) {
       console.error('Search error:', err);
     }
   }
+ 
   const selectedLocale = context.storefront.i18n as I18nLocale;
  
   return defer({
@@ -235,12 +236,11 @@ export const useRootLoaderData = () => {
 };
  
 export default function App() {
-  const {preview, header, footer, q, searchResults, isLoggedIn, customer, ...data} =
+  const {preview, header, footer, q, searchResults,  isLoggedIn, customer, ...data} =
     useLoaderData<SerializeFrom<typeof loader>>();
   const locale = data.selectedLocale ?? DEFAULT_LOCALE;
   const hasUserConsent = true;
   const nonce = useNonce();
- 
   useAnalytics(hasUserConsent);
  
   return (
