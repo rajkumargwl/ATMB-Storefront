@@ -40,6 +40,13 @@ export const aboutCompanySection = defineType({
               },
               description: 'Icon name or reference (e.g., globe, house, star)',
             }),
+            defineField({
+          name: "tooltipTitle",
+          title: "Tooltip Title",
+          type: "string",
+          description: "Title that appears on hover (tooltip) for this icon",
+        }),
+
            
             defineField({
               name: 'description',

@@ -7,7 +7,7 @@ import {
   redirect,
 } from '@shopify/remix-oxygen';
 import clsx from 'clsx';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 
 import FormCardWrapper from '~/components/account/FormCardWrapper';
 import FormFieldText from '~/components/account/FormFieldText';
@@ -40,6 +40,7 @@ type ActionData = {
   formError?: string;
 };
 
+
 export const action: ActionFunction = async ({request, context, params}) => {
   const {session, storefront} = context;
   const formData = await request.formData();
@@ -49,12 +50,31 @@ export const action: ActionFunction = async ({request, context, params}) => {
   const last_name = formData.get('last_name');
   const phone = formData.get('phone');
   const password = "12345678"; // default password for all users
-
-  if (!email || !first_name || !last_name || !phone || typeof email !== 'string' || typeof first_name !== 'string' || typeof last_name !== 'string' || typeof phone !== 'string') {
+  
+  if (!first_name || typeof first_name !== 'string') {
     return badRequest<ActionData>({
-      formError: 'Please provide First Name, Last Name, Email and Phone Number.',
+      formError: 'First name is required',
     });
   }
+  
+  if (!last_name || typeof last_name !== 'string') {
+    return badRequest<ActionData>({
+      formError: 'Last name is required',
+    });
+  }
+
+  if (!email || typeof email !== 'string') {
+    return badRequest<ActionData>({
+      formError: 'Email is required.',
+    });
+  }
+  
+  if (!phone || typeof phone !== 'string') {
+    return badRequest<ActionData>({
+      formError: 'Phone number is required',
+    });
+  }
+  
 
   try {
     // 1️ Create Shopify customer
@@ -152,16 +172,21 @@ export default function Register() {
   const [firstNameError, setFirstNameError] = useState<string | null>(null);
   const [lastNameError, setLastNameError] = useState<string | null>(null);
   const [phoneError, setPhoneError] = useState<string | null>(null);
-
+  const [formError, setFormError] = useState<string | null>(null);
+  useEffect(() => {
+    if (actionData?.formError) {
+      setFormError(actionData.formError);
+    }
+  }, [actionData]);
 
   return (
     <div className={clsx('my-32 px-4', 'md:px-8')}>
       <div className="flex justify-center">
         <FormCardWrapper title="Create an account">
-          <Form method="post" noValidate>
-            {actionData?.formError && (
+          <Form method="post" noValidate onSubmit={() => setFormError(null)}>
+            {formError && (
               <div className="mb-6 flex items-center justify-center rounded-sm border border-red p-4 text-sm text-red">
-                <p>{actionData.formError}</p>
+                <p>{formError}</p>
               </div>
             )}
 
@@ -174,6 +199,7 @@ export default function Register() {
                 aria-label="First Name"
                 label="First Name"
                 error={firstNameError || ''}
+                onFocus={() => setFormError(null)}
                 onBlur={(event) => {
                   setFirstNameError(
                     event.currentTarget.value.length && !event.currentTarget.validity.valid
@@ -191,6 +217,7 @@ export default function Register() {
                 aria-label="Last Name"
                 label="Last Name"
                 error={lastNameError || ''}
+                onFocus={() => setFormError(null)}
                 onBlur={(event) => {
                     setLastNameError(
                     event.currentTarget.value.length && !event.currentTarget.validity.valid
@@ -209,6 +236,7 @@ export default function Register() {
                 required
                 aria-label="Email address"
                 label="Email address"
+                onFocus={() => setFormError(null)}
                 error={nativeEmailError || ''}
                 onBlur={(event) => {
                   setNativeEmailError(
@@ -220,25 +248,33 @@ export default function Register() {
                 }}
               />
 
-             <FormFieldText
+              <FormFieldText
                 id="phone"
                 name="phone"
                 type="text"
                 required
                 aria-label="Phone"
                 label="Phone"
+                maxLength={16}
                 error={phoneError || ''}
+                onFocus={() => setFormError(null)}
                 onBlur={(event) => {
-                    const value = event.currentTarget.value.trim();
-                
-                    // E.164 format: starts with +, followed by 10–15 digits
-                    const isValid = /^\+[1-9]\d{9,14}$/.test(value);
-                
-                    setPhoneError(
-                      value.length && !isValid ? 'Invalid phone number. Use format +1234567890' : null,
-                    );
-                  }}
+                  const value = event.currentTarget.value.trim();
+
+                  // International format: optional +, then 7-15 digits
+                  const isValid = /^\+?\d{7,15}$/.test(value);
+
+                  setPhoneError(
+                    value.length && !isValid ? 'Invalid phone number. Include country code if needed.' : null,
+                  );
+                }}
+                onInput={(event) => {
+                  // Allow only + at start and digits
+                  event.currentTarget.value = event.currentTarget.value.replace(/(?!^\+)\D/g, '');
+                }}
               />
+
+
               
             </div>
 

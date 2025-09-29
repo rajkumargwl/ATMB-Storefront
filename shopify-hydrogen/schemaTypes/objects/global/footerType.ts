@@ -124,6 +124,13 @@ export const footerType = defineType({
                   type: "image",
                   options: {hotspot: true},
                 },
+                     defineField({
+                      name: "tooltipTitle",
+                      title: "Tooltip Title",
+                      type: "string",
+                      description: "Title that appears on hover (tooltip) for this icon",
+                    }),
+            
                 {name: "label", title: "Label", type: "string"},
                 {name: "link", title: "Link", type: "string"},
               ],
@@ -150,6 +157,13 @@ export const footerType = defineType({
               options: {hotspot: true},
             },
             {name: "link", title: "Link", type: "string"},
+                 defineField({
+                      name: "tooltipTitle",
+                      title: "Tooltip Title",
+                      type: "string",
+                      description: "Title that appears on hover (tooltip) for this icon",
+                    }),
+            
           ],
         },
       ],
@@ -165,6 +179,13 @@ export const footerType = defineType({
           type: "object",
           fields: [
             {name: "icon", title: "Icon", type: "image"},
+                 defineField({
+                      name: "tooltipTitle",
+                      title: "Tooltip Title",
+                      type: "string",
+                      description: "Title that appears on hover (tooltip) for this icon",
+                    }),
+            
             {name: "link", title: "Link", type: "string"},
           ],
         },

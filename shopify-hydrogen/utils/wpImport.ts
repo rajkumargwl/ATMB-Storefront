@@ -10,8 +10,8 @@ import { nanoid } from 'nanoid'
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') })
 
 const client = createClient({
-  projectId: process.env.SANITY_PROJECT_ID || 'yourProjectId',
-  dataset: 'production',
+  projectId: process.env.SANITY_PROJECT_ID || 'm5xb8z9y',
+  dataset: process.env.SANITY_DATASET || 'development',
   token: process.env.SANITY_API_TOKEN || '',
   useCdn: false,
   apiVersion: '2025-09-17',

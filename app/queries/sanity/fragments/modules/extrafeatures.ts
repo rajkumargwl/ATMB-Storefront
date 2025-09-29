@@ -13,6 +13,7 @@ export const MODULE_FEATURES = groq`
       }
     },
     title,
-    description
+    description,
+    tooltipTitle // ADD THIS
   }
 `;
