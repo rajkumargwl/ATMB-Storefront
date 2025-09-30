@@ -23,6 +23,8 @@ import { FAQ_MODULES } from './modules/faqcategory';
 import { USPS_FORM_1583 } from './modules/uspsform1583';
 import { CONTACT_US_MODULE } from './modules/contactus'; 
 import { AFFILIATE_MODULE } from './modules/affiliateProgramSection'; // 👈 import your affiliate module
+import { FOUNDER_BY_SLUG } from './modules/founder';
+
 
 export const MODULES = groq`
   _key,
@@ -96,4 +98,8 @@ export const MODULES = groq`
   (_type == "affiliatedProgramPageModule") => {   // 👈 added parent module
     ${AFFILIATE_MODULE}
   },
+  (_type == "founderModule") => {
+  ${FOUNDER_BY_SLUG}
+},
+
 `;

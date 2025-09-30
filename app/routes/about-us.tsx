@@ -14,8 +14,7 @@ import { Suspense } from 'react';
 import ModuleGrid from '~/components/modules/ModuleGrid';
 import { fetchGids, notFound, validateLocale } from '~/lib/utils';
 
-// 👇 import the generic PAGE query
-//import { PAGE } from '~/queries/sanity/fragments/pages/page';
+
 
 import { ABOUT_US_PAGE_QUERY } from '~/queries/sanity/fragments/pages/aboutus';
 
@@ -36,11 +35,7 @@ export const handle = { seo };
 export async function loader({ context, params }: LoaderFunctionArgs) {
   validateLocale({ context, params });
 
-  // const cache = context.storefront.CacheCustom({
-  //   mode: 'public',
-  //   maxAge: 60,
-  //   staleWhileRevalidate: 60,
-  // });
+
   
   const page = await context.sanity.query({
     query: ABOUT_US_PAGE_QUERY, // ✅ reusing the PAGE query

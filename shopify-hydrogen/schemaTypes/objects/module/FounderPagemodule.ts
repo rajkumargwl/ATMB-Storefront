@@ -52,13 +52,6 @@ export const founderModule = defineType({
               options: {hotspot: true},
             }),
             defineField({
-              name: "shortBio",
-              title: "Short Bio",
-              type: "text",
-              rows: 3,
-              description: "Brief description of the founder."
-            }),
-            defineField({
               name: "longBio",
               title: "Detailed Bio",
               type: "array",
@@ -75,16 +68,7 @@ export const founderModule = defineType({
                   title: "LinkedIn",
                   type: "url",
                 },
-                {
-                  name: "twitter",
-                  title: "Twitter",
-                  type: "url",
-                },
-                {
-                  name: "website",
-                  title: "Personal Website",
-                  type: "url",
-                },
+                
               ],
             }),
           ],
