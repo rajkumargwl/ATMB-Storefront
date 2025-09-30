@@ -44,7 +44,7 @@ export const action: ActionFunction = async ({ request, context }) => {
 
   if (!shopDomain || !token) {
     console.error("Shopify domain or token is missing!");
-    return { error: "Shopify domain or token is not set in environment variables." };
+    return { error: "Shopify domain or token is not set in environment variables." + token + shopDomain };
   }
 
   try {
