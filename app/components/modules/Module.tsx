@@ -35,6 +35,13 @@ import JoinTeamSection from '~/components/modules/JoinTeamSection';
 import FAQSection from './FAQSection';
 import FAQWithCategory from './FAQWithCategory';
 import ContactUsSection from '~/components/modules/ContactUsSection';
+import AffiliateProgramSection from '~/components/modules/AffiliateProgramSection';
+import WhyJoinSection from '~/components/modules/WhyJoinSection';
+import StepsSection from '~/components/modules/StepsSection';
+
+
+
+
 type Props = {
   imageAspectClassName?: string;
   module: SanityModule;
@@ -99,6 +106,23 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
     case 'aboutResourceAuthorsSection':
       return <AboutResourceAuthorsSection {...module} />;
    
+   case 'affiliatedProgramPageModule':
+  return (
+    <>
+      {module.modules?.map((sub: any) => (
+        <Module key={sub._key} module={sub} />
+      ))}
+    </>
+  );
+//affiliate-program-page-module
+case 'affiliateProgramSection':
+  return <AffiliateProgramSection {...module} />;
+
+case 'whyJoinSection':
+  return <WhyJoinSection {...module} />;
+
+case 'stepsSection':
+  return <StepsSection {...module} />;
 
 
       case 'faqPageModule':
