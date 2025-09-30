@@ -101,4 +101,3 @@ export default function StepsSection({
     </section>
   );
 }
-///home/gwl/Desktop/ATMB_PROJECT_WORK/homepagebugs/ATMB-Storefront/app/queries/sanity/fragments/modules/StepsSection.tsx
