@@ -59,6 +59,7 @@ import solutions from './singletons/solutions'
 import location from './location'
 import wpPost from './wpPost'
 import blockContent from './blockContent'
+import casestudy from './casestudy'
 import { featuresModule } from "./objects/module/featuresModule";
 import { pricingModule } from "./objects/module/pricingModule";
 import { extraFeatures } from "./objects/module/extraFeatures";
@@ -200,7 +201,7 @@ import {productType} from './documents/product'
 import {productVariantType} from './documents/productVariant'
 import {plansType} from './documents/plans'
 
-const documents = [collectionType, colorThemeType, pageType, productType, productVariantType,plansType,wpPost,blockContent]
+const documents = [collectionType, colorThemeType, pageType, productType, productVariantType,plansType,wpPost,blockContent,casestudy]
 
 import {homeType} from './singletons/homeType'
 import {settingsType} from './singletons/settingsType'

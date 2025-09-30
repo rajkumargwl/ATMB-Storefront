@@ -27,7 +27,7 @@ export const FOUNDER_DETAIL_PAGE_QUERY = groq`
     // If this module is founderModule, fetch the founder by $slug
     (_type == "founderModule") => {
       title,
-      founders[slug.current== 'matt-going'][0]{
+      founders[slug.current== $slug][0]{
         name,
         "slug": slug.current,
         role,
