@@ -83,6 +83,40 @@ html {
 }
  
  
+ 
+@layer utilities {
+  @keyframes fadeSlideIn {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+ 
+  .animate-fadeSlideIn {
+    animation: fadeSlideIn 2.6s ease-out;
+  }
+    @keyframes fillBar {
+    0% {
+      opacity: 0;
+    }
+    25% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+ 
+  .animate-fillBar {
+    animation: fillBar 2ms ease forwards 6ms;
+  }
+}
+ 
+ 
 /* usps page css */
 .btn-main:hover span.arrow-show{
   opacity: 1;
@@ -235,6 +269,18 @@ body.no-scroll {
     margin-top: 0px;
     text-align: left;
 }
+.how-started p {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0px;
+    font-style: normal;
+    color: #091019;
+    font-family: "Roboto", "sans-serif";
+}
+.how-started p strong {
+  font-weight: 500;
+}
  
  
 /* responsive css */
@@ -269,6 +315,10 @@ body.no-scroll {
   .main-content-left p.my-6.text-lg.text-slate-600 {
     font-size: 12px;
     line-height: 18px;
+  }
+  .how-started p {
+    font-size: 14px;
+    line-height: 21px;
   }
 }
  
@@ -376,7 +426,4 @@ body.no-scroll {
     line-height: 150%;
 }
 }
- 
- 
- 
  
