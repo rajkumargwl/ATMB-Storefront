@@ -77,7 +77,7 @@ export default function AboutUs() {
         <Suspense>
           <Await resolve={gids}>
             {page?.modules && page.modules.length > 0 && (
-              <div className={clsx('mb-32 mt-24 px-4', 'md:px-8')}>
+             <div className={clsx('mb-0 mt-0 px-0', 'md:px-0')}>
                 <ModuleGrid items={page.modules} />
               </div>
             )}
