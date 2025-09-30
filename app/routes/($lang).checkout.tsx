@@ -5,6 +5,7 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
+import {useRootLoaderData} from '~/root'; 
 import { useEffect,useState } from "react";
 import type { LoaderFunction } from "@remix-run/node";
 
@@ -15,6 +16,7 @@ import {
 
 export const loader: LoaderFunction = async ({ context, params }) => {
   const { env } = context;
+  
   const customerAccessToken = await context.session.get('customerAccessToken');
   
   if (customerAccessToken === null || customerAccessToken === undefined || customerAccessToken === '') {
@@ -36,7 +38,10 @@ function CheckoutForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [priceId, setPriceId] = useState<string | null>(null);
-
+  const rootData = useRootLoaderData();
+  const cart = rootData?.cart?._data;
+  const lines = cart?.lines?.edges;
+  
   // Fetch priceId from backend on mount
   useEffect(() => {
     fetch("/api/create-price", { method: "POST" })
@@ -69,6 +74,25 @@ function CheckoutForm() {
       setLoading(false);
       return;
     }
+    const draftRes = await fetch("/api/create-draft-order", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        lines: lines,
+        customerId: rootData?.customer?.id,  
+      }),
+    });
+    
+    const draftData = await draftRes.json();
+    console.log("Draft order created:", draftData);
+  
+    if (!draftData?.data?.draftOrderCreate?.draftOrder?.id) {
+      setError("Failed to create draft order");
+      setLoading(false);
+      return;
+    }
+  
+    const draftOrderId = draftData?.data?.draftOrderCreate?.draftOrder?.id;
 
     const { paymentMethod, error: pmError } = await stripe.createPaymentMethod({
       type: "card",
