@@ -1,5 +1,5 @@
 import React from "react";
-
+ 
 type AffiliateProgramSectionProps = {
   label?: string;
   heading?: string;
@@ -11,7 +11,7 @@ type AffiliateProgramSectionProps = {
     alt?: string;
   };
 };
-
+ 
 export default function AffiliateProgramSection({
   label,
   heading,
@@ -21,14 +21,15 @@ export default function AffiliateProgramSection({
   image,
 }: AffiliateProgramSectionProps) {
   return (
-    <section className="flex flex-col md:flex-row items-center justify-between gap-8 py-12 px-6 md:px-12 bg-white">
+    <section className="px-5 py-[40px] md:py-[54px] bg-white">
+      <div className="max-w-[1240px] mx-auto flex flex-col md:flex-row gap-[62px] lg:gap-[62px] items-center">
       {/* Left Side */}
-      <div className="flex-1 max-w-xl">
+      <div className="w-full md:w-[48.1%] space-y-5 md:space-y-5">
         {label && (
-          <p className="text-sm font-medium text-gray-500 mb-2">{label}</p>
+          <p className="font-Roboto text-LightGray font-medium leading-[27px] md:leading-[28px] text-[18px] md:text-[20px] tracking-[0px]">{label}</p>
         )}
         {heading && (
-          <h2 className="text-2xl md:text-3xl font-bold text-black mb-4">
+          <h2 className="max-w-[464px] font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px]">
             {heading}
           </h2>
         )}
@@ -38,23 +39,24 @@ export default function AffiliateProgramSection({
         {ctaText && (
           <a
             href={ctaUrl ?? "#"}
-            className="inline-block px-6 py-3 rounded-full bg-orange-500 text-white font-semibold hover:bg-orange-600 transition"
+            className="flex items-center justify-center w-full md:w-[249px] h-[44px] md:h-[52px] rounded-full bg-DarkOrange px-4 py-3 text-white  font-Roboto font-normal text-[16px] md:text-[16px] leading-[16px] tracking-[0.08px] "
           >
             {ctaText}
           </a>
         )}
       </div>
-
+ 
       {/* Right Side (Image) */}
       {image?.url && (
-        <div className="flex-1">
+        <div className="w-full md:w-[51.9%] relative">
           <img
             src={image.url}
             alt={image.alt || "Affiliate Program"}
-            className="rounded-lg shadow-lg w-full object-cover"
+            className="rounded-[20px] w-full max-h-[400px] object-cover"
           />
         </div>
       )}
+      </div>
     </section>
   );
 }
