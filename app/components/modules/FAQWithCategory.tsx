@@ -3,7 +3,6 @@ import PlusFAQ from '~/components/icons/PlusFAQ';
 import CloseFAQ from '~/components/icons/CloseFAQ';
 import '~/styles/tailwind.css';
 
-
 type FAQ = {
   question: string;
   answer: string;
@@ -24,19 +23,65 @@ export default function FAQWithCategory({ categories }: FAQWithCategoryProps) {
 
   // ✅ only declare once, not inside map
   const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  const handleKeyDown = (e: React.KeyboardEvent, idx: number) => {
+    const total = categories.length;
+
+    switch (e.key) {
+      case "ArrowRight":
+        e.preventDefault();
+        const next = (idx + 1) % total;
+        setActiveCategory(next);
+        setOpenIndex(null);
+        tabRefs.current[next]?.focus();
+        break;
+
+      case "ArrowLeft":
+        e.preventDefault();
+        const prev = (idx - 1 + total) % total;
+        setActiveCategory(prev);
+        setOpenIndex(null);
+        tabRefs.current[prev]?.focus();
+        break;
+
+      case "Home": // jump to first
+        e.preventDefault();
+        setActiveCategory(0);
+        setOpenIndex(null);
+        tabRefs.current[0]?.focus();
+        break;
+
+      case "End": // jump to last
+        e.preventDefault();
+        setActiveCategory(total - 1);
+        setOpenIndex(null);
+        tabRefs.current[total - 1]?.focus();
+        break;
+
+      default:
+        break;
+    }
+  };
 
   return (
     <section className="bg-white text-gray-900 md:py-25 py-10">
       <div className="max-w-4xl mx-auto px-4">
         {/* Tabs */}
-        <div className="flex overflow-x-auto gap-3 mb-11 scrollbar-hide border-LightWhite" role="tablist">
+        <div
+          className="flex overflow-x-auto gap-3 mb-11 scrollbar-hide border-LightWhite"
+          role="tablist"
+          aria-label="FAQ Categories"
+        >
           {categories.map((cat, idx) => (
             <button
               key={idx}
+              ref={(el) => (tabRefs.current[idx] = el)}
               onClick={() => {
                 setActiveCategory(idx);
                 setOpenIndex(null);
               }}
+              onKeyDown={(e) => handleKeyDown(e, idx)}
               className={`px-6 py-3 rounded-full border border-LightWhite text-base font-normal leading-[24px] tracking-[0px] transition-all shrink-0 ${
                 activeCategory === idx
                   ? "bg-PrimaryBlack text-white"
@@ -46,26 +91,32 @@ export default function FAQWithCategory({ categories }: FAQWithCategoryProps) {
               aria-selected={activeCategory === idx}
               aria-controls={`tabpanel-${idx}`}
               tabIndex={activeCategory === idx ? 0 : -1}
+              id={`tab-${idx}`}
             >
               {cat.title}
             </button>
           ))}
         </div>
 
-
         {/* FAQ Accordions */}
-        <div className="space-y-4">
+        <div
+          className="space-y-4"
+          id={`tabpanel-${activeCategory}`}
+          role="tabpanel"
+          aria-labelledby={`tab-${activeCategory}`}
+          tabIndex={0} // allows tabbing into FAQ after tablist
+        >
           {categories?.[activeCategory]?.faqs && categories[activeCategory].faqs.length > 0 ? (
             categories[activeCategory].faqs.map((faq, idx) => {
               const isOpen = openIndex === idx;
 
               return (
-                  <div
-                    key={idx}
-                    className={`rounded-[12px] p-6 border border-LightWhite transition-colors duration-300 ${
-                      isOpen ? "bg-[#F6F6F6]" : "bg-white"
-                    }`}
-                  >
+                <div
+                  key={idx}
+                  className={`rounded-[12px] p-6 border border-LightWhite transition-colors duration-300 ${
+                    isOpen ? "bg-[#F6F6F6]" : "bg-white"
+                  }`}
+                >
                   <button
                     onClick={() => setOpenIndex(isOpen ? null : idx)}
                     className="w-full flex justify-between items-center text-left gap-6"
@@ -76,11 +127,7 @@ export default function FAQWithCategory({ categories }: FAQWithCategoryProps) {
                     <span className="font-Roboto font-medium leading-[28px] text-[20px] text-PrimaryBlack">
                       {faq.question}
                     </span>
-                    <span
-                      className={`text-2xl font-bold transition-transform duration-300 ${
-                        isOpen ? "rotate-0" : "rotate-0"
-                      }`}
-                    >
+                    <span className="text-2xl font-bold transition-transform duration-300">
                       {isOpen ? <CloseFAQ /> : <PlusFAQ />}
                     </span>
                   </button>
