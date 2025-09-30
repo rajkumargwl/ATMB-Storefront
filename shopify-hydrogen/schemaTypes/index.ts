@@ -92,7 +92,7 @@ import {affiliateProgramSection} from './objects/module/affiliateProgramSection'
 import {whyJoinSection} from './objects/module/whyJoinSection'
 import {stepsSection} from './objects/module/stepsSection'
 import {affiliatedProgramPageModule} from './objects/module/affiliatedProgramPageModule'
-
+import {founderModule} from './objects/module/FounderPagemodule'
 // Objects used as annotations must be imported first
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
 
@@ -184,6 +184,7 @@ contactUsSection,
   whyJoinSection,
   stepsSection,
   affiliatedProgramPageModule,
+  founderModule
 
 ]
 
