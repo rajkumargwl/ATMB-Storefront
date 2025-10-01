@@ -115,6 +115,7 @@ export default function CaseStudyPage() {
       <nav className="text-sm text-gray-500 mb-6">
         <ol className="flex items-center space-x-2">
           <li>
+            
             <Link to="/case-studies" className="hover:underline">
               Case Studies
             </Link>
