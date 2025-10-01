@@ -285,6 +285,30 @@ export type SanityFAQ = {
     }[];
   }[];
 };
+export type SanityMarketPlaceIntro = {
+  _key?: string;
+  _type: 'faq';
+  label?: string;
+  heading: string;
+  image?: { url?: string; alt?: string };
+};
+export type SANITY_MARKETPLACE_CATEGORIES = {
+  _key?: string;
+  _type: 'marketPlaceCategoriesSection';
+  allIcon?: { url?: string; alt?: string };
+  categories?: {
+    title: string;
+    icon?: { url?: string; alt?: string };
+    image?: { url?: string; alt?: string };
+    subcategories?: {
+      name: string;
+      description?: string;
+      logo?: { url?: string; alt?: string };
+      buttonText?: string;
+      buttonLink?: { url?: string; alt?: string };
+    }[];
+  }[];
+}
 export type SanityHeroPage = {
   content?: SanityImageWithProductHotspots | SanityProductWithVariant;
   title?: string;
