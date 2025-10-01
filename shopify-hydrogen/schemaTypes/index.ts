@@ -95,6 +95,15 @@ import {whyJoinSection} from './objects/module/whyJoinSection'
 import {stepsSection} from './objects/module/stepsSection'
 import {affiliatedProgramPageModule} from './objects/module/affiliatedProgramPageModule'
 import {founderModule} from './objects/module/FounderPagemodule'
+import {solutionHeroModule} from './objects/module/solutionHeroModule'
+import {solutionMailboxBenefitFaqModule} from './objects/module/solutionMailboxBenefitFaqModule'
+import {solutionMailboxFeaturesModule} from './objects/module/solutionMailboxFeaturesModule'
+import {solutionMailboxLocationHowItWorksModule} from './objects/module/solutionMailboxLocationHowItWorksModule'
+import {solutionVirtualMailboxModule} from './objects/module/solutionVirtualMailboxModule'
+import {solutionPageModule} from './objects/module/solutionPageModule'
+import {solutionRealLife} from './objects/module/solutionRealLife'
+import {renterreferralprogramType} from './objects/module/renterprogramType' 
+import {renterEditor} from './objects/module/rentereditor'
 // Objects used as annotations must be imported first
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
 
@@ -186,7 +195,16 @@ contactUsSection,
   whyJoinSection,
   stepsSection,
   affiliatedProgramPageModule,
-  founderModule
+  founderModule,
+  solutionHeroModule,
+  solutionMailboxBenefitFaqModule,
+  solutionMailboxFeaturesModule,
+  solutionMailboxLocationHowItWorksModule,
+  solutionPageModule,
+  solutionRealLife,
+  renterreferralprogramType,
+renterEditor,
+  solutionVirtualMailboxModule
 
 ]
 

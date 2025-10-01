@@ -1,4 +1,8 @@
 import { Await, useLoaderData } from '@remix-run/react';
+import FounderBg from "~/components/media/Founder-bg.png";
+import FounderBgMobile from "~/components/media/our-founder-bg-mobile.png";
+import { Link } from 'react-router-dom';
+ 
 import {
   AnalyticsPageType,
   type SeoHandleFunction,
@@ -71,12 +75,15 @@ export default function FounderDetails() {
   if (!founder) {
     return (
       <div className="px-5 pt-[40px] pb-[40px] md:pb-[60px] lg:pb-[100px] bg-white">
-          <div className="flex items-center flex-row gap-[7px]">
-                    <a href="/about-us">
-                    <span className="font-Roboto text-LightGray font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px]">About us</span> </a>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10.6813 7.71732C10.8362 7.87232 10.8362 8.12732 10.6813 8.28232L6.68125 12.2823C6.52625 12.4373 6.27125 12.4373 6.11625 12.2823C5.96125 12.1273 5.96125 11.8723 6.11625 11.7173L9.83375 7.99982L6.11625 4.28232C5.96125 4.12732 5.96125 3.87232 6.11625 3.71732C6.27125 3.56232 6.52625 3.56232 6.68125 3.71732L10.6813 7.71732Z" fill="#091019"></path></svg>
-                    <span className="font-Roboto text-PrimaryBlack font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px]">Our founder</span>
-          </div>
+           <nav className="flex items-center flex-row gap-[7px]" aria-label="Breadcrumb">
+              <ol className="flex items-center flex-row gap-[7px]">
+                <li><Link to={`/about-us`}><span className="font-Roboto text-LightGray font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px]">About</span> </Link></li>
+                <li> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M10.6813 7.71732C10.8362 7.87232 10.8362 8.12732 10.6813 8.28232L6.68125 12.2823C6.52625 12.4373 6.27125 12.4373 6.11625 12.2823C5.96125 12.1273 5.96125 11.8723 6.11625 11.7173L9.83375 7.99982L6.11625 4.28232C5.96125 4.12732 5.96125 3.87232 6.11625 3.71732C6.27125 3.56232 6.52625 3.56232 6.68125 3.71732L10.6813 7.71732Z" fill="#091019"/>
+                  </svg></li>
+                <li> <span aria-current="page" className="font-Roboto text-PrimaryBlack font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px]">Our founder</span> </li>
+              </ol>  
+          </nav>
           <p className="font-Roboto text-LightGray font-normal leading-[24px] text-[16px]">
             Founder details are not available at the moment.
           </p>
@@ -92,17 +99,22 @@ export default function FounderDetails() {
       {(founder) => (
         <Suspense>
           <Await resolve={gids}>
-            <div className="px-5 pt-[40px] pb-[40px] md:pb-[60px] lg:pb-[100px] bg-white">
+            <div className="relative z-[2] px-5 pt-[40px] pb-[40px] md:pb-[60px] lg:pb-[100px] bg-white">
+              <div className="absolute hidden md:flex z-[1] bottom-[0px] right-[0px]">
+              <img src={FounderBg} alt="Background" className="w-[473px] h-[468px]"/>
+              </div>
               <div className='max-w-[1240px] mx-auto '>
                 <div className='flex flex-col mb-[44px] md:mb-[64px]'>
-                  <div className="flex items-center flex-row gap-[7px]">
-                    <a href="/about-us">
-                    <span className="font-Roboto text-LightGray font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px]">About us</span> </a>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10.6813 7.71732C10.8362 7.87232 10.8362 8.12732 10.6813 8.28232L6.68125 12.2823C6.52625 12.4373 6.27125 12.4373 6.11625 12.2823C5.96125 12.1273 5.96125 11.8723 6.11625 11.7173L9.83375 7.99982L6.11625 4.28232C5.96125 4.12732 5.96125 3.87232 6.11625 3.71732C6.27125 3.56232 6.52625 3.56232 6.68125 3.71732L10.6813 7.71732Z" fill="#091019"></path></svg>
-                    <span className="font-Roboto text-PrimaryBlack font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px]">Our founder</span>
-                    </div>
+                    <nav className="flex items-center flex-row gap-[7px]" aria-label="Breadcrumb">
+                      <ol className="flex items-center flex-row gap-[7px]">
+                        <li><Link to={`/about-us`}><span className="font-Roboto text-LightGray font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px]">About</span> </Link></li>
+                        <li> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M10.6813 7.71732C10.8362 7.87232 10.8362 8.12732 10.6813 8.28232L6.68125 12.2823C6.52625 12.4373 6.27125 12.4373 6.11625 12.2823C5.96125 12.1273 5.96125 11.8723 6.11625 11.7173L9.83375 7.99982L6.11625 4.28232C5.96125 4.12732 5.96125 3.87232 6.11625 3.71732C6.27125 3.56232 6.52625 3.56232 6.68125 3.71732L10.6813 7.71732Z" fill="#091019"/>
+                          </svg></li>
+                        <li> <span aria-current="page" className="font-Roboto text-PrimaryBlack font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px]">Our founder</span> </li>
+                      </ol>  
+                  </nav>
                 </div>
- 
               <div className="flex flex-col md:flex-row gap-[44px] md:gap-[44px] lg:gap-[72px]">
                 {/* Profile Image */}
                 {founderData?.profileImage?.url && (
@@ -118,7 +130,11 @@ export default function FounderDetails() {
                 )}
  
                 {/* Content */}
-                <div className='w-full md:w-[65%] lg:w-[72.3%]'>
+                <div className='relative z-[2] w-full md:w-[65%] lg:w-[72.3%]'>
+                  <div className="absolute flex md:hidden z-[1] top-[-377px] right-[0px]">
+                   <img src={FounderBgMobile} alt="Background" className="w-[393px] h-[736px]"/>
+                   
+                  </div>
                   <div className='pb-[24px] md:pb-[40px] flex flex-col md:flex-row gap-4 items-start justify-between'>
                   <div className='flex flex-col gap-3 items-start'>
                     <h1 className="font-Roboto text-PrimaryBlack font-normal leading-[38.4px] md:leading-[52.8px] text-[32px] md:text-[48px] tracking-[-0.48px] md:tracking-[-0.96px]">
@@ -128,7 +144,6 @@ export default function FounderDetails() {
                       {founderData?.role}
                     </p>
                   </div>
- 
                   {/* LinkedIn or other socials */}
                   {founderData?.socialLinks && (
                     <div className="hidden md:flex flex-row gap-4 items-start">
@@ -162,7 +177,6 @@ export default function FounderDetails() {
                     </div>
                   )}
                   </div>
- 
                   {/* Long Bio */}
                   <div className="space-y-4">
                     {founderData?.longBio?.map((block: any) => (
@@ -215,4 +229,3 @@ export default function FounderDetails() {
     </SanityPreview>
   );
 }
- 

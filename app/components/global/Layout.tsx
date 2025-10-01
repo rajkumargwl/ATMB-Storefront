@@ -25,7 +25,7 @@ export function Layout({backgroundColor, children}: LayoutProps) {
 
       <div
         // className="max-w-screen flex min-h-screen flex-col"
-          className="max-w-screen flex min-h-screen flex-col"
+          className="max-w-screen flex  flex-col"
         style={{background: backgroundColor}}
       >
         
