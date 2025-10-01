@@ -20,10 +20,10 @@ export default function CareerPromotionSection({
   image,
 }: Props) {
   return (
-    <section className="max-w-[1240px] mx-auto px-6 md:px-0 items-center justify-between py-16 bg-white">
+    <section className="max-w-[1240px] mx-auto px-6 max-1265px:px-4 max-1265px:gap-2 items-center justify-between py-16 bg-white">
       <div className="grid grid-cols-1 md:grid-cols-2 items-center">
         {/* Left side: text content */}
-        <div className="space-y-5">
+        <div className="md:space-y-5">
           {smallHeading && (
             <p className="font-Roboto text-[#4D4E4F] font-medium leading-[28px] text-[20px]">
               {smallHeading}
@@ -31,7 +31,7 @@ export default function CareerPromotionSection({
           )}
 
           {mainHeading && (
-            <h1 className="mt-5 font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] tracking-[-0.36px] text-[24px] lg:text-[36px] lg:leading-[43.2px] lg:tracking-[-0.54px] max-w-[529px]">
+            <h1 className="mt-5 mb-4 md:mb-0 font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] tracking-[-0.36px] text-[24px] md:text-[36px] md:leading-[43.2px] md:tracking-[-0.54px] max-w-[529px]">
              {mainHeading.split(/(\s+)/).map((chunk, idx) => {
               if (chunk.trim() === "") {
                 return chunk; // preserve spaces
@@ -55,7 +55,7 @@ export default function CareerPromotionSection({
           )}
 
           {buttonText && (
-            <div>
+            <div className="max-1265px:mb-4">
               <a
                 href={buttonLink || "#"}
                 target="_blank"
@@ -69,7 +69,7 @@ export default function CareerPromotionSection({
 
         {/* Right side: image */}
         {image?.url && (
-          <div className="flex justify-center lg:justify-end">
+          <div className="flex justify-center md:justify-end">
             <img
               src={image.url}
               alt="Career promotion"

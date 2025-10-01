@@ -23,9 +23,17 @@ export async function doLogout(context: AppLoadContext) {
 
   headers.append('Set-Cookie', await session.commit());
 
-  return redirect(`${context.storefront.i18n.pathPrefix}/`, {
-    headers,
-  });
+  // return redirect(`${context.storefront.i18n.pathPrefix}/`, {
+  //   headers,
+  // });
+  
+  // Redirect to Microsoft logout endpoint
+  const tenant = context.env.MS_ENTRA_TENANT_ID; // or your tenant ID
+  // const postLogoutRedirectUri = "https://shopifystage.anytimehq.co/";
+  const postLogoutRedirectUri = context.env.STORE_DOMAIN;
+  const logoutUrl = `https://login.anytimehq.co/${tenant}/oauth2/v2.0/logout?post_logout_redirect_uri=${encodeURIComponent(postLogoutRedirectUri)}`;
+
+  return redirect(logoutUrl, { headers });
 }
 
 export async function loader({context}: LoaderFunctionArgs) {

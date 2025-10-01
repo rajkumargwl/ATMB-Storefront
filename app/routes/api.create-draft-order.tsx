@@ -1,9 +1,8 @@
 import type { ActionFunction } from "@remix-run/node";
 
-export const action: ActionFunction = async ({ context }) => {
-  const variantId = "gid://shopify/ProductVariant/45253915246777";
-  const customerId = "gid://shopify/Customer/7722368106681";
-  const quantity = 1;
+export const action: ActionFunction = async ({ request, context }) => {
+  const body = await request.json();
+  const { lines, customerId } = body;
 
   const query = `
     mutation draftOrderCreate($input: DraftOrderInput!) {
@@ -21,11 +20,15 @@ export const action: ActionFunction = async ({ context }) => {
     }
   `;
 
+  // Convert incoming lines into Shopify draft order lineItems
+  const lineItems = lines.map((line: any) => ({
+    variantId: line?.node?.merchandise?.id,
+    quantity: line?.node?.quantity,
+  }));
+
   const variables = {
     input: {
-      lineItems: [
-        { variantId, quantity },
-      ],
+      lineItems,
       customerId,
       useCustomerDefaultAddress: true,
     },
@@ -33,7 +36,7 @@ export const action: ActionFunction = async ({ context }) => {
 
   interface Env {
     PUBLIC_STORE_DOMAIN: string;
-    SHOPIFY_ADMIN_API_TOKEN: string; 
+    SHOPIFY_ADMIN_API_TOKEN: string;
   }
 
   const shopDomain = context.env.PUBLIC_STORE_DOMAIN;
@@ -41,7 +44,7 @@ export const action: ActionFunction = async ({ context }) => {
 
   if (!shopDomain || !token) {
     console.error("Shopify domain or token is missing!");
-    return { error: "Shopify domain or token is not set in environment variables." };
+    return { error: "Shopify domain or token is not set in environment variables." + token + shopDomain };
   }
 
   try {

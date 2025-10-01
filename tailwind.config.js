@@ -1,3 +1,4 @@
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./app/**/*.{js,ts,jsx,tsx}'],
@@ -159,7 +160,7 @@ module.exports = {
         'header-lg': '6.25rem',
       },
       fontFamily: {
-        roboto: ["Roboto", "sans-serif"], 
+        roboto: ["Roboto", "sans-serif"],
       },
       spacing: {
         1: '4px',
@@ -204,7 +205,28 @@ module.exports = {
         40: '160px',
         overlap: '20px',
       },
+      keyframes: {
+        fadeSlideIn: {
+          '0%': { opacity: 0, transform: 'translateY(10px)' },
+          '100%': { opacity: 1, transform: 'translateY(0)' },
+        },
+      },
+      animation: {
+        fadeSlideIn: 'fadeSlideIn 2.6s ease-out',
+      },
+        keyframes: {
+        fillBar: {
+          '0%': { opacity: 0 },
+          '25%': { opacity: 1 },
+          '100%': {opacity: 1 },
+        },
+      },
+      animation: {
+        fillBar: 'fillBar 2ms ease forwards 6ms',
+      },
     },
   },
   plugins: [],
 };
+ 
+ 
