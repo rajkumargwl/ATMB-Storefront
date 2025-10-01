@@ -259,7 +259,7 @@ export default function PricingSection({ data }: { data: PricingData }) {
                       </p>
 
                       {/* Associated Products for Bundles */}
-                      {isBundlesTab && plan.associatedProducts && plan.associatedProducts.length > 0 && (
+                      {/* {isBundlesTab && plan.associatedProducts && plan.associatedProducts.length > 0 && (
                         <div className="mt-4 p-3 bg-[#F9F9F9] rounded-lg">                
                           <div className="space-y-2">
                             {plan.associatedProducts.map((product, productIdx) => (
@@ -291,7 +291,45 @@ export default function PricingSection({ data }: { data: PricingData }) {
                             ))}
                           </div>
                         </div>
-                      )}
+                      )} */}
+                      {isBundlesTab && plan.associatedProducts && plan.associatedProducts.length > 0 && (
+                          <div className="mt-4 p-3 bg-[#F9F9F9] rounded-lg">                
+                            <div className="space-y-2">
+                              {plan.associatedProducts.map((product, productIdx) => (
+                                <div key={productIdx} className="flex items-center justify-between">
+                                  <div>
+                                    <p className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">
+                                      {product.productName}
+                                    </p>
+                                    {product.subheading && (
+                                      <p className="text-sm text-gray-500">{product.subheading}</p>
+                                    )}
+                                  </div>
+                                  {product.level && (
+                                    <span className="px-2 py-1 bg-[#E5E5E5] text-[#333333] text-xs rounded-full">
+                                      {product.level}
+                                    </span>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+
+                            {/* Bundle Price - shown once */}
+                            {price && (
+                              <div className="flex items-end mt-4">
+                                {plan.originalPrice && (
+                                  <span className="line-through text-gray-400 text-sm mr-2">{plan.originalPrice}</span>
+                                )}
+                                <span className="font-Roboto text-PrimaryBlack text-[24px] leading-[31.2px] font-semibold tracking-[-0.36px]">
+                                  {price}
+                                </span>
+                                <span className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">
+                                  /{isYearly ? "year" : "month"}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        )}
 
                       <div className="mt-6 flex flex-row justify-between items-center">
                         <div>
