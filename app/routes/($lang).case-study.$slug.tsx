@@ -91,16 +91,23 @@ export async function loader({params, context}: LoaderFunctionArgs) {
         _id,
         title,
         "slug": slug.current
+      },
+      // 🟠 Virtual Mail Section
+      virtualMailSection {
+        heading,
+        buttonText,
+        buttonUrl
       }
     }`,
     params: { slug },
   });
+  
   return json({ caseStudy });
 }
 
 export default function CaseStudyPage() {
   const {caseStudy} = useLoaderData<typeof loader>();
-
+  console.log(JSON.stringify(caseStudy.virtualMailSection, null, 2));
   if (!caseStudy) {
     return (
       <div className="px-5 py-10 max-w-[1240px] mx-auto">
@@ -230,6 +237,21 @@ export default function CaseStudyPage() {
           )}
         </div>
       </div>
+      {caseStudy?.virtualMailSection && (
+        <div className="mt-16 bg-orange-500 text-center text-white rounded-lg py-12 px-6">
+          <h2 className="text-2xl font-bold mb-6">
+            {caseStudy.virtualMailSection.heading}
+          </h2>
+          {caseStudy.virtualMailSection?.buttonText && (
+            <a
+              href={caseStudy.virtualMailSection?.buttonUrl ?? "#"}
+              className="inline-block bg-white text-black px-6 py-3 rounded-full font-medium shadow hover:opacity-90"
+            >
+              {caseStudy.virtualMailSection.buttonText}
+            </a>
+          )}
+        </div>
+      )}
     </div>
   );
 }
