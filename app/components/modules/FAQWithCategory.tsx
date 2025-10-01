@@ -20,6 +20,7 @@ type FAQWithCategoryProps = {
 export default function FAQWithCategory({ categories }: FAQWithCategoryProps) {
   const [activeCategory, setActiveCategory] = useState(0);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+const [focusedCategory, setFocusedCategory] = useState(0);
 
   // ✅ only declare once, not inside map
   const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -27,42 +28,46 @@ export default function FAQWithCategory({ categories }: FAQWithCategoryProps) {
 
   const handleKeyDown = (e: React.KeyboardEvent, idx: number) => {
     const total = categories.length;
-
+  
     switch (e.key) {
       case "ArrowRight":
         e.preventDefault();
-        const next = (idx + 1) % total;
-        setActiveCategory(next);
-        setOpenIndex(null);
+        const next = (focusedCategory + 1) % total;
+        setFocusedCategory(next);
         tabRefs.current[next]?.focus();
         break;
-
+  
       case "ArrowLeft":
         e.preventDefault();
-        const prev = (idx - 1 + total) % total;
-        setActiveCategory(prev);
-        setOpenIndex(null);
+        const prev = (focusedCategory - 1 + total) % total;
+        setFocusedCategory(prev);
         tabRefs.current[prev]?.focus();
         break;
-
-      case "Home": // jump to first
+  
+      case "Home":
         e.preventDefault();
-        setActiveCategory(0);
-        setOpenIndex(null);
+        setFocusedCategory(0);
         tabRefs.current[0]?.focus();
         break;
-
-      case "End": // jump to last
+  
+      case "End":
         e.preventDefault();
-        setActiveCategory(total - 1);
-        setOpenIndex(null);
+        setFocusedCategory(total - 1);
         tabRefs.current[total - 1]?.focus();
         break;
-
+  
+      case "Enter":
+      case " ":
+        e.preventDefault();
+        setActiveCategory(focusedCategory);
+        setOpenIndex(null);
+        break;
+  
       default:
         break;
     }
   };
+  
 
   return (
     <section className="bg-white text-gray-900 md:py-25 py-10">
@@ -88,9 +93,9 @@ export default function FAQWithCategory({ categories }: FAQWithCategoryProps) {
                   : "bg-white text-LightGray hover:border-PrimaryBlack hover:bg-[#f3f3f3]"
               }`}
               role="tab"
-              aria-selected={activeCategory === idx}
               aria-controls={`tabpanel-${idx}`}
-              tabIndex={activeCategory === idx ? 0 : -1}
+              tabIndex={focusedCategory === idx ? 0 : -1} // focusable tab
+              aria-selected={activeCategory === idx}
               id={`tab-${idx}`}
             >
               {cat.title}
