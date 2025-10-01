@@ -41,6 +41,12 @@ export const whyWorkSection = defineType({
               },
               description: 'Reference to an icon name (e.g., house, money, growth)',
             }),
+                          {
+          name: "tooltipTitle",
+          title: "Tooltip Title",
+          type: "string",
+          description: "Title that appears on hover (tooltip) for this icon",
+        },
             defineField({
               name: 'title',
               title: 'Feature Title',

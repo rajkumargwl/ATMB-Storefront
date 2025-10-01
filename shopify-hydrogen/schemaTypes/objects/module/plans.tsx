@@ -40,6 +40,13 @@ export const plans = defineType({
                   fields: [
                     { name: 'svgCode', title: 'SVG Code', type: 'text' },
                     { name: 'svgFile', title: 'SVG File Upload', type: 'file' },
+                                      {
+          name: "tooltipTitle",
+          title: "Tooltip Title",
+          type: "string",
+          description: "Title that appears on hover (tooltip) for this icon",
+        },
+            
                   ],
                 },
                 { name: 'title', title: 'Title', type: 'string', validation: (Rule) => Rule.required() },

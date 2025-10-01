@@ -28,7 +28,8 @@ export const CAREER_PAGE_MODULE = groq`
         description,
         icon {
           "url": asset->url,
-        }
+        },
+        tooltipTitle // ADD THIS
       }
     },
 
@@ -40,7 +41,8 @@ export const CAREER_PAGE_MODULE = groq`
         description,
         icon {
           "url": asset->url,
-        }
+        },
+        tooltipTitle // ADD THIS
       }
     },
 

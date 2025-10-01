@@ -182,7 +182,7 @@
 //     </section>
 //   );
 // }
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation } from "swiper/modules";
 import "swiper/css";
@@ -201,6 +201,8 @@ export default function Testimonials({ data }: Props) {
   const nextRef = useRef<HTMLButtonElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
+  const [isBeginning, setIsBeginning] = useState(true);
+  const [isEnd, setIsEnd] = useState(false);
 
   const openVideo = (url: string) => {
     if (!url) return;
@@ -241,13 +243,17 @@ export default function Testimonials({ data }: Props) {
           <div className="hidden md:flex justify-end gap-5">
             <button
               ref={prevRef}
-              className="w-14 h-14 flex items-center justify-center rounded-full bg-orange-500 text-white"
+              className={`w-14 h-14 flex items-center justify-center rounded-full text-white ${
+                isBeginning ? "bg-[#D3D3D3]" : "bg-DarkOrange"
+              }`}
             >
               <ArrowLeftIcon />
             </button>
             <button
               ref={nextRef}
-              className="w-14 h-14 flex items-center justify-center rounded-full bg-orange-500 text-white"
+              className={`w-14 h-14 flex items-center justify-center rounded-full text-white ${
+                isEnd ? "bg-[#D3D3D3]" : "bg-DarkOrange"
+              }`}
             >
               <ArrowRightIcon />
             </button>
@@ -273,6 +279,14 @@ export default function Testimonials({ data }: Props) {
               swiper.params.navigation.prevEl = prevRef.current;
               // @ts-ignore
               swiper.params.navigation.nextEl = nextRef.current;
+            }}
+            onSlideChange={(swiper) => {
+              setIsBeginning(swiper.isBeginning);
+              setIsEnd(swiper.isEnd);
+            }}
+            onInit={(swiper) => {
+              setIsBeginning(swiper.isBeginning);
+              setIsEnd(swiper.isEnd);
             }}
           >
             {data?.testimonials?.map((item, idx) =>
@@ -310,6 +324,7 @@ export default function Testimonials({ data }: Props) {
                         href={item.readMoreUrl || "#"}
                         className="font-Roboto text-DarkOrange text-[14px] leading-[14px] tracking-[0.07px] font-normal mt-4 inline-block"
                       >
+                         <span className="sr-only">(click to  Read Full Article written by {item.authorName})</span>
                         {item.readMoreText}
                       </a>
                     )}
@@ -356,21 +371,7 @@ export default function Testimonials({ data }: Props) {
                           alt={item.videoThumbnail.altText || "Video Thumbnail"}
                           className="w-full h-[250px] object-cover"
                         />
-                        {/* {item.playIcon?.url && (
-                          <div className="absolute inset-0 flex items-center justify-center">
-                            <a
-                              href={item.videoUrl || "#"}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="cursor-pointer"
-                            >
-                              <div className="bg-[#FFFFFFB2] rounded-full p-2 shadow-lg flex items-center justify-center">
-                                <img src={item.playIcon.url} alt="Play Icon" className="w-10 h-10" />
-                              </div>
-                            </a>
-                          </div>
-                        )} */}
-                         {item.playIcon?.url && (
+                        {item.playIcon?.url && (
                           <div className="absolute inset-0 flex items-center justify-center">
                             <button
                               onClick={() => openVideo(item.videoUrl || "")}
@@ -379,6 +380,7 @@ export default function Testimonials({ data }: Props) {
                               <div className="bg-[#FFFFFFB2] rounded-full p-2 shadow-lg flex items-center justify-center">
                                 <img src={item.playIcon.url} alt="Play Icon" className="w-10 h-10" />
                               </div>
+                               <span className="sr-only">(click to play video of {item.authorName})</span>
                             </button>
                           </div>
                         )}

@@ -34,13 +34,24 @@ import CoreValuesSection from '~/components/modules/CoreValuesSection';
 import JoinTeamSection from '~/components/modules/JoinTeamSection';
 import FAQSection from './FAQSection';
 import FAQWithCategory from './FAQWithCategory';
+import ContactUsSection from '~/components/modules/ContactUsSection';
+import AffiliateProgramSection from '~/components/modules/AffiliateProgramSection';
+import WhyJoinSection from '~/components/modules/WhyJoinSection';
+import StepsSection from '~/components/modules/StepsSection';
+
+
+
 
 type Props = {
   imageAspectClassName?: string;
   module: SanityModule;
+  homeSearchResults?: any;
+  searchQuery?: string | null;
 };
 
-export default function Module({imageAspectClassName, module}: Props) {
+export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery}: Props) {
+
+    console.log("homeSearchResults in module", homeSearchResults);
   switch (module._type) {
     // -----------------------
     // About Us nested sections
@@ -61,13 +72,15 @@ export default function Module({imageAspectClassName, module}: Props) {
           ))}
         </>
       );
+      
       case 'careerPromotionSection':
       return <CareerPromotionSection {...module} />;
 
       case 'whyWorkSection':
   return <WhyWorkSection {...module} />;
   
-
+   case 'contactUsSection':
+  return <ContactUsSection data={module} />;
    case 'aboutCompanySection':
   return <AboutCompanySection {...module} />;
     case 'coreValuesSection':
@@ -93,6 +106,23 @@ export default function Module({imageAspectClassName, module}: Props) {
     case 'aboutResourceAuthorsSection':
       return <AboutResourceAuthorsSection {...module} />;
    
+   case 'affiliatedProgramPageModule':
+  return (
+    <>
+      {module.modules?.map((sub: any) => (
+        <Module key={sub._key} module={sub} />
+      ))}
+    </>
+  );
+//affiliate-program-page-module
+case 'affiliateProgramSection':
+  return <AffiliateProgramSection {...module} />;
+
+case 'whyJoinSection':
+  return <WhyJoinSection {...module} />;
+
+case 'stepsSection':
+  return <StepsSection {...module} />;
 
 
       case 'faqPageModule':
@@ -111,7 +141,7 @@ export default function Module({imageAspectClassName, module}: Props) {
     // Existing cases
     // -----------------------
     case 'heroType':
-      return <Home data={module} />;
+      return <Home data={module}  />;
     case 'featuresModule':
       return <FeaturesModule {...module} />;
     case 'pricingModule':
@@ -133,7 +163,7 @@ export default function Module({imageAspectClassName, module}: Props) {
     case 'module.instagram':
       return <InstagramModule module={module} />;
     case 'hero':
-      return <HomeHero hero={module} />;
+      return <HomeHero hero={module} homeSearchResults={homeSearchResults} searchQuery={searchQuery ?? ''} />;
     case 'homeSection2':
       return <TrustedByBusiness data={module} />;
     case 'homeSection3':
