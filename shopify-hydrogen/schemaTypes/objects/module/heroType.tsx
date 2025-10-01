@@ -60,33 +60,40 @@ export const heroType = defineType({
       options: { hotspot: true },
     }),
     // Features List
+   defineField({
+  name: "features",
+  title: "Features",
+  type: "array",
+  of: [
     defineField({
-      name: "features",
-      title: "Features",
-      type: "array",
-      of: [
-        defineField({
-          name: "feature",
-          title: "Feature",
-          type: "object",
-          fields: [
-            {
-              name: "icon",
-              title: "Icon",
-              type: "image",
-              description: "Feature icon",
-              options: { hotspot: true },
-            },
-            {
-              name: "title",
-              title: "Title",
-              type: "string",
-              description: "Feature title (e.g., Real Street Addresses)",
-            },
-          ],
-        }),
+      name: "feature",
+      title: "Feature",
+      type: "object",
+      fields: [
+        {
+          name: "icon",
+          title: "Icon",
+          type: "image",
+          description: "Feature icon",
+          options: { hotspot: true },
+        },
+        {
+          name: "title",
+          title: "Title",
+          type: "string",
+          description: "Feature title (e.g., Real Street Addresses)",
+        },
+       
+        {
+          name: "tooltipTitle",
+          title: "Tooltip Title",
+          type: "string",
+          description: "Title that appears on hover (tooltip) for this icon",
+        },
       ],
     }),
+  ],
+}),
     // Right Side Image 1
     defineField({
       name: "rightImage1",

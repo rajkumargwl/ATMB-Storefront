@@ -1,4 +1,5 @@
 import {defineConfig, isDev} from 'sanity'
+import { datasetSwitcherPlugin } from './plugins/customDocumentActions/datasetSwitcher'
 
 import {structureTool} from 'sanity/structure'
 import {schemaTypes} from './schemaTypes'
@@ -13,19 +14,24 @@ import Navbar from './components/studio/Navbar'
 
 const devOnlyPlugins = [visionTool()]
 
+const savedDataset =
+  typeof window !== 'undefined' && localStorage.getItem('sanity-dataset')
+
+const dataset = savedDataset || 'development'
+
+
 export default defineConfig({
   name: 'default',
   title: 'Shopify - 0dv7ud-pz',
-
   projectId: 'm5xb8z9y',
-  dataset: 'production',
-
-  plugins: [
+  dataset,
+  plugins: [  
     structureTool({structure}),
     colorInput(),
     imageHotspotArrayPlugin(),
     customDocumentActions(),
     media(),
+    datasetSwitcherPlugin({datasets: ['production', 'development']}), 
     ...(isDev ? devOnlyPlugins : []),
   ],
 

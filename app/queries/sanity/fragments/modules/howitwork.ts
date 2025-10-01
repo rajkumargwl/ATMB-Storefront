@@ -14,6 +14,7 @@ export const MODULE_HOW_IT_WORKS = groq`
       }
     },
     title,
-    description
+    description,
+    tooltipTitle // ADD THIS
   }
 `;

@@ -42,6 +42,13 @@ export const businessAtFingertips = defineType({
               fields: [
                 { name: 'iconFile', title: 'SVG File', type: 'file', options: { accept: '.svg,.png' },},
                 { name: 'iconCode', title: 'SVG Code', type: 'text' },
+                        {
+          name: "tooltipTitle",
+          title: "Tooltip Title",
+          type: "string",
+          description: "Title that appears on hover (tooltip) for this icon",
+        },
+            
               ],
             },
             { name: 'title', title: 'Title', type: 'string' },
