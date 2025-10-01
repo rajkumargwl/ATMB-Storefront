@@ -1,0 +1,30 @@
+import { defineType, defineField } from 'sanity'
+import { DocumentIcon } from '@sanity/icons'
+
+export const renterreferralprogramType = defineType({
+  name: 'renterreferralprogram',
+  title: 'Renter Referral Program',
+  type: 'object',
+  icon: DocumentIcon,
+   fields: [
+    defineField({
+      name: 'modules',
+      type: 'array',
+      of: [
+        { type: 'aboutIntroSection' },
+        { type: 'whyBusinessChooseUs' }, 
+        { type: 'renterEditor' }, 
+      ],
+    }),
+  ],
+  preview: {
+    select: {
+      title: 'title',
+    },
+    prepare({ title }) {
+      return {
+        title: title || 'Renter Referral Program',
+      }
+    },
+  },
+})

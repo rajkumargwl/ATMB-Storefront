@@ -35,11 +35,12 @@ export const pageType = defineType({
          { type: 'solutionsMailbox' },
           { type: 'careersPageModule' },
           { type: 'faqPageModule' },
-            { type: 'uspsForm1583' },
-             {type: 'contactUsSection'},
-             { type: 'affiliatedProgramPageModule' },
-              { type: 'founderModule' },
-          
+          { type: 'uspsForm1583' },
+          {type: 'contactUsSection'},
+          { type: 'affiliatedProgramPageModule' },
+          { type: 'founderModule' },
+          { type: 'solutionPageModule' },
+           { type: 'renterreferralprogram' },
         // add more modules if needed
       ],
     }),
