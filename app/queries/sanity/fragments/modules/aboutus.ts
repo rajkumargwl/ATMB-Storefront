@@ -15,8 +15,11 @@ export const ABOUT_US_MODULE = groq`
       description,
       buttonText,
       buttonLink,
-      image {
-        "url": asset->url,
+      video {
+        thumbnail {
+          "url": asset->url
+        },
+        url
       }
     },
 

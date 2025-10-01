@@ -43,10 +43,10 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
 //     (mod: any) => mod._type === 'solutionPageModule'
 //   );
 
-//   if (!page) throw notFound();
+  if (!page) throw notFound();
 
   const gids = fetchGids({ page, context });
- console.log(JSON.stringify(page.modules, null, 2));
+
   
   return defer({
     page,
