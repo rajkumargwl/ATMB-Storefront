@@ -40,7 +40,9 @@ export const pageType = defineType({
           { type: 'affiliatedProgramPageModule' },
           { type: 'founderModule' },
           { type: 'solutionPageModule' },
+          { type: 'marketPlaceModule' },
            { type: 'renterreferralprogram' },
+          
         // add more modules if needed
       ],
     }),
