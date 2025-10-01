@@ -4,7 +4,6 @@ import {notFound} from '~/lib/utils';
 import {WPPost} from '../../shopify-hydrogen/schemaTypes/wpPost';
 import {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
- 
 const FIRST_PAGE_SIZE = 11;
 const NEXT_PAGE_SIZE = 12;
  
@@ -75,9 +74,10 @@ export default function BlogIndex() {
               <p className='font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]'>Discover practical tips, industry insights, and success stories on virtual mail.</p>
             </div>
           {/* First row: only first 2 posts */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-11 md:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-11 md:gap-6">
             {posts.slice(0, 2).map((post) => (
               <div key={post._id} className="overflow-hidden relative">
+                <Link to={`/blog/${post.slug.current}`}>
                 {post.mainImage && <img src={post.mainImage} alt={post.title} className="w-full rounded-[20px] h-[342px] object-cover"/>}
                 <div className='absolute right-[12px] md:right-[20px] top-[12px] md:top-[20px] flex gap-2 p-2 rounded-full bg-[#FEFAED] border border-[#FFC107] font-Roboto text-PrimaryBlack font-normal text-[12px] leading-[18px] tracking-[0px]'>
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -108,11 +108,12 @@ export default function BlogIndex() {
                     {new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                   </span>
                   </p>
-                  <Link to={`/blog/${post.slug.current}`}>
+                  
                     <h2 className="line-clamp-2 font-Roboto text-PrimaryBlack font-semibold leading-[28px] md:leading-[43.2px] text-[20px] md:text-[36px] tracking-[-0.3px] md:tracking-[-0.54px]">{post.title}</h2>
-                  </Link>
+                
                   <p className="line-clamp-2 mt-3 font-Roboto text-LightGray font-normal leading-[21px] md:leading-[27px] text-[14px] md:text-[18px] tracking-[0px]">{portableTextToPlainText(post.content).slice(0, 120)}...</p>
                 </div>
+                  </Link>
               </div>
             ))}
           </div>
@@ -121,15 +122,16 @@ export default function BlogIndex() {
         <div className="px-5 bg-[#F6F6F6] py-[40px] md:py-[60px] lg:py-[100px]">
         <div className="max-w-[1240px] mx-auto">
             {/* Rest of posts: 3 per row */}
-            <div className="mb-6 md:mb-11 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-6 md:gap-y-11">
+            <div className="mb-6 md:mb-11 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-6 md:gap-y-11">
               {posts.slice(2).map((post) => (
                 <div key={post._id} className="group relative border border-LightWhite hover:border-PrimaryBlack rounded-[20px] overflow-hidden bg-white transition">
+                 <Link to={`/blog/${post.slug.current}`}>
                   {post.mainImage && <img src={post.mainImage} alt={post.title} className="w-full rounded-t-[20px] h-[249px] object-cover"/>}
                   <div className='absolute right-[24px] top-[24px] flex items-center justify-center gap-2 w-[48px] h-[48px] rounded-full bg-DarkOrange transition-all opacity-0 group-hover:opacity-100'>
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 25 24" fill="none">
                     <path d="M19.0989 4.80005C19.4289 4.80005 19.6989 5.07005 19.6989 5.40005V15C19.6989 15.33 19.4289 15.6 19.0989 15.6C18.7689 15.6 18.4989 15.33 18.4989 15V6.84755L6.32266 19.0238C6.09016 19.2563 5.70766 19.2563 5.47516 19.0238C5.24266 18.7913 5.24266 18.4088 5.47516 18.1763L17.6514 6.00005H9.49891C9.16891 6.00005 8.89891 5.73005 8.89891 5.40005C8.89891 5.07005 9.16891 4.80005 9.49891 4.80005H19.0989Z" fill="white"/>
                   </svg>
-                </div>
+                  </div>
                   
                   <div className="p-6">
                     <p className="flex items-center gap-2 mb-4 font-Roboto text-LightGray font-normal leading-[21px] md:leading-[21px] text-[14px] md:text-[14px] tracking-[0px]">
@@ -147,11 +149,12 @@ export default function BlogIndex() {
                     {new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                   </span>
                   </p>
-                     <Link to={`/blog/${post.slug.current}`}>
+                     
                       <h2 className="line-clamp-2 font-Roboto text-PrimaryBlack font-semibold leading-[28px] md:leading-[31.2px] text-[20px] md:text-[24px] tracking-[-0.3px] md:tracking-[-0.36px]">{post.title}</h2>
-                    </Link>
+                    
                     <p className="line-clamp-2 mt-2 font-Roboto text-LightGray font-normal leading-[21px] md:leading-[24px] text-[14px] md:text-[16px] tracking-[0px]">{portableTextToPlainText(post.content).slice(0, 120)}...</p>
                   </div>
+                  </Link>
                 </div>
               ))}
             </div>
