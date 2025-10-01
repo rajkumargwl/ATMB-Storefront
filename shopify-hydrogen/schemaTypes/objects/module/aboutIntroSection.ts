@@ -29,11 +29,24 @@ export const aboutIntroSection = defineType({
       title: 'Description',
       type: 'text',
     }),
+    // ⬇️ Changed image field to video object
     defineField({
-      name: 'image',
-      title: 'Right Side Image',
-      type: 'image',
-      options: {hotspot: true},
+      name: 'video',
+      title: 'Right Side Video',
+      type: 'object',
+      fields: [
+        defineField({
+          name: 'thumbnail',
+          title: 'Thumbnail',
+          type: 'image',
+          options: {hotspot: true},
+        }),
+        defineField({
+          name: 'url',
+          title: 'Video URL',
+          type: 'url',
+        }),
+      ],
     }),
     defineField({
       name: 'buttonText',
@@ -48,7 +61,7 @@ export const aboutIntroSection = defineType({
     }),
   ],
   preview: {
-    select: {title: 'heading', media: 'image'},
+    select: {title: 'heading', media: 'video.thumbnail'},
     prepare({title, media}) {
       return {
         title: title || 'About Intro Section',

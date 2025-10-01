@@ -22,7 +22,8 @@ import { CAREER_PAGE_MODULE } from './modules/careerpage';
 import { FAQ_MODULES } from './modules/faqcategory';
 import { USPS_FORM_1583 } from './modules/uspsform1583';
 import { CONTACT_US_MODULE } from './modules/contactus'; 
-import { AFFILIATE_MODULE } from './modules/affiliateProgramSection'; // 👈 import your affiliate module
+import { AFFILIATE_MODULE } from './modules/affiliateProgramSection'; 
+import { SOLUTION_PAGE_MODULE } from './modules/solutionpagemodule';
 // import { FOUNDER_BY_SLUG } from './modules/founder';
 import { RENTER_REFERRAL_FRAGMENT } from './modules/renter';
  
@@ -103,5 +104,9 @@ export const MODULES = groq`
 (_type == "renterreferralprogram") => {
     ${RENTER_REFERRAL_FRAGMENT}
   },
+  (_type == "solutionPageModule") => {
+    ${SOLUTION_PAGE_MODULE}
+  },
+
 
 `;

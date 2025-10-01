@@ -42,7 +42,12 @@ import { RenterReferralHero } from '~/components/modules/renter-referralhero';
 import { RenterReferralWork } from '~/components/modules/renter-referralwork';
 import { RenterReferralNoCatch } from '~/components/modules/renter-referralno-catch';
 import { RenterReferralEditor } from '~/components/modules/renter-referraleditor';
-
+import  SolutionHero  from '~/components/modules/SolutionHero';
+import SolutionVirtualMailbox from '~/components/modules/SolutionVirtualMailbox';
+import SolutionRealLife from '~/components/modules/SolutionRealLife';
+import SolutionMailboxFeatures from '~/components/modules/SolutionMailboxFeatures';
+import SolutionMailboxBenefitFaq from '~/components/modules/SolutionMailboxBenefitFaq';
+import SolutionMailboxLocationHowItWorks from '~/components/modules/SolutionMailboxLocationHowItWorks';
 type Props = {
   imageAspectClassName?: string;
   module: SanityModule;
@@ -51,10 +56,9 @@ type Props = {
 };
 
 export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery}: Props) {
-  console.log("homeSearchResults in module", homeSearchResults);
+
   
-  // Add debug logging for module types
-  console.log("Processing module type:", module._type, "with key:", module._key);
+
 
   switch (module._type) {
     // -----------------------
@@ -184,6 +188,38 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
     case 'faqWithCategory':
       return <FAQWithCategory {...module} />;
 
+
+
+     // -----------------------
+  // Solution Page Module
+  // -----------------------
+  case 'solutionPageModule':
+    return (
+      <>
+        {module.modules?.map((sub: any) => (
+          <Module key={sub._key} module={sub} />
+        ))}
+      </>
+    );
+
+  case 'solutionHeroModule':
+    return <SolutionHero data={module} />;
+  case 'solutionVirtualMailboxModule':
+  return <SolutionVirtualMailbox data={module} />;
+
+  case 'solutionRealLife':
+  return <SolutionRealLife data={module} />;
+
+  case 'solutionMailboxFeaturesModule':
+  return <SolutionMailboxFeatures data={module} />;
+case 'solutionMailboxBenefitFaqModule':
+  return <SolutionMailboxBenefitFaq data={module} />;
+
+  case 'solutionMailboxLocationHowItWorksModule':
+  return <SolutionMailboxLocationHowItWorks data={module} />;
+
+
+
     // -----------------------
     // Existing cases
     // -----------------------
@@ -254,6 +290,7 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
           module={module}
         />
       );
+
     
     default:
       console.warn(`No component found for module type: ${module._type}`);

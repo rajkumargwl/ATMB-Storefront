@@ -1,3 +1,5 @@
+// app/routes/solutions.tsx
+
 import { Await, useLoaderData } from '@remix-run/react';
 import {
   AnalyticsPageType,
@@ -14,45 +16,38 @@ import { Suspense } from 'react';
 import ModuleGrid from '~/components/modules/ModuleGrid';
 import { fetchGids, notFound, validateLocale } from '~/lib/utils';
 
-
-
-import { ABOUT_US_PAGE_QUERY } from '~/queries/sanity/fragments/pages/aboutus';
+import { SOLUTIONS_PAGE_QUERY } from '~/queries/sanity/fragments/pages/solutionpage';
 
 // -----------------
 // SEO
 // -----------------
 const seo: SeoHandleFunction = ({ data }) => ({
-  title: data?.page?.seo?.title || 'About Us - Sanity x Hydrogen',
+  title: data?.page?.seo?.title || 'Solutions - Sanity x Hydrogen',
   description:
     data?.page?.seo?.description ||
-    'Learn more about our story, vision, and team.',
+    'Explore our virtual mailbox solutions and benefits.',
 });
 export const handle = { seo };
-
 // -----------------
 // Loader
 // -----------------
 export async function loader({ context, params }: LoaderFunctionArgs) {
   validateLocale({ context, params });
 
-
-  
   const page = await context.sanity.query({
-    query: ABOUT_US_PAGE_QUERY, // ✅ reusing the PAGE query
-  
+    query: SOLUTIONS_PAGE_QUERY, // ✅ use Solutions query
   });
+   
+  // Optionally: pick specific solution module
+//   const solutionPageModule = page?.modules?.find(
+//     (mod: any) => mod._type === 'solutionPageModule'
+//   );
 
-  
-    const aboutUsModule = page?.modules?.find(
-    (mod: any) => mod._type === 'aboutUsModule'
-  );
-
-  
-  
   if (!page) throw notFound();
 
   const gids = fetchGids({ page, context });
 
+  
   return defer({
     page,
     gids,
@@ -63,16 +58,16 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
 // -----------------
 // Component
 // -----------------
-export default function AboutUs() {
+export default function SolutionsPage() {
   const { page, gids } = useLoaderData<typeof loader>();
 
   return (
-    <SanityPreview data={page} query={ABOUT_US_PAGE_QUERY}>
+    <SanityPreview data={page} query={SOLUTIONS_PAGE_QUERY}>
       {(page) => (
         <Suspense>
           <Await resolve={gids}>
             {page?.modules && page.modules.length > 0 && (
-             <div className={clsx('mb-0 mt-0 px-0', 'md:px-0')}>
+              <div className={clsx('mb-0 mt-0 px-0', 'md:px-0')}>
                 <ModuleGrid items={page.modules} />
               </div>
             )}

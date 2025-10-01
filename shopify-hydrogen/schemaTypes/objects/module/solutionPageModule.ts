@@ -15,7 +15,9 @@ export const solutionPageModule = defineType({
         {type: 'solutionRealLife'},             // Real Life Example / Stories
         {type: 'solutionMailboxFeaturesModule'},      // Features
         {type: 'solutionMailboxBenefitFaqModule'},    // Benefits + FAQ
-        {type: 'solutionMailboxLocationHowItWorksModule'}, // Location + How It Works
+        {type: 'solutionMailboxLocationHowItWorksModule'},
+        {type: 'faq'},
+         {type: 'plans'},
       ],
     }),
   ],
