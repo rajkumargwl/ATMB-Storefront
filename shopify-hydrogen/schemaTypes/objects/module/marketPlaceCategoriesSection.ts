@@ -5,8 +5,13 @@ export const marketPlaceCategoriesSection = defineType({
   name: "marketPlaceCategoriesSection",
   title: "Marketplace Categories",
   type: "object",
-  icon: HelpCircleIcon,
   fields: [
+    defineField({
+      name: 'allIcon',
+      title: 'All Category Icon',
+      type: 'image',
+      options: {hotspot: true},
+    }),
     defineField({
       name: "categories",
       title: "Marketplace Categories",
