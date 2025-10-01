@@ -148,11 +148,15 @@ useEffect(() => {
               <div key={idx} className="relative group p-2">
                  <Link
                   to={item.label === "Solutions"
-        ? "/solutions"
+        ? "/solutionsvm"
         : item.label === "Locations"
         ? "/locations"
           : item.label === "Blog"
           ? "/blogs"
+          : item.label === "About Us"
+          ? "/about-us"
+          : item.label === "Contact Us"
+          ? "/contact"
         : item.url ?? "#"}
                   className="text-PrimaryBlack hover:text-PrimaryBlack font-normal flex items-center gap-[6px] text-[14px] md:text-[14px] xl:text-[16px] leading-[24px] tracking-[0px]"
                 >
