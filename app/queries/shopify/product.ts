@@ -333,3 +333,89 @@ export const ALL_PRODUCTS_QUERY =`#graphql
   }
 `;
 
+export const PRODUCT_METAFIELDS_QUERY = `#graphql
+  ${PRODUCT_FIELDS}
+  ${PRODUCT_VARIANT_FIELDS}
+
+  query product(
+    $country: CountryCode
+    $language: LanguageCode
+    $handle: String!
+    $selectedOptions: [SelectedOptionInput!]!
+  ) @inContext(country: $country, language: $language) {
+    product(handle: $handle) {
+      ...ProductFields
+
+      metafields(identifiers: [{ namespace: "custom", key: "bundle_items" }]) {
+        value
+        type
+        references(first: 10) {
+          edges {
+            node {
+              ... on Product {
+                id
+                title
+                handle
+                description
+                featuredImage { url }
+                variants(first: 50) {
+                  nodes {
+                    ...ProductVariantFields
+                    metafields(identifiers: [{ namespace: "custom", key: "plan_type" }]) {
+                      value
+                      key
+                      type
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+
+      media(first: 20) {
+        nodes {
+          ... on MediaImage {
+            id
+            mediaContentType
+            image {
+              id
+              url
+              altText
+              width
+              height
+            }
+          }
+          ... on Model3d {
+            id
+            mediaContentType
+            sources {
+              mimeType
+              url
+            }
+          }
+        }
+      }
+
+      selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {
+        ...ProductVariantFields
+        metafields(identifiers: [{ namespace: "custom", key: "plan_type" }]) {
+          key
+          value
+        }
+      }
+
+      variants(first: 50) {
+        nodes {
+          ...ProductVariantFields
+          metafields(identifiers: [{ namespace: "custom", key: "plan_type" }]) {
+            key
+            value
+          }
+        }
+      }
+    }
+  }
+`;
+
