@@ -103,6 +103,10 @@ import {solutionPageModule} from './objects/module/solutionPageModule'
 import {solutionRealLife} from './objects/module/solutionRealLife'
 import {renterreferralprogramType} from './objects/module/renterprogramType' 
 import {renterEditor} from './objects/module/rentereditor'
+import {marketPlaceModule} from './objects/module/marketPlaceModule'
+import {marketPlaceIntroSection} from './objects/module/marketPlaceIntroSection'
+import {marketPlaceCategoriesSection} from './objects/module/marketPlaceCategoriesSection'
+
 // Objects used as annotations must be imported first
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
 
@@ -202,9 +206,11 @@ contactUsSection,
   solutionPageModule,
   solutionRealLife,
   renterreferralprogramType,
-renterEditor,
-  solutionVirtualMailboxModule
-
+  renterEditor,
+  solutionVirtualMailboxModule,
+  marketPlaceModule,
+  marketPlaceIntroSection,
+  marketPlaceCategoriesSection,
 ]
 
 import {portableTextType} from './portableText/portableTextType'
