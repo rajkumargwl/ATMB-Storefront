@@ -26,6 +26,7 @@ import { AFFILIATE_MODULE } from './modules/affiliateProgramSection';
 import { SOLUTION_PAGE_MODULE } from './modules/solutionpagemodule';
 // import { FOUNDER_BY_SLUG } from './modules/founder';
 import { RENTER_REFERRAL_FRAGMENT } from './modules/renter';
+import { MARKETPLACE } from './modules/marketplace';
  
  
 
@@ -82,6 +83,9 @@ export const MODULES = groq`
   },
   (_type == "faq") => {
     ${FAQ}
+  },
+  (_type == "marketPlaceModule") => {
+    ${MARKETPLACE}
   },
   (_type == "aboutUsModule") => {
     ${ABOUT_US_MODULE}
