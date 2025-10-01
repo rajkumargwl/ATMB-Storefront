@@ -6,10 +6,19 @@ export const solutionVirtualMailboxModule = defineType({
   type: 'object',
   fields: [
     defineField({
-      name: 'leftImage',
-      title: 'Left Side Image',
+      name: 'desktopImage',
+      title: 'Desktop View Image',
       type: 'image',
-      description: 'Main mockup image (desktop + mobile view)',
+      description: 'Main mockup image for desktop view',
+      options: {
+        hotspot: true,
+      },
+    }),
+    defineField({
+      name: 'mobileImage',
+      title: 'Mobile View Image',
+      type: 'image',
+      description: 'Main mockup image for mobile view',
       options: {
         hotspot: true,
       },
@@ -62,8 +71,14 @@ export const solutionVirtualMailboxModule = defineType({
   preview: {
     select: {
       title: 'title',
-      subtitle: 'description',
-      media: 'leftImage',
+      media: 'desktopImage', // show desktop image in preview
+    },
+    prepare(selection) {
+      return {
+        title: selection.title,
+        subtitle: 'Virtual Mailbox Module',
+        media: selection.media,
+      }
     },
   },
 })
