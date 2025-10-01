@@ -48,6 +48,9 @@ import SolutionRealLife from '~/components/modules/SolutionRealLife';
 import SolutionMailboxFeatures from '~/components/modules/SolutionMailboxFeatures';
 import SolutionMailboxBenefitFaq from '~/components/modules/SolutionMailboxBenefitFaq';
 import SolutionMailboxLocationHowItWorks from '~/components/modules/SolutionMailboxLocationHowItWorks';
+import MarketplaceIntro from '~/components/modules/MarketplaceIntro';
+import MarketplaceCategories from '~/components/modules/MarketplaceCategories';
+
 type Props = {
   imageAspectClassName?: string;
   module: SanityModule;
@@ -290,6 +293,21 @@ case 'solutionMailboxBenefitFaqModule':
           module={module}
         />
       );
+
+    case 'marketPlaceModule':
+      return (
+        <>
+          {module.modules?.map((sub: any) => (
+            <Module key={sub._key} module={sub} />
+          ))}
+        </>
+      );
+
+    case 'marketPlaceIntroSection':
+      return <MarketplaceIntro data={module} />;  
+
+    case 'marketPlaceCategoriesSection':
+      return <MarketplaceCategories data={module} />;  
 
     
     default:

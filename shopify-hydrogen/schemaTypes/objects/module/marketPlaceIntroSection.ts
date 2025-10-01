@@ -51,7 +51,7 @@ export const marketPlaceIntroSection = defineType({
     select: {title: 'heading', media: 'image'},
     prepare({title, media}) {
       return {
-        title: title || 'About Intro Section',
+        title: title || 'Marketplace Intro Section',
         media,
       }
     },
