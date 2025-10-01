@@ -38,7 +38,6 @@ export default defineType({
       type: 'image',
       options: { hotspot: true },
     }),
-    // 🔑 Single rich text editor for all content
     defineField({
       name: 'content',
       title: 'Case Study Content',
@@ -55,7 +54,6 @@ export default defineType({
       ],
     }),
 
-    // ✅ New "By The Numbers" section
     defineField({
       name: 'byTheNumbers',
       title: 'By The Numbers',
@@ -77,20 +75,29 @@ export default defineType({
               title: 'Stat Item',
               type: 'object',
               fields: [
-                defineField({
-                  name: 'value',
-                  title: 'Value',
-                  type: 'string', // "$400", "60%", etc.
-                }),
-                defineField({
-                  name: 'label',
-                  title: 'Label',
-                  type: 'string', // description
-                }),
+                defineField({ name: 'value', title: 'Value', type: 'string' }),
+                defineField({ name: 'label', title: 'Label', type: 'string' }),
               ],
             }),
           ],
         }),
+      ],
+    }),
+
+    // 🟠 Fixed "Virtual Mail CTA" section
+    defineField({
+      name: 'virtualMailSection',
+      title: 'Virtual Mail Section',
+      type: 'object',
+      initialValue: {
+        heading: 'Postal has gone digital, do you offer virtual mail?',
+        buttonText: 'Mail Center Signup',
+        buttonUrl: '',
+      },
+      fields: [
+        defineField({ name: 'heading', title: 'Heading', type: 'string' }),
+        defineField({ name: 'buttonText', title: 'Button Text', type: 'string' }),
+        defineField({ name: 'buttonUrl', title: 'Button URL', type: 'url' }),
       ],
     }),
 

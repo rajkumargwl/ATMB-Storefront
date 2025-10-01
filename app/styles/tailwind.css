@@ -117,6 +117,40 @@ html {
 }
  
  
+ 
+@layer utilities {
+  @keyframes fadeSlideIn {
+    0% {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+ 
+  .animate-fadeSlideIn {
+    animation: fadeSlideIn 2.6s ease-out;
+  }
+    @keyframes fillBar {
+    0% {
+      opacity: 0;
+    }
+    25% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+ 
+  .animate-fillBar {
+    animation: fillBar 2ms ease forwards 6ms;
+  }
+}
+ 
+ 
 /* usps page css */
 .btn-main:hover span.arrow-show{
   opacity: 1;
@@ -282,45 +316,62 @@ body.no-scroll {
   font-weight: 500;
 }
  
- 
-/* responsive css */
-@media only screen and (max-width:767px)  {
-  .main-content-left  .content-block {
-    padding: 40px 24px;
-  }
-  .main-content-left .content-block h2,
-  .main-content-left .content-block h2 strong {
-    font-size: 20px;
-    line-height: 28px;
-    letter-spacing: -0.3px;
-  }
-  .main-content-left .content-block h3,
-  .main-content-left .content-block h3 strong {
+/* case study page */
+.case-study-content p {
     font-size: 18px;
+    font-weight: 400;
     line-height: 27px;
+    letter-spacing: 0px;
+    color: #4d4e4f;
+    font-family: Roboto, "sans-serif";
+    margin-bottom: 32px;
+    margin-top: 0px;
 }
-  .main-content-left p,
-  .main-content-left p.my-6.text-lg.text-slate-600+p{
-    font-size: 16px;
-    line-height: 24px;
-    margin-bottom: 24px;
-  }
-  .main-content-left p a,
-  .main-content-left h4,
-  .main-content-left ul li,
-  .main-content-left ol li{
-    font-size: 16px;
-    line-height: 24px;
-  }
-  .main-content-left p.my-6.text-lg.text-slate-600 {
-    font-size: 12px;
-    line-height: 18px;
-  }
-  .how-started p {
-    font-size: 14px;
-    line-height: 21px;
-  }
+.case-study-content ol,
+.case-study-content ul {
+    margin-bottom: 25px;
+    padding-left: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
 }
+.case-study-content ol ol,
+.case-study-content ul ul {
+  margin-bottom: 0px;
+}
+.case-study-content ul li {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 27px;
+    letter-spacing: 0px;
+    color: #4D4E4F;
+    font-family: "Roboto", "sans-serif";
+    list-style-type: disc;
+    list-style-position: outside;
+}
+.case-study-content ol li {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 27px;
+    letter-spacing: 0px;
+    color: #4D4E4F;
+    font-family: "Roboto", "sans-serif";
+    list-style-type: decimal;
+    list-style-position: outside;
+}
+.case-study-content h2,
+.case-study-content h2 strong {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 31.2px;
+    letter-spacing: -0.36px;
+    color: #091019;
+    font-family: "Roboto", "sans-serif";
+    margin-bottom: 16px;
+    margin-top: 0px;
+}
+ 
+ 
  
  
 /* blog detail page css */
@@ -403,6 +454,47 @@ body.no-scroll {
     list-style-type: disc;
     list-style-position: outside;
 }
+ 
+ 
+/* responsive css */
+@media only screen and (max-width:767px)  {
+  .main-content-left  .content-block {
+    padding: 40px 24px;
+  }
+  .main-content-left .content-block h2,
+  .main-content-left .content-block h2 strong {
+    font-size: 20px;
+    line-height: 28px;
+    letter-spacing: -0.3px;
+  }
+  .main-content-left .content-block h3,
+  .main-content-left .content-block h3 strong {
+    font-size: 18px;
+    line-height: 27px;
+}
+  .main-content-left p,
+  .main-content-left p.my-6.text-lg.text-slate-600+p{
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 24px;
+  }
+  .main-content-left p a,
+  .main-content-left h4,
+  .main-content-left ul li,
+  .main-content-left ol li{
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .main-content-left p.my-6.text-lg.text-slate-600 {
+    font-size: 12px;
+    line-height: 18px;
+  }
+  .how-started p {
+    font-size: 14px;
+    line-height: 21px;
+  }
+}
+ 
 /* responsive css */
 @media only screen and (max-width:767px)  {
 .detail-content p,
@@ -424,6 +516,24 @@ body.no-scroll {
 .detail-content h4 {
     font-size: 16px;
     line-height: 150%;
+}
+.case-study-content h2, .case-study-content h2 strong {
+    font-size: 20px;
+    line-height: 28px;
+}
+.case-study-content p,
+.case-study-content ul li,
+.case-study-content ol li {
+   font-size: 16px;
+    line-height: 24px;
+}
+.case-study-content p,
+.case-study-content ul,
+.case-study-content ol {
+  margin-bottom: 44px;
+}
+.case-study-content p:last-child {
+  margin-bottom: 0;
 }
 }
  
