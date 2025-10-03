@@ -34,12 +34,14 @@
     "sanity-plugin-hotspot-array": "^1.0.1",
     "sanity-plugin-media": "^2.0.5",
     "slug": "^8.2.2",
-    "styled-components": "^6.1.18"
+    "styled-components": "^6.1.18",
+    "turndown": "^7.2.1"
   },
   "devDependencies": {
     "@portabletext/types": "^2.0.2",
     "@sanity/eslint-config-studio": "^5.0.2",
     "@types/html-to-text": "^9.0.4",
+    "@types/jsdom": "^27.0.0",
     "@types/lodash.get": "^4.4.7",
     "@types/node": "^24.5.1",
     "@types/react": "^19.1",

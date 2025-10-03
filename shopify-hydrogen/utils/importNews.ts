@@ -5,6 +5,7 @@ import path from 'path'
 import https from 'https'
 import dotenv from 'dotenv'
 import { nanoid } from 'nanoid'
+import { parse, HTMLElement, Node } from 'node-html-parser'
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') })
 
@@ -24,7 +25,7 @@ if (!WP_NEWS_API || !WP_MEDIA_API) {
   throw new Error('WP_NEWS_API_URL or WP_MEDIA_API_URL is not set in .env')
 }
 
-// --- Helpers ---
+// --------------------- Helpers ---------------------
 async function downloadImage(url: string, filename: string): Promise<void> {
   const file = fs.createWriteStream(filename)
   return new Promise<void>((resolve, reject) => {
@@ -48,33 +49,107 @@ async function uploadImageToSanity(url?: string | null) {
     }
     const asset = await client.assets.upload('image', fs.createReadStream(tempFile))
     fs.unlinkSync(tempFile)
-    return { _type: 'image', asset: { _ref: asset._id, _type: 'reference' } }
+    return { _type: 'image', _key: nanoid(), asset: { _ref: asset._id, _type: 'reference' } }
   } catch (err) {
     console.error(`Skipped invalid image: ${url}`, err)
     if (fs.existsSync(tempFile)) fs.unlinkSync(tempFile)
     return null
   }
 }
-function convertToBlockContent(text: string) {
-  if (!text) return []
 
-  return [
-    {
-      _key: nanoid(),  // unique key for this block
+// --------------------- HTML to Portable Text ---------------------
+function isHTMLElement(node: Node): node is HTMLElement {
+  return (node as HTMLElement).tagName !== undefined
+}
+
+function isTextNode(node: Node): node is Node & { text: string } {
+  return 'text' in node && typeof (node as any).text === 'string'
+}
+
+async function collectInlineNodes(node: Node): Promise<any[]> {
+  const children: any[] = []
+
+  for (const child of node.childNodes) {
+    if (isHTMLElement(child)) {
+      const tag = child.tagName.toUpperCase()
+      const marks: string[] = []
+
+      if (['STRONG', 'B'].includes(tag)) marks.push('strong')
+      if (['EM', 'I'].includes(tag)) marks.push('em')
+
+      if (tag === 'A') {
+        const href = child.getAttribute('href')
+        if (href && (href.startsWith('http://') || href.startsWith('https://'))) {
+          const markId = nanoid()
+          const nestedChildren = await collectInlineNodes(child)
+          nestedChildren.forEach(c => c.marks = [...c.marks, markId])
+          children.push(...nestedChildren)
+          children.push({ _key: markId, _type: 'link', href })
+        } else {
+          // treat as plain text if not external link
+          const nestedChildren = await collectInlineNodes(child)
+          children.push(...nestedChildren)
+        }
+        continue
+      }
+
+      const nestedChildren = await collectInlineNodes(child)
+      nestedChildren.forEach(c => c.marks = [...marks, ...(c.marks || [])])
+      children.push(...nestedChildren)
+    } else if (isTextNode(child) && child.text.trim()) {
+      children.push({ _key: nanoid(), _type: 'span', text: child.text.trim(), marks: [] })
+    }
+  }
+
+  return children
+}
+
+async function htmlNodeToBlocks(node: Node): Promise<any[]> {
+  const blocks: any[] = []
+
+  if (isHTMLElement(node)) {
+    const tag = node.tagName.toUpperCase()
+
+    if (tag === 'IMG') {
+      const img = await uploadImageToSanity(node.getAttribute('src') || '')
+      if (img) blocks.push(img)
+    } else if (['H1','H2','H3','H4','H5','H6','P','LI','BLOCKQUOTE'].includes(tag)) {
+      const children = await collectInlineNodes(node)
+      if (children.length > 0) {
+        blocks.push({
+          _key: nanoid(),
+          _type: 'block',
+          style: tag === 'LI' ? 'normal' : tag.toLowerCase(),
+          children
+        })
+      }
+    } else {
+      for (const child of node.childNodes) {
+        blocks.push(...(await htmlNodeToBlocks(child)))
+      }
+    }
+  } else if (isTextNode(node) && node.text.trim()) {
+    blocks.push({
+      _key: nanoid(),
       _type: 'block',
       style: 'normal',
-      children: [
-        {
-          _key: nanoid(), // unique key for the span
-          _type: 'span',
-          text: text,
-          marks: [],
-        },
-      ],
-    },
-  ]
+      children: [{ _key: nanoid(), _type: 'span', text: node.text.trim(), marks: [] }]
+    })
+  }
+
+  return blocks
 }
-// --- Fetch news with pagination ---
+
+async function htmlToPortableText(html: string): Promise<any[]> {
+  const root = parse(html)
+  const blocks: any[] = []
+  for (const node of root.childNodes) {
+    blocks.push(...(await htmlNodeToBlocks(node)))
+  }
+  return blocks
+}
+
+// --------------------- Fetch News ---------------------
 async function fetchAllNews(): Promise<any[]> {
   let page = 1
   const allNews: any[] = []
@@ -84,10 +159,7 @@ async function fetchAllNews(): Promise<any[]> {
     const response = await axios.get(WP_NEWS_API!, { params: { per_page: PER_PAGE, page } })
     allNews.push(...response.data)
 
-    if (page === 1) {
-      totalPages = parseInt(response.headers['x-wp-totalpages'], 10)
-    }
-
+    if (page === 1) totalPages = parseInt(response.headers['x-wp-totalpages'], 10)
     console.log(`Fetched news page ${page} of ${totalPages}`)
     page++
   } while (page <= totalPages)
@@ -96,7 +168,7 @@ async function fetchAllNews(): Promise<any[]> {
   return allNews
 }
 
-// --- Featured image ---
+// --------------------- Featured Image ---------------------
 async function fetchFeaturedImage(item: any) {
   if (item.featured_media) {
     try {
@@ -109,39 +181,22 @@ async function fetchFeaturedImage(item: any) {
   return null
 }
 
-// --- Organization Logo ---
-async function fetchOrganizationLogo(item: any) {
-  try {
-    const logoUrl =
-      item.yoast_head_json?.schema?.['@graph']?.find(
-        (node: any) => node['@type'] === 'Organization'
-      )?.logo?.url
-
-    if (logoUrl) {
-      return await uploadImageToSanity(logoUrl)
-    }
-  } catch (err) {
-    console.error('Error fetching organization logo for news:', item.id, err)
-  }
-  return null
-}
-
-// --- Import news ---
+// --------------------- Import News ---------------------
 async function importNews() {
   const newsItems = await fetchAllNews()
-
   const orgLogoUrl = 'https://www.anytimemailbox.com/wp-content/uploads/2023/09/public-atmb-logo-white.png'
   const logoImage = await uploadImageToSanity(orgLogoUrl)
 
   for (const item of newsItems) {
     const mainImage = await fetchFeaturedImage(item)
+    const description = await htmlToPortableText(item.content.rendered)
 
     const doc: any = {
       _id: `news-${item.slug}`,
       _type: 'news',
       title: item.title.rendered,
       slug: { _type: 'slug', current: item.slug },
-      description: convertToBlockContent(item.content.rendered.replace(/<[^>]*>/g, '')),
+      description, 
       date: item.date,
     }
 
@@ -157,4 +212,5 @@ async function importNews() {
   }
 }
 
+// --------------------- Run ---------------------
 importNews()
