@@ -18,14 +18,12 @@ export const MARKETPLACE = groq`
 
     // Marketplace Categories Section
     (_type == "marketPlaceCategoriesSection") => {
-      allIcon {
-        "url": asset->url
-      },
+      allIconWhite,
+      allIconBlack,
       categories[] {
         title,
-        icon {
-          "url": asset->url
-        },
+        iconBlack,
+        iconWhite,
         image {
           "url": asset->url
         },
@@ -35,10 +33,8 @@ export const MARKETPLACE = groq`
           logo {
             "url": asset->url
           },
-          link {
-            label,
-            url
-          }
+          buttonText,
+          buttonLink
         }
       }
     },

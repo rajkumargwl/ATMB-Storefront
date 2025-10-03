@@ -7,10 +7,14 @@ export const marketPlaceCategoriesSection = defineType({
   type: "object",
   fields: [
     defineField({
-      name: 'allIcon',
-      title: 'All Category Icon',
-      type: 'image',
-      options: {hotspot: true},
+      name: 'allIconWhite',
+      title: 'All Category Icon(SVG Code)',
+      type: 'text',
+    }),
+    defineField({
+      name: 'allIconBlack',
+      title: 'All Category Black Icon(SVG Code)',
+      type: 'text',
     }),
     defineField({
       name: "categories",
@@ -30,12 +34,8 @@ export const marketPlaceCategoriesSection = defineType({
               description:
                 "Category name (e.g., Account & Finance, Business registration).",
             }),
-            defineField({
-              name: 'icon',
-              title: 'Icon',
-              type: 'image',
-              options: {hotspot: true},
-            }),
+            defineField(  { name: 'iconBlack', title: 'Black Icon(SVG Code)', type: 'text' },),
+            defineField(  { name: 'iconWhite', title: 'White Icon(SVG Code)', type: 'text' },),
             defineField({
               name: 'image',
               title: 'Category Image',
