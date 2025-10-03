@@ -54,8 +54,6 @@ export default function HomeHero({ data }: Props) {
     const scrollContainer = scrollRef.current;
     if (scrollContainer) {
       scrollContainer.addEventListener('scroll', checkScrollButtons);
-      
-      // Check on resize as well
       window.addEventListener('resize', checkScrollButtons);
       
       return () => {
@@ -110,9 +108,9 @@ export default function HomeHero({ data }: Props) {
                 : "bg-[#E6E6E6]"
             }`}
             disabled={!canScrollLeft}
-  tabIndex={canScrollLeft ? 0 : -1} // Prevent focus when disabled
+            tabIndex={canScrollLeft ? 0 : -1} // Prevent focus when disabled
           >
-             <span className="sr-only">(scroll left)</span>
+            <span className="sr-only">(scroll left)</span>
             <BlackChevron />
           </button>
 
@@ -124,6 +122,40 @@ export default function HomeHero({ data }: Props) {
           >
             {data?.tabs?.map((tab, idx) => {
               const isSelected = activeTab === tab.label;
+
+              const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+                const tabs = data?.tabs || [];
+                let newIndex = idx;
+
+                switch (e.key) {
+                  case "ArrowRight":
+                  case "ArrowDown":
+                    e.preventDefault();
+                    newIndex = (idx + 1) % tabs.length;
+                    document.getElementById(`tab-${newIndex}`)?.focus();
+                    break;
+                  case "ArrowLeft":
+                  case "ArrowUp":
+                    e.preventDefault();
+                    newIndex = (idx - 1 + tabs.length) % tabs.length;
+                    document.getElementById(`tab-${newIndex}`)?.focus();
+                    break;
+                  case "Home":
+                    e.preventDefault();
+                    document.getElementById("tab-0")?.focus();
+                    break;
+                  case "End":
+                    e.preventDefault();
+                    document.getElementById(`tab-${tabs.length - 1}`)?.focus();
+                    break;
+                  case "Enter":
+                  case " ":
+                    e.preventDefault();
+                    setActiveTab(tab.label);
+                    break;
+                }
+              };
+
               return (
                 <button
                   key={idx}
@@ -132,16 +164,17 @@ export default function HomeHero({ data }: Props) {
                   aria-controls={`tabpanel-${idx}`}
                   id={`tab-${idx}`}
                   onClick={() => setActiveTab(tab.label)}
+                  onKeyDown={handleKeyDown}
+                  tabIndex={isSelected ? 0 : -1} // Only selected tab is tabbable
                   className={`px-6 py-3 rounded-full border border-LightWhite text-base font-normal leading-[24px] tracking-[0px] transition-all shrink-0 ${
                     isSelected
                       ? "bg-PrimaryBlack text-white"
                       : "bg-white text-LightGray hover:border-PrimaryBlack hover:bg-[#f3f3f3]"
                   }`}
                 >
-                   {isSelected && (
-                      <span className="sr-only">(selected tab is)</span>
-                    )}
-                   
+                  {isSelected && (
+                    <span className="sr-only">(selected tab is)</span>
+                  )}
                   {tab.label}
                 </button>
               );
@@ -153,10 +186,10 @@ export default function HomeHero({ data }: Props) {
             className={`w-10 h-10 hidden md:flex items-center justify-center rounded-full shrink-0 ${
               canScrollRight ? "bg-DarkOrange text-white" : "bg-[#E6E6E6] text-black"
             }`}
-          
-  tabIndex={canScrollRight ? 0 : -1} // Prevent focus when disabled
-            disabled={!canScrollRight} // optional, prevents click when inactive
-          ><span className="sr-only">(scroll right )</span>
+            tabIndex={canScrollRight ? 0 : -1}
+            disabled={!canScrollRight}
+          >
+            <span className="sr-only">(scroll right)</span>
             {canScrollRight ? <WhiteChevron /> : <BlackwhiteChevron />}
           </button>
         </div>
@@ -280,10 +313,13 @@ export default function HomeHero({ data }: Props) {
 
               {activeData.button?.label && (
                 <button className="group flex items-center justify-center md:max-w-[386px] mt-6 w-full bg-DarkOrange text-white font-medium font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[14px] md:py-[18px] rounded-full overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]">
-                  
-                  <span className="relative flex items-center"> {activeData.button.label} <span className="sr-only">(Explore More services)</span> <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
-                    <RightArrowWhite />
-                  </span></span>               
+                  <span className="relative flex items-center"> 
+                    {activeData.button.label} 
+                    <span className="sr-only">(Explore More services)</span> 
+                    <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
+                      <RightArrowWhite />
+                    </span>
+                  </span>               
                 </button>
               )}
             </div>

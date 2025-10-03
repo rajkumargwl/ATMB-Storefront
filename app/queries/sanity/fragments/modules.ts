@@ -27,7 +27,7 @@ import { SOLUTION_PAGE_MODULE } from './modules/solutionpagemodule';
 // import { FOUNDER_BY_SLUG } from './modules/founder';
 import { RENTER_REFERRAL_FRAGMENT } from './modules/renter';
 import { MARKETPLACE } from './modules/marketplace';
- 
+import { HOW_IT_WORKS_MODULE } from './modules/howitworksmodule';
  
 
 export const MODULES = groq`
@@ -111,6 +111,8 @@ export const MODULES = groq`
   (_type == "solutionPageModule") => {
     ${SOLUTION_PAGE_MODULE}
   },
-
+(_type == "howitworks") => {
+    ${HOW_IT_WORKS_MODULE}
+  }
 
 `;
