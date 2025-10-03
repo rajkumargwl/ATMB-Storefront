@@ -295,10 +295,12 @@ export type SanityMarketPlaceIntro = {
 export type SANITY_MARKETPLACE_CATEGORIES = {
   _key?: string;
   _type: 'marketPlaceCategoriesSection';
-  allIcon?: { url?: string; alt?: string };
+  allIconWhite?: string;
+  allIconBlack?: string;
   categories?: {
     title: string;
-    icon?: { url?: string; alt?: string };
+    iconBlack?: string;
+    iconWhite?: string;
     image?: { url?: string; alt?: string };
     subcategories?: {
       name: string;
