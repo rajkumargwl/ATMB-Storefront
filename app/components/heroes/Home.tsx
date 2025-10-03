@@ -5,6 +5,7 @@ import AmLogo from '~/components/icons/AmLogo';
 import RightArrowWhite from '~/components/icons/RightArrowWhite';
 import { useNavigate, useLocation } from "@remix-run/react";
 import { useState, useEffect } from "react";
+
 type Props = {
   hero: SanityHeroHome;
   homeSearchResults: any[];  
@@ -13,6 +14,7 @@ type Props = {
 
 export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props) {
   if (!hero) return null;
+  
   console.log("homeSearchResults in HomeHero", homeSearchResults);
   const [qresults, setQresults] = useState(homeSearchResults || []);
   const [searchquery, setSearchquery] = useState("");
@@ -20,7 +22,8 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
   const navigate = useNavigate();
   const location = useLocation();
   const [skipSearchQSync, setSkipSearchQSync] = useState(false);
-   useEffect(() => {
+  
+  useEffect(() => {
     setSearchquery(searchQuery || "");
     setQresults(homeSearchResults || []);
   }, [searchQuery, homeSearchResults]);
@@ -45,7 +48,8 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
 
     return () => clearTimeout(timeout);
   }, [searchquery, navigate, location.search, skipSearchQSync]);
-    const handleSearchResultClick = (item: any) => {
+  
+  const handleSearchResultClick = (item: any) => {
     setSkipSearchQSync(true);
     setSearchquery("");
     setQresults([]);
@@ -59,12 +63,12 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
   };
   
   useEffect(() => {
-  const params = new URLSearchParams(location.search);
-  const newQuery = params.get("p") || "";
+    const params = new URLSearchParams(location.search);
+    const newQuery = params.get("p") || "";
 
-  setSearchquery(newQuery);
-  setQresults(homeSearchResults || []); // new qresults from loader
-}, [location.search, homeSearchResults]);
+    setSearchquery(newQuery);
+    setQresults(homeSearchResults || []);
+  }, [location.search, homeSearchResults]);
 
   return (
     <section className="bg-white pt-[40px] md:pt-[69px] pb-[40px] md:pb-[79px] px-5">
@@ -102,66 +106,72 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
               <input
                 type="text"
                 value={searchquery}
-               onChange={(e) => {
-              const newValue = e.target.value;
-              setSearchquery(newValue);
+                onChange={(e) => {
+                  const newValue = e.target.value;
+                  setSearchquery(newValue);
 
-              const params = new URLSearchParams(location.search);
-              if (newValue.trim()) {
-                params.set("p", newValue);
-              } else {
-                params.delete("p");
-              }
+                  const params = new URLSearchParams(location.search);
+                  if (newValue.trim()) {
+                    params.set("p", newValue);
+                  } else {
+                    params.delete("p");
+                  }
 
-              navigate(`?${params.toString()}`, { replace: true });
-            }}
+                  navigate(`?${params.toString()}`, { replace: true });
+                }}
                 id="mainContent" 
                 placeholder={hero.searchPlaceholder||"Address and zip"}
                 className="font-Roboto text-PrimaryBlack placeholder:text-PrimaryBlack font-normal leading-[24px] text-[16px] tracking-[0.08px] flex-1 py-[5px] md:py-[13px] focus:outline-none"
               />
-              <button className="group bg-DarkOrange text-white px-[20px] md:px-[35.5px] py-[11px] md:py-[15px] font-normal leading-[14px] md:leading-[22px] text-[14px] md:text-[16px] tracking-[0.08px] rounded-full overflow-hidden transition-all hover:scale-[1.01] 
-              hover:bg-[#DD5827] "  aria-label="You can search location" >
-                 <span className="sr-only">(You can search location)</span>
-                
-                 <span className="relative flex items-center">{hero.searchButtonText} <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[25px] transition-all duration-300">
+              <button 
+                className="group bg-DarkOrange text-white px-[20px] md:px-[35.5px] py-[11px] md:py-[15px] font-normal leading-[14px] md:leading-[22px] text-[14px] md:text-[16px] tracking-[0.08px] rounded-full overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]" 
+                aria-label="You can search location"
+              >
+                <span className="sr-only">(You can search location)</span>
+                <span className="relative flex items-center">
+                  {hero.searchButtonText} 
+                  <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[25px] transition-all duration-300">
                     <RightArrowWhite />
-                  </span></span>
+                  </span>
+                </span>
               </button>
             </div>
- {/* Results List */}
- {searchquery && (
-        <div className="md:pt-2">
-          <div className="bg-white border-t md:border border-LightWhite md:rounded-[20px] shadow-md w-full p-5">
-            <ul className="max-h-72 overflow-y-auto space-y-6">
-              {qresults.length > 0 ? (
-                qresults.map((item) => (
-                  <li
-                    key={item._id}
-                    className="cursor-pointer font-Roboto leading-[27px] text-[18px] tracking-[0px]"
-                    onClick={() => handleSearchResultClick(item)}
-                  >
-                    {item.type === "location" ? (
-                      <>
-                        <span className="mr-2 font-medium text-PrimaryBlack">{item.name}</span>
-                        <span className="text-LightGray font-normal">
-                          {item.city}, {item.postalCode}
-                        </span>
-                      </>
+
+            {/* Results List */}
+            {searchquery && (
+              <div className="md:pt-2">
+                <div className="bg-white border-t md:border border-LightWhite md:rounded-[20px] shadow-md w-full p-5">
+                  <ul className="max-h-72 overflow-y-auto space-y-6">
+                    {qresults.length > 0 ? (
+                      qresults.map((item) => (
+                        <li
+                          key={item._id}
+                          className="cursor-pointer font-Roboto leading-[27px] text-[18px] tracking-[0px]"
+                          onClick={() => handleSearchResultClick(item)}
+                        >
+                          {item.type === "location" ? (
+                            <>
+                              <span className="mr-2 font-medium text-PrimaryBlack">{item.name}</span>
+                              <span className="text-LightGray font-normal">
+                                {item.city}, {item.postalCode}
+                              </span>
+                            </>
+                          ) : (
+                            <>
+                              <span className="mr-2 font-medium text-PrimaryBlack">{item.title}</span>
+                              <span className="text-LightGray font-normal">(Product)</span>
+                            </>
+                          )}
+                        </li>
+                      ))
                     ) : (
-                      <>
-                        <span className="mr-2 font-medium text-PrimaryBlack">{item.title}</span>
-                        <span className="text-LightGray font-normal">(Product)</span>
-                      </>
+                      <li className="px-4 py-3 font-Roboto text-PrimaryBlack font-normal leading-[24px] text-[16px] tracking-[0px]">No results found</li>
                     )}
-                  </li>
-                ))
-              ) : (
-                <li className="px-4 py-3 font-Roboto text-PrimaryBlack font-normal leading-[24px] text-[16px] tracking-[0px]">No results found</li>
-              )}
-            </ul>
-          </div>
-        </div>
-      )}
+                  </ul>
+                </div>
+              </div>
+            )}
+
             {/* Trusted Section */}
             <div className="flex items-center gap-3">
               <div className="flex -space-x-[10px]">
@@ -170,7 +180,6 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
                     key={i}
                     src={avatar.asset.url}
                     alt="trusted avatar"
-                   
                     className="w-10 h-10 rounded-full"
                   />
                 ))}
@@ -198,9 +207,10 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
                       src={feature.icon.asset.url}
                       alt={feature.title}
                       className="w-6 h-6 object-contain"
+                      title={feature.tooltipTitle || ''}
                     />
                   )}
-                  <span className="font-Roboto tracking-[0] font-normal  text-PrimaryBlack text-[16px] leading-[24px]">
+                  <span className="font-Roboto tracking-[0] font-normal text-PrimaryBlack text-[16px] leading-[24px]">
                     {feature.title}
                   </span>
                 </div>
@@ -211,51 +221,51 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
           {/* Right Images (separate divs for image 1 and 2) */}
           <div className="w-full lg:w-[44.2%] hidden md:flex gap-4 justify-center">
             <div className="md:flex gap-4 justify-center">
-            {/* Image 1 */}
-            {hero.rightImage1?.image?.asset?.url && (
-              <div className="relative">
-                <img
-                  src={hero.rightImage1.image.asset.url}
-                  alt="right image 1"
-                  className="w-full h-[603px] object-cover rounded-[124px_124px_124px_0]"
-                />
-                <div className="flex items-center gap-2 absolute bottom-[85px] lg:bottom-[132px] left-[-85px] max-w-[242px] p-4 rounded-[12px] border border-[#DCDCDC] bg-[rgba(255,255,255,0.70)] backdrop-blur-[12px]">
-                  {hero.rightImage1.icon?.asset?.url && (
-                    <img
-                      src={hero.rightImage1.icon.asset.url}
-                      alt="icon 1"
-                      className="w-6 h-6 object-cover"
-                    />
-                  )}
-                  <span className="font-Roboto text-PrimaryBlack font-medium leading-[21px] text-[14px]">
-                    {hero.rightImage1.overlayText}
-                  </span>
+              {/* Image 1 */}
+              {hero.rightImage1?.image?.asset?.url && (
+                <div className="relative">
+                  <img
+                    src={hero.rightImage1.image.asset.url}
+                    alt="right image 1"
+                    className="w-full h-[603px] object-cover rounded-[124px_124px_124px_0]"
+                  />
+                  <div className="flex items-center gap-2 absolute bottom-[85px] lg:bottom-[132px] left-[-85px] max-w-[242px] p-4 rounded-[12px] border border-[#DCDCDC] bg-[rgba(255,255,255,0.70)] backdrop-blur-[12px]">
+                    {hero.rightImage1.icon?.asset?.url && (
+                      <img
+                        src={hero.rightImage1.icon.asset.url}
+                        alt="icon 1"
+                        className="w-6 h-6 object-cover"
+                      />
+                    )}
+                    <span className="font-Roboto text-PrimaryBlack font-medium leading-[21px] text-[14px]">
+                      {hero.rightImage1.overlayText}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* Image 2 */}
-            {hero.rightImage2?.image?.asset?.url && (
-              <div className="relative">
-                <img
-                  src={hero.rightImage2.image.asset.url}
-                  alt="right image 2"
-                  className="w-full h-[603px] object-cover rounded-[0_124px_124px_124px]"
-                />
-                <div className="flex items-center gap-2 absolute  bottom-[210px] lg:bottom-[255px] right-[-20px] xl:right-[-42px] max-w-[242px] p-4 rounded-[12px] border border-[#DCDCDC] bg-[rgba(255,255,255,0.70)] backdrop-blur-[12px]">
-                  {hero.rightImage2.icon?.asset?.url && (
-                    <img
-                      src={hero.rightImage2.icon.asset.url}
-                      alt="icon 2"
-                      className="w-6 h-6 object-cover"
-                    />
-                  )}
-                  <span className="font-Roboto text-PrimaryBlack font-medium leading-[21px] text-[14px]">
-                    {hero.rightImage2.overlayText}
-                  </span>
+              {/* Image 2 */}
+              {hero.rightImage2?.image?.asset?.url && (
+                <div className="relative">
+                  <img
+                    src={hero.rightImage2.image.asset.url}
+                    alt="right image 2"
+                    className="w-full h-[603px] object-cover rounded-[0_124px_124px_124px]"
+                  />
+                  <div className="flex items-center gap-2 absolute bottom-[210px] lg:bottom-[255px] right-[-20px] xl:right-[-42px] max-w-[242px] p-4 rounded-[12px] border border-[#DCDCDC] bg-[rgba(255,255,255,0.70)] backdrop-blur-[12px]">
+                    {hero.rightImage2.icon?.asset?.url && (
+                      <img
+                        src={hero.rightImage2.icon.asset.url}
+                        alt="icon 2"
+                        className="w-6 h-6 object-cover"
+                      />
+                    )}
+                    <span className="font-Roboto text-PrimaryBlack font-medium leading-[21px] text-[14px]">
+                      {hero.rightImage2.overlayText}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
             </div>
           </div>
         </div>
@@ -263,7 +273,6 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
     </section>
   );
 }
-
 
 /** Small image placeholder tile */
 function Tile() {
