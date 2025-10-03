@@ -124,7 +124,7 @@ useEffect(() => {
 
 
   return (
-    <header className="w-full bg-white px-5 border-b border-LightWhite lg:border-none">
+    <header className=" relative z-[99] w-full bg-white px-5 border-b border-LightWhite lg:border-none">
       <div className="max-w-[1240px] mx-auto flex items-center justify-between py-5">
         <div className="flex items-center  gap-5 xl:gap-10">
           {/* Logo */}

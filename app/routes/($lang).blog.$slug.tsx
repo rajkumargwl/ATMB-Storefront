@@ -206,7 +206,7 @@ export default function BlogPost() {
             </div>
             
             {post.mainImage && (
-              <img src={post.mainImage} alt={post.title} className="w-full h-auto lg:h-[460px] object-cover mb-7 rounded-[20px]" />
+              <img src={post.mainImage} alt={post.title} className="w-full h-auto object-cover mb-7 rounded-[20px]" />
             )}
             <div className="detail-content prose prose-lg max-w-none" dangerouslySetInnerHTML={{ __html: htmlContent }} />
           </div>
@@ -251,8 +251,9 @@ export default function BlogPost() {
               </div>
               <ul className="grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3 gap-11 md:gap-6">
                 {others.map((rp) => (
+                  <Link to={`/blog/${rp.slug.current}`}>
                   <li key={rp._id} className="group relative border border-LightWhite hover:border-PrimaryBlack rounded-[20px] overflow-hidden bg-white transition">
-                   <Link to={`/blog/${rp.slug.current}`}>
+                   
                     {rp.mainImage && <img src={rp.mainImage} alt={rp.title} className="w-full rounded-t-[20px] h-[249px] object-cover" />}
                     <div className='absolute right-[24px] top-[24px] flex items-center justify-center gap-2 w-[48px] h-[48px] rounded-full bg-DarkOrange transition-all opacity-0 group-hover:opacity-100'>
                       <svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none">
@@ -270,8 +271,9 @@ export default function BlogPost() {
                       {getPlainText(rp.content).slice(0, 120)}...
                     </p>
                     </div>
-                     </Link>
+                    
                   </li>
+                   </Link>
                 ))}
               </ul>
             </div>

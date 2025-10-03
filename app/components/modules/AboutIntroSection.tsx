@@ -1,6 +1,6 @@
 // ~/components/modules/AboutIntroSection.tsx
 import {PortableText} from '@portabletext/react';
-
+ 
 type Props = {
   label?: string;
   heading: string;
@@ -13,7 +13,7 @@ type Props = {
     url?: string;
   };
 };
-
+ 
 export default function AboutIntroSection({
   label,
   heading,
@@ -33,24 +33,24 @@ export default function AboutIntroSection({
               {label}
             </p>
           )}
-
-          <h2 className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.39px] md:tracking-[-0.54px]">
+ 
+          <h1 className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.39px] md:tracking-[-0.54px]">
             {heading}
-          </h2>
-
+          </h1>
+ 
           {description && (
             <div className="prose prose-lg text-gray-700">
               <PortableText value={description} />
             </div>
           )}
-
+ 
           {highlightedText && (
             <p className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.39px] md:tracking-[-0.54px]">
               {highlightedText}
             </p>
           )}
         </div>
-
+ 
         {/* Right video thumbnail (same as image) */}
         {video?.thumbnail?.url && (
           <div className="w-full md:w-[51.9%] relative">
@@ -89,3 +89,4 @@ export default function AboutIntroSection({
     </section>
   );
 }
+ 
