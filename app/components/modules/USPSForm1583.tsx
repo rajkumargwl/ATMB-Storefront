@@ -1,9 +1,10 @@
 import {PortableText} from '@portabletext/react';
- 
+import { useEffect } from 'react';
+
 type Props = {
   module: any;
 };
- 
+
 const getPlainText = (portableText: any): string | null => {
   if (!portableText || !Array.isArray(portableText) || portableText.length === 0) {
     return null;
@@ -17,17 +18,59 @@ const getPlainText = (portableText: any): string | null => {
     .map((span: any) => span.text)
     .join('');
 };
- 
+
 export default function USPSForm1583Module({module}: Props) {
   if (!module?.subModules) return null;
- 
+
   const guideModule = module.subModules.find(
     (mod: any) => mod._type === 'uspsForm1583Guide',
   );
   const contentModule = module.subModules.find(
     (mod: any) => mod._type === 'uspsForm1583Content',
   );
- 
+
+  // Handle table of contents clicks with immediate scroll
+  useEffect(() => {
+    const handleTableClick = (e: Event) => {
+      const target = e.target as HTMLElement;
+      const link = target.closest('a');
+      
+      if (link && link.hash) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const id = link.hash.substring(1);
+        const element = document.getElementById(id);
+        
+        if (element) {
+          // Immediate scroll without any delay
+          element.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+          });
+          
+          // Force browser to update URL without navigation
+          if (history.pushState) {
+            history.pushState(null, '', link.hash);
+          } else {
+            window.location.hash = link.hash;
+          }
+        }
+      }
+    };
+
+    const tableOfContents = document.querySelector('aside');
+    if (tableOfContents) {
+      tableOfContents.addEventListener('click', handleTableClick);
+    }
+
+    return () => {
+      if (tableOfContents) {
+        tableOfContents.removeEventListener('click', handleTableClick);
+      }
+    };
+  }, [contentModule?.contentBlocks]);
+
   return (
     <>
       {guideModule && <GuideModule module={guideModule} />}
@@ -36,7 +79,7 @@ export default function USPSForm1583Module({module}: Props) {
          <main className="w-full md:w-[70.5%] border border-LightWhite rounded-[12px] order-2 md:order-1 main-content-left">
           {contentModule && <ContentModule module={contentModule} />}
         </main>
- 
+
         <aside className="w-full md:w-[29.5%] md:sticky md:top-0 h-fit z-10 order-1 md:order-2">
           <div className="p-6 md:py-[40px] md:px-8 rounded-[12px] bg-[#F6F6F6]">
             <h3 className="mb-4 font-Roboto text-LightGray font-medium leading-[28px] md:leading-[28px] text-[20px] md:text-[20px] tracking-[0px]">In This Guide</h3>
@@ -48,10 +91,20 @@ export default function USPSForm1583Module({module}: Props) {
                     const blockTitle = getPlainText(block.textField);
                     return (
                       <li key={block._key || index} className='pl-5 indent-[-20px]'>
-                        <a
-                          href={`#block-${index}`}
-                          className="font-Roboto text-DarkOrange font-medium text-[18px] leading-[27px] tracking-[0px]"
-                        >
+                      <a
+  href={`#block-${index}`}
+  className="font-Roboto text-DarkOrange font-medium text-[18px] leading-[27px] tracking-[0px]" // ← Original class without cursor-pointer
+  onClick={(e) => {
+    e.preventDefault();
+    const element = document.getElementById(`block-${index}`);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (history.pushState) {
+        history.pushState(null, '', `#block-${index}`);
+      }
+    }
+  }}
+>
                           <div className="">
                             <span className="font-Roboto text-DarkOrange font-medium text-[18px] leading-[27px] tracking-[0px]">
                               {blockTitle || `Section ${index + 1}`}
@@ -75,7 +128,7 @@ export default function USPSForm1583Module({module}: Props) {
     </>
   );
 }
- 
+
 function GuideModule({module}: {module: any}) {
   return (
     <section className="px-5 py-[40px] md:py-[54px] bg-[#F6F6F6]">
@@ -106,7 +159,7 @@ function GuideModule({module}: {module: any}) {
     </section>
   );
 }
- 
+
 function ContentModule({module}: {module: any}) {
   return (
     <div className="content-module rounded-lg border bg-white p-6 shadow-sm sm:p-8">
@@ -121,7 +174,7 @@ function ContentModule({module}: {module: any}) {
     </div>
   );
 }
- 
+
 function ContentBlock({block}: {block: any}) {
   return (
     <div className="content-block">
@@ -130,13 +183,13 @@ function ContentBlock({block}: {block: any}) {
           <PortableText value={block.textField} />
         </div>
       )}
- 
+
       {block.mainContent && (
         <div className="prose prose-lg max-w-none prose-slate">
           <PortableText value={block.mainContent} />
         </div>
       )}
- 
+
       {(block.leftImage?.asset?.url || block.rightImage?.asset?.url) && (
         <div className="my-6 md:my-[30px] flex flex-wrap gap-6 md:gap-[136px]">
           {block.leftImage?.asset?.url && (
@@ -161,11 +214,11 @@ function ContentBlock({block}: {block: any}) {
           )}
         </div>
       )}
- 
+
       {block.textField1 && (
         <p className="my-6 text-lg text-slate-600">{block.textField1}</p>
       )}
- 
+
       {block.image2?.asset?.url && (
         <div className="my-6 md:my-[30px]">
           <img
@@ -176,15 +229,15 @@ function ContentBlock({block}: {block: any}) {
           />
         </div>
       )}
- 
+
       {block.textField2 && (
         <p className="my-6 text-lg text-slate-600">{block.textField2}</p>
       )}
- 
+
       {block.textField4 && (
         <p className="my-6 text-lg text-slate-600">{block.textField4}</p>
       )}
- 
+
       {block.image3?.asset?.url && (
         <div className="my-6 md:my-[30px]">
           <img
@@ -195,17 +248,17 @@ function ContentBlock({block}: {block: any}) {
           />
         </div>
       )}
- 
+
       {block.textField5 && (
         <p className="my-6 text-lg text-slate-600">{block.textField5}</p>
       )}
- 
+
       {block.extraContent && (
         <div className="prose prose-lg max-w-none prose-slate">
           <PortableText value={block.extraContent} />
         </div>
       )}
- 
+
       {block.image4?.asset?.url && (
         <div className="my-6 md:my-[30px]">
           <img
@@ -216,11 +269,11 @@ function ContentBlock({block}: {block: any}) {
           />
         </div>
       )}
- 
+
       {block.textField6 && (
         <p className="my-6 text-lg text-slate-600">{block.textField6}</p>
       )}
- 
+
       {block.extraContent2 && (
         <div className="prose prose-lg max-w-none prose-slate">
           <PortableText value={block.extraContent2} />
@@ -229,4 +282,3 @@ function ContentBlock({block}: {block: any}) {
     </div>
   );
 }
- 
