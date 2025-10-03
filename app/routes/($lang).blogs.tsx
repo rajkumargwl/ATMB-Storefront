@@ -1,3 +1,4 @@
+
 import {json, type LoaderFunctionArgs, defer} from '@shopify/remix-oxygen';
 import {useLoaderData, useFetcher} from '@remix-run/react';
 import {notFound} from '~/lib/utils';
@@ -76,8 +77,9 @@ export default function BlogIndex() {
           {/* First row: only first 2 posts */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-11 md:gap-6">
             {posts.slice(0, 2).map((post) => (
+              <Link to={`/blog/${post.slug.current}`}>
               <div key={post._id} className="overflow-hidden relative">
-                <Link to={`/blog/${post.slug.current}`}>
+                
                 {post.mainImage && <img src={post.mainImage} alt={post.title} className="w-full rounded-[20px] h-[342px] object-cover"/>}
                 <div className='absolute right-[12px] md:right-[20px] top-[12px] md:top-[20px] flex gap-2 p-2 rounded-full bg-[#FEFAED] border border-[#FFC107] font-Roboto text-PrimaryBlack font-normal text-[12px] leading-[18px] tracking-[0px]'>
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -113,8 +115,9 @@ export default function BlogIndex() {
                 
                   <p className="line-clamp-2 mt-3 font-Roboto text-LightGray font-normal leading-[21px] md:leading-[27px] text-[14px] md:text-[18px] tracking-[0px]">{portableTextToPlainText(post.content).slice(0, 120)}...</p>
                 </div>
-                  </Link>
+                 
               </div>
+               </Link>
             ))}
           </div>
           </div>
@@ -124,8 +127,9 @@ export default function BlogIndex() {
             {/* Rest of posts: 3 per row */}
             <div className="mb-6 md:mb-11 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-6 md:gap-y-11">
               {posts.slice(2).map((post) => (
+                <Link to={`/blog/${post.slug.current}`}>
                 <div key={post._id} className="group relative border border-LightWhite hover:border-PrimaryBlack rounded-[20px] overflow-hidden bg-white transition">
-                 <Link to={`/blog/${post.slug.current}`}>
+                 
                   {post.mainImage && <img src={post.mainImage} alt={post.title} className="w-full rounded-t-[20px] h-[249px] object-cover"/>}
                   <div className='absolute right-[24px] top-[24px] flex items-center justify-center gap-2 w-[48px] h-[48px] rounded-full bg-DarkOrange transition-all opacity-0 group-hover:opacity-100'>
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 25 24" fill="none">
@@ -154,8 +158,9 @@ export default function BlogIndex() {
                     
                     <p className="line-clamp-2 mt-2 font-Roboto text-LightGray font-normal leading-[21px] md:leading-[24px] text-[14px] md:text-[16px] tracking-[0px]">{portableTextToPlainText(post.content).slice(0, 120)}...</p>
                   </div>
-                  </Link>
+                 
                 </div>
+                 </Link>
               ))}
             </div>
  
@@ -175,3 +180,4 @@ export default function BlogIndex() {
     </div>
   );
 }
+ 
