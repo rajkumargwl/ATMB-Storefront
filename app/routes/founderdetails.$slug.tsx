@@ -1,3 +1,4 @@
+
 import { Await, useLoaderData } from '@remix-run/react';
 import FounderBg from "~/components/media/Founder-bg.png";
 import FounderBgMobile from "~/components/media/our-founder-bg-mobile.png";
@@ -152,11 +153,11 @@ export default function FounderDetails() {
                         target="_blank"
                         rel="noopener noreferrer"
                         className="bg-transparent border border-LightWhite
-                        font-Roboto text-PrimaryBlack text-[16px] md:text-base leading-[16px] tracking-[0.08px] px-3 py-3 rounded-full flex
+                        font-Roboto text-PrimaryBlack font-normal text-[16px] md:text-base leading-[16px] tracking-[0.08px] px-3 py-3 rounded-full flex
                         items-center gap-3  transition-all"
                       >
                         {/* LinkedIn SVG */}
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="33" viewBox="0 0 32 33" fill="none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 33" fill="none">
                           <g clip-path="url(#clip0_3218_20231)">
                             <path d="M16 32.5C24.8366 32.5 32 25.3366 32 16.5C32 7.66344 24.8366 0.5 16 0.5C7.16344 0.5 0 7.66344 0 16.5C0 25.3366 7.16344 32.5 16 32.5Z" fill="#0B69C7"/>
                             <path d="M12.4213 10.6832C12.4217 11.1155 12.2939 11.5383 12.0539 11.898C11.8139 12.2577 11.4727 12.5381 11.0733 12.7038C10.6739 12.8694 10.2343 12.9129 9.81024 12.8286C9.38614 12.7444 8.99657 12.5362 8.69083 12.2305C8.38509 11.9247 8.17692 11.5352 8.09267 11.1111C8.00842 10.687 8.05187 10.2474 8.21753 9.84803C8.38319 9.44864 8.6636 9.10737 9.02329 8.86741C9.38298 8.62745 9.80577 8.49958 10.2382 8.5C10.817 8.50056 11.372 8.73075 11.7813 9.14005C12.1906 9.54935 12.4208 10.1043 12.4213 10.6832Z" fill="white"/>
@@ -229,3 +230,4 @@ export default function FounderDetails() {
     </SanityPreview>
   );
 }
+ 
