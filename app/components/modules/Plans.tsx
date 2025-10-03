@@ -89,37 +89,52 @@ export default function PricingSection({ data }: { data: PricingData }) {
 
           {/* Center Tabs with proper ARIA roles */}
           <div className="flex-1 flex justify-center">
-            <div 
-              role="tablist" 
-              aria-label="Pricing plans"
-              className="flex gap-4"
-            >
-              {tabs.map((tab, idx) => {
-                const isSelected = activeTab === tab.id;
-                return (
-                  <button
-                    key={tab.id}
-                    id={`tab-${tab.id}`}
-                    role="tab"
-                    aria-selected={isSelected}
-                    aria-controls={`tabpanel-${tab.id}`}
-                    tabIndex={isSelected ? 0 : -1}
-                    onClick={() => setActiveTab(tab.id as "individual" | "bundles")}
-                    className={`px-6 py-3 font-Roboto text-[16px] leading-[24px] tracking-[0px] font-normal rounded-full border border-LightWhite transition ${
-                      isSelected
-                        ? "border-PrimaryBlack text-white bg-PrimaryBlack"
-                        : "text-PrimaryBlack"
-                    }`}
-                  >
-                    {isSelected && (
-                      <span className="sr-only">(selected tab is)</span>
-                    )}
-                    {tab.tabName}
-                    
-                  </button>
-                );
-              })}
-            </div>
+<div 
+  role="tablist" 
+  aria-label="Pricing plans"
+  className="flex gap-4"
+>
+  {tabs.map((tab, idx) => {
+    const isSelected = activeTab === tab.id;
+    return (
+      <button
+        key={tab.id}
+        id={`tab-${tab.id}`}
+        role="tab"
+        aria-selected={isSelected}
+        aria-controls={`tabpanel-${tab.id}`}
+        tabIndex={isSelected ? 0 : -1} // only selected is tabbable
+        onClick={() => setActiveTab(tab.id as "individual" | "bundles")}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setActiveTab(tab.id as "individual" | "bundles");
+          }
+          if (e.key === "ArrowRight") {
+            e.preventDefault();
+            const next = (idx + 1) % tabs.length;
+            setActiveTab(tabs[next].id as "individual" | "bundles");
+          }
+          if (e.key === "ArrowLeft") {
+            e.preventDefault();
+            const prev = (idx - 1 + tabs.length) % tabs.length;
+            setActiveTab(tabs[prev].id as "individual" | "bundles");
+          }
+        }}
+        className={`px-6 py-3 font-Roboto text-[16px] leading-[24px] tracking-[0px] font-normal rounded-full border border-LightWhite transition ${
+          isSelected
+            ? "border-PrimaryBlack text-white bg-PrimaryBlack"
+            : "text-PrimaryBlack"
+        }`}
+      >
+        {isSelected && <span className="sr-only">(selected tab is)</span>}
+        {tab.tabName}
+      </button>
+    );
+  })}
+</div>
+
+
           </div>
 
           {/* Billing Toggle */}

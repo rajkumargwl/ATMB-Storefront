@@ -107,7 +107,12 @@ import {renterEditor} from './objects/module/rentereditor'
 import {marketPlaceModule} from './objects/module/marketPlaceModule'
 import {marketPlaceIntroSection} from './objects/module/marketPlaceIntroSection'
 import {marketPlaceCategoriesSection} from './objects/module/marketPlaceCategoriesSection'
-
+import { howitworksType } from './objects/module/howitwrorksType'
+import { howitworksVirtualbox } from './objects/module/howitworksVirtualbox'
+import { builtForHowYouWorkToday } from './objects/module/builtforhowyouworktoday'
+import { howitworks3steps } from './objects/module/howitworks3steps'
+import { howitworks2 } from './objects/module/howitworks2'
+// Objects used as annotations must be imported first
 // Objects used as annotations must be imported first
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
 
@@ -212,6 +217,11 @@ contactUsSection,
   marketPlaceModule,
   marketPlaceIntroSection,
   marketPlaceCategoriesSection,
+  howitworksType,
+  howitworksVirtualbox,
+  builtForHowYouWorkToday,
+  howitworks3steps,
+  howitworks2,
 ]
 
 import {portableTextType} from './portableText/portableTextType'

@@ -50,7 +50,12 @@ import SolutionMailboxBenefitFaq from '~/components/modules/SolutionMailboxBenef
 import SolutionMailboxLocationHowItWorks from '~/components/modules/SolutionMailboxLocationHowItWorks';
 import MarketplaceIntro from '~/components/modules/MarketplaceIntro';
 import MarketplaceCategories from '~/components/modules/MarketplaceCategories';
-
+import { HowItWorksHero } from './howitworkshero';
+import { HowItWorksVirtualbox } from './howitworks-virtualbox';
+import { HowItWorks2 } from './howitworks-2';
+import { BuiltForYou } from './builtforyou';
+import { HowItWork3Steps } from './howitwork3steps';
+import { HowItWorksFaq } from './howitworksfaq';
 type Props = {
   imageAspectClassName?: string;
   module: SanityModule;
@@ -64,6 +69,29 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
 
 
   switch (module._type) {
+    case 'howitworks':
+      return (
+        <>
+          {module.modules?.map((sub: any) => (
+            <Module key={sub._key} module={sub} />
+          ))}
+        </>
+      );
+ 
+    case 'howitworksVirtualbox':
+      return <HowItWorksVirtualbox data={module} />;
+ 
+    case 'uspsForm1583Guide':
+      return <HowItWorksHero data={module} />;
+ 
+    case 'howitworks2':
+      return <HowItWorks2 data={module} />;
+ 
+    case 'builtForHowYouWorkToday':
+      return <BuiltForYou data={module} />;
+ 
+    case 'howitworks3steps':
+      return <HowItWork3Steps data={module} />;
     // -----------------------
     // Renter Referral Program
     // -----------------------

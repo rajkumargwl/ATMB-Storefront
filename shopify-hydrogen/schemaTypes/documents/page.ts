@@ -42,7 +42,7 @@ export const pageType = defineType({
           { type: 'solutionPageModule' },
           { type: 'marketPlaceModule' },
            { type: 'renterreferralprogram' },
-          
+          { type: 'howitworks' },
         // add more modules if needed
       ],
     }),
