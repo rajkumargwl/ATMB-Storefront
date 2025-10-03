@@ -1,10 +1,10 @@
 import { createClient } from '@sanity/client'
 import axios from 'axios'
-import { parse } from 'node-html-parser'
 import fs from 'fs'
 import path from 'path'
 import https from 'https'
 import dotenv from 'dotenv'
+import { nanoid } from 'nanoid'
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') })
 
@@ -55,7 +55,25 @@ async function uploadImageToSanity(url?: string | null) {
     return null
   }
 }
+function convertToBlockContent(text: string) {
+  if (!text) return []
 
+  return [
+    {
+      _key: nanoid(),  // unique key for this block
+      _type: 'block',
+      style: 'normal',
+      children: [
+        {
+          _key: nanoid(), // unique key for the span
+          _type: 'span',
+          text: text,
+          marks: [],
+        },
+      ],
+    },
+  ]
+}
 // --- Fetch news with pagination ---
 async function fetchAllNews(): Promise<any[]> {
   let page = 1
@@ -108,7 +126,7 @@ async function fetchOrganizationLogo(item: any) {
   return null
 }
 
-
+// --- Import news ---
 async function importNews() {
   const newsItems = await fetchAllNews()
 
@@ -123,12 +141,12 @@ async function importNews() {
       _type: 'news',
       title: item.title.rendered,
       slug: { _type: 'slug', current: item.slug },
-      description: item.excerpt?.rendered?.replace(/<[^>]*>/g, ''),
+      description: convertToBlockContent(item.content.rendered.replace(/<[^>]*>/g, '')),
       date: item.date,
     }
 
     if (mainImage) doc.featuredImage = mainImage
-    if (logoImage) doc.logoImage = logoImage  
+    if (logoImage) doc.logoImage = logoImage
 
     try {
       await client.createOrReplace(doc)
@@ -138,6 +156,5 @@ async function importNews() {
     }
   }
 }
-
 
 importNews()

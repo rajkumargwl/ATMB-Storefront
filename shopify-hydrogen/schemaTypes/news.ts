@@ -19,11 +19,16 @@ export default {
       },
       validation: Rule => Rule.required(),
     },
+    // {
+    //   name: 'description',
+    //   title: 'Description',
+    //   type: 'text',
+    //   rows: 4,
+    // },
     {
       name: 'description',
       title: 'Description',
-      type: 'text',
-      rows: 4,
+      type: 'blockContent',
     },
     {
       name: 'featuredImage',
