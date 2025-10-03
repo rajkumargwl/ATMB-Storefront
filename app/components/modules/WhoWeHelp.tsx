@@ -109,6 +109,8 @@ export default function HomeHero({ data }: Props) {
                 ? "bg-DarkOrange" 
                 : "bg-[#E6E6E6]"
             }`}
+            disabled={!canScrollLeft}
+  tabIndex={canScrollLeft ? 0 : -1} // Prevent focus when disabled
           >
              <span className="sr-only">(scroll left)</span>
             <BlackChevron />
@@ -151,7 +153,8 @@ export default function HomeHero({ data }: Props) {
             className={`w-10 h-10 hidden md:flex items-center justify-center rounded-full shrink-0 ${
               canScrollRight ? "bg-DarkOrange text-white" : "bg-[#E6E6E6] text-black"
             }`}
-            
+          
+  tabIndex={canScrollRight ? 0 : -1} // Prevent focus when disabled
             disabled={!canScrollRight} // optional, prevents click when inactive
           ><span className="sr-only">(scroll right )</span>
             {canScrollRight ? <WhiteChevron /> : <BlackwhiteChevron />}
