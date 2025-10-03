@@ -1,4 +1,5 @@
 import React from "react";
+import Contact from "~/components/media/contact.png";
 
 type ContactUsProps = {
   data?: {
@@ -29,181 +30,247 @@ export default function ContactUsSection({ data }: ContactUsProps) {
   }
 
   return (
-    <section
-      className="w-full max-w-6xl mx-auto px-4 md:px-8 my-16"
-      aria-labelledby="contact-heading"
-    >
+    <section className="px-5 py-[40px] md:py-[60px] lg:py-[100px] bg-white "aria-labelledby="contact-heading">
+      <div className="max-w-[1240px] mx-auto">
       {/* Page Title */}
       {data.title && (
         <h1
           id="contact-heading"
-          className="text-center text-3xl font-bold text-gray-900 mb-10"
+          className="mb-[44px] md:mb-[56px] text-center font-Roboto text-PrimaryBlack font-semibold leading-[38.4px] md:leading-[61.6px] text-[32px] md:text-[56px] tracking-[-0.48px] md:tracking-[-1.12px]"
         >
           {data.title}
         </h1>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="max-w-[1120px] mx-auto flex flex-col lg:flex-row gap-10">
         {/* LEFT: Static Form */}
         <div
-          className="col-span-2 bg-white shadow rounded-lg p-6"
+          className="w-full lg:w-[59.8%] rounded-[12px] p-6 bg-white border border-LightWhite"
           role="form"
           aria-labelledby="form-title"
         >
           {data.formTitle && (
             <h2
               id="form-title"
-              className="text-xl font-semibold text-gray-900 mb-2"
+              className="font-Roboto text-PrimaryBlack font-semibold leading-[28px] md:leading-[31.2px] text-[20px] md:text-[24px] tracking-[-0.3px] md:tracking-[-0.36px]"
             >
               {data.formTitle}
             </h2>
           )}
           {data.formDescription && (
-            <p className="text-gray-600 mb-6">{data.formDescription}</p>
+            <p className="mt-1 mb-8 font-Roboto text-PrimaryBlack font-normal leading-[21px] md:leading-[24px] text-[14px] md:text-[16px] tracking-[0px]">{data.formDescription}</p>
           )}
 
-          <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+          <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
             {/* Name */}
-            <div>
-              <label
-                htmlFor="name"
-                className="block text-sm font-medium text-gray-700"
+            <div className="relative">
+              <label htmlFor="name"
+                className="absolute left-[12px] top-[6px] font-Roboto text-LightGray font-normal leading-[18px] md:leading-[18px] text-[12px] md:text-[12px] tracking-[0px]"
               >
-                Name
+                Company Name
               </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                required
-                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              <input type="text" id="name" name="name" placeholder="ABC Corporation" required
+                className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px]
+                font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px] 
+                placeholder:font-Roboto placeholder:text-PrimaryBlack placeholder:font-normal placeholder:leading-[24px]  placeholder:text-[16px]  placeholder:tracking-[0px]"
+              />
+            </div>
+            <div className="flex flex-col md:flex-row gap-5 md:gap-4">
+              <div className="relative w-full">
+              <label htmlFor="name"
+                className="absolute left-[12px] top-[6px] font-Roboto text-LightGray font-normal leading-[18px] md:leading-[18px] text-[12px] md:text-[12px] tracking-[0px]"
+              >
+                First Name
+              </label>
+              <input type="text" id="name" name="name" placeholder="Scott" required
+                className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px]
+                font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px] 
+                placeholder:font-Roboto placeholder:text-PrimaryBlack placeholder:font-normal placeholder:leading-[24px]  placeholder:text-[16px]  placeholder:tracking-[0px]"
+              />
+            </div>
+            <div className="relative w-full">
+              <label htmlFor="name"
+                className="absolute left-[12px] top-[6px] font-Roboto text-LightGray font-normal leading-[18px] md:leading-[18px] text-[12px] md:text-[12px] tracking-[0px]"
+              >
+                Last Name
+              </label>
+              <input type="text" id="name" name="name" placeholder="Morrison" required
+                className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px]
+                font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px] 
+                placeholder:font-Roboto placeholder:text-PrimaryBlack placeholder:font-normal placeholder:leading-[24px]  placeholder:text-[16px]  placeholder:tracking-[0px]"
+              />
+            </div>
+            </div>
+            <div className="flex flex-col md:flex-row gap-5 md:gap-4">
+              <div className="relative w-full">
+                  <label htmlFor="name"
+                    className="absolute left-[12px] top-[6px] font-Roboto text-LightGray font-normal leading-[18px] md:leading-[18px] text-[12px] md:text-[12px] tracking-[0px]"
+                  >
+                    Email
+                  </label>
+                  <input type="text" id="name" name="name" placeholder="scott.morrison@example.com" required
+                    className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px]
+                    font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px] 
+                    placeholder:font-Roboto placeholder:text-PrimaryBlack placeholder:font-normal placeholder:leading-[24px]  placeholder:text-[16px]  placeholder:tracking-[0px]"
+                  />
+              </div>
+              <div className="relative w-full">
+                <label htmlFor="name"
+                  className="absolute left-[12px] top-[6px] font-Roboto text-LightGray font-normal leading-[18px] md:leading-[18px] text-[12px] md:text-[12px] tracking-[0px]"
+                >
+                  Phone Number
+                </label>
+                <input type="text" id="name" name="name" placeholder="123-456-7890" required
+                  className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px]
+                  font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px] 
+                  placeholder:font-Roboto placeholder:text-PrimaryBlack placeholder:font-normal placeholder:leading-[24px]  placeholder:text-[16px]  placeholder:tracking-[0px]"
+                />
+              </div>
+            </div>
+            <div className="relative">
+              <label htmlFor="name"
+                className="absolute left-[12px] top-[6px] font-Roboto text-LightGray font-normal leading-[18px] md:leading-[18px] text-[12px] md:text-[12px] tracking-[0px]"
+              >
+                Which best describes you?
+              </label>
+              <input type="text" id="name" name="name" placeholder="Small business owner" required
+                className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px]
+                font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px] 
+                placeholder:font-Roboto placeholder:text-PrimaryBlack placeholder:font-normal placeholder:leading-[24px]  placeholder:text-[16px]  placeholder:tracking-[0px]"
+              />
+            </div>
+            <div className="relative">
+              <label htmlFor="name"
+                className="absolute left-[12px] top-[6px] font-Roboto text-LightGray font-normal leading-[18px] md:leading-[18px] text-[12px] md:text-[12px] tracking-[0px]"
+              >
+                How did you hear about us?
+              </label>
+              <input type="text" id="name" name="name" placeholder="Instagram" required
+                className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px]
+                font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px] 
+                placeholder:font-Roboto placeholder:text-PrimaryBlack placeholder:font-normal placeholder:leading-[24px]  placeholder:text-[16px]  placeholder:tracking-[0px]"
               />
             </div>
 
-            {/* Email */}
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
+            <div className="relative">
+              <label htmlFor="name"
+                className="absolute left-[12px] top-[6px] font-Roboto text-LightGray font-normal leading-[18px] md:leading-[18px] text-[12px] md:text-[12px] tracking-[0px]"
               >
-                Email
+               Tell us how we can help you
               </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                required
-                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              />
-            </div>
-
-            {/* Message */}
-            <div>
-              <label
-                htmlFor="message"
-                className="block text-sm font-medium text-gray-700"
+              <textarea  rows={4}
+                required placeholder="Looking for a reliable mailbox service" required
+                className="block w-full rounded-[8px] border border-LightWhite bg-white h-[126px] pl-[12px] pt-[24px] pb-[10px]
+                font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px] 
+                placeholder:font-Roboto placeholder:text-PrimaryBlack placeholder:font-normal placeholder:leading-[24px]  placeholder:text-[16px]  placeholder:tracking-[0px]"
               >
-                Message
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                rows={4}
-                required
-                className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-              ></textarea>
-            </div>
+              </textarea>
+            </div>   
+            <div className="relative">
+                 <img
+                      src={Contact}
+                      alt="captcha"                      
+                      className="rounded-[20px] w-full max-w-[368px] h-auto  object-cover"
+                    />
+            </div>       
 
+            
+          <div className="relative pt-3 flex items-center justify-center">
             {/* Submit */}
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white rounded-md py-2 px-4 font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full w-full md:w-[271px] h-[52px]"
             >
               Submit
             </button>
+            </div>
           </form>
         </div>
 
         {/* RIGHT: Support + Quick Links */}
         <aside
-          className="space-y-6"
+          className="w-full lg:w-[40.2%]"
           aria-labelledby="support-heading quick-links-heading"
         >
           {/* Support Section */}
           {data.supportSection && (
             <div
-              className="bg-white shadow rounded-lg p-6"
+              className="bg-[#F6F6F6] border border-LightWhite rounded-[12px] p-6"
               aria-labelledby="support-heading"
             >
               {data.supportSection.sectionTitle && (
                 <h2
                   id="support-heading"
-                  className="text-lg font-semibold text-gray-900 mb-2"
+                  className="font-Roboto text-PrimaryBlack font-semibold leading-[28px] md:leading-[31.2px] text-[20px] md:text-[24px] tracking-[-0.3px] md:tracking-[-0.36px]"
                 >
                   {data.supportSection.sectionTitle}
                 </h2>
               )}
               {data.supportSection.sectionDescription && (
-                <p className="text-gray-600 mb-4">
+                <p className="mt-1 mb-6 font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">
                   {data.supportSection.sectionDescription}
                 </p>
               )}
 
-              <ul className="space-y-4">
+              <ul className="space-y-6">
                 {data.supportSection.supportItems?.map((item, idx) => (
                   <li
                     key={idx}
-                    className="border rounded-lg p-4 flex flex-col gap-2"
+                    className="px-5 py-4 border border-LightWhite rounded-[12px] bg-white flex flex-row items-start gap-4"
                   >
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-4">
                       {item.icon?.url && (
                         <img
                           src={item.icon.url}
                           alt=""
-                          className="w-5 h-5"
+                          className="w-8 h-8"
                           aria-hidden="true"
                         />
                       )}
-                      {item.title && (
-                        <span className="font-medium text-gray-900">
-                          {item.title}
+                     
+                    </div>
+                    <div className="flex flex-col gap-2">
+                       {item.title && (
+                        <span className="font-Roboto text-PrimaryBlack font-medium leading-[27px] md:leading-[27px] text-[18px] md:text-[18px] tracking-[0px]">
+                         {item.title}
                         </span>
                       )}
-                    </div>
+                    
 
                     {item.contacts && (
-                      <ul className="pl-6 space-y-1">
+                      <ul className="space-y-2">
                         {item.contacts.map((contact, cIdx) => (
-                          <li key={cIdx} className="flex items-center gap-2">
+                          <li key={cIdx} className="flex gap-2 items-center">
                             {contact.icon?.url && (
                               <img
                                 src={contact.icon.url}
                                 alt=""
-                                className="w-4 h-4"
+                                className="w-6"
                                 aria-hidden="true"
                               />
                             )}
                             {contact.phoneLink ? (
                               <a
                                 href={contact.phoneLink}
-                                className="text-blue-600 hover:underline"
+                                className="tracking-[0px] font-Roboto text-LightWhite text-[14px] leading-[21px] font-normal py-1 inline-block"
                                 aria-label={`Call ${contact.number}`}
                               >
                                 {contact.number}
                               </a>
                             ) : (
-                              <span className="text-gray-700">
-                                {contact.number}
+                              <span className="tracking-[0px] font-Roboto text-LightGray text-[14px] leading-[21px] font-normal py-1 inline-block">
+                                <a href={`tel:${contact.number}`} className=""> {contact.number}</a>
                               </span>
                             )}
                           </li>
                         ))}
                       </ul>
-                    )}
+                    )}                   
 
                     {item.note && (
-                      <p className="text-sm text-gray-500">{item.note}</p>
+                      <p className="tracking-[0px] font-Roboto text-LightGray text-[14px] leading-[21px] font-normal inline-block">{item.note}</p>
                     )}
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -213,28 +280,30 @@ export default function ContactUsSection({ data }: ContactUsProps) {
           {/* Quick Links */}
           {data.quickLinks && data.quickLinks.length > 0 && (
             <nav
-              className="bg-white shadow rounded-lg p-6"
+              className="mt-6 md:mt-8 bg-white border border-LightWhite rounded-[12px] p-6"
               aria-labelledby="quick-links-heading"
             >
               <h2
                 id="quick-links-heading"
-                className="text-lg font-semibold text-gray-900 mb-2"
+                className="mb-6 font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[31.2px] text-[24px] md:text-[24px] tracking-[-0.36px] md:tracking-[-0.36px]"
               >
                 Quick Links
               </h2>
-              <ul className="list-disc pl-5 space-y-2">
+              <ul className="list-none space-y-4">
                 {data.quickLinks.map((link, idx) => (
                   <li key={idx}>
                     {link.url ? (
                       <a
                         href={link.url}
-                        className="text-blue-600 hover:underline"
+                        className="font-Roboto text-DarkOrange font-normal leading-[27px] md:leading-[27px] text-[18px] md:text-[18px] tracking-[0px] md:tracking-[0px]
+                      underline decoration-solid decoration-skip-ink-auto decoration-auto underline-offset-auto"
                         aria-label={`Quick link: ${link.label}`}
                       >
                         {link.label}
                       </a>
                     ) : (
-                      <span className="text-gray-700">{link.label}</span>
+                      <span className="font-Roboto text-DarkOrange font-normal leading-[27px] md:leading-[27px] text-[18px] md:text-[18px] tracking-[0px] md:tracking-[0px]
+                      underline decoration-solid decoration-skip-ink-auto decoration-auto underline-offset-auto">{link.label}</span>
                     )}
                   </li>
                 ))}
@@ -242,6 +311,7 @@ export default function ContactUsSection({ data }: ContactUsProps) {
             </nav>
           )}
         </aside>
+      </div>
       </div>
     </section>
   );
