@@ -189,7 +189,7 @@ export default function Newsroom() {
             <div className="flex justify-center mt-12 pt-8 border-t border-gray-200">
               <button
                 onClick={handleLoadMore}
-                className="bg-gray-600  px-8 py-3 rounded-lg font-medium hover:bg-gray-700 transition-colors"
+                className="bg-gray-600 px-8 py-3 rounded-lg font-medium hover:bg-gray-700 transition-colors"
               >
                 Load More
               </button>
