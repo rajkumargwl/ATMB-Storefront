@@ -59,16 +59,12 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
 
   if (!newsItem) throw new Response(null, { status: 404 });
 
-  // Extract the year and month from the article’s date
-  const currentDate = new Date(newsItem.date);
-  const year = currentDate.getUTCFullYear();
-  const month = currentDate.getUTCMonth(); // 0-based (0 = Jan)
+  // Convert current news date to a year range
+  const newsDate = new Date(newsItem.date);
+  const startOfYear = new Date(Date.UTC(newsDate.getFullYear(), 0, 1, 0, 0, 0)); // Jan 1, 00:00 UTC
+  const endOfYear = new Date(Date.UTC(newsDate.getFullYear(), 11, 31, 23, 59, 59)); // Dec 31, 23:59 UTC
 
-  // Define start and end of that month
-  const startOfMonth = new Date(Date.UTC(year, month, 1, 0, 0, 0));
-  const endOfMonth = new Date(Date.UTC(year, month + 1, 0, 23, 59, 59));
-
-  // Fetch related news from the same month/year
+  // Fetch related news from the same year
   let relatedNews = await context.sanity.query({
     query: `*[_type == "news" && date >= $start && date <= $end && slug.current != $slug]
             | order(date desc)[0...3] {
@@ -80,27 +76,20 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
       logoImage { asset->{_id,url,metadata{dimensions{width,height}}}, alt },
       featuredImage { asset->{_id,url,metadata{dimensions{width,height}}}, alt }
     }`,
-    params: { start: startOfMonth.toISOString(), end: endOfMonth.toISOString(), slug },
+    params: { start: startOfYear.toISOString(), end: endOfYear.toISOString(), slug },
   });
-  
-  // Fallback: if no related news in same month, show recent 3
+
+  // Fallback: if no related news in the same year, show recent 3
   if (!relatedNews?.length) {
     relatedNews = await context.sanity.query({
-      query: `*[_type == "news" && slug.current != $slug]
-              | order(date desc)[0...3] {
+      query: `*[_type == "news" && slug.current != $slug] | order(date desc)[0...3] {
         _id,
         title,
         "slug": slug.current,
         description,
         date,
-        logoImage {
-          asset->{
-            _id,
-            url,
-            metadata { dimensions { width, height } }
-          },
-          alt
-        }
+        logoImage { asset->{_id,url,metadata{dimensions{width,height}}}, alt },
+        featuredImage { asset->{_id,url,metadata{dimensions{width,height}}}, alt }
       }`,
       params: { slug },
     });
@@ -270,7 +259,7 @@ export default function NewsroomDetailPage() {
                       </div>
                     )}
 
-                    {/* Featured image */}
+                    {/* Featured image 
                       {item.featuredImage?.asset?.url && (
                         <Image
                           data={{
@@ -284,7 +273,7 @@ export default function NewsroomDetailPage() {
                           sizes="(max-width: 768px) 100vw, 33vw"
                         />
                       )}
-
+                       */}
                     {/* Title + truncated description */}
                     <div className="p-4 space-y-2">
                       <h3 className="text-lg font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">
