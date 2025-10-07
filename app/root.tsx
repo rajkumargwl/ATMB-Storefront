@@ -24,6 +24,7 @@ import {
   type MetaFunction,
   type SerializeFrom,
 } from '@shopify/remix-oxygen';
+import {CartProvider} from '@shopify/hydrogen-react';
 import {getPreview, PreviewProvider} from 'hydrogen-sanity';
  
 import {GenericError} from '~/components/global/GenericError';
@@ -266,11 +267,14 @@ export default function App() {
           </div>
           {/* 🔹 Global Header with search support */}
           <Header data={header} searchQuery={q} searchResults={searchResults} isLoggedIn={isLoggedIn} customer={customer} />
-
+          <CartProvider>
           <Layout key={`${locale.language}-${locale.country}`}>
+           
             <Outlet />
+          
+            
           </Layout>
-
+          </CartProvider>
           {/* 🔹 Global Footer */}
           <Footer data={footer} />
         </PreviewProvider>

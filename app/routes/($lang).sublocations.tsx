@@ -90,7 +90,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
         query: `{
           "locations": *[_type == "location" && (
             name match $search ||
-            display_name match $search ||
+            displayName match $search ||
             city match $search ||
             postalCode match $search
           )][0...10]{
@@ -159,8 +159,6 @@ export async function loader({context, request}: LoaderFunctionArgs) {
     results.locations = locations;
   }
 
-  console.log('Fetched locations:', JSON.stringify(results.locations));
-
   return defer({
     locations: results.locations,
     header,
@@ -186,7 +184,7 @@ export default function LocationsPage() {
   const [selectedLocation, setSelectedLocation] = useState<LocationAPI | null>(
     locations[0] || null,
   );
-
+console.log("locations", locations);
   const [showFilters, setShowFilters] = useState(false);
   const [planTier, setPlanTier] = useState('');
   const [minPrice, setMinPrice] = useState(
@@ -229,7 +227,9 @@ export default function LocationsPage() {
   const cities = Array.from(
     new Set(locations.map((loc) => loc.city).filter(Boolean)),
   );
-
+  const displayNames = Array.from(
+    new Set(locations.map((loc) => loc.displayName).filter(Boolean)),
+  );
   const uniqueFeatures = Array.from(
     new Set(locations.flatMap((loc) => loc.featureList?.map((f) => f.label) || [])),
   );
@@ -384,7 +384,11 @@ export default function LocationsPage() {
       mapRef.current.fitBounds(boundsRef.current);
     }
   };
-
+  const combinedCities = cities.map((city, index) => ({
+    id: index,
+    city,
+    displayName: displayNames[index] || city, // fallback if displayName missing
+  }));
   return (
     <>
      {/* <Header data={header} searchResults={mergedResults} searchQuery={q} /> */}
@@ -495,7 +499,7 @@ export default function LocationsPage() {
   </div>
 
   {/* Autocomplete suggestions */}
-  {showSuggestions && searchCity && cities.filter(city =>
+  {/* {showSuggestions && searchCity && cities.filter(city =>
       city.toLowerCase().includes(searchCity.toLowerCase())
     ).length > 0 && (
     <ul className="absolute z-50 w-full bg-white border border-LightWhite rounded-b-md max-h-40 overflow-y-auto mt-12 shadow-md">
@@ -517,7 +521,37 @@ export default function LocationsPage() {
           </li>
         ))}
     </ul>
-  )}
+  )} */}
+   {showSuggestions &&
+  searchCity &&
+  combinedCities.filter(
+    (cityObj) =>
+      cityObj.city?.toLowerCase().includes(searchCity.toLowerCase()) ||
+      cityObj.displayName?.toLowerCase().includes(searchCity.toLowerCase())
+  ).length > 0 && (
+    <ul className="absolute z-50 w-full bg-white border border-LightWhite rounded-b-md max-h-40 overflow-y-auto mt-12 shadow-md">
+      {combinedCities
+        .filter(
+          (cityObj) =>
+            cityObj.city?.toLowerCase().includes(searchCity.toLowerCase()) ||
+            cityObj.displayName?.toLowerCase().includes(searchCity.toLowerCase())
+        )
+        .map((cityObj) => (
+          <li
+            key={cityObj.id}
+            className="px-3 py-2 cursor-pointer hover:bg-gray-100"
+            onClick={() => {
+              setSearchCity(cityObj.displayName || cityObj.city);
+              setSelectedCity(cityObj);
+              setShowSuggestions(false);
+            }}
+          >
+            {cityObj.displayName} ({cityObj.city})
+          </li>
+        ))}
+    </ul>
+)}
+
 </div>
   </div>
 

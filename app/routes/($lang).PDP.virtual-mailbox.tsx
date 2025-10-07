@@ -10,7 +10,9 @@ import {PRODUCT_QUERY} from '~/queries/shopify/product';
 import type {Product, ProductVariant} from '@shopify/hydrogen/storefront-api-types';
 import {type ShopifyAnalyticsProduct} from '@shopify/hydrogen';
 import AddToCartButton from '~/components/product/buttons/AddToCartButton';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
+import ReplacePlanAddToCartButton from '~/components/cart/ReplacePlanAddToCartButton';
+import {useCart} from '@shopify/hydrogen-react';
 
 // Location query from Sanity
 const LOCATION_QUERY = /* groq */ `
@@ -63,7 +65,6 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     },
   });
   if (!product) throw notFound();
-  console.log('Product fetched:', JSON.stringify(product));
 
   // Fetch Sanity location dynamically
   const locationId = new URL(request.url).searchParams.get('locationId') ?? '101';
@@ -84,9 +85,13 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
 }
 
 export default function Plans() {
-  const {location, header, footer, product} = useLoaderData<typeof loader>();
+  const {lines} = useCart();
+  console.log('Cart lines in Plans page:', lines);
+  const [replaceLineId, setReplaceLineId] = useState<string | null>(null);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
+  const {location, header, footer, product} = useLoaderData<typeof loader>();
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
+  const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
 
   const variants = (product?.variants?.nodes ?? []) as ProductVariant[];
 
@@ -115,16 +120,12 @@ export default function Plans() {
       value: String(value), // Shopify requires string values
     }));
 
-  //  const locationProperties={
-  //   locationId: location.locationId,
-  //   displayName: location.displayName,
-  //   addressLine1: location.addressLine1,
-  //   city: location.city,
-  //   state: location.state,
-  //   postalCode: location.postalCode,
-  //   country: location.country,
-  //  } 
-
+  useEffect(() => {
+    const storedLineId = sessionStorage.getItem('replaceLineId');
+    if (storedLineId) setReplaceLineId(storedLineId);
+    console.log('Replace line ID from sessionStorage:', storedLineId);
+  }, []);
+  
   return (
     <>
       <div className="flex flex-col min-h-screen">
@@ -209,7 +210,7 @@ export default function Plans() {
 
           {/* Add to Cart */}
           <div className="flex justify-center pt-6">
-            <AddToCartButton
+            {/* <AddToCartButton
               lines={
                 selectedVariant
                   ? [
@@ -232,7 +233,15 @@ export default function Plans() {
               }
               buttonClassName="w-full mt-2"
               text={selectedVariant ? 'Add to Cart' : 'Select a Plan First'}
-            />
+            /> */}
+            <ReplacePlanAddToCartButton
+  selectedVariant={selectedVariant}
+  replaceLineId={replaceLineId}
+  locationProperties={locationProperties}
+  disabled={!selectedVariant || !selectedVariant.availableForSale}
+  buttonClassName="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600"
+  text={selectedVariant ? 'Add to Cart' : 'Select a Plan First'}
+/>
           </div>
         </main>
       </div>

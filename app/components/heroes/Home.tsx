@@ -5,6 +5,7 @@ import AmLogo from '~/components/icons/AmLogo';
 import RightArrowWhite from '~/components/icons/RightArrowWhite';
 import { useNavigate, useLocation } from "@remix-run/react";
 import { useState, useEffect } from "react";
+import SearchBox from "~/components/SearchBox";
 type Props = {
   hero: SanityHeroHome;
   homeSearchResults: any[];  
@@ -13,7 +14,6 @@ type Props = {
 
 export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props) {
   if (!hero) return null;
-  console.log("homeSearchResults in HomeHero", homeSearchResults);
   const [qresults, setQresults] = useState(homeSearchResults || []);
   const [searchquery, setSearchquery] = useState("");
 
@@ -32,7 +32,7 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
     const params = new URLSearchParams(location.search);
 
     if (!searchquery.trim()) {
-      params.delete("p");
+     // params.delete("p");
       navigate(`?${params.toString()}`, { replace: true });
       setQresults([]);
       return;
@@ -96,72 +96,20 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
               </p>
             )}
 
-            {/* Search Box */}
-            <div className="mt-[40px] md:mt-[64px] mb-4 md:mb-5 flex items-center gap-[10px] w-full max-w-[546px] pt-[8px] md:pt-[6px] pr-[8px] md:pr-[6px] pb-[8px] md:pb-[6px] pl-[16px] md:pl-[20px] bg-white border border-LightGray rounded-full shadow-sm overflow-hidden">
-              <SearchIconBanner />
-              <input
-                type="text"
-                value={searchquery}
-               onChange={(e) => {
-              const newValue = e.target.value;
-              setSearchquery(newValue);
-
-              const params = new URLSearchParams(location.search);
-              if (newValue.trim()) {
-                params.set("p", newValue);
-              } else {
-                params.delete("p");
-              }
-
-              navigate(`?${params.toString()}`, { replace: true });
-            }}
-                id="mainContent" 
-                placeholder={hero.searchPlaceholder||"Address and zip"}
-                className="font-Roboto text-PrimaryBlack placeholder:text-PrimaryBlack font-normal leading-[24px] text-[16px] tracking-[0.08px] flex-1 py-[5px] md:py-[13px] focus:outline-none"
-              />
-              <button className="group bg-DarkOrange text-white px-[20px] md:px-[35.5px] py-[11px] md:py-[15px] font-normal leading-[14px] md:leading-[22px] text-[14px] md:text-[16px] tracking-[0.08px] rounded-full overflow-hidden transition-all hover:scale-[1.01] 
-              hover:bg-[#DD5827] "  aria-label="You can search location" >
-                 <span className="sr-only">(You can search location)</span>
-                
-                 <span className="relative flex items-center">{hero.searchButtonText} <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[25px] transition-all duration-300">
-                    <RightArrowWhite />
-                  </span></span>
-              </button>
-            </div>
- {/* Results List */}
- {searchquery && (
-        <div className="md:pt-2">
-          <div className="bg-white border-t md:border border-LightWhite md:rounded-[20px] shadow-md w-full p-5">
-            <ul className="max-h-72 overflow-y-auto space-y-6">
-              {qresults.length > 0 ? (
-                qresults.map((item) => (
-                  <li
-                    key={item._id}
-                    className="cursor-pointer font-Roboto leading-[27px] text-[18px] tracking-[0px]"
-                    onClick={() => handleSearchResultClick(item)}
-                  >
-                    {item.type === "location" ? (
-                      <>
-                        <span className="mr-2 font-medium text-PrimaryBlack">{item.name}</span>
-                        <span className="text-LightGray font-normal">
-                          {item.city}, {item.postalCode}
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <span className="mr-2 font-medium text-PrimaryBlack">{item.title}</span>
-                        <span className="text-LightGray font-normal">(Product)</span>
-                      </>
-                    )}
-                  </li>
-                ))
-              ) : (
-                <li className="px-4 py-3 font-Roboto text-PrimaryBlack font-normal leading-[24px] text-[16px] tracking-[0px]">No results found</li>
-              )}
-            </ul>
-          </div>
-        </div>
-      )}
+<SearchBox
+  placeholder={hero.searchPlaceholder || "Address and zip"}
+  buttonText={hero.searchButtonText}
+  initialQuery={searchQuery}
+  results={homeSearchResults}
+  onResultClick={(item) => {
+    if (item.type === "product") {
+      navigate(`/products/${item.handle}`);
+    } else if (item.type === "location") {
+      const queryParam = item.name || item.city;
+      navigate(`/sublocations?q=${encodeURIComponent(queryParam)}`);
+    }
+  }}
+/>
             {/* Trusted Section */}
             <div className="flex items-center gap-3">
               <div className="flex -space-x-[10px]">
