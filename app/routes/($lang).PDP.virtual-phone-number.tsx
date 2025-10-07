@@ -10,7 +10,8 @@ import {PRODUCT_QUERY} from '~/queries/shopify/product';
 import type {Product, ProductVariant} from '@shopify/hydrogen/storefront-api-types';
 import {type ShopifyAnalyticsProduct} from '@shopify/hydrogen';
 import AddToCartButton from '~/components/product/buttons/AddToCartButton';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
+import ReplacePlanAddToCartButton from '~/components/cart/ReplacePlanAddToCartButton';
 
 // Loader
 export async function loader({context, params, request}: LoaderFunctionArgs) {
@@ -42,6 +43,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
 }
 
 export default function Plans() {
+  const [replaceLineId, setReplaceLineId] = useState<string | null>(null);
   const {header, footer, product} = useLoaderData<typeof loader>();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
@@ -66,7 +68,10 @@ export default function Plans() {
         quantity: 1,
       }
     : null;
-
+useEffect(() => {
+    const storedLineId = sessionStorage.getItem('replaceLineId');
+    if (storedLineId) setReplaceLineId(storedLineId);
+  }, []);
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <main className="flex-1 p-6">
@@ -171,7 +176,7 @@ export default function Plans() {
                 US${selectedVariant.price.amount}/{billingCycle}
               </p>
             </div>
-            <AddToCartButton
+            {/* <AddToCartButton
               lines={[
                 {merchandiseId: selectedVariant.id, quantity: 1},
               ]}
@@ -186,6 +191,14 @@ export default function Plans() {
               }
               buttonClassName="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600"
               text="Add to Cart"
+            /> */}
+             <ReplacePlanAddToCartButton
+              selectedVariant={selectedVariant}
+              replaceLineId={replaceLineId}
+              locationProperties={[]}
+              disabled={!selectedVariant || !selectedVariant.availableForSale}
+              buttonClassName="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600"
+              text={selectedVariant ? 'Add to Cart' : 'Select a Plan First'}
             />
           </div>
         )}
