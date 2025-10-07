@@ -133,7 +133,7 @@ export const action: ActionFunction = async ({request, context, params}) => {
         last_name,
         phone,
         status: 'Active',
-        type: 'Customer',
+        type: 'Lead',
       }),
     });
 
@@ -142,6 +142,65 @@ export const action: ActionFunction = async ({request, context, params}) => {
       // console.error('External API failed', await userResponses.errors);
       throw new Error('Could not create user in external API: ' + userResponses.errors.map((err: any) => err.message).join(', '));
     }
+
+    //  Extract the external user ID
+    const externalUserId = userResponses.data?.user_id;
+
+    //  Get the Shopify Customer ID from Step 1
+    const shopifyCustomerId = data.customerCreate.customer.id;
+
+    //  Update existing metafield value for `custom.user_id`
+    const metafieldUpdateResponse = await fetch(
+      `https://${context.env.PUBLIC_STORE_DOMAIN}/admin/api/2024-07/graphql.json`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Shopify-Access-Token': context.env.SHOPIFY_ADMIN_API_TOKEN!,
+        },
+        body: JSON.stringify({
+          query: `
+            mutation UpdateCustomerMetafield($ownerId: ID!, $namespace: String!, $key: String!, $value: String!) {
+              metafieldsSet(
+                metafields: [
+                  {
+                    ownerId: $ownerId
+                    namespace: $namespace
+                    key: $key
+                    type: "single_line_text_field"
+                    value: $value
+                  }
+                ]
+              ) {
+                metafields {
+                  id
+                  key
+                  value
+                }
+                userErrors {
+                  field
+                  message
+                }
+              }
+            }
+          `,
+          variables: {
+            ownerId: shopifyCustomerId,
+            namespace: 'custom',
+            key: 'user_id',
+            value: externalUserId,
+          },
+        }),
+      }
+    );
+
+    const metafieldUpdateResult = await metafieldUpdateResponse.json();
+
+    if (metafieldUpdateResult.errors || metafieldUpdateResult.data?.metafieldsSet?.userErrors?.length) {
+      console.error('Failed to update metafield:', metafieldUpdateResult);
+      throw new Error('Could not update user_id metafield for customer');
+    }
+
 
     // 4️⃣ Login customer in Shopify
     const customerAccessToken = await doLogin(context, {email, password});

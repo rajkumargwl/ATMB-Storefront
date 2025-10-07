@@ -87,7 +87,6 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
        console.error('Search error:', err);
      }
    }
-
   return defer({
     page,                           
     header,
