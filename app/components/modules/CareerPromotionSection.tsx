@@ -20,10 +20,10 @@ export default function CareerPromotionSection({
   image,
 }: Props) {
   return (
-    <section className="max-w-[1240px] mx-auto px-6 md:px-0 items-center justify-between py-16 bg-white">
-      <div className="grid grid-cols-1 gap-10 md:grid-cols-2 items-center">
+    <section className="max-w-[1240px] mx-auto px-6 max-1265px:px-4 max-1265px:gap-2 items-center justify-between py-16 bg-white">
+      <div className="grid grid-cols-1 md:grid-cols-2 items-center">
         {/* Left side: text content */}
-        <div className="space-y-6">
+        <div className="md:space-y-5">
           {smallHeading && (
             <p className="font-Roboto text-[#4D4E4F] font-medium leading-[28px] text-[20px]">
               {smallHeading}
@@ -31,7 +31,7 @@ export default function CareerPromotionSection({
           )}
 
           {mainHeading && (
-            <h2 className="mt-6 font-Roboto text-PrimaryBlack font-semibold text-[28px] leading-[36px] tracking-[-0.4px]  sm:text-[32px] sm:leading-[42px] sm:tracking-[-0.48px]  max-w-[523px]">
+            <h1 className="mt-5 mb-4 md:mb-0 font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] tracking-[-0.36px] text-[24px] md:text-[36px] md:leading-[43.2px] md:tracking-[-0.54px] max-w-[529px]">
              {mainHeading.split(/(\s+)/).map((chunk, idx) => {
               if (chunk.trim() === "") {
                 return chunk; // preserve spaces
@@ -51,15 +51,15 @@ export default function CareerPromotionSection({
               );
             })}
 
-            </h2>
+            </h1>
           )}
 
           {buttonText && (
-            <div>
+            <div className="max-1265px:mb-4">
               <a
                 href={buttonLink || "#"}
                 target="_blank"
-                className="font-Roboto inline-block rounded-full bg-[#FF6600] text-[20px] leading-[16px] px-6 py-3 text-white font-normal hover:bg-orange-600 transition-colors"
+                className="font-Roboto inline-block rounded-full bg-[#FF6600] text-[16px] leading-[16px] px-4 py-3 text-white font-normal hover:bg-orange-600 transition-colors"
               >
                 {buttonText}
               </a>
@@ -69,11 +69,11 @@ export default function CareerPromotionSection({
 
         {/* Right side: image */}
         {image?.url && (
-          <div className="flex justify-center">
+          <div className="flex justify-center md:justify-end">
             <img
               src={image.url}
               alt="Career promotion"
-              className="rounded-lg shadow-md object-cover max-h-[400px] w-full"
+               className="rounded-xl shadow-md w-full h-auto lg:w-[611px] lg:h-[443px] object-cover"
             />
           </div>
         )}

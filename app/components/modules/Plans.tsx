@@ -89,37 +89,52 @@ export default function PricingSection({ data }: { data: PricingData }) {
 
           {/* Center Tabs with proper ARIA roles */}
           <div className="flex-1 flex justify-center">
-            <div 
-              role="tablist" 
-              aria-label="Pricing plans"
-              className="flex gap-4"
-            >
-              {tabs.map((tab, idx) => {
-                const isSelected = activeTab === tab.id;
-                return (
-                  <button
-                    key={tab.id}
-                    id={`tab-${tab.id}`}
-                    role="tab"
-                    aria-selected={isSelected}
-                    aria-controls={`tabpanel-${tab.id}`}
-                    tabIndex={isSelected ? 0 : -1}
-                    onClick={() => setActiveTab(tab.id as "individual" | "bundles")}
-                    className={`px-6 py-3 font-Roboto text-[16px] leading-[24px] tracking-[0px] font-normal rounded-full border border-LightWhite transition ${
-                      isSelected
-                        ? "border-PrimaryBlack text-white bg-PrimaryBlack"
-                        : "text-PrimaryBlack"
-                    }`}
-                  >
-                    {isSelected && (
-                      <span className="sr-only">(selected tab is)</span>
-                    )}
-                    {tab.tabName}
-                    
-                  </button>
-                );
-              })}
-            </div>
+<div 
+  role="tablist" 
+  aria-label="Pricing plans"
+  className="flex gap-4"
+>
+  {tabs.map((tab, idx) => {
+    const isSelected = activeTab === tab.id;
+    return (
+      <button
+        key={tab.id}
+        id={`tab-${tab.id}`}
+        role="tab"
+        aria-selected={isSelected}
+        aria-controls={`tabpanel-${tab.id}`}
+        tabIndex={isSelected ? 0 : -1} // only selected is tabbable
+        onClick={() => setActiveTab(tab.id as "individual" | "bundles")}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setActiveTab(tab.id as "individual" | "bundles");
+          }
+          if (e.key === "ArrowRight") {
+            e.preventDefault();
+            const next = (idx + 1) % tabs.length;
+            setActiveTab(tabs[next].id as "individual" | "bundles");
+          }
+          if (e.key === "ArrowLeft") {
+            e.preventDefault();
+            const prev = (idx - 1 + tabs.length) % tabs.length;
+            setActiveTab(tabs[prev].id as "individual" | "bundles");
+          }
+        }}
+        className={`px-6 py-3 font-Roboto text-[16px] leading-[24px] tracking-[0px] font-normal rounded-full border border-LightWhite transition ${
+          isSelected
+            ? "border-PrimaryBlack text-white bg-PrimaryBlack"
+            : "text-PrimaryBlack"
+        }`}
+      >
+        {isSelected && <span className="sr-only">(selected tab is)</span>}
+        {tab.tabName}
+      </button>
+    );
+  })}
+</div>
+
+
           </div>
 
           {/* Billing Toggle */}
@@ -259,7 +274,7 @@ export default function PricingSection({ data }: { data: PricingData }) {
                       </p>
 
                       {/* Associated Products for Bundles */}
-                      {isBundlesTab && plan.associatedProducts && plan.associatedProducts.length > 0 && (
+                      {/* {isBundlesTab && plan.associatedProducts && plan.associatedProducts.length > 0 && (
                         <div className="mt-4 p-3 bg-[#F9F9F9] rounded-lg">                
                           <div className="space-y-2">
                             {plan.associatedProducts.map((product, productIdx) => (
@@ -291,7 +306,45 @@ export default function PricingSection({ data }: { data: PricingData }) {
                             ))}
                           </div>
                         </div>
-                      )}
+                      )} */}
+                      {isBundlesTab && plan.associatedProducts && plan.associatedProducts.length > 0 && (
+                          <div className="mt-4 p-3 bg-[#F9F9F9] rounded-lg">                
+                            <div className="space-y-2">
+                              {plan.associatedProducts.map((product, productIdx) => (
+                                <div key={productIdx} className="flex items-center justify-between">
+                                  <div>
+                                    <p className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">
+                                      {product.productName}
+                                    </p>
+                                    {product.subheading && (
+                                      <p className="text-sm text-gray-500">{product.subheading}</p>
+                                    )}
+                                  </div>
+                                  {product.level && (
+                                    <span className="px-2 py-1 bg-[#E5E5E5] text-[#333333] text-xs rounded-full">
+                                      {product.level}
+                                    </span>
+                                  )}
+                                </div>
+                              ))}
+                            </div>
+
+                            {/* Bundle Price - shown once */}
+                            {price && (
+                              <div className="flex items-end mt-4">
+                                {plan.originalPrice && (
+                                  <span className="line-through text-gray-400 text-sm mr-2">{plan.originalPrice}</span>
+                                )}
+                                <span className="font-Roboto text-PrimaryBlack text-[24px] leading-[31.2px] font-semibold tracking-[-0.36px]">
+                                  {price}
+                                </span>
+                                <span className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">
+                                  /{isYearly ? "year" : "month"}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        )}
 
                       <div className="mt-6 flex flex-row justify-between items-center">
                         <div>

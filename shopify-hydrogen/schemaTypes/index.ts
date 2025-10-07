@@ -58,7 +58,9 @@ import solutions from './singletons/solutions'
 // import { heroBanner } from "./objects/module/heroBanner";
 import location from './location'
 import wpPost from './wpPost'
+import news from './news'
 import blockContent from './blockContent'
+import casestudy from './casestudy'
 import { featuresModule } from "./objects/module/featuresModule";
 import { pricingModule } from "./objects/module/pricingModule";
 import { extraFeatures } from "./objects/module/extraFeatures";
@@ -87,6 +89,30 @@ import {faqPageModule} from './objects/module/faqPageModule'
 import { uspsForm1583Type } from './objects/module/uspsForm1583Type'
 import { uspsForm1583Guide } from './objects/module/uspsForm1583Guide'
 import { uspsForm1583Content } from "./objects/module/uspsForm1583Content"
+import {contactUsSection} from './objects/module/contactUsSection'
+import {affiliateProgramSection} from './objects/module/affiliateProgramSection'
+import {whyJoinSection} from './objects/module/whyJoinSection'
+import {stepsSection} from './objects/module/stepsSection'
+import {affiliatedProgramPageModule} from './objects/module/affiliatedProgramPageModule'
+import {founderModule} from './objects/module/FounderPagemodule'
+import {solutionHeroModule} from './objects/module/solutionHeroModule'
+import {solutionMailboxBenefitFaqModule} from './objects/module/solutionMailboxBenefitFaqModule'
+import {solutionMailboxFeaturesModule} from './objects/module/solutionMailboxFeaturesModule'
+import {solutionMailboxLocationHowItWorksModule} from './objects/module/solutionMailboxLocationHowItWorksModule'
+import {solutionVirtualMailboxModule} from './objects/module/solutionVirtualMailboxModule'
+import {solutionPageModule} from './objects/module/solutionPageModule'
+import {solutionRealLife} from './objects/module/solutionRealLife'
+import {renterreferralprogramType} from './objects/module/renterprogramType' 
+import {renterEditor} from './objects/module/rentereditor'
+import {marketPlaceModule} from './objects/module/marketPlaceModule'
+import {marketPlaceIntroSection} from './objects/module/marketPlaceIntroSection'
+import {marketPlaceCategoriesSection} from './objects/module/marketPlaceCategoriesSection'
+import { howitworksType } from './objects/module/howitwrorksType'
+import { howitworksVirtualbox } from './objects/module/howitworksVirtualbox'
+import { builtForHowYouWorkToday } from './objects/module/builtforhowyouworktoday'
+import { howitworks3steps } from './objects/module/howitworks3steps'
+import { howitworks2 } from './objects/module/howitworks2'
+// Objects used as annotations must be imported first
 // Objects used as annotations must be imported first
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
 
@@ -171,7 +197,31 @@ whyChooseVirtualMailbox,
   faqPageModule,
   uspsForm1583Type,
 uspsForm1583Guide,
-uspsForm1583Content
+uspsForm1583Content,
+contactUsSection,
+  // Affiliate Program Page Modules
+  affiliateProgramSection,
+  whyJoinSection,
+  stepsSection,
+  affiliatedProgramPageModule,
+  founderModule,
+  solutionHeroModule,
+  solutionMailboxBenefitFaqModule,
+  solutionMailboxFeaturesModule,
+  solutionMailboxLocationHowItWorksModule,
+  solutionPageModule,
+  solutionRealLife,
+  renterreferralprogramType,
+  renterEditor,
+  solutionVirtualMailboxModule,
+  marketPlaceModule,
+  marketPlaceIntroSection,
+  marketPlaceCategoriesSection,
+  howitworksType,
+  howitworksVirtualbox,
+  builtForHowYouWorkToday,
+  howitworks3steps,
+  howitworks2,
 ]
 
 import {portableTextType} from './portableText/portableTextType'
@@ -186,7 +236,7 @@ import {productType} from './documents/product'
 import {productVariantType} from './documents/productVariant'
 import {plansType} from './documents/plans'
 
-const documents = [collectionType, colorThemeType, pageType, productType, productVariantType,plansType,wpPost,blockContent]
+const documents = [collectionType, colorThemeType, pageType, productType, productVariantType,plansType,wpPost,blockContent,casestudy,news]
 
 import {homeType} from './singletons/homeType'
 import {settingsType} from './singletons/settingsType'

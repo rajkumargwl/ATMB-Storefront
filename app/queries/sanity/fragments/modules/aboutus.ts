@@ -1,11 +1,12 @@
 import groq from 'groq';
- 
+
 export const ABOUT_US_MODULE = groq`
   _type,
   _key,
   modules[] {
     _type,
     _key,
+
     // About Intro Section
     (_type == "aboutIntroSection") => {
       label,
@@ -14,18 +15,23 @@ export const ABOUT_US_MODULE = groq`
       description,
       buttonText,
       buttonLink,
-       image {
-      "url": asset->url,
-  }
+      video {
+        thumbnail {
+          "url": asset->url
+        },
+        url
+      }
     },
+
     // How It Started Section
     (_type == "aboutHowItStartedSection") => {
       heading,
       content,
       image {
-      "url": asset->url,
-  }
+        "url": asset->url,
+      }
     },
+
     // Features Section
     (_type == "aboutFeaturesSection") => {
       backgroundColor,
@@ -35,9 +41,10 @@ export const ABOUT_US_MODULE = groq`
         icon {
           "url": asset->url,
         },
-        tooltipTitle // ADD THIS
+        tooltipTitle
       }
     },
+
     // Detailed Features Section
     (_type == "aboutDetailedFeaturesSection") => {
       heading,
@@ -52,9 +59,10 @@ export const ABOUT_US_MODULE = groq`
         icon {
           "url": asset->url,
         },
-        tooltipTitle // ADD THIS
+        tooltipTitle
       }
     },
+
     // Founders Section
     (_type == "aboutFoundersSection") => {
       title,
@@ -69,6 +77,7 @@ export const ABOUT_US_MODULE = groq`
         }
       }
     },
+
     // Resource Authors Section
     (_type == "aboutResourceAuthorsSection") => {
       title,
@@ -79,6 +88,19 @@ export const ABOUT_US_MODULE = groq`
         image {
           "url": asset->url,
         }
+      }
+    },
+
+    // Core Values Section
+    (_type == "coreValuesSection") => {
+      title,
+      subtitle,
+      values[] {
+        icon {
+          "url": asset->url
+        },
+        title,
+        description
       }
     }
   }

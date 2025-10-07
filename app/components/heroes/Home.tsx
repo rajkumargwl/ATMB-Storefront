@@ -20,7 +20,8 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
   const navigate = useNavigate();
   const location = useLocation();
   const [skipSearchQSync, setSkipSearchQSync] = useState(false);
-   useEffect(() => {
+  
+  useEffect(() => {
     setSearchquery(searchQuery || "");
     setQresults(homeSearchResults || []);
   }, [searchQuery, homeSearchResults]);
@@ -45,7 +46,8 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
 
     return () => clearTimeout(timeout);
   }, [searchquery, navigate, location.search, skipSearchQSync]);
-    const handleSearchResultClick = (item: any) => {
+  
+  const handleSearchResultClick = (item: any) => {
     setSkipSearchQSync(true);
     setSearchquery("");
     setQresults([]);
@@ -59,12 +61,12 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
   };
   
   useEffect(() => {
-  const params = new URLSearchParams(location.search);
-  const newQuery = params.get("p") || "";
+    const params = new URLSearchParams(location.search);
+    const newQuery = params.get("p") || "";
 
-  setSearchquery(newQuery);
-  setQresults(homeSearchResults || []); // new qresults from loader
-}, [location.search, homeSearchResults]);
+    setSearchquery(newQuery);
+    setQresults(homeSearchResults || []);
+  }, [location.search, homeSearchResults]);
 
   return (
     <section className="bg-white pt-[40px] md:pt-[69px] pb-[40px] md:pb-[79px] px-5">
@@ -118,7 +120,6 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
                     key={i}
                     src={avatar.asset.url}
                     alt="trusted avatar"
-                   
                     className="w-10 h-10 rounded-full"
                   />
                 ))}
@@ -146,9 +147,10 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
                       src={feature.icon.asset.url}
                       alt={feature.title}
                       className="w-6 h-6 object-contain"
+                      title={feature.tooltipTitle || ''}
                     />
                   )}
-                  <span className="font-Roboto tracking-[0] font-normal  text-PrimaryBlack text-[16px] leading-[24px]">
+                  <span className="font-Roboto tracking-[0] font-normal text-PrimaryBlack text-[16px] leading-[24px]">
                     {feature.title}
                   </span>
                 </div>
@@ -159,51 +161,51 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
           {/* Right Images (separate divs for image 1 and 2) */}
           <div className="w-full lg:w-[44.2%] hidden md:flex gap-4 justify-center">
             <div className="md:flex gap-4 justify-center">
-            {/* Image 1 */}
-            {hero.rightImage1?.image?.asset?.url && (
-              <div className="relative">
-                <img
-                  src={hero.rightImage1.image.asset.url}
-                  alt="right image 1"
-                  className="w-full h-[603px] object-cover rounded-[124px_124px_124px_0]"
-                />
-                <div className="flex items-center gap-2 absolute bottom-[85px] lg:bottom-[132px] left-[-85px] max-w-[242px] p-4 rounded-[12px] border border-[#DCDCDC] bg-[rgba(255,255,255,0.70)] backdrop-blur-[12px]">
-                  {hero.rightImage1.icon?.asset?.url && (
-                    <img
-                      src={hero.rightImage1.icon.asset.url}
-                      alt="icon 1"
-                      className="w-6 h-6 object-cover"
-                    />
-                  )}
-                  <span className="font-Roboto text-PrimaryBlack font-medium leading-[21px] text-[14px]">
-                    {hero.rightImage1.overlayText}
-                  </span>
+              {/* Image 1 */}
+              {hero.rightImage1?.image?.asset?.url && (
+                <div className="relative">
+                  <img
+                    src={hero.rightImage1.image.asset.url}
+                    alt="right image 1"
+                    className="w-full h-[603px] object-cover rounded-[124px_124px_124px_0]"
+                  />
+                  <div className="flex items-center gap-2 absolute bottom-[85px] lg:bottom-[132px] left-[-85px] max-w-[242px] p-4 rounded-[12px] border border-[#DCDCDC] bg-[rgba(255,255,255,0.70)] backdrop-blur-[12px]">
+                    {hero.rightImage1.icon?.asset?.url && (
+                      <img
+                        src={hero.rightImage1.icon.asset.url}
+                        alt="icon 1"
+                        className="w-6 h-6 object-cover"
+                      />
+                    )}
+                    <span className="font-Roboto text-PrimaryBlack font-medium leading-[21px] text-[14px]">
+                      {hero.rightImage1.overlayText}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {/* Image 2 */}
-            {hero.rightImage2?.image?.asset?.url && (
-              <div className="relative">
-                <img
-                  src={hero.rightImage2.image.asset.url}
-                  alt="right image 2"
-                  className="w-full h-[603px] object-cover rounded-[0_124px_124px_124px]"
-                />
-                <div className="flex items-center gap-2 absolute  bottom-[210px] lg:bottom-[255px] right-[-20px] xl:right-[-42px] max-w-[242px] p-4 rounded-[12px] border border-[#DCDCDC] bg-[rgba(255,255,255,0.70)] backdrop-blur-[12px]">
-                  {hero.rightImage2.icon?.asset?.url && (
-                    <img
-                      src={hero.rightImage2.icon.asset.url}
-                      alt="icon 2"
-                      className="w-6 h-6 object-cover"
-                    />
-                  )}
-                  <span className="font-Roboto text-PrimaryBlack font-medium leading-[21px] text-[14px]">
-                    {hero.rightImage2.overlayText}
-                  </span>
+              {/* Image 2 */}
+              {hero.rightImage2?.image?.asset?.url && (
+                <div className="relative">
+                  <img
+                    src={hero.rightImage2.image.asset.url}
+                    alt="right image 2"
+                    className="w-full h-[603px] object-cover rounded-[0_124px_124px_124px]"
+                  />
+                  <div className="flex items-center gap-2 absolute bottom-[210px] lg:bottom-[255px] right-[-20px] xl:right-[-42px] max-w-[242px] p-4 rounded-[12px] border border-[#DCDCDC] bg-[rgba(255,255,255,0.70)] backdrop-blur-[12px]">
+                    {hero.rightImage2.icon?.asset?.url && (
+                      <img
+                        src={hero.rightImage2.icon.asset.url}
+                        alt="icon 2"
+                        className="w-6 h-6 object-cover"
+                      />
+                    )}
+                    <span className="font-Roboto text-PrimaryBlack font-medium leading-[21px] text-[14px]">
+                      {hero.rightImage2.overlayText}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
             </div>
           </div>
         </div>
@@ -211,7 +213,6 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
     </section>
   );
 }
-
 
 /** Small image placeholder tile */
 function Tile() {

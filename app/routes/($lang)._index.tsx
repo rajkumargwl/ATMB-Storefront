@@ -44,7 +44,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
     context.sanity.query({ query: HEADER_QUERY, cache }),
     context.sanity.query({ query: FOOTER_QUERY, cache }),
   ]);
-  console.log("trustedby", page.modules[1]);
+ 
   if (!page) throw notFound();
  
 
@@ -101,7 +101,6 @@ export default function Index() {
   //const { page, gids,  header, footer, mergedResults, q } = useLoaderData<typeof loader>();
    const { page, gids, p, homeSearchResults} = useLoaderData<typeof loader>();
 
-  console.log("homeSearchResults in index", homeSearchResults);
   return (
     <>
      {/* <Header data={header} searchResults={mergedResults} searchQuery={q} /> */}
