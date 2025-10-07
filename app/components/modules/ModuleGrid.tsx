@@ -93,18 +93,28 @@ type Props = {
   homeSearchResults: any;
   searchQuery: string | null;
 };
+type ModuleGridProps = {
+  items: any[];
+  searchQuery: string;
+  homeSearchResults: any[];
+  bundles?: any[]; // 🔹 add this
+};
 
-export default function ModuleGrid({items, homeSearchResults, searchQuery}: Props) {
+//export default function ModuleGrid({items, homeSearchResults, searchQuery}: Props) {
+  export default function ModuleGrid({ items, homeSearchResults, searchQuery, bundles }: ModuleGridProps) {
 
     console.log("homeSearchResults in modulegrid", homeSearchResults);
   return (
     <>
        {items.map((item, index) => {
+         const key = 'id' in item ? item.id : (item as SanityModule)._key;
          return (
            <Module
+           key={key}
            module={item}
            homeSearchResults={homeSearchResults}
            searchQuery={searchQuery}
+           bundles={bundles} 
          />
          );
        })}
