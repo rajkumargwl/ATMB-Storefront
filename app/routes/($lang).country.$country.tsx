@@ -54,8 +54,8 @@ export default function CountryPage() {
   const navigate = useNavigate();
 
   function handleLocationClick(loc: any) {
-    const countrySlug = encodeURIComponent(loc.country?.toLowerCase().replace(/\s+/g, '-'));
-    const stateSlug = encodeURIComponent((loc.state || '').toLowerCase().replace(/\s+/g, '-'));
+    const countrySlug = encodeURIComponent(loc.country);
+    const stateSlug = encodeURIComponent((loc.state || ''));
     navigate(`/${countrySlug}/${stateSlug}`);
   }
 
@@ -74,25 +74,26 @@ export default function CountryPage() {
           }}
         />
 
-        <div className="mt-10">
-          <h2 className="text-xl font-semibold mb-4">Locations</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {locations.map((loc: any, idx: number) => (
-              <div
-                key={idx}
-                className="flex flex-col justify-between text-gray-700 hover:text-orange-600 cursor-pointer py-2"
-                onClick={() => handleLocationClick(loc)}
-              >
-                <span>{loc.state }</span>
-                {/* {loc.postalCode && (
-                  <span className="text-sm text-gray-500">
-                    {loc.postalCode}
-                  </span>
-                )} */}
-              </div>
-            ))}
-          </div>
-        </div>
+<div className="mt-10">
+  <h2 className="text-xl font-semibold mb-4">States</h2>
+  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    {states.map((state: any, idx: number) => (
+      <div
+        key={idx}
+        className="flex justify-between items-center text-gray-700 hover:text-orange-600 cursor-pointer py-2"
+        onClick={() => {
+          const loc = locations.find((l: any) => l.state === state.name);
+          if (loc) handleLocationClick(loc);
+        }}
+      >
+        <span >{state.name}</span>
+        <span className="bg-gray-100 rounded-full px-2 py-0.5 text-sm">
+                {state.count}
+              </span>
+      </div>
+    ))}
+  </div>
+</div>
       </main>
     </div>
   );
