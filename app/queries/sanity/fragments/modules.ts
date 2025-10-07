@@ -17,10 +17,19 @@ import { WHY_BUSINESS_CHOOSE_US } from './modules/whyBusinessChooseUs';
 import { BUSINESS_AT_FINGERTIPS } from './modules/businessAtFingertips';
 import { TESTIMONIAL } from './modules/testimonial';
 import { FAQ } from './modules/faq';
-import { ABOUT_US_MODULE } from './modules/aboutus'; // 👈 import your About Us GROQ
+import { ABOUT_US_MODULE } from './modules/aboutus';
 import { CAREER_PAGE_MODULE } from './modules/careerpage';
 import { FAQ_MODULES } from './modules/faqcategory';
 import { USPS_FORM_1583 } from './modules/uspsform1583';
+import { CONTACT_US_MODULE } from './modules/contactus'; 
+import { AFFILIATE_MODULE } from './modules/affiliateProgramSection'; 
+import { SOLUTION_PAGE_MODULE } from './modules/solutionpagemodule';
+// import { FOUNDER_BY_SLUG } from './modules/founder';
+import { RENTER_REFERRAL_FRAGMENT } from './modules/renter';
+import { MARKETPLACE } from './modules/marketplace';
+import { HOW_IT_WORKS_MODULE } from './modules/howitworksmodule';
+ 
+
 export const MODULES = groq`
   _key,
   _type,
@@ -75,16 +84,35 @@ export const MODULES = groq`
   (_type == "faq") => {
     ${FAQ}
   },
- (_type == "aboutUsModule") => {
-  ${ABOUT_US_MODULE}
-},
-(_type == "careersPageModule") => {
-  ${CAREER_PAGE_MODULE}
-},
-(_type == "faqPageModule") => {
-  ${FAQ_MODULES}
-},
-(_type == "uspsForm1583") => {
+  (_type == "marketPlaceModule") => {
+    ${MARKETPLACE}
+  },
+  (_type == "aboutUsModule") => {
+    ${ABOUT_US_MODULE}
+  },
+  (_type == "careersPageModule") => {
+    ${CAREER_PAGE_MODULE}
+  },
+  (_type == "faqPageModule") => {
+    ${FAQ_MODULES}
+  },
+  (_type == "uspsForm1583") => {
     ${USPS_FORM_1583}
   },
+  (_type == "contactUsSection") => {
+    ${CONTACT_US_MODULE}
+  },
+  (_type == "affiliatedProgramPageModule") => {   // 👈 added parent module
+    ${AFFILIATE_MODULE}
+  },
+(_type == "renterreferralprogram") => {
+    ${RENTER_REFERRAL_FRAGMENT}
+  },
+  (_type == "solutionPageModule") => {
+    ${SOLUTION_PAGE_MODULE}
+  },
+(_type == "howitworks") => {
+    ${HOW_IT_WORKS_MODULE}
+  }
+
 `;

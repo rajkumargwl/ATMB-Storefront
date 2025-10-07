@@ -2,7 +2,7 @@ import {defineType, defineField} from 'sanity'
 
 export const plans = defineType({
   name: 'plans',
-  title: 'Stay Connected Section',
+  title: 'Plans',
   type: 'object',
   fields: [
     // Individual Products Tab (with its own heading + description)

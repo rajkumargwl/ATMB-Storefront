@@ -124,7 +124,7 @@ useEffect(() => {
 
 
   return (
-    <header className="w-full bg-white px-5 border-b border-LightWhite lg:border-none">
+    <header className=" relative z-[99] w-full bg-white px-5 border-b border-LightWhite lg:border-none">
       <div className="max-w-[1240px] mx-auto flex items-center justify-between py-5">
         <div className="flex items-center  gap-5 xl:gap-10">
           {/* Logo */}
@@ -148,11 +148,15 @@ useEffect(() => {
               <div key={idx} className="relative group p-2">
                  <Link
                   to={item.label === "Solutions"
-        ? "/solutions"
+        ? "/solutionsvm"
         : item.label === "Locations"
         ? "/sublocations"
           : item.label === "Blog"
           ? "/blogs"
+          : item.label === "About Us"
+          ? "/about-us"
+          : item.label === "Contact Us"
+          ? "/contact"
         : item.url ?? "#"}
                   className="text-PrimaryBlack hover:text-PrimaryBlack font-normal flex items-center gap-[6px] text-[14px] md:text-[14px] xl:text-[16px] leading-[24px] tracking-[0px]"
                 >

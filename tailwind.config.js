@@ -1,3 +1,4 @@
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./app/**/*.{js,ts,jsx,tsx}'],
@@ -14,6 +15,37 @@ module.exports = {
     boxShadow: {
       DEFAULT: '0px 0px 4px rgba(0, 0, 0, 0.1)',
     },
+     screens: {
+        sm: '320px',
+        md: '768px',
+        'min-700px': { min: '700px' },
+        'max-1440px': { 'max': '1440px' },
+        'max-1199px': { 'max': '1199px' },
+        'max-1024px': { 'max': '1024px' },
+        'max-840px': { 'max': '840px' },
+        'max-700px': { max: '700px' },
+        'max-767px': { max: '767px' },
+        'min-768px': { min: '768px' },
+        'min-1024px': { min: '1024px' },
+        'max-777px': { 'max': '777px' },
+        'max-600px': { max: '600px' },
+        'max-660px': { max: '660px' },
+        'max-500px': { max: '500px' },
+        'max-400px': { max: '400px' },
+        'max-430px': { max: '430px' },
+        'max-395px': { max: '395px' },
+        'max-699px': { 'max': '699px' },
+        'max-937px': { 'max': '937px' },
+        'max-999px': { 'max': '999px' },
+        'max-1200px': { 'max': '1200px' },
+        'max-1265px': { 'max': '1265px' },
+        'min-999px': { 'min': '999px' },
+        'max-480px': { max: '480px' },
+        'max-820px': { min: '820px' },
+        lg: '1200px',
+        xl: '1440px',
+        '2xl': '1536px',
+      },
     // fontFamily: {
     //   sans: '"DM Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
     // },
@@ -128,7 +160,7 @@ module.exports = {
         'header-lg': '6.25rem',
       },
       fontFamily: {
-        roboto: ["Roboto", "sans-serif"], 
+        roboto: ["Roboto", "sans-serif"],
       },
       spacing: {
         1: '4px',
@@ -173,7 +205,28 @@ module.exports = {
         40: '160px',
         overlap: '20px',
       },
+      keyframes: {
+        fadeSlideIn: {
+          '0%': { opacity: 0, transform: 'translateY(10px)' },
+          '100%': { opacity: 1, transform: 'translateY(0)' },
+        },
+      },
+      animation: {
+        fadeSlideIn: 'fadeSlideIn 2.6s ease-out',
+      },
+        keyframes: {
+        fillBar: {
+          '0%': { opacity: 0 },
+          '25%': { opacity: 1 },
+          '100%': {opacity: 1 },
+        },
+      },
+      animation: {
+        fillBar: 'fillBar 2ms ease forwards 6ms',
+      },
     },
   },
   plugins: [],
 };
+ 
+ 
