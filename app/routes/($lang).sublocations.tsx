@@ -80,6 +80,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
 
   const url = new URL(request.url);
   const q = url.searchParams.get('q') || '';
+  console.log("Search query:", q);
 
   let results = {locations: [] as LocationAPI[]};
 
@@ -126,43 +127,45 @@ export async function loader({context, request}: LoaderFunctionArgs) {
     } catch (error) {
       console.error('Sanity query failed:', error);
     }
-  } else {
-    const locations: LocationAPI[] = await context.sanity.query({
-      query: `*[_type == "location"][0...10]{
-        _id,
-        displayName,
-        city,
-        stateCode,
-        addressLine1,
-        addressLine2,
-        postalCode,
-        coordinates,
-        "latitude":coordinates.lat,
-        "longitude":coordinates.lng,
-        featureList[]{
-          feature_id,
-          label,
-          description,
-          status,
-          type
-        },
-        ratingList[]{
-          rating_id,
-          type,
-          status,
-          value
-        },
-        planTier,
-        priceRange
-      }`,
-    });
-    results.locations = locations;
-  }
+  } 
+  // else {
+  //   const locations: LocationAPI[] = await context.sanity.query({
+  //     query: `*[_type == "location"][0...10]{
+  //       _id,
+  //       displayName,
+  //       city,
+  //       stateCode,
+  //       addressLine1,
+  //       addressLine2,
+  //       postalCode,
+  //       coordinates,
+  //       "latitude":coordinates.lat,
+  //       "longitude":coordinates.lng,
+  //       featureList[]{
+  //         feature_id,
+  //         label,
+  //         description,
+  //         status,
+  //         type
+  //       },
+  //       ratingList[]{
+  //         rating_id,
+  //         type,
+  //         status,
+  //         value
+  //       },
+  //       planTier,
+  //       priceRange
+  //     }`,
+  //   });
+  //   results.locations = locations;
+  // }
 
   return defer({
     locations: results.locations,
     header,
     footer,
+    q,
     analytics: {pageType: AnalyticsPageType.page},
   });
 }
@@ -177,14 +180,14 @@ export default function LocationsPage() {
 
 
   const navigate = useNavigate();
-  const {locations, header, footer} = useLoaderData<typeof loader>();
-  const [selectedCity, setSelectedCity] = useState<string>('');
-  const [searchCity, setSearchCity] = useState<string>('');
+  const {locations, header, footer,q} = useLoaderData<typeof loader>();
+  const [selectedCity, setSelectedCity] = useState<string>(q || '');
+  const [searchCity, setSearchCity] = useState<string>(q || '');
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<LocationAPI | null>(
     locations[0] || null,
   );
-console.log("locations", locations);
+console.log("locations in subloc", locations);
   const [showFilters, setShowFilters] = useState(false);
   const [planTier, setPlanTier] = useState('');
   const [minPrice, setMinPrice] = useState(
@@ -470,6 +473,7 @@ console.log("locations", locations);
       onChange={(e) => {
         setSearchCity(e.target.value);
         setShowSuggestions(true); // show suggestions when typing
+        navigate(`/sublocations?q=${encodeURIComponent(searchCity)}`, { replace: true });
       }}
       placeholder="Type a city"
       className="flex-1 py-[3px] md:py-2 bg-white font-Roboto text-PrimaryBlack font-normal text-[14px] md:text-[16px] leading-[20px] md:leading-[24px] tracking-[0px] border-none outline-none"
@@ -544,6 +548,8 @@ console.log("locations", locations);
               setSearchCity(cityObj.displayName || cityObj.city);
               setSelectedCity(cityObj);
               setShowSuggestions(false);
+              navigate(`/sublocations?q=${encodeURIComponent(cityObj.displayName || cityObj.city)}`, { replace: true });
+              
             }}
           >
             {cityObj.displayName} ({cityObj.city})
