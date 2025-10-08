@@ -23,6 +23,7 @@ const seo: SeoHandleFunction = ({data}) => ({
     data?.page?.seo?.description ||
     'A custom storefront powered by Hydrogen and Sanity',
 });
+import { fetchBundleProducts } from '~/lib/bundle.server';
 
 export const handle = { seo };
 
@@ -39,10 +40,11 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
   
 
   // Fetch all at once
-  const [page, header, footer] = await Promise.all([
+  const [page, header, footer,bundles] = await Promise.all([
     context.sanity.query({ query: HOME_PAGE_QUERY, cache }),
     context.sanity.query({ query: HEADER_QUERY, cache }),
     context.sanity.query({ query: FOOTER_QUERY, cache }),
+    fetchBundleProducts(context), // Fetch bundle products
   ]);
  
   if (!page) throw notFound();
@@ -91,7 +93,8 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
     footer,
     gids,
     p,
-    homeSearchResults: mergedSearchResults, 
+    homeSearchResults: mergedSearchResults,
+    bundles, // Pass bundles to the frontend 
     analytics: { pageType: AnalyticsPageType.home },
   });
 }
@@ -99,7 +102,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
 
 export default function Index() {
   //const { page, gids,  header, footer, mergedResults, q } = useLoaderData<typeof loader>();
-   const { page, gids, p, homeSearchResults} = useLoaderData<typeof loader>();
+   const { page, gids, p, homeSearchResults,bundles} = useLoaderData<typeof loader>();
 
   return (
     <>
@@ -123,7 +126,7 @@ export default function Index() {
               {/* Page modules */}
               {page?.modules && (
                 // <div className={clsx('mb-32 mt-24 px-4', 'md:px-8')}>
-                  <ModuleGrid items={page.modules} searchQuery={p} homeSearchResults={homeSearchResults}  />
+                  <ModuleGrid items={page.modules} searchQuery={p} homeSearchResults={homeSearchResults}  bundles={bundles}  />
                 // </div>
               )}
             </Await>
