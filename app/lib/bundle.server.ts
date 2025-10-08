@@ -13,6 +13,7 @@ export type BundleItem = {
   productTitle: string | null;
   productHandle: string | null;
   productImage: string | null;
+  savedPercentage?: number | null;
 };
 
 export type BundleProduct = {
@@ -24,14 +25,16 @@ export type BundleProduct = {
   price: string | null;
   compareAtPrice: string | null;
   currency: string | null;
+  variantTitle?: string | null;
   associatedItems: BundleItem[];
-  bundleFeature: string | null;
+  bundleFeature: string[] | null;
+  savedPercentage?: number | null;
 };
-
+//parse bundle product
 export function parseBundleProduct(product: any): BundleProduct {
+  const associatedItemsMap: Record<string, Set<string>> = {}; // productTitle -> set of variantTitles
   const associatedItems: BundleItem[] = [];
 
-  // Parse variant-level bundle_items
   for (const vEdge of product.variants?.edges ?? []) {
     const variant = vEdge.node;
     if (!Array.isArray(variant.metafields)) continue;
@@ -39,83 +42,80 @@ export function parseBundleProduct(product: any): BundleProduct {
     for (const mf of variant.metafields) {
       if (!mf) continue;
 
-      if (mf.key === "bundle_items") {
-        // If references exist
-        if (mf.references?.edges?.length > 0) {
-          associatedItems.push(
-            ...mf.references.edges.map(({ node }: any) => ({
+      if (mf.key === "bundle_items" && mf.references?.edges?.length > 0) {
+        for (const { node } of mf.references.edges) {
+          const productTitle = node.product?.title ?? "Unknown Product";
+          const variantTitle = node.title ?? "";
+
+          // Initialize the set for this product if needed
+          if (!associatedItemsMap[productTitle]) {
+            associatedItemsMap[productTitle] = new Set();
+          }
+
+          // Only add if variantTitle not already present
+          if (!associatedItemsMap[productTitle].has(variantTitle)) {
+            associatedItemsMap[productTitle].add(variantTitle);
+
+            associatedItems.push({
               variantId: node.id,
-              variantTitle: node.title,
+              variantTitle: variantTitle,
               sku: node.sku ?? null,
               price: node.priceV2?.amount ?? null,
               compareAtPrice: node.compareAtPriceV2?.amount ?? null,
               currency: node.priceV2?.currencyCode ?? null,
               selectedOptions: node.selectedOptions ?? [],
               productId: node.product?.id ?? null,
-              productTitle: node.product?.title ?? null,
+              productTitle: productTitle,
               productHandle: node.product?.handle ?? null,
               productImage: node.product?.featuredImage?.url ?? null,
-            }))
-          );
-        } else if (mf.value) {
-          // If JSON string stored
-          try {
-            const items = JSON.parse(mf.value);
-            if (Array.isArray(items)) {
-              for (const i of items) {
-                associatedItems.push({
-                  variantId: i.variantId || null,
-                  variantTitle: i.variantTitle || "",
-                  sku: i.sku || null,
-                  price: i.price || null,
-                  compareAtPrice: i.compareAtPrice || null,
-                  currency: i.currency || null,
-                  selectedOptions: i.selectedOptions || [],
-                  productId: i.productId || null,
-                  productTitle: i.productTitle || null,
-                  productHandle: i.productHandle || null,
-                  productImage: i.productImage || null,
-                });
-              }
-            }
-          } catch {}
+            });
+          }
         }
       }
     }
   }
 
-  // Parse product-level bundle_feature
-  const bundleFeatureMf = product.metafields?.find((mf: any) => mf.key === "bundle_feature");
-  let bundleFeature: string[] = [];
+  // Get monthly/yearly prices
+  const monthlyVariant = product.variants?.edges?.find(
+    (vEdge: any) => vEdge.node.title.toLowerCase() === "monthly"
+  )?.node;
+  const yearlyVariant = product.variants?.edges?.find(
+    (vEdge: any) => vEdge.node.title.toLowerCase() === "yearly"
+  )?.node;
 
-  if (bundleFeatureMf?.value) {
-    try {
-      const parsed = JSON.parse(bundleFeatureMf.value);
-      if (Array.isArray(parsed)) bundleFeature = parsed;
-    } catch {
-      // fallback: treat as single string if JSON.parse fails
-      bundleFeature = [bundleFeatureMf.value];
-    }
-  }
+  const monthlyPrice = monthlyVariant?.priceV2?.amount ?? null;
+  const yearlyPrice = yearlyVariant?.priceV2?.amount ?? null;
+  const monthlyCompareAtPrice = monthlyVariant?.compareAtPriceV2?.amount ?? null;
+  const yearlyCompareAtPrice = yearlyVariant?.compareAtPriceV2?.amount ?? null;
+ const bundleFeatureMf = product.metafields?.find((mf: any) => mf.key === "bundle_feature");
+ let bundleFeature: string[] = [];
 
-  const firstVariant = product.variants?.edges?.[0]?.node;
-
+ if (bundleFeatureMf?.value) {
+   try {
+     const parsed = JSON.parse(bundleFeatureMf.value);
+     if (Array.isArray(parsed)) bundleFeature = parsed;
+   } catch {
+     bundleFeature = [bundleFeatureMf.value];
+   }
+ }
   return {
     id: product.id,
     title: product.title,
     handle: product.handle,
     description: product.description,
     image: product.featuredImage?.url ?? null,
-    price: firstVariant?.priceV2?.amount ?? null,
-    compareAtPrice: firstVariant?.compareAtPriceV2?.amount ?? null,
-    currency: firstVariant?.priceV2?.currencyCode ?? null,
+    price: monthlyPrice,
+    compareAtPrice: monthlyCompareAtPrice,
+    yearlyPrice,
+    yearlyCompareAtPrice,
+    monthlyVariantId: monthlyVariant?.id ?? null,
+    yearlyVariantId: yearlyVariant?.id ?? null,
+    currency: monthlyVariant?.priceV2?.currencyCode ?? null,
     associatedItems,
-    bundleFeature,
+    bundleFeature
   };
 }
-
-
-export async function fetchBundleProducts(context: any): Promise<BundleProduct[]> {
+export async function fetchBundleProducts(context: any, billing: "monthly" | "yearly" = "monthly"): Promise<BundleProduct[]> {
   try {
     const data = await context.storefront.query(BUNDLE_PRODUCTS_QUERY, {
       variables: { country: "IN", language: "EN" },
@@ -130,7 +130,7 @@ export async function fetchBundleProducts(context: any): Promise<BundleProduct[]
       )
     );
 
-    return bundleProducts.map(parseBundleProduct);
+    return bundleProducts.map((product) => parseBundleProduct(product, billing));
   } catch (err: any) {
     console.error("Failed to fetch bundle products:", err);
     throw new Error("Failed to fetch bundle products");

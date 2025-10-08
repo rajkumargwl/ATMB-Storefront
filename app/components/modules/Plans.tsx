@@ -50,9 +50,7 @@ type PricingModuleProps = {
   export default function Pricingmodule({ data, bundles }: PricingModuleProps) {
   const [activeTab, setActiveTab] = useState<"individual" | "bundles">("individual");
   const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
-  console.log("Bundles prop :", bundles); // 🔹 log bundles received from parent
-  console.log("Data for Bundles Tab:", data?.bundlesTab?.plans); // 🔹 log Sanity tab data
-
+  console.log("bundles data", bundles);
   const isYearly = billing === "yearly";
 
   const tabs = [
@@ -192,116 +190,119 @@ type PricingModuleProps = {
             </span>
           </div>
         </div>
-{/* Tab Panels */}
-<div 
-  id={`tabpanel-${activeTab}`}
-  role="tabpanel"
-  aria-labelledby={`tab-${activeTab}`}
-  tabIndex={0}
-  className="mt-11 w-full"
->
-  <div className="items-start justify-center grid gap-6 md:grid-cols-2 lg:grid-cols-3 w-full">
-    {activeTab === "bundles" ? (
-      bundles.map((bundle) => (
-        
-        <div key={bundle.id} className="p-6 bg-white rounded-[20px] shadow-md relative group hover:shadow-lg transition">
-          {/* Title */}
-          <h3 className="font-Roboto text-PrimaryBlack text-[22px] md:text-[24px] font-semibold mb-2">
-            {bundle.title}
-          </h3>
+        {/* Tab Panels */}
+        <div 
+          id={`tabpanel-${activeTab}`}
+          role="tabpanel"
+          aria-labelledby={`tab-${activeTab}`}
+          tabIndex={0}
+          className="mt-11 w-full"
+        >
+          <div className="items-start justify-center grid gap-6 md:grid-cols-2 lg:grid-cols-3 w-full">
+          {activeTab === "bundles" && bundles.map((bundle) => {
+          const displayPrice = billing === "monthly" ? bundle.price : bundle.yearlyPrice;
+          const displayCompare = billing === "monthly" ? bundle.compareAtPrice : bundle.yearlyCompareAtPrice;
 
-          {/* Description */}
-          <p className="font-Roboto text-LightGray mb-4">
-            {bundle.description || "No description provided."}
-          </p>
+          return (
+            <div key={bundle.id} className="p-6 bg-white rounded-[20px] shadow-md relative group hover:shadow-lg transition">
+            {/* Save Label */}
+            {displayCompare && (
+              <div className="absolute top-4 right-4 bg-[#74A038] text-white text-xs font-Roboto px-2 py-1 rounded-full">
+                Save {Math.round(((parseFloat(displayCompare) - parseFloat(displayPrice || "0")) / parseFloat(displayCompare)) * 100)}%
+              </div>
+            )}
 
-                {/* Price */}
-       
-                <p className="font-Roboto text-PrimaryBlack text-[20px] font-semibold mb-4">
-                  {bundle.price} {bundle.currency} /month
-                </p>
-                
-                          {/* Associated Products */}
-                          <div className="mb-4">
-                            <h4 className="font-Roboto font-medium mb-2">Associated Products:</h4>
-                            {bundle.associatedItems && bundle.associatedItems.length > 0 ? (
-                              <ul className="list-disc pl-5 space-y-1">
-                                {/* Get the unique product titles */}
-                                {[...new Set(bundle.associatedItems.map(item => item.productTitle))].map((title, idx) => (
-                                  <li key={idx} className="font-Roboto text-gray-700 text-[14px]">
-                                    {title}
-                                  </li>
-                                ))}
-                              </ul>
-                            ) : (
-                              <p className="text-gray-400 text-sm">No associated products found.</p>
-                            )}
-                          </div>
-                          <div>
-                          <p className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">
+            <h3 className="font-Roboto text-PrimaryBlack text-[22px] md:text-[24px] font-semibold mb-2">
+              {bundle.title}
+            </h3>
+
+            <p className="font-Roboto text-LightGray mb-4">{bundle.description}</p>
+                  {/* Associated Products */}
+                  <div className="mb-4">
+                              
+                         {bundle.associatedItems && bundle.associatedItems.length > 0 ? (
+                           <ul className="list-disc pl-5 space-y-2">
+                             {/* Get unique product titles */}
+                             {[...new Set(bundle.associatedItems.map(item => item.productTitle))].map((title, idx) => {
+                               // Get variants for this product
+                               const variants = bundle.associatedItems
+                                 .filter(item => item.productTitle === title)
+                                 .map(item => item.variantTitle)
+                                 .filter(Boolean); // remove empty/null variant names
+
+                               return (
+                                 <li key={idx} className="font-Roboto text-gray-700 text-[14px]">
+                                   <strong>{title}</strong>
+                                   {variants.length > 0 && (
+                                     <ul className="list-disc pl-5 mt-1 space-y-1 text-gray-600 text-sm">
+                                       {variants.map((variant, vidx) => (
+                                         <li key={vidx}>{variant}</li>
+                                       ))}
+                                     </ul>
+                                   )}
+                                 </li>
+                               );
+                             })}
+                           </ul>
+                         ) : (
+                           <p className="text-gray-400 text-sm">No associated products found.</p>
+                         )}
+                       </div>
+               
+                        {/* Pricing */}
+                        <div className="flex items-end mt-1">
+                        <p className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">
                             Starting from
                           </p>
-                          {bundle.price && (
-                            <div className="flex items-end mt-1">
-                              {/* Show original price for bundles if available */}
-                              { bundle.compareAtPrice && (
-                                <span className="line-through text-gray-400 text-sm mr-2">{bundle.compareAtPrice} {bundle.currency}</span>
-                              )}
-                              <span className="font-Roboto text-PrimaryBlack text-[24px] leading-[31.2px] font-semibold tracking-[-0.36px]">
-                              {bundle.price} {bundle.currency} 
-                              </span>
-                              <span className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">
-                                / month
-                              </span>
-                            </div>
+                          {displayCompare && (
+                            <span className="line-through text-gray-400 text-sm mr-2">{displayCompare} {bundle.currency}</span>
                           )}
+                          <span className="font-Roboto text-PrimaryBlack text-[24px] leading-[31.2px] font-semibold tracking-[-0.36px]">
+                            {displayPrice} {bundle.currency}
+                          </span>
+                          <span className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">
+                            /{billing === "monthly" ? "month" : "year"}
+                          </span>
                         </div>
+                            {/* Features / Starting from */}
+                            {bundle.bundleFeature.length > 0 && (
+                          <ul className="mt-2 mb-4 space-y-2 text-[14px] text-[#333333]">
+                            {bundle.bundleFeature.map((feature, idx) => (
+                              <li key={idx} className="flex items-center gap-2">
+                                <span className="w-4 h-4 flex-shrink-0 bg-[#74A038] text-white text-xs rounded-full flex items-center justify-center">✓</span>
+                                {feature}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                     <button
+                      className="mt-4 w-full bg-PrimaryBlack text-white py-2 rounded-full font-Roboto font-medium"
+                      onClick={() => {
+                        const hasVirtualMailbox = bundle.associatedItems?.some(
+                          (item) => item.productTitle.toLowerCase().includes("virtual mailbox")
+                        );
 
-                      {/* Features / Starting from */}
-                {bundle.bundleFeature.length > 0 && (
-                  <ul className="mt-2 mb-4 space-y-2 text-[14px] text-[#333333]">
-                    {bundle.bundleFeature.map((feature, idx) => (
-                      <li key={idx} className="flex items-center gap-2">
-                        <span className="w-4 h-4 flex-shrink-0 bg-[#74A038] text-white text-xs rounded-full flex items-center justify-center">✓</span>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                        // Pick variant ID based on billing
+                        const gid = billing === "monthly" ? bundle.monthlyVariantId : bundle.yearlyVariantId;
 
+                        // Extract numeric part from GID
+                        const numericVariantId = gid?.split("/").pop();
+
+                        if (hasVirtualMailbox) {
+                          window.location.href = `/sublocations?variantId=${numericVariantId}`;
+                        } else {
+                          window.location.href = `/checkout/${numericVariantId}`;
+                        }
+                      }}
+                    >
+                      Buy Now
+                    </button>
+                      </div>
+                      
+                    );
                     
-                {/* Buy Button */}
-                {/* <button className="mt-4 w-full bg-PrimaryBlack text-white py-2 rounded-full font-Roboto font-medium">
-                  Buy Now
-                </button> */}
-                 {/* Buy Button */}
-                <button
-              className="mt-4 w-full bg-PrimaryBlack text-white py-2 rounded-full font-Roboto font-medium"
-              onClick={() => {
-                const hasVirtualMailbox = bundle.associatedItems?.some(
-                  (item) =>
-                    item.productTitle.toLowerCase().includes("virtual mailbox")
-                );
+                  })}
 
-                if (hasVirtualMailbox) {
-                  // Redirect to /subloaction if bundle contains Virtual Mailbox
-                  window.location.href = "/sublocations";
-                } else {
-                  // Normal buy flow for other bundles
-                  window.location.href = `/checkout/${bundle.id}`; // Example: replace with your checkout route
-                }
-              }}
-            >
-              Buy Now
-            </button>
-              </div>
-            ))
-    ) : (
-      // Individual products tab
-      plans.map((plan, idx) => (
-        <div key={idx} className="...">{/* your existing plan card code */}</div>
-      ))
-    )}
   </div>
 </div>
 
