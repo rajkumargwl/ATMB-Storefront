@@ -1,18 +1,34 @@
 import { loadStripe } from "@stripe/stripe-js";
+import {Await, useLoaderData} from '@remix-run/react';
+import {Suspense} from 'react';
+import {useRootLoaderData} from '~/root'; 
 import {
   Elements,
   CardElement,
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
-import {useRootLoaderData} from '~/root'; 
 import { useEffect,useState } from "react";
 import type { LoaderFunction } from "@remix-run/node";
 
-import { useLoaderData } from "@remix-run/react";
 import {
   redirect,
 } from '@shopify/remix-oxygen';
+import {
+  Money,
+} from '@shopify/hydrogen-react';
+import CartBundleSection from '~/components/cart/CartBundleSection';
+import CartEssentialsSection from '~/components/cart/CartEssentialsSection';
+import {
+  CartActions,
+  CartLineItems,
+  CartSummary,
+} from '~/components/cart/Cart';
+import SpinnerIcon from "~/components/icons/Spinner";
+import {PRODUCT_QUERY, ALL_PRODUCTS_QUERY} from '~/queries/shopify/product';
+import type {Product} from '@shopify/hydrogen/storefront-api-types';
+import {notFound} from '~/lib/utils';
+import Button from "~/components/elements/Button";
 
 export const loader: LoaderFunction = async ({ context, params }) => {
   const { env } = context;
@@ -23,9 +39,40 @@ export const loader: LoaderFunction = async ({ context, params }) => {
     return redirect('/create-account');
   }
 
+  const [virtualMailbox, virtualPhone, BusinessAcc] = await Promise.all([
+      context.storefront.query<{product: Product}>(PRODUCT_QUERY, {
+        variables: {handle: 'virtual-mailbox', selectedOptions: []},
+      }),
+      context.storefront.query<{product: Product}>(PRODUCT_QUERY, {
+        variables: {handle: 'virtual-phone-number', selectedOptions: []},
+      }),
+      context.storefront.query<{product: Product}>(PRODUCT_QUERY, {
+        variables: {handle: 'business-accelerato', selectedOptions: []},
+      }),
+      // context.storefront.query(ALL_PRODUCTS_QUERY, {
+      //   variables: {first: 50}, 
+      // }),
+      
+    ]);
+  
+    if (!virtualMailbox?.product || !virtualPhone?.product || !BusinessAcc?.product) {
+      throw notFound();
+    }
+   // Combine them into an array
+  const AllProducts = [
+    virtualMailbox.product,
+    virtualPhone.product,
+    BusinessAcc.product,
+  ];
+  
+  console.log(AllProducts);
+
+
   return new Response(
     JSON.stringify({
       stripePublishableKey: env.VITE_STRIPE_PUBLISHABLE_KEY,
+      bundleProducts: [virtualMailbox.product, virtualPhone.product],
+      essentialsProducts: AllProducts ?? [],
     }),
     { headers: { "Content-Type": "application/json" } }
   );
@@ -41,6 +88,7 @@ function CheckoutForm() {
   const rootData = useRootLoaderData();
   const cart = rootData?.cart?._data;
   const lines = cart?.lines?.edges;
+  const { bundleProducts, essentialsProducts} = useLoaderData<typeof loader>();
   
   // Fetch priceId from backend on mount
   useEffect(() => {
@@ -158,41 +206,253 @@ function CheckoutForm() {
     console.log("Invoice created:", data);
     alert(JSON.stringify(data, null, 2));
   }
+  const VISIBLE_ATTRIBUTES = [
+    'locationId',
+    'displayName',
+    'addressLine1',
+    'city',
+    'state',
+    'postalCode',
+    'country',
+  ];
+  console.log(cart, "cartttt");
+  
 
   return (
-    <div className="mt-20 max-w-md mx-auto p-4 space-y-4">
-      {/* Subscription Form */}
-      <form onSubmit={handleSubmit} className="border p-4 rounded shadow space-y-4">
-        {error && <p className="text-red-500">{error}</p>}
+    // <div className="mt-20 max-w-md mx-auto p-4 space-y-4">
+    //   <form onSubmit={handleSubmit} className="border p-4 rounded shadow space-y-4">
+    //     {error && <p className="text-red-500">{error}</p>}
 
-        <input
-          type="email"
-          placeholder="Email"
-          required
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="border p-2 rounded w-full"
-        />
+    //     <input
+    //       type="email"
+    //       placeholder="Email"
+    //       required
+    //       value={email}
+    //       onChange={(e) => setEmail(e.target.value)}
+    //       className="border p-2 rounded w-full"
+    //     />
 
-        <CardElement className="border p-2 rounded" />
+    //     <CardElement className="border p-2 rounded" />
 
-        <button
-          type="submit"
-          disabled={!stripe || loading}
-          className="bg-blue-500 text-white px-4 py-2 rounded w-full"
-        >
-          {loading ? "Processing..." : "Subscribe"}
-        </button>
-      </form>
+    //     <button
+    //       type="submit"
+    //       disabled={!stripe || loading}
+    //       className="bg-blue-500 text-white px-4 py-2 rounded w-full"
+    //     >
+    //       {loading ? "Processing..." : "Subscribe"}
+    //     </button>
+    //   </form>
 
-      {/* Test Charge Again Button */}
-      <button
-        onClick={chargeAgain}
-        className="bg-green-500 text-white px-4 py-2 rounded w-full"
-      >
-        Test Charge Again
-      </button>
-    </div>
+    //   <button
+    //     onClick={chargeAgain}
+    //     className="bg-green-500 text-white px-4 py-2 rounded w-full"
+    //   >
+    //     Test Charge Again
+    //   </button>
+    // </div>
+    <>
+    <section className="">
+      <Suspense fallback={<div className="flex justify-center"><SpinnerIcon /></div>}>
+       <Await resolve={rootData?.cart}>
+          {(cart) => {
+              const availableEssentials = essentialsProducts.filter(
+                (product) =>
+                  !cart.lines.edges.some(
+                    (line) => line.node.merchandise.product.handle === product.handle
+                  )
+              );
+              const firstEssential = availableEssentials.length
+              ? availableEssentials[Math.floor(Math.random() * availableEssentials.length)]
+              : null;
+              return (
+                <>
+                  {cart && cart.lines.edges.length > 0 && (
+                    <div className="">
+                      <div className="bg-white px-5 pt-[32px] pb-[40px] md:pb-[60px]">
+                        <div className='max-w-[1240px] mx-auto'>
+                          <div className='flex flex-row items-center justify-start mb-6 md:mb-10 gap-3 border-b border-[#DCDCDC] pb-5'>
+                              <Button
+                                onClick={() => window.history.back()}
+                                className="bg-[#ffffff] p-6 w-[32px] md:w-[36px] h-[32px] md:h-[36px] border border-LightWhite rounded-full flex items-center justify-center p-0"
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="20"
+                                  height="16"
+                                  viewBox="0 0 20 16"
+                                  fill="none"
+                                >
+                                  <path
+                                    d="M7.53027 1.33008C7.56751 1.29284 7.63366 1.29284 7.6709 1.33008C7.70773 1.36727 7.70774 1.43254 7.6709 1.46973L1.24121 7.89941H19C19.0539 7.89941 19.1006 7.94614 19.1006 8C19.1005 8.05381 19.0538 8.09961 19 8.09961H1.24121L7.6709 14.5293C7.70807 14.5665 7.70794 14.6326 7.6709 14.6699C7.63366 14.7072 7.56751 14.7072 7.53027 14.6699L0.930664 8.07031C0.893426 8.03307 0.893426 7.96693 0.930664 7.92969L7.53027 1.33008Z"
+                                    fill="#091019"
+                                    stroke="#091019"
+                                  />
+                                </svg>
+                              </Button>
+                              <h1 className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[28px] text-[24px] md:text-[20px] tracking-[-0.36px] md:tracking-[-0.3px]">Back to cart</h1>
+                          </div>
+                          <div className="mb-8">
+                            <h1 className="font-[600] text-[#091019] md:text-[32px] md:leading-[38.4px] md:tracking-[-0.48px] text-[24px] leading-[31.2px] tracking-[-0.36px]">Checkout</h1>
+                            <p className="text-[#4D4E4F] font-[400] text-[16px] leading-[24px] mt-1">
+                              Get started in seconds and manage your mail anytime, anywhere.
+                            </p>
+                          </div>
+                        </div>
+                      
+                      <div className='max-w-[1240px] mx-auto gap-[24px] md:gap-[59px] flex flex-col lg:flex-row'>
+                        <div className='w-full lg:w-[65.35%]'>                
+                          <div role="row" className="flex flex-col p-6 border border-LightWhite rounded-[12px]">
+                            <h3 className="font-[400] md:font-[600] text-[#091019] md:text-[24px] md:leading-[31.2px] tracking-[-0.48px] text-[20px] leading-[28px]">Payment Details</h3>
+                            <p className="text-[#4D4E4F] font-[400] text-[14px] leading-[21px] mt-1">
+                              Your transaction and card details are fully secure with our encrypted payment system.
+                            </p>
+                            <form onSubmit={handleSubmit}>
+                             {error && <p className="text-[#FF6600] mt-1">{error}</p>}
+                                {/* <input
+                                  type="email"
+                                  placeholder="Email"
+                                  required
+                                  value={email}
+                                  onChange={(e) => setEmail(e.target.value)}
+                                  className="border p-2 rounded w-full"
+                                />
+                             <CardElement className="border p-2 rounded" /> */}
+
+                            <div className="mt-6 flex flex-col gap-5">
+                              {/* Card Number */}
+                              <div className="relative">
+                                <input
+                                  id="cardNumber"
+                                  type="text"
+                                  placeholder="1234 5678 9012 3456"
+                                  className="font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
+                                />
+                                <label
+                                  htmlFor="cardNumber"
+                                  className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150"
+                                >
+                                  Card Number
+                                </label>
+                              </div>
+
+                              {/* Expiry Date & CVV */}
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="relative">
+                                  <input
+                                    id="expiryDate"
+                                    type="text"
+                                    placeholder="12/2028"
+                                    className="font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px]  placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
+                                  />
+                                  <label
+                                    htmlFor="expiryDate"
+                                    className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F] leading-[18px]  peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150"
+                                  >
+                                    Expiry Date
+                                  </label>
+                                </div>
+
+                                <div className="relative">
+                                  <input
+                                    id="cvv"
+                                    type="text"
+                                    placeholder="126"
+                                    className="font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2  leading-[24px] text-[16px] text-[#091019] placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
+                                  />
+                                  <label
+                                    htmlFor="cvv"
+                                    className="font-[400] absolute left-4 top-[10px] text-[12px]  leading-[18px] text-[#4D4E4F] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150"
+                                  >
+                                    CVV
+                                  </label>
+                                </div>
+                              </div>
+
+                              {/* Zip Code & Card Holder Name */}
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="relative">
+                                  <input
+                                    id="zipCode"
+                                    type="text"
+                                    placeholder="12458"
+                                    className="font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2  leading-[24px] text-[16px] text-[#091019] placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
+                                  />
+                                  <label
+                                    htmlFor="zipCode"
+                                    className="font-[400] absolute left-4 top-[10px] text-[12px]  leading-[18px] text-[#4D4E4F] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150"
+                                  >
+                                    Zip Code
+                                  </label>
+                                </div>
+
+                                <div className="relative">
+                                  <input
+                                    id="cardHolder"
+                                    type="text"
+                                    placeholder="Scott Jerris"
+                                    className="font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2  leading-[24px] text-[16px] text-[#091019] placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
+                                  />
+                                  <label
+                                    htmlFor="cardHolder"
+                                    className="font-[400] absolute left-4 top-[10px] text-[12px]  leading-[18px] text-[#4D4E4F] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150"
+                                  >
+                                    Card Holder Name
+                                  </label>
+                                </div>
+                              </div>
+
+                              {/* Terms & Payment Button */}
+                              <div className="flex items-center gap-2 mt-2">
+                                <input type="checkbox" id="agree" className="w-4 h-4 accent-[#FF6600]" />
+                                <label htmlFor="agree" className="text-[14px] text-[#4D4E4F] font-[400] leading-[21px]">
+                                  I agree to the{' '}
+                                  <a href="#" className="text-[#FF6600] underline">
+                                    terms & conditions
+                                  </a>{' '}
+                                  and{' '}
+                                  <a href="#" className="text-[#FF6600] underline">
+                                    privacy policy
+                                  </a>
+                                </label>
+                              </div>
+
+                              <button type="submit" className="mt-4 bg-[#FF6600] h-[52px] hover:bg-[#e55a00] text-white font-medium text-[16px] py-3 rounded-full transition-all">
+                                {loading ? "Processing..." : "Make Payment" + (cart?.cost?.subtotalAmount?.amount ? ` - $${cart.cost.subtotalAmount.amount}` : '')}
+                              </button>
+                            </div>
+                            </form>
+                          </div>
+                        </div>
+                        <div className="w-full lg:w-[34.65%] md:sticky md:top-[80px] space-y-6">
+                          <CartSummary cart={cart} cost={cart.cost} />
+                        </div>
+                      </div>
+          
+                      </div>
+                      
+                    </div>
+                  )}
+          
+                  {!cart?.lines?.edges?.length && (
+                    <div className="mx-auto max-w-[1240px] text-center flex flex-col gap-6">
+                      <h1 className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[38.4px] text-[24px] md:text-[32px] tracking-[-0.36px] md:tracking-[-0.48px]">Your Cart is Empty</h1>
+                      <p className="font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Looks like you haven't added anything to your cart yet.</p>
+                      <a
+                        href="/"
+                        className="flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto text-[16px] tracking-[0.08px] py-[12px] px-4 rounded-full h-[52px]"
+                      >
+                        Continue Shopping
+                      </a>
+                    </div>
+                  )}
+                </>
+              );
+          }}
+          </Await>
+         </Suspense>
+       </section>
+    </>
+  
   );
 }
 
