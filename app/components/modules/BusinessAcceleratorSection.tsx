@@ -14,8 +14,7 @@ type BusinessAcceleratorSectionProps = {
 
 export default function BusinessAcceleratorSection({ data }: BusinessAcceleratorSectionProps) {
   // if (!data) return null; // safety check
-console.log('troggggededd');
-  console.log('BusinessAcceleratorSection data:', data);
+
 
   return (
     <section
