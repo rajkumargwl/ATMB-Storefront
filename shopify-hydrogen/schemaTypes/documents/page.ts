@@ -43,6 +43,8 @@ export const pageType = defineType({
           { type: 'marketPlaceModule' },
            { type: 'renterreferralprogram' },
           { type: 'howitworks' },
+           { type: 'acceleratorPageModule' },
+          
         // add more modules if needed
       ],
     }),

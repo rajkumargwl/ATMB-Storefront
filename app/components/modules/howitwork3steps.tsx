@@ -1,5 +1,5 @@
 import { Link } from '@remix-run/react';
-
+ 
 interface HowItWork3StepsProps {
   data: {
     _type: 'howitworks3steps';
@@ -12,7 +12,7 @@ interface HowItWork3StepsProps {
         };
         svgCode?: string;
       };
-      tooltip?: string;
+      tooltip?: string; // This property will be used for the title attribute
       title?: string;
       description?: string;
     }>;
@@ -26,52 +26,66 @@ interface HowItWork3StepsProps {
     };
   };
 }
-
+ 
 export function HowItWork3Steps({ data }: HowItWork3StepsProps) {
   return (
-    <section className="bg-orange-500 py-20">
-      <div className="container mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">
+    <section className="bg-DarkOrange  px-5  py-[40px] md:py-[60px] lg:py-[100px]">
+      <div className="max-w-[1240px] mx-auto">
+        <div className="flex flex-col items-center justify-center gap-5 md:gap-5 mb-[44px] md:mb-[64px]">
+          <h2 className="font-Roboto text-white font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px]">
             {data.heading }
           </h2>
-          <p className="text-xl text-white/90 max-w-3xl mx-auto">
+          <p className="text-center font-Roboto text-white font-normal leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px]">
             {data.description }
           </p>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12 relative">
+ 
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-11 md:gap-10 mb-[44px] md:mb-[64px] relative">
           {data.features?.map((feature, index) => (
             <div key={index} className="text-center relative">
               
               {/* Step Icon and Arrow Container */}
-              <div className="relative mb-6">
+              <div className="relative flex items-center justify-center">
                 {/* Arrow Connector for Steps 1 and 2 */}
                 {index < (data.features?.length || 0) - 1 && (
-                  <div className="hidden lg:block absolute left-[calc(50%+40px)] top-1/2 w-[calc(100%-80px)] border-t-2 border-dashed border-white/50 transform -translate-y-1/2">
-                    <svg className="absolute top-1/2 -right-2 h-4 w-4 transform -translate-y-1/2 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                    </svg>
+                  <div className="hidden lg:block absolute right-[-85px] top-[25px]">
+                    {index % 2 === 0 ? (
+                      // Right-pointing arrow (even indexes)
+                      <svg xmlns="http://www.w3.org/2000/svg" width="169" height="25" viewBox="0 0 169 25" fill="none" className="w-[130px] lg:w-[169px]">
+                        <path d="M168.533 4.77305C168.708 4.24933 168.425 3.68264 167.902 3.5073L159.367 0.649985C158.844 0.474646 158.277 0.757058 158.102 1.28077C157.926 1.80448 158.209 2.37118 158.732 2.54651L166.319 5.08635L163.779 12.6725C163.603 13.1962 163.886 13.7629 164.409 13.9382C164.933 14.1136 165.5 13.8311 165.675 13.3074L168.533 4.77305ZM1 4.45557L0.543637 5.34536C1.10693 5.63426 1.68792 5.92535 2.28622 6.21812L2.72576 5.31989L3.1653 4.42167C2.57793 4.13425 2.00816 3.84878 1.45636 3.56577L1 4.45557ZM6.28358 6.98637L5.87401 7.89865C7.03367 8.41928 8.24434 8.9424 9.50394 9.46539L9.8874 8.54183L10.2709 7.61827C9.02828 7.10235 7.83503 6.58674 6.69315 6.07409L6.28358 6.98637ZM13.5164 9.99409L13.1565 10.9271C14.3501 11.3875 15.5806 11.846 16.8466 12.3007L17.1846 11.3596L17.5226 10.4185C16.2712 9.96899 15.0553 9.51592 13.8763 9.06111L13.5164 9.99409ZM20.8862 12.643L20.5689 13.5914C21.7883 13.9993 23.0362 14.4027 24.3117 14.8L24.6091 13.8453L24.9066 12.8906C23.6444 12.4973 22.4097 12.0983 21.2035 11.6947L20.8862 12.643ZM28.3506 14.9695L28.0724 15.9301C29.3109 16.2888 30.5724 16.641 31.8561 16.9858L32.1155 16.02L32.3749 15.0542C31.1038 14.7129 29.8548 14.3641 28.6288 14.009L28.3506 14.9695ZM35.9035 16.9984L35.6627 17.969C36.9201 18.281 38.1966 18.5852 39.4916 18.8806L39.714 17.9057L39.9365 16.9307C38.6539 16.6381 37.3896 16.3368 36.1443 16.0278L35.9035 16.9984ZM43.5463 18.7424L43.3421 19.7213C44.6125 19.9863 45.8989 20.2424 47.2008 20.4888L47.3868 19.5062L47.5728 18.5237C46.2831 18.2796 45.0088 18.0259 43.7504 17.7635L43.5463 18.7424ZM51.2309 20.1971L51.0631 21.1829C52.3437 21.4009 53.6381 21.6092 54.9455 21.807L55.0951 20.8182L55.2446 19.8295C53.9495 19.6336 52.6673 19.4273 51.3987 19.2113L51.2309 20.1971ZM58.978 21.3689L58.8468 22.3602C60.1364 22.5309 61.4378 22.6911 62.7504 22.8401L62.8632 21.8465L62.976 20.8529C61.6758 20.7053 60.3867 20.5466 59.1092 20.3775L58.978 21.3689ZM66.7497 22.251L66.6555 23.2466C67.9527 23.3694 69.2601 23.481 70.5771 23.5807L70.6526 22.5836L70.7281 21.5864C69.4238 21.4876 68.1289 21.3771 66.8439 21.2555L66.7497 22.251ZM74.5671 22.8427L74.5105 23.8411C75.8084 23.9147 77.1149 23.9765 78.4296 24.0259L78.4672 23.0266L78.5047 22.0273C77.2029 21.9783 75.909 21.9172 74.6237 21.8443L74.5671 22.8427ZM82.3805 23.136L82.3622 24.1358C83.6695 24.1597 84.9843 24.1712 86.3061 24.1695L86.3049 23.1695L86.3037 22.1695C84.995 22.1711 83.6933 22.1598 82.3988 22.1361L82.3805 23.136ZM90.2086 23.1266L90.2295 24.1264C91.5342 24.0992 92.8453 24.0591 94.1623 24.0055L94.1217 23.0063L94.081 22.0071C92.7774 22.0602 91.4795 22.0999 90.1878 22.1268L90.2086 23.1266ZM98.0388 22.8075L98.0995 23.8056C99.3996 23.7265 100.705 23.6339 102.015 23.5275L101.934 22.5308L101.853 21.5341C100.557 21.6394 99.2647 21.731 97.978 21.8093L98.0388 22.8075ZM105.835 22.1738L105.936 23.1686C107.236 23.0362 108.541 22.8897 109.849 22.7289L109.727 21.7364L109.605 20.7439C108.311 20.903 107.02 21.0479 105.733 21.179L105.835 22.1738ZM113.601 21.2193L113.744 22.2091C115.039 22.0224 116.337 21.8214 117.639 21.6055L117.476 20.619L117.312 19.6325C116.024 19.846 114.74 20.0448 113.459 20.2295L113.601 21.2193ZM121.326 19.9384L121.511 20.9212C122.794 20.6802 124.08 20.4245 125.369 20.1537L125.164 19.1751L124.958 18.1964C123.683 18.4643 122.411 18.7172 121.142 18.9556L121.326 19.9384ZM128.993 18.327L129.22 19.301C130.489 19.0053 131.761 18.6947 133.034 18.3687L132.786 17.3999L132.538 16.4312C131.279 16.7535 130.022 17.0607 128.766 17.3531L128.993 18.327ZM136.573 16.3862L136.842 17.3493C138.099 16.9978 139.358 16.6311 140.617 16.2488L140.327 15.2919L140.037 14.335C138.791 14.713 137.547 15.0756 136.303 15.4232L136.573 16.3862ZM144.058 14.114L144.37 15.0642C145.613 14.6565 146.858 14.2332 148.102 13.794L147.77 12.8509L147.437 11.9079C146.206 12.3421 144.976 12.7606 143.747 13.1638L144.058 14.114ZM151.438 11.5104L151.792 12.4458C153.017 11.9825 154.243 11.5034 155.468 11.0083L155.094 10.0811L154.719 9.15392C153.507 9.6434 152.296 10.117 151.084 10.5751L151.438 11.5104ZM158.696 8.57864L159.091 9.49723C160.293 8.98032 161.494 8.44764 162.694 7.89887L162.279 6.98938L161.863 6.07989C160.676 6.62241 159.489 7.14903 158.301 7.66006L158.696 8.57864ZM165.817 5.32402L166.253 6.22399C166.845 5.93687 167.438 5.64575 168.03 5.35058L167.584 4.45557L167.138 3.56055C166.553 3.85237 165.967 4.14019 165.381 4.42404L165.817 5.32402Z" fill="white"/>
+                      </svg>
+                    ) : (
+                      // Left-pointing arrow (odd indexes)
+                      <svg width="169" height="25" viewBox="0 0 169 25" fill="none" className="w-[130px] lg:w-[169px]" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M168.384 20.2262C168.559 20.7499 168.277 21.3166 167.753 21.492L159.219 24.3493C158.695 24.5246 158.129 24.2422 157.953 23.7185C157.778 23.1948 158.06 22.6281 158.584 22.4528L166.17 19.9129L163.63 12.3268C163.455 11.8031 163.737 11.2364 164.261 11.0611C164.785 10.8857 165.351 11.1681 165.527 11.6918L168.384 20.2262ZM0.851562 20.5437L0.395199 19.6539C0.958491 19.365 1.53949 19.0739 2.13778 18.7811L2.57732 19.6794L3.01686 20.5776C2.42949 20.865 1.85972 21.1505 1.30793 21.4335L0.851562 20.5437ZM6.13514 18.0129L5.72557 17.1006C6.88523 16.58 8.0959 16.0569 9.3555 15.5339L9.73896 16.4574L10.1224 17.381C8.87984 17.8969 7.68659 18.4125 6.54471 18.9252L6.13514 18.0129ZM13.368 15.0052L13.008 14.0722C14.2017 13.6117 15.4322 13.1532 16.6981 12.6985L17.0362 13.6397L17.3742 14.5808C16.1227 15.0303 14.9068 15.4833 13.7279 15.9382L13.368 15.0052ZM20.7378 12.3562L20.4205 11.4079C21.6399 10.9999 22.8878 10.5966 24.1633 10.1992L24.4607 11.154L24.7581 12.1087C23.4959 12.5019 22.2612 12.901 21.0551 13.3046L20.7378 12.3562ZM28.2022 10.0297L27.924 9.06921C29.1625 8.71051 30.424 8.35822 31.7077 8.01348L31.9671 8.97926L32.2264 9.94503C30.9554 10.2864 29.7064 10.6352 28.4803 10.9903L28.2022 10.0297ZM35.7551 8.00087L35.5142 7.0303C36.7716 6.71832 38.0482 6.4141 39.3431 6.11864L39.5656 7.09358L39.788 8.06852C38.5054 8.36117 37.2411 8.66247 35.9959 8.97144L35.7551 8.00087ZM43.3978 6.25688L43.1937 5.27794C44.464 5.013 45.7505 4.75689 47.0524 4.51048L47.2384 5.49303L47.4243 6.47559C46.1347 6.71968 44.8603 6.97337 43.602 7.23582L43.3978 6.25688ZM51.0825 4.80214L50.9146 3.81632C52.1953 3.59832 53.4896 3.39005 54.7971 3.19227L54.9466 4.18102L55.0962 5.16977C53.801 5.3657 52.5189 5.57201 51.2503 5.78796L51.0825 4.80214ZM58.8296 3.63039L58.6983 2.63903C59.988 2.46834 61.2894 2.30815 62.602 2.15916L62.7147 3.15278L62.8275 4.1464C61.5274 4.29398 60.2383 4.45265 58.9608 4.62174L58.8296 3.63039ZM66.6013 2.74824L66.507 1.7527C67.8043 1.62988 69.1117 1.5183 70.4287 1.41856L70.5042 2.4157L70.5797 3.41285C69.2753 3.51163 67.9804 3.62215 66.6955 3.74379L66.6013 2.74824ZM74.4186 2.15654L74.3621 1.15814C75.66 1.08458 76.9665 1.02281 78.2812 0.973398L78.3187 1.97269L78.3563 2.97199C77.0544 3.02092 75.7606 3.08209 74.4752 3.15493L74.4186 2.15654ZM82.2321 1.8633L82.2138 0.86347C83.5211 0.83955 84.8359 0.828117 86.1577 0.829723L86.1565 1.82972L86.1553 2.82972C84.8466 2.82813 83.5448 2.83945 82.2504 2.86313L82.2321 1.8633ZM90.0602 1.87266L90.081 0.872881C91.3858 0.900047 92.6969 0.94018 94.0139 0.99379L93.9732 1.99296L93.9326 2.99214C92.6289 2.93907 91.3311 2.89934 90.0394 2.87245L90.0602 1.87266ZM97.8903 2.19182L97.9511 1.19366C99.2512 1.2728 100.557 1.36534 101.867 1.47175L101.786 2.46847L101.705 3.46519C100.408 3.35988 99.1163 3.2683 97.8296 3.18997L97.8903 2.19182ZM105.686 2.82547L105.788 1.83062C107.088 1.9631 108.392 2.10952 109.701 2.27034L109.579 3.26287L109.457 4.25541C108.162 4.09629 106.871 3.95141 105.585 3.82031L105.686 2.82547ZM113.453 3.77998L113.596 2.79021C114.89 2.97687 116.189 3.1779 117.491 3.39374L117.327 4.38027L117.164 5.3668C115.876 5.15329 114.591 4.95442 113.31 4.76975L113.453 3.77998ZM121.178 5.06088L121.362 4.07806C122.646 4.31907 123.932 4.57477 125.221 4.84556L125.015 5.82419L124.81 6.80282C123.535 6.535 122.263 6.2821 120.993 6.0437L121.178 5.06088ZM128.844 6.67223L129.071 5.6983C130.341 5.99398 131.612 6.3046 132.886 6.63056L132.638 7.59933L132.39 8.56809C131.131 8.24576 129.873 7.93858 128.618 7.64616L128.844 6.67223ZM136.424 8.61302L136.693 7.64995C137.951 8.00142 139.209 8.36815 140.469 8.75051L140.179 9.7074L139.888 10.6643C138.643 10.2862 137.398 9.92364 136.155 9.57609L136.424 8.61302ZM143.91 10.8853L144.221 9.93504C145.465 10.3428 146.709 10.7661 147.954 11.2053L147.621 12.1483L147.289 13.0914C146.058 12.6571 144.828 12.2386 143.598 11.8355L143.91 10.8853ZM151.29 13.4888L151.643 12.5535C152.869 13.0168 154.094 13.4959 155.32 13.991L154.945 14.9182L154.571 15.8453C153.359 15.3559 152.147 14.8823 150.936 14.4242L151.29 13.4888ZM158.548 16.4206L158.943 15.502C160.144 16.0189 161.345 16.5516 162.546 17.1004L162.13 18.0099L161.714 18.9194C160.528 18.3769 159.34 17.8502 158.152 17.3392L158.548 16.4206ZM165.668 19.6753L166.104 18.7753C166.697 19.0624 167.29 19.3535 167.882 19.6487L167.436 20.5437L166.99 21.4387C166.404 21.1469 165.818 20.8591 165.232 20.5752L165.668 19.6753Z" fill="white"/>
+                      </svg>
+                    )}
                   </div>
-                )}
-
+                )}   
+                
                 {/* Icon Circle */}
-                <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-4 border border-gray-200 shadow-md">
+                <div
+                  className="w-[80px] md:w-[80px] h-[80px] md:h-[80px] rounded-full bg-white flex items-center justify-center mb-6 md:mb-8"
+                  // <--- Added title here for non-image/svg fallbacks, but placed inside the image/svg check for clarity
+                >
                   {feature.icon?.upload?.url ? (
                     <img
                       src={feature.icon.upload.url}
                       alt={feature.title || `Step ${index + 1}`}
-                      className="h-10 w-10 text-orange-600"
-                      width={40}
-                      height={40}
+                      className="h-8 w-8"
+                      title={feature.tooltip || ''} // <--- Added title here
                     />
                   ) : feature.icon?.svgCode ? (
-                    <div 
+                    <div
                       dangerouslySetInnerHTML={{ __html: feature.icon.svgCode }}
                       className="h-10 w-10 [&>svg]:w-full [&>svg]:h-full [&>svg]:text-orange-600"
+                      title={feature.tooltip || ''} // <--- Added title here
                     />
                   ) : (
-                    <span className="text-2xl font-bold text-orange-600">
+                    <span
+                      className="text-2xl font-bold text-orange-600"
+                      title={feature.tooltip || ''} // <--- Added title here for the number fallback
+                    >
                       {index + 1}
                     </span>
                   )}
@@ -79,21 +93,22 @@ export function HowItWork3Steps({ data }: HowItWork3StepsProps) {
               </div>
               
               {/* Title and Description */}
-              <h3 className="text-xl font-bold text-white mb-3">
+              <h3 className="text-center font-Roboto text-white font-semibold leading-[28px] md:leading-[31.2px] text-[20px] md:text-[24px] tracking-[-0.3px] md:tracking-[-0.36px]">
                 {feature.title}
               </h3>
-              <p className="text-white/80 max-w-xs mx-auto">
+              <p className="text-center mt-4 md:mt-4 font-Roboto text-white font-normal leading-[27px] md:leading-[27px] text-[18px] md:text-[18px] tracking-[0px]">
                 {feature.description}
               </p>
+              
             </div>
           ))}
         </div>
-
-        <div className="text-center space-x-4">
+ 
+        <div className="text-center flex flex-col md:flex-row items-center justify-center gap-4">
           {data.buttonPrimary && (
             <Link
               to={data.buttonPrimary.url || '#'}
-              className="inline-block bg-gray-900 text-white px-8 py-4 rounded-lg font-semibold hover:bg-gray-800 transition-colors shadow-lg"
+              className="flex items-center justify-center w-full md:w-[249px] bg-PrimaryBlack text-white font-Roboto font-normal leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-[16px] py-[12px] rounded-[100px]"
             >
               {data.buttonPrimary.label }
             </Link>
@@ -101,7 +116,7 @@ export function HowItWork3Steps({ data }: HowItWork3StepsProps) {
           {data.buttonSecondary && (
             <Link
               to={data.buttonSecondary.url || '#'}
-              className="inline-block bg-white text-gray-900 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition-colors shadow-lg border border-transparent"
+              className="flex items-center justify-center w-full md:w-[249px] bg-white text-PrimaryBlack font-Roboto font-normal leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-[16px] py-[12px] rounded-[100px] border border-PrimaryBlack"
             >
               {data.buttonSecondary.label }
             </Link>

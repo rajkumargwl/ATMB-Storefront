@@ -63,7 +63,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
 
     if (!query.trim()) {
       params.delete("q");
-      navigate(`?${params.toString()}`, { replace: true });
+      // navigate(`?${params.toString()}`, { replace: true });
       setResults([]);
       return;
     }
