@@ -58,6 +58,7 @@ import solutions from './singletons/solutions'
 // import { heroBanner } from "./objects/module/heroBanner";
 import location from './location'
 import wpPost from './wpPost'
+import news from './news'
 import blockContent from './blockContent'
 import casestudy from './casestudy'
 import { featuresModule } from "./objects/module/featuresModule";
@@ -235,7 +236,7 @@ import {productType} from './documents/product'
 import {productVariantType} from './documents/productVariant'
 import {plansType} from './documents/plans'
 
-const documents = [collectionType, colorThemeType, pageType, productType, productVariantType,plansType,wpPost,blockContent,casestudy]
+const documents = [collectionType, colorThemeType, pageType, productType, productVariantType,plansType,wpPost,blockContent,casestudy,news]
 
 import {homeType} from './singletons/homeType'
 import {settingsType} from './singletons/settingsType'

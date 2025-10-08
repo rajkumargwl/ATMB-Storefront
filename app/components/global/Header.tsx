@@ -150,7 +150,7 @@ useEffect(() => {
                   to={item.label === "Solutions"
         ? "/solutionsvm"
         : item.label === "Locations"
-        ? "/locations"
+        ? "/sublocations"
           : item.label === "Blog"
           ? "/blogs"
           : item.label === "About Us"
@@ -205,14 +205,15 @@ useEffect(() => {
 
           {/* Cart */}
           {icon2?.url && (
-            <button>
+             <Link
+               to="/cart">
               <img
                 src={icon2.url}
                 alt="Cart"
                 title="Cart"
                 className="h-6 w-6 object-contain"
               />
-            </button>
+            </Link>
           )}
 
           {/* Login / Get Started (Desktop only) */}
