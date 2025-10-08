@@ -65,6 +65,7 @@ interface LocationsListProps {
 }
 
 export default function LocationsList({locations, initialQuery = ''}: LocationsListProps) {
+    console.log("locations in subloc", locations);
     const [minVal, setMinVal] = useState(25);
     const [maxVal, setMaxVal] = useState(75);
     const [showMore, setShowMore] = useState(false);
@@ -80,7 +81,6 @@ export default function LocationsList({locations, initialQuery = ''}: LocationsL
     const [selectedLocation, setSelectedLocation] = useState<LocationAPI | null>(
       locations[0] || null,
     );
-  console.log("locations in subloc", locations);
     const [showFilters, setShowFilters] = useState(false);
     const [planTier, setPlanTier] = useState('');
     const [minPrice, setMinPrice] = useState(
@@ -167,8 +167,6 @@ export default function LocationsList({locations, initialQuery = ''}: LocationsL
     markersRef.current = [];
 
     filtered.forEach((loc) => {
-      console.log(loc.latitude, loc.longitude);
-      console.log(loc.featureList);
       if (loc.latitude && loc.longitude) {
         const marker = new google.maps.Marker({
           position: {lat: loc.latitude, lng: loc.longitude},
@@ -366,7 +364,7 @@ export default function LocationsList({locations, initialQuery = ''}: LocationsL
       onChange={(e) => {
         setSearchCity(e.target.value);
         setShowSuggestions(true); // show suggestions when typing
-        navigate(`/sublocations?q=${encodeURIComponent(searchCity)}`, { replace: true });
+       // navigate(`/sublocations?q=${encodeURIComponent(searchCity)}`, { replace: true });
       }}
       placeholder="Type a city"
       className="flex-1 py-[3px] md:py-2 bg-white font-Roboto text-PrimaryBlack font-normal text-[14px] md:text-[16px] leading-[20px] md:leading-[24px] tracking-[0px] border-none outline-none"
@@ -419,7 +417,7 @@ export default function LocationsList({locations, initialQuery = ''}: LocationsL
         ))}
     </ul>
   )} */}
-   {showSuggestions &&
+   {/* {showSuggestions &&
   searchCity &&
   combinedCities.filter(
     (cityObj) =>
@@ -441,7 +439,7 @@ export default function LocationsList({locations, initialQuery = ''}: LocationsL
               setSearchCity(cityObj.displayName || cityObj.city);
               setSelectedCity(cityObj);
               setShowSuggestions(false);
-              navigate(`/sublocations?q=${encodeURIComponent(cityObj.displayName || cityObj.city)}`, { replace: true });
+              //navigate(`/sublocations?q=${encodeURIComponent(cityObj.displayName || cityObj.city)}`, { replace: true });
               
             }}
           >
@@ -449,6 +447,29 @@ export default function LocationsList({locations, initialQuery = ''}: LocationsL
           </li>
         ))}
     </ul>
+)} */}
+{showSuggestions && searchCity && 
+  cities
+    .filter(city => city.toLowerCase().includes(searchCity.toLowerCase()))
+    .length > 0 && (
+  <ul className="absolute z-50 w-full bg-white border border-LightWhite rounded-b-md max-h-40 overflow-y-auto mt-12 shadow-md">
+    {cities
+      .filter(city => city.toLowerCase().includes(searchCity.toLowerCase()))
+      .map((city, index) => (
+        <li
+          key={index}
+          className="px-3 py-2 cursor-pointer hover:bg-gray-100"
+          onClick={() => {
+            setSearchCity(city);
+            setSelectedCity(city);
+            setShowSuggestions(false);
+            navigate(`/sublocations?q=${encodeURIComponent(city)}`, { replace: true });
+          }}
+        >
+          {city}
+        </li>
+      ))}
+  </ul>
 )}
 
 </div>

@@ -17,12 +17,88 @@ export async function loader({context, request}: LoaderFunctionArgs) {
 
   const url = new URL(request.url);
   const q = url.searchParams.get('q') || '';
+  console.log("Search query:", q);
 
-  const locations: LocationAPI[] = await context.sanity.query({
-    query: `*[_type == "location"][0...10]{_id, displayName, city, stateCode, addressLine1, addressLine2, postalCode, coordinates, "latitude":coordinates.lat, "longitude":coordinates.lng, featureList[]{feature_id,label,description,status,type}, ratingList[]{rating_id,type,status,value}, planTier, priceRange}`,
-  });
+  let results = {locations: [] as LocationAPI[]};
 
-  return defer({locations, header, footer, q});
+  if (q) {
+    const searchParam = `${q}*`;
+    try {
+      results = await context.sanity.query({
+        query: `{
+          "locations": *[_type == "location" && (
+            name match $search ||
+            displayName match $search ||
+            city match $search ||
+            postalCode match $search
+          )][0...10]{
+            _id,
+            displayName,
+            city,
+            stateCode,
+            addressLine1,
+            addressLine2,
+            postalCode,
+            coordinates,
+            "latitude":coordinates.lat,
+            "longitude":coordinates.lng,
+            featureList[]{
+              feature_id,
+              label,
+              description,
+              status,
+              type
+            },
+            ratingList[]{
+              rating_id,
+              type,
+              status,
+              value
+            },
+            planTier,
+            priceRange
+          }
+        }`,
+        params: {search: searchParam},
+      });
+    } catch (error) {
+      console.error('Sanity query failed:', error);
+    }
+  } 
+  else {
+    const locations: LocationAPI[] = await context.sanity.query({
+      query: `*[_type == "location"][0...50]{
+        _id,
+        displayName,
+        city,
+        stateCode,
+        addressLine1,
+        addressLine2,
+        postalCode,
+        coordinates,
+        "latitude":coordinates.lat,
+        "longitude":coordinates.lng,
+        featureList[]{
+          feature_id,
+          label,
+          description,
+          status,
+          type
+        },
+        ratingList[]{
+          rating_id,
+          type,
+          status,
+          value
+        },
+        planTier,
+        priceRange
+      }`,
+    });
+    results.locations = locations;
+  }
+
+  return defer({locations:results.locations, header, footer, q});
 }
 
 export default function LocationsPage() {
