@@ -28,6 +28,8 @@ export async function loader({context, params}: LoaderFunctionArgs) {
           name,
           postalCode,
           type,
+          "latitude":coordinates.lat,
+          "longitude":coordinates.lng,
           _id
         }
       `,
@@ -56,6 +58,7 @@ export default function CountryPage() {
   const {decodedCountry, states, locations} = useLoaderData<typeof loader>();
   const navigate = useNavigate();
   const [selectedLocation, setSelectedLocation] = useState<null | any>(null);
+  console.log("locations", locations);
   function handleLocationClick(loc: any) {
     setSelectedLocation(loc);
     const countrySlug = encodeURIComponent(loc.country);
@@ -136,7 +139,7 @@ export default function CountryPage() {
                       if (loc) handleLocationClick(loc);
                     }}
                   >
-                    <span className="group-hover:text-[#F15A24]">{state.name}</span>
+                    <span className="group-hover:text-[#F15A24]">{state.name }</span>
                     <span className="text-[12px] bg-[#0000001a] font-[400] leading-[18px] text-[#091019] rounded-full w-6 h-6 flex items-center justify-center">
                       {state.count}
                     </span>
