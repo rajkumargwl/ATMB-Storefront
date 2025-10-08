@@ -66,16 +66,25 @@ import BusinessSupport from '~/components/modules/BusinessSupport';
 import BusinessBanner from '~/components/modules/BusinessBanner';
 import WebinarsTopicsSection from '~/components/modules/WebinarsTopicsSection';
 
+// type Props = {
+//   imageAspectClassName?: string;
+//   module: SanityModule;
+//   homeSearchResults?: any;
+//   searchQuery?: string | null;
+// };
+
 type Props = {
-  imageAspectClassName?: string;
-  module: SanityModule;
+  module: SanityModule | ProductWithNodes;
   homeSearchResults?: any;
   searchQuery?: string | null;
+  bundles?: any[]; // 🔹 make sure Module receives bundles
 };
 
-export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery}: Props) {
+export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery,bundles}: Props) {
 
-   console.log('Module received:', module._type, module);
+  console.log("check bundles in module", bundles);
+
+
   switch (module._type) {
    
      
@@ -305,7 +314,7 @@ case 'solutionMailboxBenefitFaqModule':
       return <FeaturesModule {...module} />;
     
     case 'pricingModule':
-      return <Pricingmodule data={module} />;
+      return <Pricingmodule data={module}  />;
     
     case 'howItWorks':
       return <HowItWorks data={module} />;
@@ -343,8 +352,8 @@ case 'solutionMailboxBenefitFaqModule':
     case 'homeSection4':
       return <Locations data={module} />;
     
-    // case 'plans':
-    //   return <Plans data={module} />;
+    case 'plans':
+      return <Plans data={module} bundles={bundles}/>;
     
     case 'bundles':
       return <Bundles data={module} />;
