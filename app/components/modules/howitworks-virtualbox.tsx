@@ -1,5 +1,5 @@
 import { Link } from '@remix-run/react';
-
+ 
 interface HowItWorksVirtualboxProps {
   data: {
     _type: 'howitworksVirtualbox';
@@ -19,28 +19,29 @@ interface HowItWorksVirtualboxProps {
     };
   };
 }
-
+ 
 export function HowItWorksVirtualbox({ data }: HowItWorksVirtualboxProps) {
   return (
-    <section className="bg-white py-20">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    <section className="px-5 py-[40px] md:py-[54px] bg-white">
+      <div className="max-w-[1240px] mx-auto">
+        <div className=" flex flex-col md:flex-row gap-[44px] lg:gap-[62px] items-center">
           
-          <div>
-            <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
+          <div className='w-full md:w-[48.1%] space-y-5 md:space-y-5'>
+            <h1 className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.39px] md:tracking-[-0.54px]">
               {data.title}
             </h1>
-            <p className="text-xl text-gray-600 mb-8">
+            <p className="max-w-[567px] font-Roboto text-LightGray font-medium leading-[27px] md:leading-[28px] text-[18px] md:text-[20px] tracking-[0px]">
               {data.description}
             </p>
             
             {data.links && data.links.length > 0 && (
-              <div className="flex flex-wrap gap-x-6 gap-y-2 mb-8">
+              <div className="flex flex-wrap gap-5">
                 {data.links.map((link, index) => (
                   <Link
                     key={index}
                     to={link.url || '#'}
-                    className="text-sm text-orange-600 hover:text-orange-800 font-medium border-b border-orange-600 hover:border-orange-800"
+                    className="font-Roboto text-DarkOrange font-normal leading-[21px] md:leading-[21px] text-[14px] md:text-[14px] tracking-[0px] md:tracking-[0px]
+                      underline decoration-solid decoration-skip-ink-auto decoration-auto underline-offset-auto  border-r border-LightWhite pr-[20px] last:border-none"
                   >
                     {link.label}
                   </Link>
@@ -51,7 +52,7 @@ export function HowItWorksVirtualbox({ data }: HowItWorksVirtualboxProps) {
             {data.ctaButton && (
               <Link
                 to={data.ctaButton.url || '#'}
-                className="inline-block bg-orange-500 text-white px-8 py-4 rounded-lg font-semibold hover:bg-orange-600 transition-colors shadow-lg hover:shadow-xl"
+                className="flex items-center justify-center w-full md:w-[192px] bg-DarkOrange text-white font-Roboto font-normal leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-[16px] py-[12px] rounded-[100px]"
               >
                 {data.ctaButton.label}
               </Link>
@@ -59,13 +60,11 @@ export function HowItWorksVirtualbox({ data }: HowItWorksVirtualboxProps) {
           </div>
           
           {data.image?.url && (
-            <div className="relative">
+            <div className="w-full md:w-[51.9%] relative">
               <img
                 src={data.image.url}
-                alt={data.image.alt}
-                className="rounded-xl shadow-2xl w-full"
-                width={600}
-                height={500}
+                alt={data.image.alt || "hero image"}
+                className="rounded-[20px] w-full max-h-[400px] object-cover"
               />
             </div>
           )}
