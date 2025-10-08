@@ -171,7 +171,7 @@ export default function Cart() {
   
 console.log('Essentials Products in Cart page:', essentialsProducts);
   return (
-    <section className="px-4 pb-20 pt-10 md:px-8 md:pb-8 md:pt-20">
+    <section className="">
       <Suspense fallback={<div className="flex justify-center"><SpinnerIcon /></div>}>
       <Await resolve={rootData?.cart}>
   {(cart) => {
@@ -188,32 +188,51 @@ console.log('Essentials Products in Cart page:', essentialsProducts);
     return (
       <>
         {cart && cart.lines.edges.length > 0 && (
-          <div className="mx-auto grid w-full max-w-6xl gap-8 md:grid-cols-3 lg:gap-12">
-            {/* LEFT SIDE */}
-            <div className="col-span-2 space-y-8">
-              <h1 className="text-2xl font-semibold mb-4">Your Cart</h1>
-              
-              <CartLineItems linesObj={cart.lines} />
+          <div className="">
+            <div className="bg-white px-5 pt-[32px] pb-[40px] md:pb-[60px]">
+              <div className='max-w-[1240px] mx-auto'>
+                <div className='flex flex-row items-center justify-start mb-6 md:mb-8 gap-3 md:gap-6'>
+                    <span className='flex items-center justify-center w-[32px] md:w-[48px] h-[32px] md:h-[48px] border border-LightWhite rounded-full'>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" className='w-[16px] md:w-[24px] h-[16px] md:h-[24px]'>
+                        <path d="M9.53027 5.33008C9.56751 5.29284 9.63366 5.29284 9.6709 5.33008C9.70773 5.36727 9.70774 5.43254 9.6709 5.46973L3.24121 11.8994H21C21.0539 11.8994 21.1006 11.9461 21.1006 12C21.1005 12.0538 21.0538 12.0996 21 12.0996H3.24121L9.6709 18.5293C9.70807 18.5665 9.70794 18.6326 9.6709 18.6699C9.63366 18.7072 9.56751 18.7072 9.53027 18.6699L2.93066 12.0703C2.89343 12.0331 2.89343 11.9669 2.93066 11.9297L9.53027 5.33008Z" fill="#091019" stroke="#091019"/>
+                      </svg>
+                    </span>
+                    <h1 className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[38.4px] text-[24px] md:text-[32px] tracking-[-0.36px] md:tracking-[-0.48px]">Your Cart</h1>
+                </div>
+              </div>
+            <div className='max-w-[1240px] mx-auto gap-[24px] md:gap-[59px] flex flex-col lg:flex-row'>
+              <div className='w-full lg:w-[65.35%]'>                
+                <CartLineItems linesObj={cart.lines} />
+              </div>
+              <div className="w-full lg:w-[34.65%] md:sticky md:top-[80px] space-y-6">
+                <CartSummary cart={cart} cost={cart.cost} />
+                <CartActions cart={cart} />
+              </div>
+            </div>
+
+            </div>
+           
+
+            <div className="bg-[#F6F6F6] px-5 pt-[40px] md:pt-[60px] pb-[40px] md:pb-[60px] lg:pb-[120px]"> 
+              <div className='max-w-[1240px] mx-auto flex flex-col lg:flex-row gap-[24px] md:gap-[40px]'>
 
               <CartBundleSection bundleProducts={bundleProducts} />
               <CartEssentialsSection essentialsProducts={firstEssential ? [firstEssential] : []} />
             </div>
+            </div>        
 
-            {/* RIGHT SIDE */}
-            <div className="md:sticky md:top-[80px] space-y-6">
-              <CartSummary cart={cart} cost={cart.cost} />
-              <CartActions cart={cart} />
-            </div>
+      
+           
           </div>
         )}
 
         {!cart?.lines?.edges?.length && (
-          <div className="mx-auto max-w-3xl text-center">
-            <h1 className="text-2xl font-semibold mb-4">Your Cart is Empty</h1>
-            <p className="mb-8">Looks like you haven't added anything to your cart yet.</p>
+          <div className="mx-auto max-w-[1240px] text-center flex flex-col gap-6">
+            <h1 className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[38.4px] text-[24px] md:text-[32px] tracking-[-0.36px] md:tracking-[-0.48px]">Your Cart is Empty</h1>
+            <p className="font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Looks like you haven't added anything to your cart yet.</p>
             <a
               href="/"
-              className="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600"
+              className="flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto text-[16px] tracking-[0.08px] py-[12px] px-4 rounded-full h-[52px]"
             >
               Continue Shopping
             </a>
