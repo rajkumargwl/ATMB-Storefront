@@ -83,6 +83,18 @@ export async function action({request, context}: ActionFunctionArgs) {
         customerAccessToken,
       });
       break;
+      case 'REPLACE_LINE': {
+        if (inputs.lineIds?.length) {
+          await cart.removeLines(inputs.lineIds);
+        }
+      
+        if (inputs.lines?.length) {
+          result = await cart.addLines(inputs.lines);
+        } else {
+          result = await cart.get();
+        }
+        break;
+      }
     default:
       invariant(false, `${action} cart action is not defined`);
   }
@@ -93,11 +105,19 @@ export async function action({request, context}: ActionFunctionArgs) {
   const cartId = result.cart.id;
   const headers = cart.setCartId(result.cart.id);
 
-  const redirectTo = formData.get('redirectTo') ?? null;
-  if (typeof redirectTo === 'string' && isLocalPath(request, redirectTo)) {
-    status = 303;
-    headers.set('Location', redirectTo);
+  // const redirectTo = formData.get('redirectTo') ?? null;
+  // if (typeof redirectTo === 'string' && isLocalPath(request, redirectTo)) {
+  //   status = 303;
+  //   headers.set('Location', redirectTo);
+  // }
+  // const redirectTo = formData.get('redirectTo');
+  // if (typeof redirectTo === 'string' && isLocalPath(request, redirectTo)) {
+  //   return redirect(redirectTo, {headers});
+  // }
+  if (inputs.redirectTo && typeof inputs.redirectTo === 'string') {
+    return redirect(inputs.redirectTo, {headers});
   }
+
 
   const {cart: cartResult, errors} = result;
   return json(
@@ -112,7 +132,8 @@ export async function action({request, context}: ActionFunctionArgs) {
   );
 }
 export async function loader({context}: LoaderFunctionArgs) {
-  const [virtualMailbox, virtualPhone, BusinessAcc,AllProducts] = await Promise.all([
+  
+  const [virtualMailbox, virtualPhone, BusinessAcc] = await Promise.all([
     context.storefront.query<{product: Product}>(PRODUCT_QUERY, {
       variables: {handle: 'virtual-mailbox', selectedOptions: []},
     }),
@@ -122,25 +143,33 @@ export async function loader({context}: LoaderFunctionArgs) {
     context.storefront.query<{product: Product}>(PRODUCT_QUERY, {
       variables: {handle: 'business-accelerato', selectedOptions: []},
     }),
-    context.storefront.query(ALL_PRODUCTS_QUERY, {
-      variables: {first: 50}, // fetch first 50 products, adjust as needed
-    })
+    // context.storefront.query(ALL_PRODUCTS_QUERY, {
+    //   variables: {first: 50}, 
+    // }),
+    
   ]);
 
   if (!virtualMailbox?.product || !virtualPhone?.product || !BusinessAcc?.product) {
     throw notFound();
   }
- 
+ // Combine them into an array
+const AllProducts = [
+  virtualMailbox.product,
+  virtualPhone.product,
+  BusinessAcc.product,
+];
+
+console.log(AllProducts);
   return defer({
     bundleProducts: [virtualMailbox.product, virtualPhone.product],
-    essentialsProducts: AllProducts.products.nodes ?? [],
+    essentialsProducts: AllProducts ?? [],
   });
 }
 export default function Cart() {
   const rootData = useRootLoaderData();
   const { bundleProducts, essentialsProducts} = useLoaderData<typeof loader>();
   
-
+console.log('Essentials Products in Cart page:', essentialsProducts);
   return (
     <section className="px-4 pb-20 pt-10 md:px-8 md:pb-8 md:pt-20">
       <Suspense fallback={<div className="flex justify-center"><SpinnerIcon /></div>}>

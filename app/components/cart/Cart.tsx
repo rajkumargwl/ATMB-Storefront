@@ -22,6 +22,7 @@ import SpinnerIcon from '~/components/icons/Spinner';
 import {Link} from '~/components/Link';
 import {useCartFetchers} from '~/hooks/useCartFetchers';
 import {useRootLoaderData} from '~/root';
+import ChangePlanButton from './ChangePlanButton';
 
 export function CartLineItems({
   linesObj,
@@ -172,7 +173,7 @@ className="text-sm font-bold hover:underline"
   </div>
   
 )}
- {(merchandise.product.handle==='virtual-mailbox')? <Link
+ {/* {(merchandise.product.handle==='virtual-mailbox')? <Link
         to={`/PDP/${merchandise.product.handle}?locationId=${attributes?.find(attr => attr.key === 'locationId')?.value}`}
         className="text-sm font-bold hover:underline"
       >
@@ -185,9 +186,12 @@ className="text-sm font-bold hover:underline"
 Change Plan
 </Link>
 
-
-      }
-
+      } */}
+<ChangePlanButton
+  lineId={lineItem.id}
+  productHandle={merchandise.product.handle}
+  locationId={attributes?.find(attr => attr.key === 'locationId')?.value ?? undefined}
+/>
       </div>
 
       {/* Quantity */}
