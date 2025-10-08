@@ -170,6 +170,7 @@ export default function CountryLocationsPage() {
                 <div
                 key={index}
                 className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-200"
+                onClick={() => navigate(`/${encodeURIComponent(state.country)}/${encodeURIComponent(state.name)}`)}
               >
                 <span className="group-hover:text-[#F15A24]">{state.name}</span>
                 {state && (
@@ -201,7 +202,9 @@ export default function CountryLocationsPage() {
         <div className="grid grid-cols-2 md:grid-cols-4 md:gap-x-6 md:gap-y-5 gap-x-4 gap-y-8">
         {countries.map((country, index) => {
             return (
-                <div key={index} className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-200">
+                <div key={index} className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-200"
+                onClick={() => navigate(`/country/${encodeURIComponent(country.name)}`)}
+                >
                 <span className="group-hover:text-[#F15A24]">{country.name.trim()}</span>
                 {country.count && (
                     <>

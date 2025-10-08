@@ -100,6 +100,10 @@ type PricingModuleProps = {
 >
   {tabs.map((tab, idx) => {
     const isSelected = activeTab === tab.id;
+
+    // Make only Bundles tab tabbable initially
+    const tabIndex = tab.id === "bundles" ? 0 : -1;
+
     return (
       <button
         key={tab.id}
@@ -107,7 +111,7 @@ type PricingModuleProps = {
         role="tab"
         aria-selected={isSelected}
         aria-controls={`tabpanel-${tab.id}`}
-        tabIndex={isSelected ? 0 : -1} // only selected is tabbable
+        tabIndex={tabIndex} 
         onClick={() => setActiveTab(tab.id as "individual" | "bundles")}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
@@ -137,6 +141,7 @@ type PricingModuleProps = {
     );
   })}
 </div>
+
 
 
           </div>
