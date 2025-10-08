@@ -55,10 +55,12 @@ export async function loader({context, params}: LoaderFunctionArgs) {
 export default function CountryPage() {
   const {decodedCountry, states, locations} = useLoaderData<typeof loader>();
   const navigate = useNavigate();
-
+  const [selectedLocation, setSelectedLocation] = useState<null | any>(null);
   function handleLocationClick(loc: any) {
+    setSelectedLocation(loc);
     const countrySlug = encodeURIComponent(loc.country);
     const stateSlug = encodeURIComponent((loc.state || ''));
+    console.log("countrySlug, stateSlug", countrySlug, stateSlug);
     navigate(`/${countrySlug}/${stateSlug}`);
   }
     const [showMap, setShowMap] = useState(false);
@@ -113,13 +115,13 @@ export default function CountryPage() {
               <div className="flex items-center space-x-4 mb-6">
                 <button
                   className="rounded-full md:border md:border-LightWhite p-2 md:p-[11px]"
-                  onClick={() => navigate("/")}
+                  onClick={() => navigate(-1)}
                 >
                   <LeftArrowBlack />
                 </button>
     
                 <h1 className="font-Roboto text-PrimaryBlack font-semibold text-[24px] leading-[31.2px] tracking-[-0.39px]">
-                  Australia
+                {decodedCountry} 
                 </h1>
               </div>
     
@@ -129,6 +131,10 @@ export default function CountryPage() {
                   <div
                     key={index}
                     className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-200"
+                    onClick={() => {
+                      const loc = locations.find((l: any) => l.state === state.name);
+                      if (loc) handleLocationClick(loc);
+                    }}
                   >
                     <span className="group-hover:text-[#F15A24]">{state.name}</span>
                     <span className="text-[12px] bg-[#0000001a] font-[400] leading-[18px] text-[#091019] rounded-full w-6 h-6 flex items-center justify-center">
@@ -148,12 +154,21 @@ export default function CountryPage() {
                 showMap ? "block" : "hidden md:block"
               } ${showMap ? "relative z-0" : "z-0"}`}
             >
-              <iframe
+              {/* <iframe
                 title="Virtual Mailbox Map"
                 className="w-full h-[750px] relative z-0"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3153.056865217281!2d144.86990917589054!3d-37.69626193453139!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad6693b0f3f89f9%3A0xa00f7a99f0ff0b0!2sGladstone%20Park%20VIC%203043%2C%20Australia!5e0!3m2!1sen!2sin!4v1696435132197!5m2!1sen!2sin"
                 loading="lazy"
-              ></iframe>
+              ></iframe> */}
+              <iframe
+  title="Virtual Mailbox Map"
+  className="w-full h-[750px] relative z-0"
+  src={`https://www.google.com/maps/embed/v1/place?key=AIzaSyDXYZ7HuZbqyLOv8xlijti1jwP9k4lSJqM&q=${encodeURIComponent(
+    selectedLocation ? selectedLocation.city + ', ' + selectedLocation.state + ', ' + selectedLocation.country : decodedCountry
+  )}`}
+  loading="lazy"
+/>
+
             </section>
           </main>
     

@@ -3,8 +3,6 @@ import {json, type LoaderFunctionArgs, defer} from '@shopify/remix-oxygen';
 import {useLoaderData, useNavigate} from '@remix-run/react';
 import {useState, useEffect, useMemo, useRef} from 'react';
 import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
-import Header from '~/components/global/Header';
-import Footer from '~/components/global/Footer';
 import {HEADER_QUERY} from '~/queries/sanity/header';
 import {FOOTER_QUERY} from '~/queries/sanity/footer';
 import {notFound} from '~/lib/utils';
@@ -13,7 +11,6 @@ import CloseIconBlack from '~/components/icons/CloseIconBlack';
 import Location from "~/components/media/location.svg";
 import Location1 from "~/components/media/location1.svg";
 import LeftArrowBlack from '~/components/icons/LeftArrowBlack';
-import SearchIcon from "~/components/icons/SearchIcon";
 import SearchWhite from "~/components/media/Search.svg";
 
 
@@ -460,7 +457,7 @@ console.log("locations in subloc", locations);
   <div className="flex items-center gap-3 w-full relative">  
     <button
       className="rounded-full md:border md:border-LightWhite p-2 md:p-[11px]"
-      onClick={() => navigate("/")}
+      onClick={() => navigate(-1)}
     >
       <LeftArrowBlack />
     </button>  
