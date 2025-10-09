@@ -120,7 +120,7 @@ export default function CountryLocationsPage() {
         <div >
             <h1 className="text-center md:text-left font-Roboto text-PrimaryBlack font-semibold leading-[38.4px] tracking-[-0.48px] text-[32px] md:text-[36px] md:leading-[43.2px] md:tracking-[-0.54px]">Virtual Mailbox Locations Across the United States and Worldwide</h1>
             <p className="text-center md:text-left mt-[16px] md:text-[18px] text-[14px] text-[#4D4E4F] font-[400] leading-[21px] md:leading-[27px]">Choose from 2500+ locations and get your digital mailbox today!</p>
-            <div className="mt-[40px] md:mt-[16px] mb-4 md:mb-5 flex items-center gap-[10px] w-full max-w-[546px] pt-[8px] md:pt-[6px] pr-[8px] md:pr-[6px] pb-[8px] md:pb-[6px] pl-[16px] md:pl-[20px] bg-white border border-LightGray rounded-full shadow-sm overflow-hidden">
+           {/*  <div className="mt-[40px] md:mt-[16px] mb-4 md:mb-5 flex items-center gap-[10px] w-full max-w-[546px] pt-[8px] md:pt-[6px] pr-[8px] md:pr-[6px] pb-[8px] md:pb-[6px] pl-[16px] md:pl-[20px] bg-white border border-LightGray rounded-full shadow-sm overflow-hidden">
               <SearchIconBanner />
               <input
                 type="text"
@@ -141,8 +141,19 @@ export default function CountryLocationsPage() {
                     <RightArrowWhite />
                   </span>
                 </span>
-              </button>
-            </div>
+              </button> 
+               </div> */} 
+                <SearchBox
+          placeholder="Enter address or zip code..."
+          buttonText="Search"
+          initialQuery=""
+          results={locations || []}
+          onResultClick={(item) => {
+            navigate(`/sublocations?q=${encodeURIComponent(item.name || item.city || '')}`);
+          }}
+        />
+
+         
         </div>
 
         {/* Right: Image */}

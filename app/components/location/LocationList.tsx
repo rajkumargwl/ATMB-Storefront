@@ -75,8 +75,9 @@ export default function LocationsList({locations, initialQuery = ''}: LocationsL
   
   
     const navigate = useNavigate();
-    const [selectedCity, setSelectedCity] = useState<string>('');
-    const [searchCity, setSearchCity] = useState<string>('');
+    const [selectedCity, setSelectedCity] = useState<string>(initialQuery || '');
+    const [searchCity, setSearchCity] = useState<string>(initialQuery || '');
+    const [filtered, setFiltered] = useState<LocationAPI[]>(locations);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState<LocationAPI | null>(
       locations[0] || null,
@@ -99,20 +100,67 @@ export default function LocationsList({locations, initialQuery = ''}: LocationsL
       );
     };
   
-    const filtered = locations.filter((loc) => {
-      const matchCity = selectedCity ? loc.city === selectedCity : true;
-      const matchTier = planTier ? loc.planTier === planTier : true;
-      const matchPrice =
-        (loc.priceRange || 0) >= minPrice && (loc.priceRange || 0) <= maxPrice;
-      const matchFeatures =
-        selectedFeatures.length > 0
-          ? selectedFeatures.every((f) =>
-              (loc.featureList || []).map((ft) => ft.label).includes(f),
-            )
-          : true;
+    // const filtered = locations.filter((loc) => {
+    //   const matchCity = selectedCity ? loc.city === selectedCity : true;
+    //   const matchTier = planTier ? loc.planTier === planTier : true;
+    //   const matchPrice =
+    //     (loc.priceRange || 0) >= minPrice && (loc.priceRange || 0) <= maxPrice;
+    //   const matchFeatures =
+    //     selectedFeatures.length > 0
+    //       ? selectedFeatures.every((f) =>
+    //           (loc.featureList || []).map((ft) => ft.label).includes(f),
+    //         )
+    //       : true;
   
-      return matchCity && matchTier && matchPrice && matchFeatures;
-    });
+    //   return matchCity && matchTier && matchPrice && matchFeatures;
+    // });
+    useEffect(() => {
+        if (initialQuery && !selectedCity) {
+          setSelectedCity(initialQuery);
+          setSearchCity(initialQuery);
+        }
+      }, [initialQuery]);
+      
+      useEffect(() => {
+        if (!locations || locations.length === 0) return;
+      
+        const query = selectedCity.trim().toLowerCase();
+      
+        const newFiltered = locations.filter((loc) => {
+          const city = loc.city?.toLowerCase() || '';
+          const displayName = loc.displayName?.toLowerCase() || '';
+          const postal = loc.postalCode?.toLowerCase() || '';
+          const tier = loc.planTier || '';
+      
+          const matchesCity =
+            query ? city.includes(query) || displayName.includes(query) || postal.includes(query) : true;
+      
+          const matchesTier = planTier ? tier === planTier : true;
+      
+          const matchesPrice =
+            (loc.priceRange || 0) >= minPrice && (loc.priceRange || 0) <= maxPrice;
+      
+          const matchesFeatures =
+            selectedFeatures.length > 0
+              ? selectedFeatures.every((f) =>
+                  (loc.featureList || []).some(
+                    (ft) => ft.label?.toLowerCase() === f.toLowerCase(),
+                  ),
+                )
+              : true;
+      
+          return matchesCity && matchesTier && matchesPrice && matchesFeatures;
+        });
+      
+        setFiltered(newFiltered);
+      
+        // auto-select first valid location
+        if (newFiltered.length > 0) {
+          setSelectedLocation(newFiltered[0]);
+        } else {
+          setSelectedLocation(null);
+        }
+      }, [selectedCity, planTier, minPrice, maxPrice, selectedFeatures, locations]);
   
     useEffect(() => {
       if (filtered.length > 0) {
@@ -282,7 +330,7 @@ export default function LocationsList({locations, initialQuery = ''}: LocationsL
     city,
     displayName: displayNames[index] || city, // fallback if displayName missing
   }));
-
+ 
   return (
     <>
      {/* <Header data={header} searchResults={mergedResults} searchQuery={q} /> */}
@@ -417,7 +465,7 @@ export default function LocationsList({locations, initialQuery = ''}: LocationsL
         ))}
     </ul>
   )} */}
-   {/* {showSuggestions &&
+    {showSuggestions &&
   searchCity &&
   combinedCities.filter(
     (cityObj) =>
@@ -447,8 +495,8 @@ export default function LocationsList({locations, initialQuery = ''}: LocationsL
           </li>
         ))}
     </ul>
-)} */}
-{showSuggestions && searchCity && 
+)} 
+{/*{showSuggestions && searchCity && 
   cities
     .filter(city => city.toLowerCase().includes(searchCity.toLowerCase()))
     .length > 0 && (
@@ -470,7 +518,7 @@ export default function LocationsList({locations, initialQuery = ''}: LocationsL
         </li>
       ))}
   </ul>
-)}
+)}*/}
 
 </div>
   </div>
