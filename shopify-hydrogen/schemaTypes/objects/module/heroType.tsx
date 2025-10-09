@@ -1,116 +1,164 @@
 import {defineType, defineField} from 'sanity'
 
-export const header = defineType({
-  name: "header",
-  title: "Header",
-  type: "document",
- 
-  // ✅ Restrict to single doc (no create/delete, only update/publish)
-//   __experimental_actions: ["update", "publish"],
- 
+export const heroType = defineType({
+  name: 'hero',
+  title: 'Mail. Calls. Growth',
+  type: 'object',
   fields: [
-    // ✅ Logo
     defineField({
-      name: "logo",
-      title: "Logo",
-      type: "image",
+      name: "smallheading",
+      title: "Small Heading",
+      type: "string",
+      description: "",
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "title",
+      title: "Title",
+      type: "string",
+      description: "Main heading (e.g., Run Your Business From Anywhere.)",
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: "highlightedWord",
+      title: "Highlighted Word",
+      type: "string",
+      description: "Word inside the title that should be highlighted (e.g., Business)",
+    }),
+    defineField({
+      name: "subtitle",
+      title: "Subtitle",
+      type: "text",
+      rows: 3,
+      description: "Supporting text under the heading.",
+    }),
+    // Search Bar
+    defineField({
+      name: "searchPlaceholder",
+      title: "Search Placeholder",
+      type: "string",
+      initialValue: "Address, City or Zip Code...",
+    }),
+    defineField({
+      name: "searchButtonText",
+      title: "Search Button Text",
+      type: "string",
+      initialValue: "Search",
+    }),
+    // Trusted By Section
+    defineField({
+      name: "trustedText",
+      title: "Trusted Text",
+      type: "string",
+      initialValue: "Trusted by over 10,000+ professionals",
+    }),
+    defineField({
+      name: "trustedAvatars",
+      title: "Trusted Avatars",
+      type: "array",
+      of: [{ type: "image" }],
       options: { hotspot: true },
     }),
- 
-    // ✅ Menu with optional submenus
+    // Features List
+   defineField({
+  name: "features",
+  title: "Features",
+  type: "array",
+  of: [
     defineField({
-      name: "menu",
-      title: "Menu",
-      type: "array",
-      of: [
+      name: "feature",
+      title: "Feature",
+      type: "object",
+      fields: [
         {
-          name: "menuItem",
-          title: "Menu Item",
-          type: "object",
-          fields: [
-            defineField({ name: "label", title: "Label", type: "string" }),
-            defineField({ name: "url", title: "URL", type: "string" }),
-            defineField({
-              name: "hasSubmenu",
-              title: "Has Submenu?",
-              type: "boolean",
-              initialValue: false,
-            }),
-            defineField({
-              name: "subMenu",
-              title: "Sub Menu",
-              type: "array",
-              hidden: ({ parent }) => !parent?.hasSubmenu,
-              of: [
-                {
-                  name: "subLink",
-                  title: "Sub Link",
-                  type: "object",
-                  fields: [
-                    defineField({ name: "label", title: "Label", type: "string" }),
-                    defineField({ name: "url", title: "URL", type: "string" }),
-                  ],
-                },
-              ],
-            }),
-          ],
+          name: "icon",
+          title: "Icon",
+          type: "image",
+          description: "Feature icon",
+          options: { hotspot: true },
+        },
+        {
+          name: "title",
+          title: "Title",
+          type: "string",
+          description: "Feature title (e.g., Real Street Addresses)",
+        },
+       
+        {
+          name: "tooltipTitle",
+          title: "Tooltip Title",
+          type: "string",
+          description: "Title that appears on hover (tooltip) for this icon",
         },
       ],
     }),
- 
-    // ✅ 2 Icons
+  ],
+}),
+    // Right Side Image 1
     defineField({
-      name: "icon1",
-      title: "Icon 1",
-      type: "image",
-      options: { hotspot: true },
-    }),
-    defineField({
-      name: "icon2",
-      title: "Icon 2",
-      type: "image",
-      options: { hotspot: true },
-    }),
- 
-    // ✅ Login button
-    defineField({
-      name: "loginButton",
-      title: "Login Button",
+      name: "rightImage1",
+      title: "Right Side Image 1",
       type: "object",
       fields: [
-        defineField({ name: "label", type: "string", title: "Label" }),
-        defineField({ name: "link", type: "url", title: "Link" }),
+        {
+          name: "image",
+          title: "Image",
+          type: "image",
+          options: { hotspot: true },
+        },
+        {
+          name: "overlayText",
+          title: "Overlay Text",
+          type: "string",
+          description: "Optional floating text (e.g., Your Cheques is cleared successfully)",
+        },
+        {
+          name: "icon",
+          title: "Icon",
+          type: "image",
+          description: "Text icon",
+          options: { hotspot: true },
+        }
       ],
     }),
- 
-    // ✅ Get Started button
+    // Right Side Image 2
     defineField({
-      name: "getStartedButton",
-      title: "Get Started Button",
+      name: "rightImage2",
+      title: "Right Side Image 2",
       type: "object",
       fields: [
-        defineField({ name: "label", type: "string", title: "Label" }),
-        defineField({ name: "link", type: "url", title: "Link" }),
+        {
+          name: "image",
+          title: "Image",
+          type: "image",
+          options: { hotspot: true },
+        },
+        {
+          name: "overlayText",
+          title: "Overlay Text",
+          type: "string",
+          description: "Optional floating text (e.g., Your Cheques is cleared successfully)",
+        },
+        {
+          name: "icon",
+          title: "Icon",
+          type: "image",
+          description: "Text icon",
+          options: { hotspot: true },
+        }
       ],
     }),
   ],
- 
-  // ✅ Preview config for Studio
   preview: {
     select: {
-      media: "logo",
-      login: "loginButton.label",
-      getStarted: "getStartedButton.label",
-      firstMenu: "menu.0.label",
+      title: 'heading',
+      subtitle: 'title',
     },
-    prepare({ media, login, getStarted, firstMenu }) {
+    prepare({ title, subtitle }) {
       return {
-        title: "Header",
-        subtitle: `Menu: ${firstMenu || "N/A"} | Login: ${
-          login || "N/A"
-        } | Get Started: ${getStarted || "N/A"}`,
-        media,
-      };
+        title: title || 'Business Section',
+        subtitle: subtitle || 'No title set',
+      }
     },
   },
-});
+})
