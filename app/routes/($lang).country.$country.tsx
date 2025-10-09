@@ -4,7 +4,7 @@ import {useEffect, useRef, useState} from 'react';
 import ArrowRightCountries from '~/components/icons/ArrowRightCountries';
 import LeftArrowBlack from '~/components/icons/LeftArrowBlack';
 
-// Loader
+// 🔹 Loader
 export async function loader({context, params}: LoaderFunctionArgs) {
   const {country} = params;
   if (!country) throw new Response('Country not found', {status: 404});
@@ -52,27 +52,50 @@ export async function loader({context, params}: LoaderFunctionArgs) {
   return defer({decodedCountry, states, locations});
 }
 
-// 🔹 Map Component
-function CountryMap({locations, onMarkerClick}: {locations: any[]; onMarkerClick: (loc: any) => void}) {
+// 🔹 Google Map Component (reused from LocationsList.tsx)
+function CountryMap({
+  locations,
+  onMarkerClick,
+}: {
+  locations: any[];
+  onMarkerClick: (loc: any) => void;
+}) {
   const mapRef = useRef<HTMLDivElement>(null);
+  const mapInstance = useRef<google.maps.Map | null>(null);
+  const markersRef = useRef<google.maps.Marker[]>([]);
+  const boundsRef = useRef<google.maps.LatLngBounds | null>(null);
 
   useEffect(() => {
     if (!window.google || !mapRef.current) return;
 
-    const bounds = new google.maps.LatLngBounds();
-    const map = new google.maps.Map(mapRef.current, {
-      zoom: 5,
-      center: {lat: 20, lng: 0},
-      mapTypeControl: false,
-    });
+    // Initialize map once
+    if (!mapInstance.current) {
+      mapInstance.current = new google.maps.Map(mapRef.current, {
+        center: {lat: 20, lng: 0},
+        zoom: 4,
+        mapTypeControl: false,
+        streetViewControl: false,
+        fullscreenControl: false,
+        zoomControl: false, // using custom buttons
+      });
+    }
 
+    const map = mapInstance.current;
+    boundsRef.current = new google.maps.LatLngBounds();
+
+    // Clear old markers
+    markersRef.current.forEach((m) => m.setMap(null));
+    markersRef.current = [];
+
+    // Add new markers
     locations.forEach((loc) => {
       if (!loc.latitude || !loc.longitude) return;
 
       const marker = new google.maps.Marker({
         position: {lat: loc.latitude, lng: loc.longitude},
         map,
-        title: `${loc.name || loc.city}`,
+        title: loc.name || loc.city,
+        optimized: true,
       });
 
       const infoWindow = new google.maps.InfoWindow({
@@ -90,16 +113,61 @@ function CountryMap({locations, onMarkerClick}: {locations: any[]; onMarkerClick
         onMarkerClick(loc);
       });
 
-      bounds.extend(marker.getPosition()!);
+      markersRef.current.push(marker);
+      boundsRef.current?.extend(marker.getPosition()!);
     });
 
-    if (locations.length) map.fitBounds(bounds);
+    // Fit map to all markers
+    if (locations.length > 0) {
+      map.fitBounds(boundsRef.current!);
+    }
+
+    // Cleanup
+    return () => {
+      markersRef.current.forEach((m) => m.setMap(null));
+      markersRef.current = [];
+    };
   }, [locations, onMarkerClick]);
 
-  return <div ref={mapRef} className="w-full h-[750px] rounded-xl" />;
+  // 🔹 Custom zoom controls
+  const handleZoomIn = () => {
+    if (mapInstance.current) {
+      mapInstance.current.setZoom(mapInstance.current.getZoom()! + 1);
+    }
+  };
+
+  const handleZoomOut = () => {
+    if (mapInstance.current) {
+      mapInstance.current.setZoom(mapInstance.current.getZoom()! - 1);
+    }
+  };
+
+  return (
+    <div className="relative w-full h-[750px] rounded-xl overflow-hidden">
+      <div ref={mapRef} className="w-full h-full" />
+
+      {/* Zoom buttons */}
+      <div className="absolute top-4 right-4 flex flex-col bg-white rounded-lg shadow-md overflow-hidden z-10">
+        <button
+          onClick={handleZoomIn}
+          className="p-2 border-b hover:bg-gray-100 transition"
+          aria-label="Zoom in"
+        >
+          +
+        </button>
+        <button
+          onClick={handleZoomOut}
+          className="p-2 hover:bg-gray-100 transition"
+          aria-label="Zoom out"
+        >
+          −
+        </button>
+      </div>
+    </div>
+  );
 }
 
-// 🔹 Main Component
+// 🔹 Main Page
 export default function CountryPage() {
   const {decodedCountry, states, locations} = useLoaderData<typeof loader>();
   const navigate = useNavigate();
@@ -114,7 +182,7 @@ export default function CountryPage() {
   return (
     <div className="flex flex-col min-h-screen bg-white relative">
       <main className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-7xl mx-auto w-full pt-10 pb-16 px-5">
-        {/* Left Column - List View */}
+        {/* Left Column */}
         <aside
           className={`rounded-xl shadow-sm transition-all duration-300 ${
             showMap ? 'hidden md:block' : 'block'
@@ -134,7 +202,7 @@ export default function CountryPage() {
             </h1>
           </div>
 
-          {/* State list */}
+          {/* States List */}
           <ul className="space-y-8">
             {states.map((state, index) => (
               <div
@@ -157,11 +225,11 @@ export default function CountryPage() {
           </ul>
         </aside>
 
-        {/* Right Column - Map View */}
+        {/* Right Column - Map */}
         <section
           className={`rounded-xl shadow-sm overflow-hidden transition-all duration-300 ${
             showMap ? 'block' : 'hidden md:block'
-          } ${showMap ? 'relative z-0' : 'z-0'}`}
+          }`}
         >
           <CountryMap
             locations={locations}
@@ -170,7 +238,7 @@ export default function CountryPage() {
         </section>
       </main>
 
-      {/* Toggle button for mobile */}
+      {/* Toggle for mobile */}
       <div className="md:hidden fixed bottom-6 left-0 right-0 flex justify-center z-50">
         <button
           onClick={() => setShowMap(!showMap)}

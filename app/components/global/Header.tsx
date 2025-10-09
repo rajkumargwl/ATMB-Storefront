@@ -56,25 +56,25 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
   }, [searchQuery, searchResults]);
 
   // Sync search input to URL
-  useEffect(() => {
-    if (skipSearchSync) return;
+  // useEffect(() => {
+  //   if (skipSearchSync) return;
 
-    const params = new URLSearchParams(location.search);
+  //   const params = new URLSearchParams(location.search);
 
-    if (!query.trim()) {
-      params.delete("q");
-      navigate(`?${params.toString()}`, { replace: true });
-      setResults([]);
-      return;
-    }
+  //   // if (!query.trim()) {
+  //   //   params.delete("q");
+  //   //   navigate(`?${params.toString()}`, { replace: true });
+  //   //   setResults([]);
+  //   //   return;
+  //   // }
 
-    const timeout = setTimeout(() => {
-      params.set("q", query);
-      navigate(`?${params.toString()}`, { replace: true });
-    }, 500);
+  //   // const timeout = setTimeout(() => {
+  //   //   params.set("q", query);
+  //   //   navigate(`?${params.toString()}`, { replace: true });
+  //   // }, 500);
 
-    return () => clearTimeout(timeout);
-  }, [query, navigate, location.search, skipSearchSync]);
+  //   //return () => clearTimeout(timeout);
+  // }, [query, navigate, location.search, skipSearchSync]);
     const handleResultClick = (item: any) => {
     setSkipSearchSync(true);
     setQuery("");

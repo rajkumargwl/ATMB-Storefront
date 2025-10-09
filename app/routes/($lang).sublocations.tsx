@@ -16,7 +16,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
   if (!header || !footer) throw notFound();
 
   const url = new URL(request.url);
-  const q = url.searchParams.get('q') || '';
+  const q = url.searchParams.get('q');
   console.log("Search query:", q);
 
   let results = {locations: [] as LocationAPI[]};
