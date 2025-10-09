@@ -29,7 +29,7 @@ export const header = defineType({
           type: "object",
           fields: [
             defineField({ name: "label", title: "Label", type: "string" }),
-            defineField({ name: "url", title: "URL", type: "url" }),
+            defineField({ name: "url", title: "URL", type: "string" }),
             defineField({
               name: "hasSubmenu",
               title: "Has Submenu?",
@@ -48,7 +48,7 @@ export const header = defineType({
                   type: "object",
                   fields: [
                     defineField({ name: "label", title: "Label", type: "string" }),
-                    defineField({ name: "url", title: "URL", type: "url" }),
+                    defineField({ name: "url", title: "URL", type: "string" }),
                   ],
                 },
               ],
