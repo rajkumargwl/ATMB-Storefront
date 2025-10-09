@@ -60,7 +60,7 @@ console.log("decodedCountry, decodedState", decodedCountry, decodedState);
           authorName: "John Doe",
           authorTitle: "Founder, Startup Co.",
           authorImage: {
-            url: "https://randomuser.me/api/portraits/men/12.jpg",
+            url: "https://cdn.sanity.io/images/m5xb8z9y/production/6c6013ec1d9c25ee9d2a190fe7e936188ac4934b-64x64.png",
           },
           starIcon: {
             url: "https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg",
@@ -77,7 +77,7 @@ console.log("decodedCountry, decodedState", decodedCountry, decodedState);
           authorName: "Jane Smith",
           authorTitle: "Marketing Lead, Creative Inc.",
           authorImage: {
-            url: "https://randomuser.me/api/portraits/women/44.jpg",
+            url: "https://cdn.sanity.io/images/m5xb8z9y/production/6c6013ec1d9c25ee9d2a190fe7e936188ac4934b-64x64.png",
           },
           starIcon: {
             url: "https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg",
@@ -92,7 +92,7 @@ console.log("decodedCountry, decodedState", decodedCountry, decodedState);
           authorName: "Raj Patel",
           authorTitle: "Product Designer, UX Labs",
           authorImage: {
-            url: "https://randomuser.me/api/portraits/men/32.jpg",
+            url: "https://cdn.sanity.io/images/m5xb8z9y/production/6c6013ec1d9c25ee9d2a190fe7e936188ac4934b-64x64.png",
           },
           starIcon: {
             url: "https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg",
@@ -100,7 +100,7 @@ console.log("decodedCountry, decodedState", decodedCountry, decodedState);
           rating: "4.9",
           videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
           videoThumbnail: {
-            url: "https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+            url: "https://cdn.sanity.io/images/m5xb8z9y/production/4da40797caf56c12fe5e95816470cb198b95f1a6-349x250.png",
           },
           playIcon: {
             url: "https://cdn.sanity.io/files/m5xb8z9y/production/9107bb3818c3b05330736ec84ea60379f1eb6221.svg",
@@ -215,7 +215,7 @@ export default function StatePage() {
         <div className="max-w-[1240px] mx-auto flex flex-col md:flex-row gap-[44px] lg:gap-[142px] items-center">
           
           {/* Image Section */}
-          <div className="w-full md:w-[50.3%] relative order-2 md:order-1">
+          <div className="w-full md:w-[50.3%] relative order-1 md:order-1">
             <img
               src="https://cdn.sanity.io/images/m5xb8z9y/production/0a914c1742706760c5b68605cfccf1ea143c86e9-550x446.png"
               alt="How it started"
@@ -224,7 +224,7 @@ export default function StatePage() {
           </div>
 
           {/* Text Section */}
-          <div className="w-full md:w-[49.7%] space-y-4 order-1 md:order-2">
+          <div className="w-full md:w-[49.7%] space-y-4 order-1 md:order-1">
             <h2 className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px]">
             Why Get a Mailing Address in<br/><span className='text-[#FF6600]'>New South Wales</span> 
             </h2>
@@ -248,7 +248,7 @@ export default function StatePage() {
         <div className="max-w-[1240px] mx-auto">
           {/* Heading */}
           <div className="flex flex-col gap-5 max-w-[850px] mx-auto">
-            <h2 className="font-Roboto text-white font-semibold leading-[31.2px] md:leading-[43.2px] text-[26px] md:text-[36px] tracking-[-0.39px] md:tracking-[-0.54px] text-center">
+            <h2 className="font-Roboto text-white font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.39px] md:tracking-[-0.54px] text-center">
               {dummyBusinessData?.headline}
             </h2>
           </div>
@@ -304,7 +304,7 @@ export default function StatePage() {
       <section className="w-full bg-white">
       {/* ==== Video Section ==== */}
       <div className="w-full bg-white py-10 md:py-16 flex justify-center">
-        <div className="w-full max-w-[1184px] aspect-video rounded-[10px] overflow-hidden shadow-lg h-[665px]">
+        <div className="w-full md:w-[1184px] aspect-video rounded-[10px] overflow-hidden shadow-lg md:h-[665px] h-[199px] w-[353px]">
         <iframe className='w-full h-full' src="https://www.youtube.com/embed/TJArEqaZgnA?rel=0" title="Anytime Mailbox Digital Mailbox Features" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
         </div>
       </div>
@@ -560,12 +560,12 @@ export default function StatePage() {
       {/* // Testimonials Section */}
 
 
-      <section className="relative bg-[#FF6600] px-6 md:px-12 overflow-hidden">
-        <div className="relative max-w-[1240px] mx-auto flex items-center justify-between h-[363px]">
-          
+      <section className="relative bg-[#FF6600] md:px-12 overflow-hidden">
+        <div className="relative max-w-[1240px] mx-auto flex flex-col md:flex-row justify-between h-auto md:h-[363px]">
+
           {/* Left Text */}
-          <div className="z-10 text-center md:text-left">
-            <h2 className="text-white font-Roboto font-[600] text-[28px] md:text-[56px] leading-[61.6px] tracking-[-1.12px] mb-6">
+          <div className="z-10 text-left mb-6 px-5 md:px-0 md:mb-0 order-1 mt-10 md:mt-0 pt-0 md:pt-25">
+            <h2 className="text-white font-Roboto font-[600] text-[28px] md:text-[56px] leading-[38px] md:leading-[61.6px] tracking-[-1.12px] md:mb-6 mb-4">
               Plans start at $9.99
             </h2>
             <button className="bg-white text-[#041E2C] font-[400] text-[16px] leading-[16px] tracking-[0.08px] px-5 py-4 rounded-full hover:bg-gray-100 transition">
@@ -573,17 +573,18 @@ export default function StatePage() {
             </button>
           </div>
 
-          {/* Right Image (Inside 1240px Container) */}
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 md:static md:translate-y-0 flex justify-end w-full md:w-auto">
+          {/* Right Image (Responsive position) */}
+          <div className="order-2 md:order-2 px-5 flex justify-center items-center md:justify-end w-full md:w-auto">
             <img
               src={require('~/components/media/boy-city.svg')}
               alt="Person checking phone"
-              className="h-full max-h-[363px] w-auto object-contain md:max-w-[500px]"
+              className="w-full max-w-[400px] md:max-w-[500px] h-auto object-contain"
             />
           </div>
 
         </div>
       </section>
+
 
 
 
