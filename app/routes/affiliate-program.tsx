@@ -38,11 +38,11 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
     query: AFFILIATE_PAGE_QUERY,
   });
 
-   console.log("Sanity page:", JSON.stringify(page, null, 2));
 
-  // if (!page) {
-  //   throw notFound(); // fallback if page doesn't exist
-  // }
+
+  if (!page) {
+    throw notFound(); // fallback if page doesn't exist
+  }
 
   const gids = fetchGids({ page, context });
 
