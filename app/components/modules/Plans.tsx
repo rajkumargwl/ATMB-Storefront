@@ -57,7 +57,7 @@ type PricingModuleProps = {
     { 
       id: "individual",
       tabName: "Individual Products", 
-      // heading: data.individualProductsTab.heading, 
+      heading: data.individualProductsTab.heading, 
       description: data.individualProductsTab.description, 
       tabCards: data.individualProductsTab.plans || [] 
     },
@@ -308,8 +308,8 @@ type PricingModuleProps = {
                     
                   })}
 
-  </div>
-</div>
+            </div>
+          </div>
 
         {/* Tab Panels */}
         <div 
