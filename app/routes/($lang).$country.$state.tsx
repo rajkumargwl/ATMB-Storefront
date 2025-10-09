@@ -95,7 +95,7 @@ console.log("decodedCountry, decodedState", decodedCountry, decodedState);
             url: "https://cdn.sanity.io/images/m5xb8z9y/production/6c6013ec1d9c25ee9d2a190fe7e936188ac4934b-64x64.png",
           },
           starIcon: {
-            url: "https://upload.wikimedia.org/wikipedia/commons/1/18/Five-pointed_star.svg",
+            url: "https://cdn.sanity.io/files/m5xb8z9y/production/c543ab461d31dac8d7435372643c376b63e5623a.svg",
           },
           rating: "4.9",
           videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
@@ -205,6 +205,26 @@ export default function StatePage() {
     };
     // Testimonial slider data
 
+
+    const [showButton, setShowButton] = useState(false);
+
+    // Show button only after scrolling down
+    useEffect(() => {
+      const handleScroll = () => {
+        if (window.scrollY > 300) {
+          setShowButton(true);
+        } else {
+          setShowButton(false);
+        }
+      };
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
+    }, []);
+
+    // Scroll to top smoothly
+    const scrollToTop = () => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    };
 
    
     return (
@@ -610,7 +630,20 @@ export default function StatePage() {
 
 
 
-
+      {/* Floating Scroll to Top Button */}
+      {showButton && (
+        <button
+          onClick={scrollToTop}
+          className="fixed bottom-6 right-6 bg-[#FF6600] text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-2 transition-all hover:bg-[#e45a00] z-50"
+        >
+          <span className="text-[16px] leading-[16px]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="8" viewBox="0 0 14 8" fill="none">
+              <path d="M6.57672 0.976133C6.80922 0.743633 7.19172 0.743633 7.42422 0.976133L13.4242 6.97613C13.6567 7.20863 13.6567 7.59113 13.4242 7.82363C13.1917 8.05613 12.8092 8.05613 12.5767 7.82363L7.00047 2.24738L1.42422 7.82363C1.19172 8.05613 0.809219 8.05613 0.576719 7.82363C0.344219 7.59113 0.344219 7.20863 0.576719 6.97613L6.57672 0.976133Z" fill="white"/>
+            </svg>
+          </span>
+          <span>Get a {locations[0]?.city} Address</span>
+        </button>
+      )}
       </>
     );
 
