@@ -65,7 +65,8 @@ import BusinessGrowth from '~/components/modules/BusinessGrowth';
 import BusinessSupport from '~/components/modules/BusinessSupport';
 import BusinessBanner from '~/components/modules/BusinessBanner';
 import WebinarsTopicsSection from '~/components/modules/WebinarsTopicsSection';
-
+import NoOfficeSection from '~/components/modules/NoOfficeSection';
+import  AnytimeFeaturesModule from '~/components/modules/AnytimeFeaturesModule';
 // type Props = {
 //   imageAspectClassName?: string;
 //   module: SanityModule;
@@ -87,7 +88,22 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
 
   switch (module._type) {
    
-     
+
+      case 'anytimePhone':
+  return (
+    <>
+      {module.modules?.map((sub: any) => (
+        <Module key={sub._key} module={sub} />
+      ))}
+    </>
+  );
+  //  case 'solutionHeroModule':
+  //   return <SolutionHero data={module} />;
+  case 'noOfficeSection':
+  return <NoOfficeSection {...module} />;
+  case 'featuresSection':
+  return <AnytimeFeaturesModule {...module} />;
+
     // Add this case to your switch statement
    case 'acceleratorPageModule':
   return (
@@ -97,6 +113,7 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
       ))}
     </>
   );
+
   
     case 'businessAcceleratorSection':
     return <BusinessAcceleratorSection data={module} />;
@@ -352,8 +369,8 @@ case 'solutionMailboxBenefitFaqModule':
     case 'homeSection4':
       return <Locations data={module} />;
     
-    case 'plans':
-      return <Plans data={module} bundles={bundles}/>;
+    // case 'plans':
+    //   return <Plans data={module} bundles={bundles}/>;
     
     case 'bundles':
       return <Bundles data={module} />;
