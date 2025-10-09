@@ -1,6 +1,6 @@
 import groq from "groq";
 
-export const BUSINESS_ACCELERATOR_MODULE = groq`
+export const ANYTIME_PHONE_MODULE = groq`
 
   _type,
   _key,
@@ -8,7 +8,66 @@ export const BUSINESS_ACCELERATOR_MODULE = groq`
     _type,
     _key,
 
-    // 🔸 Banner Section
+    (_type == "solutionHeroModule") => {
+      heading,
+      highlightText,
+      description,
+      cta {
+        label,
+        url,
+        variant
+      },
+      trustSection {
+        text,
+        avatars[] {
+          "url": asset->url
+        },
+        licensedText,
+        licensedIcon {
+          "url": asset->url
+        }
+      },
+      rightImage {
+        "url": asset->url
+      },
+      overlayOne {
+        title,
+        subtitle,
+        icon {
+          "url": asset->url
+        }
+      },
+      overlayTwo {
+        title,
+        subtitle,
+        icon {
+          "url": asset->url
+        }
+      }
+    },
+    
+      // 🔸 Transformation Section
+    (_type == "businessTransformationSection") => {
+      title,
+       "cards":items[] {
+        heading,
+        description,
+        icon {
+          "url": asset->url
+        }
+      }
+    },
+    
+// 🔹 No Office or Secretary Section
+    (_type == "noOfficeSection") => {
+      title,
+      description,
+      "features": features[] {
+        text
+      },
+      "image": image.asset->url
+    },
+ // 🔸 Banner Section
     (_type == "businessAcceleratorBannerSection") => {
       title,
       cta {
@@ -19,19 +78,6 @@ export const BUSINESS_ACCELERATOR_MODULE = groq`
         "url": asset->url
       },
      
-    },
-
-    // 🔸 Business Accelerator Section
-    (_type == "businessAcceleratorSection") => {
-      title,
-      description,
-      cta {
-        label,
-        url
-      },
-      image {
-        "url": asset->url
-      }
     },
 
     // 🔸 How It Works Section
@@ -46,95 +92,16 @@ export const BUSINESS_ACCELERATOR_MODULE = groq`
         }
       }
     },
-
-    // 🔸 Growth Toolkit Section
-    (_type == "businessGrowthToolkitSection") => {
+      // 🔸 Features Section
+    (_type == "featuresSection") => {
       title,
       subtitle,
-      features[] {
-        title,
-        description,
-        icon {
-          "url": asset->url
-        }
-      },
-      sideImage {
-        "url": asset->url
+      "featureCategories": featureCategories[] {
+        categoryTitle,
+        "icon": icon.asset->url,
+        points[]
       }
     },
-
-    // 🔸 Profit Section
-    (_type == "businessProfitSection") => {
-      title,
-      features[] {
-        heading,
-        description,
-        icon {
-          "url": asset->url
-        }
-      },
-      sideImage {
-        "url": asset->url
-      },
-      testimonials[] {
-        quote,
-        name,
-        role,
-        avatar {
-          "url": asset->url
-        }
-      }
-    },
-
-    // 🔸 Strategy (Video) Section
-    (_type == "businessStrategySection") => {
-      title,
-      description,
-      videoThumbnail {
-        "url": asset->url
-      },
-      videoLink,
-      label
-    },
-
-    // 🔸 Support Section
-    (_type == "businessSupportSection") => {
-      title,
-      description,
-      cta {
-        label,
-        url
-      },
-      sideImage {
-        "url": asset->url
-      }
-    },
-
-    // 🔸 Transformation Section
-    (_type == "businessTransformationSection") => {
-      title,
-       "cards":items[] {
-        heading,
-        description,
-        icon {
-          "url": asset->url
-        }
-      }
-    },
-
-    // 🔸 Webinars Topics Section
-    (_type == "webinarsTopicsSection") => {
-      title,
-      description,
-      topics[] {
-        heading,
-        points,
-        icon {
-          "url": asset->url
-        }
-      }
-    },
-
     // 🔸 Testimonials (Thousand Trust)
     (_type == "testimonial") => {
       headline,
@@ -162,7 +129,6 @@ export const BUSINESS_ACCELERATOR_MODULE = groq`
         }
       }
     },
-
     // 🔸 FAQ Section
     (_type == "faq") => {
       headline,
@@ -172,7 +138,6 @@ export const BUSINESS_ACCELERATOR_MODULE = groq`
         answer
       }
     },
-
     // 🔸 PLANS Section
     (_type == "plansSection") => {
       // Individual Products Tab

@@ -13,18 +13,17 @@ import { Suspense } from 'react';
 
 import ModuleGrid from '~/components/modules/ModuleGrid';
 import { fetchGids, notFound, validateLocale } from '~/lib/utils';
-
-// 👇 import the Affiliate PAGE query
-import { AFFILIATE_PAGE_QUERY } from '~/queries/sanity/fragments/pages/affiliatedprogrampage';
+import { ANYTIME_PHONE_PAGE_QUERY } from '~/queries/sanity/fragments/pages/anytimePhonepage';
 
 // -----------------
 // SEO
 // -----------------
 const seo: SeoHandleFunction = ({ data }) => ({
-  title: data?.page?.seo?.title || 'Affiliate Program - Sanity x Hydrogen',
+  title:
+    data?.page?.seo?.title || 'Anytime Phone - Sanity x Hydrogen',
   description:
     data?.page?.seo?.description ||
-    'Join our affiliate program and start earning today.',
+    'Explore the Anytime Phone solutions powered by Sanity and Hydrogen.',
 });
 export const handle = { seo };
 
@@ -34,15 +33,12 @@ export const handle = { seo };
 export async function loader({ context, params }: LoaderFunctionArgs) {
   validateLocale({ context, params });
 
+  // Fetch the page data from Sanity
   const page = await context.sanity.query({
-    query: AFFILIATE_PAGE_QUERY,
+    query: ANYTIME_PHONE_PAGE_QUERY,
   });
 
-
-
-  if (!page) {
-    throw notFound(); // fallback if page doesn't exist
-  }
+//   if (!page) throw notFound();
 
   const gids = fetchGids({ page, context });
 
@@ -53,20 +49,19 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
   });
 }
 
-
 // -----------------
 // Component
 // -----------------
-export default function AffiliateProgram() {
+export default function AnytimePhonePage() {
   const { page, gids } = useLoaderData<typeof loader>();
 
   return (
-    <SanityPreview data={page} query={AFFILIATE_PAGE_QUERY}>
+    <SanityPreview data={page} query={ANYTIME_PHONE_PAGE_QUERY}>
       {(page) => (
         <Suspense>
           <Await resolve={gids}>
             {page?.modules && page.modules.length > 0 && (
-             <div className={clsx('mb-0 mt-0 px-0', 'md:px-0')}>
+              <div className={clsx('mb-0 mt-0 px-0', 'md:px-0')}>
                 <ModuleGrid items={page.modules} />
               </div>
             )}
