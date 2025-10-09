@@ -3,7 +3,7 @@ import { useLoaderData, Link } from "@remix-run/react";
 import { Image } from "@shopify/hydrogen";
 import { useState } from "react";
 import { PortableText } from "@portabletext/react";
-
+ 
 export async function loader({ context }: LoaderFunctionArgs) {
   const newsItems = await context.sanity.query({
     query: `*[_type == "news"] | order(date desc) {
@@ -22,11 +22,11 @@ export async function loader({ context }: LoaderFunctionArgs) {
       }
     }`,
   });
-
+ 
   if (!newsItems || newsItems.length === 0) {
     return json({ allCards: [] });
   }
-
+ 
   const allCards = newsItems.map((item: any) => ({
     heading: item.title,
     description: item.description,
@@ -34,14 +34,14 @@ export async function loader({ context }: LoaderFunctionArgs) {
     logo: item.logoImage,
     externalLink: `/newsroom/${item.slug}`,
   }));
-
+ 
   return json({ allCards });
 }
-
+ 
 export default function Newsroom() {
   const { allCards } = useLoaderData<typeof loader>();
   const [visibleCount, setVisibleCount] = useState(6);
-
+ 
   // Group all cards by year
   const groupedByYear: Record<string, any[]> = {};
   allCards.forEach((card) => {
@@ -49,69 +49,83 @@ export default function Newsroom() {
     if (!groupedByYear[year]) groupedByYear[year] = [];
     groupedByYear[year].push(card);
   });
-
+ 
   // Convert grouped object to sorted array
   const groupedArray = Object.entries(groupedByYear)
     .sort((a, b) => parseInt(b[0]) - parseInt(a[0]))
     .map(([year, cards]) => ({ year, cards }));
-
+ 
   // Slice first N (visibleCount) items while keeping year grouping
   const visibleGroups: typeof groupedArray = [];
   let count = 0;
-
+ 
   for (const group of groupedArray) {
     if (count >= visibleCount) break;
-
+ 
     const remaining = visibleCount - count;
     const slicedCards = group.cards.slice(0, remaining);
     visibleGroups.push({ year: group.year, cards: slicedCards });
-
+ 
     count += slicedCards.length;
   }
-
+ 
   const hasMore = allCards.length > visibleCount;
-
+ 
   const handleLoadMore = () => setVisibleCount((prev) => prev + 6);
-
+ 
   const formatDate = (dateString: string) =>
     new Date(dateString).toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
       year: "numeric",
     });
-
+ 
   return (
-    <div className="min-h-screen bg-white">
-      <main className="container mx-auto px-4 py-8 lg:py-12 lg:px-8">
-        <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen">
+      <main className="">
+        <div className="">
           {/* Header */}
-          <header className="flex justify-between items-center mb-12 pb-6 border-b border-gray-200">
-            <h1 className="text-4xl font-bold text-gray-900">Newsroom</h1>
-            <a
-              href="/media-kit"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
-            >
-              Media Kit
-            </a>
+          <header className="bg-white py-[40px] md:py-[60px] px-5">
+            <div className="max-w-[1240px] mx-auto flex items-center justify-between">
+            <h1 className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[61.6px] text-[24px] md:text-[56px] tracking-[-0.36px] md:tracking-[-1.12px]">Newsroom</h1>
+              <a
+                href="/media-kit"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center font-Roboto text-DarkOrange font-normal leading-[16px] text-[16px] tracking-[0.08px] px-4 py-3 h-[44px] md:h-[52px] min-w-[130px]"
+              >
+                Media Kit
+              </a>
+            </div>
           </header>
-
+ 
           {/* News grouped by year */}
-          <div className="space-y-12">
+          <div className="bg-[#F6F6F6] pt-[40px] pb-[40px] md:pb-[60px] lg:pb-[100px] px-5">
+            <div className="max-w-[1240px] mx-auto ">
+          <div className="space-y-8">
             {visibleGroups.map(({ year, cards }) => (
               <section key={year}>
-                <h2 className="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
+                <h2 className="font-Roboto text-LightGray font-normal leading-[27px] text-[18px] tracking-[0px] mb-[32px]">
                   {year}
                 </h2>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+ 
+                <div className="max-w-[1212px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-6 items-stretch">
+                  
                   {cards.map((card, idx) => (
+                    <Link
+                            to={card.externalLink}
+                            className="flex md:min-h-[358px]"
+                          >
                     <article
                       key={idx}
-                      className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-lg transition-shadow"
+                      className="bg-white group border border-LightWhite rounded-[20px] p-6 hover:border-PrimaryBlack relative overflow-hidden"
                     >
-                      <div className="flex justify-between items-start mb-4">
+                        <div className='absolute right-[20px] top-[20px] flex items-center justify-center gap-2 w-[48px] h-[48px] rounded-full bg-DarkOrange transition-all opacity-0 group-hover:opacity-100'>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 25 24" fill="none">
+                                          <path d="M19.0989 4.80005C19.4289 4.80005 19.6989 5.07005 19.6989 5.40005V15C19.6989 15.33 19.4289 15.6 19.0989 15.6C18.7689 15.6 18.4989 15.33 18.4989 15V6.84755L6.32266 19.0238C6.09016 19.2563 5.70766 19.2563 5.47516 19.0238C5.24266 18.7913 5.24266 18.4088 5.47516 18.1763L17.6514 6.00005H9.49891C9.16891 6.00005 8.89891 5.73005 8.89891 5.40005C8.89891 5.07005 9.16891 4.80005 9.49891 4.80005H19.0989Z" fill="white"/>
+                                        </svg>
+                        </div>
+                      <div className="flex flex-col items-start gap-6 mb-2">
                         {card.logo && (
                           <div className="flex-shrink-0">
                             <Image
@@ -122,15 +136,15 @@ export default function Newsroom() {
                                 width: card.logo.asset.metadata?.dimensions?.width,
                                 height: card.logo.asset.metadata?.dimensions?.height,
                               }}
-                              className="h-10 w-auto max-w-[120px] object-contain"
+                              className="!w-[89px] h-[46px] object-contain"
                             />
                           </div>
                         )}
-
-                        <div className="flex items-center gap-2 text-gray-600 text-sm">
+ 
+                        <div className="flex items-center gap-1">
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4 text-gray-500"
+                            className="h-5 w-5 text-gray-500"
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke="currentColor"
@@ -143,60 +157,61 @@ export default function Newsroom() {
                             />
                           </svg>
                           {card.date && (
-                            <time dateTime={card.date} className="whitespace-nowrap">
+                            <time dateTime={card.date} className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">
                               {formatDate(card.date)}
                             </time>
                           )}
                         </div>
                       </div>
-
+ 
                       <div>
-                        <h3 className="text-xl font-semibold text-gray-900 mb-3 leading-tight">
-                          <Link
-                            to={card.externalLink}
-                            className="hover:text-blue-600 transition-colors block"
-                          >
+                        <h3 className="mb-2 font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[31.2px] text-[24px] md:text-[24px] tracking-[-0.36px] md:tracking-[-0.36px]">
+                          
                             {card.heading}
-                          </Link>
+                          
                         </h3>
-
+ 
                         {card.description && (
-                          <div className="text-gray-600 leading-relaxed mb-4 line-clamp-3">
+                          <div className="newsroom-text font-Roboto text-LightGray font-normal leading-[24px] text-[16px] tracking-[0px] line-clamp-2">
                             <PortableText
                               value={card.description}
                               components={{
-                                block: { normal: ({ children }) => <p>{children}</p> },
+                                block: { normal: ({ children }) => <p className="font-Roboto text-LightGray font-normal leading-[24px] text-[16px] tracking-[0px]">{children}</p> },
                               }}
                             />
                           </div>
                         )}
-
+ 
                         <Link
                           to={card.externalLink}
-                          className="inline-block text-blue-600 font-medium hover:text-blue-700 transition-colors"
+                          className="hidden inline-block text-blue-600 font-medium hover:text-blue-700 transition-colors"
                         >
                           Read More →
                         </Link>
                       </div>
                     </article>
+                    </Link>
                   ))}
                 </div>
               </section>
             ))}
           </div>
-
+ 
           {hasMore && (
-            <div className="flex justify-center mt-12 pt-8 border-t border-gray-200">
+            <div className="flex justify-center mt-8">
               <button
                 onClick={handleLoadMore}
-                className="bg-gray-600 px-8 py-3 rounded-lg font-medium hover:bg-gray-700 transition-colors"
+                className="flex items-center justify-center w-[151px] h-[44px] md:h-[52px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-PrimaryBlack border border-[#091019] px-4 py-[12px]"
               >
                 Load More
               </button>
             </div>
           )}
         </div>
+        </div>
+        </div>
       </main>
     </div>
   );
 }
+ 
