@@ -37,7 +37,6 @@ export async function loader({context, params}: LoaderFunctionArgs) {
     }),
   ]);
 
-  // Count states
   const stateMap: Record<string, number> = {};
   locations.forEach((loc: any) => {
     const state = loc.state || 'Unknown';
@@ -52,7 +51,7 @@ export async function loader({context, params}: LoaderFunctionArgs) {
   return defer({decodedCountry, states, locations});
 }
 
-// 🔹 Google Map Component (reused from LocationsList.tsx)
+// 🔹 Google Map Component
 function CountryMap({
   locations,
   onMarkerClick,
@@ -68,7 +67,6 @@ function CountryMap({
   useEffect(() => {
     if (!window.google || !mapRef.current) return;
 
-    // Initialize map once
     if (!mapInstance.current) {
       mapInstance.current = new google.maps.Map(mapRef.current, {
         center: {lat: 20, lng: 0},
@@ -76,7 +74,8 @@ function CountryMap({
         mapTypeControl: false,
         streetViewControl: false,
         fullscreenControl: false,
-        zoomControl: false, // using custom buttons
+        zoomControl: false,
+        gestureHandling: 'cooperative',
       });
     }
 
@@ -87,15 +86,33 @@ function CountryMap({
     markersRef.current.forEach((m) => m.setMap(null));
     markersRef.current = [];
 
+    const markerIcon = {
+      path: google.maps.SymbolPath.CIRCLE,
+      fillColor: '#F15A24',
+      fillOpacity: 1,
+      scale: 7,
+      strokeColor: 'white',
+      strokeWeight: 2,
+    };
+
     // Add new markers
     locations.forEach((loc) => {
       if (!loc.latitude || !loc.longitude) return;
 
+      const position = new google.maps.LatLng(loc.latitude, loc.longitude);
       const marker = new google.maps.Marker({
         position: {lat: loc.latitude, lng: loc.longitude},
         map,
-        title: loc.name || loc.city,
-        optimized: true,
+        title: loc.name,
+        icon: {
+    url: "data:image/svg+xml;utf-8," + encodeURIComponent(`
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32">
+        <path fill="#FF6600" d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5c-1.4 0-2.5-1.1-2.5-2.5S10.6 6.5 12 6.5s2.5 1.1 2.5 2.5S13.4 11.5 12 11.5z"/>
+      </svg>
+    `),
+    scaledSize: new google.maps.Size(32, 32),
+    anchor: new google.maps.Point(16, 32),
+  },
       });
 
       const infoWindow = new google.maps.InfoWindow({
@@ -111,18 +128,24 @@ function CountryMap({
       marker.addListener('click', () => {
         infoWindow.open(map, marker);
         onMarkerClick(loc);
+
+        // Smooth pan animation
+        map.panTo(position);
+        map.setZoom(10);
       });
 
       markersRef.current.push(marker);
-      boundsRef.current?.extend(marker.getPosition()!);
+      boundsRef.current?.extend(position);
     });
 
-    // Fit map to all markers
+    // Smooth fit to bounds animation
     if (locations.length > 0) {
       map.fitBounds(boundsRef.current!);
+      setTimeout(() => {
+        map.panBy(0, -50); // adjust center for better visibility
+      }, 500);
     }
 
-    // Cleanup
     return () => {
       markersRef.current.forEach((m) => m.setMap(null));
       markersRef.current = [];
@@ -144,7 +167,7 @@ function CountryMap({
 
   return (
     <div className="relative w-full h-[750px] rounded-xl overflow-hidden">
-      <div ref={mapRef} className="w-full h-full" />
+      <div ref={mapRef} className="w-full h-full transition-all duration-500" />
 
       {/* Zoom buttons */}
       <div className="absolute top-4 right-4 flex flex-col bg-white rounded-lg shadow-md overflow-hidden z-10">
@@ -167,7 +190,7 @@ function CountryMap({
   );
 }
 
-// 🔹 Main Page
+// 🔹 Main Country Page
 export default function CountryPage() {
   const {decodedCountry, states, locations} = useLoaderData<typeof loader>();
   const navigate = useNavigate();
@@ -176,19 +199,22 @@ export default function CountryPage() {
   function handleLocationClick(loc: any) {
     const countrySlug = encodeURIComponent(loc.country);
     const stateSlug = encodeURIComponent(loc.state || '');
-    navigate(`/${countrySlug}/${stateSlug}`);
+    navigate(`/l/${countrySlug}/${stateSlug}`);
   }
 
   return (
     <div className="flex flex-col min-h-screen bg-white relative">
-      <main className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-7xl mx-auto w-full pt-10 pb-16 px-5">
+      <main
+        className={`grid grid-cols-1 md:grid-cols-2 gap-6 max-w-7xl mx-auto w-full pt-10 pb-16 px-5 transition-all duration-500 ease-in-out ${
+          showMap ? 'opacity-100' : 'opacity-100'
+        }`}
+      >
         {/* Left Column */}
         <aside
-          className={`rounded-xl shadow-sm transition-all duration-300 ${
+          className={`rounded-xl shadow-sm transition-all duration-500 ease-in-out ${
             showMap ? 'hidden md:block' : 'block'
           }`}
         >
-          {/* Header */}
           <div className="flex items-center space-x-4 mb-6">
             <button
               className="rounded-full md:border md:border-LightWhite p-2 md:p-[11px]"
@@ -202,12 +228,11 @@ export default function CountryPage() {
             </h1>
           </div>
 
-          {/* States List */}
           <ul className="space-y-8">
             {states.map((state, index) => (
               <div
                 key={index}
-                className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-200"
+                className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-300"
                 onClick={() => {
                   const loc = locations.find((l: any) => l.state === state.name);
                   if (loc) handleLocationClick(loc);
@@ -227,7 +252,7 @@ export default function CountryPage() {
 
         {/* Right Column - Map */}
         <section
-          className={`rounded-xl shadow-sm overflow-hidden transition-all duration-300 ${
+          className={`rounded-xl shadow-sm overflow-hidden transition-all duration-500 ease-in-out ${
             showMap ? 'block' : 'hidden md:block'
           }`}
         >
@@ -238,7 +263,7 @@ export default function CountryPage() {
         </section>
       </main>
 
-      {/* Toggle for mobile */}
+      {/* Mobile Toggle */}
       <div className="md:hidden fixed bottom-6 left-0 right-0 flex justify-center z-50">
         <button
           onClick={() => setShowMap(!showMap)}
