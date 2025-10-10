@@ -3,7 +3,7 @@
 
 # AKVA - An example storefront powered by Sanity + Hydrogen
 
-This demo is compatible with `@shopify/hydrogen >= 2023.10.0` built on Remix.
+This demo is compatible with `@shopify/hydrogen >= 2023.10.0` built on Remixx.
 
 > For a more complex reference example, please see our [demo-ecommerce repo](https://github.com/sanity-io/demo-ecommerce) which features a monorepo with an embedded Sanity Studio, full live preview, more content models and added internationalisation.
 > For the legacy Hydrogen v1 template, please refer to the [hydrogen-v1 branch](https://github.com/sanity-io/hydrogen-sanity-demo/tree/hydrogen-v1).
