@@ -101,10 +101,18 @@ function CountryMap({
 
       const position = new google.maps.LatLng(loc.latitude, loc.longitude);
       const marker = new google.maps.Marker({
-        position,
+        position: {lat: loc.latitude, lng: loc.longitude},
         map,
-        title: loc.name || loc.city,
-        icon: markerIcon,
+        title: loc.name,
+        icon: {
+    url: "data:image/svg+xml;utf-8," + encodeURIComponent(`
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="32" height="32">
+        <path fill="#FF6600" d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5c-1.4 0-2.5-1.1-2.5-2.5S10.6 6.5 12 6.5s2.5 1.1 2.5 2.5S13.4 11.5 12 11.5z"/>
+      </svg>
+    `),
+    scaledSize: new google.maps.Size(32, 32),
+    anchor: new google.maps.Point(16, 32),
+  },
       });
 
       const infoWindow = new google.maps.InfoWindow({
