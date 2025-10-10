@@ -29,7 +29,7 @@ import { RENTER_REFERRAL_FRAGMENT } from './modules/renter';
 import { MARKETPLACE } from './modules/marketplace';
 import { HOW_IT_WORKS_MODULE } from './modules/howitworksmodule';
 import { BUSINESS_ACCELERATOR_MODULE } from './modules/accelerator';
- 
+ import { OPERATOR_SIGNUP_FRAGMENT } from './modules/operatorsignup';
 import { ANYTIME_PHONE_MODULE } from './modules/anytimephone';
 export const MODULES = groq`
   _key,
@@ -120,5 +120,8 @@ export const MODULES = groq`
   },
     (_type == "anytimePhone") => {
     ${ANYTIME_PHONE_MODULE}
+  },
+    (_type == "operatorsignup") => {  
+    ${OPERATOR_SIGNUP_FRAGMENT}
   }
 `;

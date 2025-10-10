@@ -41,7 +41,7 @@ import { RenterReferralHero } from '~/components/modules/renter-referralhero';
 import { RenterReferralWork } from '~/components/modules/renter-referralwork';
 import { RenterReferralNoCatch } from '~/components/modules/renter-referralno-catch';
 import { RenterReferralEditor } from '~/components/modules/renter-referraleditor';
-import  SolutionHero  from '~/components/modules/SolutionHero';
+import SolutionHero from '~/components/modules/SolutionHero';
 import SolutionVirtualMailbox from '~/components/modules/SolutionVirtualMailbox';
 import SolutionRealLife from '~/components/modules/SolutionRealLife';
 import SolutionMailboxFeatures from '~/components/modules/SolutionMailboxFeatures';
@@ -65,31 +65,40 @@ import BusinessGrowth from '~/components/modules/BusinessGrowth';
 import BusinessSupport from '~/components/modules/BusinessSupport';
 import BusinessBanner from '~/components/modules/BusinessBanner';
 import WebinarsTopicsSection from '~/components/modules/WebinarsTopicsSection';
+
+// 櫨 OPERATOR SIGNUP SPECIFIC COMPONENTS - SEPARATE DESIGN
+// NOTE: These files must exist in the current directory:
+// './OperatorSignupDebug', './operatorAdvantage', etc.
+
+import { OperatorAdvantage } from './operatorAdvantage';
+import { OperatorGrowYour } from './operatorGrowYour';
+import { OperatorMailCenter } from './operatormailcenter';
+import { OperatorNowYourCustomer } from './operatornowyourcustomer';
+import { OperatorVideo } from './operatorvideo';
+import { OperatorThousand } from './operatorthousand';
+import { OperatorWhyJoin } from './operatorwhyjoin';
+import { OperatorYourCompetitors } from './operatoryourcompetitors';
+import { OperatorYourBusiness } from './operatoryourbuisness';
 import NoOfficeSection from '~/components/modules/NoOfficeSection';
 import  AnytimeFeaturesModule from '~/components/modules/AnytimeFeaturesModule';
-// type Props = {
-//   imageAspectClassName?: string;
-//   module: SanityModule;
-//   homeSearchResults?: any;
-//   searchQuery?: string | null;
-// };
-
 type Props = {
   module: SanityModule | ProductWithNodes;
   homeSearchResults?: any;
   searchQuery?: string | null;
-  bundles?: any[]; // 🔹 make sure Module receives bundles
+  bundles?: any[];
+  pageType?: 'operator' | 'default'; // 争 ADDED pageType PROP
 };
 
-export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery,bundles}: Props) {
+export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery, bundles, pageType = 'default'}: Props) { // 争 Set default pageType
 
   console.log("check bundles in module", bundles);
 
+  // Helper boolean for conditional rendering
+  const isOperatorPage = pageType === 'operator';
 
   switch (module._type) {
-   
 
-      case 'anytimePhone':
+    case 'anytimePhone':
   return (
     <>
       {module.modules?.map((sub: any) => (
@@ -97,19 +106,104 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
       ))}
     </>
   );
-  //  case 'solutionHeroModule':
-  //   return <SolutionHero data={module} />;
   case 'noOfficeSection':
   return <NoOfficeSection {...module} />;
   case 'featuresSection':
   return <AnytimeFeaturesModule {...module} />;
+ 
+
+
+   
+    // 櫨 OPERATOR SIGNUP CONTAINER
+    case 'operatorsignup':
+      return (
+        <>
+          {module.modules?.map((sub: any) => (
+            <Module key={sub._key} module={sub} pageType='operator' /> // 争 PASSING 'operator' down to children
+          ))}
+        </>
+      );
+
+
+    // Operator specific modules using standard type names but conditional rendering
+    
+    // affilateProgramSection -> OperatorGrowYour / AffiliateProgramSection
+    case 'affiliateProgramSection':
+      return isOperatorPage 
+        ? <OperatorGrowYour module={module} /> 
+        : <AffiliateProgramSection {...module} />;
+
+    // whyJoinSection -> OperatorWhyJoin / WhyJoinSection
+    case 'whyJoinSection':
+      return isOperatorPage
+        ? <OperatorWhyJoin module={module} />
+        : <WhyJoinSection {...module} />;
+
+    // howitworks3steps -> OperatorNowYourCustomer / HowItWork3Steps
+    case 'howitworks3steps':
+      return isOperatorPage
+        ? <OperatorNowYourCustomer module={module} />
+        : <HowItWork3Steps data={module} />;
+
+    // businessAtFingertips -> OperatorYourBusiness / BusinessAtFingertips
+    case 'businessAtFingertips':
+      return isOperatorPage
+        ? <OperatorYourBusiness module={module} />
+        : <BusinessAtFingertips data={module} />;
+
+    // whyBusinessChooseUs -> OperatorAdvantage / RenterReferralWork / WhyBusinessChooseUs
+    case 'whyBusinessChooseUs':
+      if (isOperatorPage) {
+        return <OperatorAdvantage module={module} />;
+      }
+      // Renter Referral Program Logic (module._key === '21b68d61ef37' was a key check)
+      if (module._key === '21b68d61ef37') {
+        return <RenterReferralWork data={module} />;
+      }
+      // Default Fallback
+      return <WhyBusinessChooseUs data={module} />;
+        
+    // testimonial -> OperatorThousand / Testimonial
+    case 'testimonial':
+      return isOperatorPage
+        ? <OperatorThousand module={module} />
+        : <Testimonial data={module} />;
+
+    // The modules below are assumed to ONLY exist on the Operator Signup page, 
+    // but we add the isOperatorPage check just in case.
+
+    // New Operator-only type (formerly: operatorSignupDebug)
+ 
+
+    case 'operatorSignupVideo':
+      return <OperatorVideo module={module} />;
+
+    case 'operatorYourCompetitors':
+      return <OperatorYourCompetitors module={module} />;
+      
+    // joinTeamSection -> OperatorMailCenter / JoinTeamSection (using joinTeamSection as placeholder for CTA)
+    case 'joinTeamSection':
+      return isOperatorPage
+        ? <OperatorMailCenter module={module} />
+        : <JoinTeamSection {...module} />;
+
+
+     // 櫨 END OPERATOR SIGNUP MODULES
+        
+ 
+
+
+
+
+
+
 
     // Add this case to your switch statement
    case 'acceleratorPageModule':
   return (
     <>
       {module.modules?.map((sub: any) => (
-        <Module key={sub._key} module={sub} />
+        <Module key={sub._key} module={sub} pageType={pageType} />
       ))}
     </>
   );
@@ -148,7 +242,7 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
       return (
         <>
           {module.modules?.map((sub: any) => (
-            <Module key={sub._key} module={sub} />
+            <Module key={sub._key} module={sub} pageType={pageType} />
           ))}
         </>
       );
@@ -165,8 +259,12 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
     case 'builtForHowYouWorkToday':
       return <BuiltForYou data={module} />;
  
-    case 'howitworks3steps':
-      return <HowItWork3Steps data={module} />;
+    // NOTE: 'howitworks3steps' is handled above for operator conditional rendering.
+    // The previous duplicate case is removed.
+    
+    case 'howitworksfaq':
+      return <HowItWorksFaq data={module} />;
+    
     // -----------------------
     // Renter Referral Program
     // -----------------------
@@ -174,7 +272,7 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
       return (
         <>
           {module.modules?.map((sub: any) => (
-            <Module key={sub._key} module={sub} />
+            <Module key={sub._key} module={sub} pageType={pageType} />
           ))}
         </>
       );
@@ -196,13 +294,8 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
       // Fallback to regular AboutIntroSection for other contexts
       return <AboutIntroSection {...module} />;
 
-    case 'whyBusinessChooseUs':
-      // Check if this is within a renter referral program context
-      if (module._key === '21b68d61ef37') {
-        return <RenterReferralWork data={module} />;
-      }
-      // Fallback to regular WhyBusinessChooseUs for other contexts
-      return <WhyBusinessChooseUs data={module} />;
+    // NOTE: 'whyBusinessChooseUs' is handled above for operator/renter conditional rendering.
+    // The previous duplicate case is removed.
 
     case 'renterEditor':
       return <RenterReferralEditor data={module} />;
@@ -214,7 +307,7 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
       return (
         <>
           {module.modules?.map((sub: any) => (
-            <Module key={sub._key} module={sub} />
+            <Module key={sub._key} module={sub} pageType={pageType} />
           ))}
         </>
       );
@@ -223,7 +316,7 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
       return (
         <>
           {module.modules?.map((sub: any) => (
-            <Module key={sub._key} module={sub} />
+            <Module key={sub._key} module={sub} pageType={pageType} />
           ))}
         </>
       );
@@ -243,8 +336,7 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
     case 'coreValuesSection':
       return <CoreValuesSection {...module} />;
     
-    case 'joinTeamSection':
-      return <JoinTeamSection {...module} />;
+    // 'joinTeamSection' is handled above for operator conditional rendering.
 
     case 'aboutHowItStartedSection':
       return <AboutHowItStartedSection {...module} />;
@@ -265,16 +357,16 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
       return (
         <>
           {module.modules?.map((sub: any) => (
-            <Module key={sub._key} module={sub} />
+            <Module key={sub._key} module={sub} pageType={pageType} />
           ))}
         </>
       );
 
-    case 'affiliateProgramSection':
-      return <AffiliateProgramSection {...module} />;
+    // NOTE: 'affiliateProgramSection' is handled above for operator conditional rendering.
+    // The previous duplicate case is removed.
 
-    case 'whyJoinSection':
-      return <WhyJoinSection {...module} />;
+    // NOTE: 'whyJoinSection' is handled above for operator conditional rendering.
+    // The previous duplicate case is removed.
 
     case 'stepsSection':
       return <StepsSection {...module} />;
@@ -283,7 +375,7 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
       return (
         <>
           {module.modules?.map((sub: any) => (
-            <Module key={sub._key} module={sub} />
+            <Module key={sub._key} module={sub} pageType={pageType} />
           ))}
         </>
       );
@@ -303,7 +395,7 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
     return (
       <>
         {module.modules?.map((sub: any) => (
-          <Module key={sub._key} module={sub} />
+          <Module key={sub._key} module={sub} pageType={pageType} />
         ))}
       </>
     );
@@ -325,13 +417,13 @@ case 'solutionMailboxBenefitFaqModule':
   return <SolutionMailboxLocationHowItWorks data={module} />;
 
     case 'heroType':
-      return <Home data={module}  />;
+      return <Home data={module} />;
     
     case 'featuresModule':
       return <FeaturesModule {...module} />;
     
     case 'pricingModule':
-      return <Pricingmodule data={module}  />;
+      return <Pricingmodule data={module} />;
     
     case 'howItWorks':
       return <HowItWorks data={module} />;
@@ -375,11 +467,10 @@ case 'solutionMailboxBenefitFaqModule':
     case 'bundles':
       return <Bundles data={module} />;
     
-    case 'testimonial':
-      return <Testimonial data={module} />;
-    
-    case 'businessAtFingertips':
-      return <BusinessAtFingertips data={module} />;
+    // 'testimonial' is handled above for operator conditional rendering.
+
+    // NOTE: 'businessAtFingertips' is handled above for operator conditional rendering.
+    // The previous duplicate case is removed.
     
     case 'faq':
       return <FAQ data={module} />;
@@ -396,7 +487,7 @@ case 'solutionMailboxBenefitFaqModule':
       return (
         <>
           {module.modules?.map((sub: any) => (
-            <Module key={sub._key} module={sub} />
+            <Module key={sub._key} module={sub} pageType={pageType} />
           ))}
         </>
       );
@@ -406,9 +497,10 @@ case 'solutionMailboxBenefitFaqModule':
     case 'marketPlaceCategoriesSection':
       return <MarketplaceCategories data={module} />;  
 
-    
-    // default:
-    //   console.warn(`No component found for module type: ${module._type}`);
-    //   return null;
+    // 櫨 DEFAULT CASE FOR DEBUGGING
+    default:
+      console.warn(`No component found for module type: ${module._type}`);
+     
+      return null;
   }
 }

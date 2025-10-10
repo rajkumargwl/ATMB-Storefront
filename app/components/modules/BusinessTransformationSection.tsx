@@ -3,10 +3,11 @@ type BusinessTransformationSectionProps = {
   subtitle?: string;
   cards: {
     icon?: { url?: string };
-    title: string;
+    heading: string; // ✅ changed from title to heading
     description: string;
   }[];
 };
+
 
 export default function BusinessTransformationSection({
   title,
@@ -36,19 +37,20 @@ export default function BusinessTransformationSection({
               className="flex flex-col p-8 bg-white rounded-[20px] transition shadow-[0_4px_20px_rgba(0,0,0,0.05)]"
             >
               {/* Icon */}
-              {card.icon?.url && (
-                <div className="mb-6">
-                  <img
-                    src={card.icon.url}
-                    alt="icon"
-                    className="w-8 h-8 object-contain"
-                  />
-                </div>
-              )}
+            {card.icon?.url && (
+  <div className="mb-6 flex justify-center bg-DarkOrange">
+    <img
+      src={card.icon.url}
+      alt="icon"
+      className="w-8 h-8 object-contain"
+    />
+  </div>
+)}
+
 
               {/* Title */}
               <h3 className="font-Roboto text-[#FF6B35] font-semibold text-[20px] md:text-[22px] leading-[28px] md:leading-[32px] tracking-[0px] mb-3">
-                {card.title}
+                {card.heading}
               </h3>
 
               {/* Description */}

@@ -4,11 +4,10 @@ type Step = {
   heading?: string;
   text?: string;
   icon?: {
-    asset?: {
-      url?: string;
-    };
+    url?: string;
   };
 };
+
 
 type BuisnessHowItWorkProps = {
   title?: string;
@@ -65,18 +64,18 @@ export default function BuisnessHowitWork({
               className="relative flex flex-col items-center text-center focus-within:outline-none focus-within:ring-2 focus-within:ring-DarkOrange rounded-lg"
             >
               {/* Icon */}
-              {step?.icon?.asset?.url && (
-                <div
-                  className="w-[60px] md:w-[80px] h-[60px] md:h-[80px] rounded-full bg-[#FF6600] flex items-center justify-center mb-5 md:mb-8"
-                  aria-hidden="true"
-                >
-                  <img
-                    src={step.icon.asset.url}
-                    alt=""
-                    className="w-6 md:w-8 h-6 md:h-8"
-                  />
-                </div>
-              )}
+              {step?.icon?.url && (
+  <div
+    className="w-[60px] md:w-[80px] h-[60px] md:h-[80px] rounded-full bg-[#FF6600] flex items-center justify-center mb-5 md:mb-8"
+    aria-hidden="true"
+  >
+    <img
+      src={step.icon.url}
+      alt=""
+      className="w-6 md:w-8 h-6 md:h-8"
+    />
+  </div>
+)}
 
               {/* Step Heading */}
               {step.heading && (
