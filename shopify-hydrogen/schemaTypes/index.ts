@@ -125,6 +125,8 @@ import { noOfficeSection } from "./objects/module/noOfficeSection";
 import { featuresSection } from "./objects/module/featuresSection";
 import { businessAcceleratorBannerSection } from './objects/module/businessAcceleratorBannerSection'
 import {  anytimePhone } from './objects/module/anytimePhone'
+import { operatorsignupType } from './objects/module/operatorsignupType'
+import operatorSignupVideo from './objects/module/operatorSignupVideo'
 // Objects used as annotations must be imported first
 // Objects used as annotations must be imported first
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
@@ -247,6 +249,8 @@ contactUsSection,
   businessAcceleratorBannerSection,
   noOfficeSection,
   featuresSection,
+    operatorsignupType,
+  operatorSignupVideo,
   anytimePhone
 ]
 

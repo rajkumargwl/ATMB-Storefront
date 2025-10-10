@@ -45,6 +45,7 @@ export const pageType = defineType({
           { type: 'howitworks' },
            { type: 'acceleratorPageModule' },
            { type: 'anytimePhone' },
+              { type: 'operatorsignup' },
         // add more modules if needed
       ],
     }),
