@@ -28,8 +28,9 @@ import { SOLUTION_PAGE_MODULE } from './modules/solutionpagemodule';
 import { RENTER_REFERRAL_FRAGMENT } from './modules/renter';
 import { MARKETPLACE } from './modules/marketplace';
 import { HOW_IT_WORKS_MODULE } from './modules/howitworksmodule';
+import { BUSINESS_ACCELERATOR_MODULE } from './modules/accelerator';
  
-
+import { ANYTIME_PHONE_MODULE } from './modules/anytimephone';
 export const MODULES = groq`
   _key,
   _type,
@@ -113,6 +114,11 @@ export const MODULES = groq`
   },
 (_type == "howitworks") => {
     ${HOW_IT_WORKS_MODULE}
+  },
+  (_type == "acceleratorPageModule") => {
+    ${BUSINESS_ACCELERATOR_MODULE}
+  },
+    (_type == "anytimePhone") => {
+    ${ANYTIME_PHONE_MODULE}
   }
-
 `;

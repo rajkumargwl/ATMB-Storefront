@@ -112,6 +112,19 @@ import { howitworksVirtualbox } from './objects/module/howitworksVirtualbox'
 import { builtForHowYouWorkToday } from './objects/module/builtforhowyouworktoday'
 import { howitworks3steps } from './objects/module/howitworks3steps'
 import { howitworks2 } from './objects/module/howitworks2'
+import { webinarsTopicsSection } from './objects/module/webinarsTopicsSection'
+import { businessTransformationSection } from './objects/module/businessTransformationSection'
+import { businessSupportSection } from './objects/module/businessSupportSection'
+import { businessStrategySection } from './objects/module/businessStrategySection'
+import { buisnesshowitwork } from './objects/module/buisnesshowitwork'
+import { businessAcceleratorSection } from './objects/module/businessAcceleratorSection'
+import { acceleratorPageModule } from './objects/module/acceleratorPageModule'
+import { businessGrowthToolkitSection } from './objects/module/businessGrowthToolkitSection'
+import { businessProfitSection } from './objects/module/businessProfitSection'
+import { noOfficeSection } from "./objects/module/noOfficeSection";
+import { featuresSection } from "./objects/module/featuresSection";
+import { businessAcceleratorBannerSection } from './objects/module/businessAcceleratorBannerSection'
+import {  anytimePhone } from './objects/module/anytimePhone'
 // Objects used as annotations must be imported first
 // Objects used as annotations must be imported first
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
@@ -222,6 +235,19 @@ contactUsSection,
   builtForHowYouWorkToday,
   howitworks3steps,
   howitworks2,
+  businessAcceleratorSection,
+  businessGrowthToolkitSection,
+  businessProfitSection,
+  businessStrategySection,
+  businessSupportSection,
+  businessTransformationSection,
+  webinarsTopicsSection,
+  acceleratorPageModule,
+  buisnesshowitwork,
+  businessAcceleratorBannerSection,
+  noOfficeSection,
+  featuresSection,
+  anytimePhone
 ]
 
 import {portableTextType} from './portableText/portableTextType'

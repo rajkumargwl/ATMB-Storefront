@@ -53,7 +53,7 @@ export async function loader({context, params}: LoaderFunctionArgs) {
 }
 
 export default function Solution() {
-  const {page, gids} = useLoaderData<typeof loader>();
+  const {page,  gids} = useLoaderData<typeof loader>();
 
   return (
     <>

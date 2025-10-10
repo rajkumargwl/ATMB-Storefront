@@ -1,3 +1,5 @@
+// app/routes/business-accelerator.tsx
+
 import { Await, useLoaderData } from '@remix-run/react';
 import {
   AnalyticsPageType,
@@ -14,18 +16,19 @@ import { Suspense } from 'react';
 import ModuleGrid from '~/components/modules/ModuleGrid';
 import { fetchGids, notFound, validateLocale } from '~/lib/utils';
 
-// 👇 import the Affiliate PAGE query
-import { AFFILIATE_PAGE_QUERY } from '~/queries/sanity/fragments/pages/affiliatedprogrampage';
+import { BUSINESS_ACCELERATOR_PAGE_QUERY } from '~/queries/sanity/fragments/pages/businessAcceleratorPageQuery';
 
 // -----------------
 // SEO
 // -----------------
 const seo: SeoHandleFunction = ({ data }) => ({
-  title: data?.page?.seo?.title || 'Affiliate Program - Sanity x Hydrogen',
+  title:
+    data?.page?.seo?.title || 'Business Accelerator - Sanity x Hydrogen',
   description:
     data?.page?.seo?.description ||
-    'Join our affiliate program and start earning today.',
+    'Explore our Business Accelerator program and resources.',
 });
+
 export const handle = { seo };
 
 // -----------------
@@ -33,16 +36,14 @@ export const handle = { seo };
 // -----------------
 export async function loader({ context, params }: LoaderFunctionArgs) {
   validateLocale({ context, params });
-
+   
   const page = await context.sanity.query({
-    query: AFFILIATE_PAGE_QUERY,
+    query: BUSINESS_ACCELERATOR_PAGE_QUERY,
+
   });
 
+  if (!page) throw notFound();
 
-
-  if (!page) {
-    throw notFound(); // fallback if page doesn't exist
-  }
 
   const gids = fetchGids({ page, context });
 
@@ -53,15 +54,14 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
   });
 }
 
-
 // -----------------
 // Component
 // -----------------
-export default function AffiliateProgram() {
+export default function BusinessAccelerator() {
   const { page, gids } = useLoaderData<typeof loader>();
 
   return (
-    <SanityPreview data={page} query={AFFILIATE_PAGE_QUERY}>
+    <SanityPreview data={page} query={BUSINESS_ACCELERATOR_PAGE_QUERY}>
       {(page) => (
         <Suspense>
           <Await resolve={gids}>

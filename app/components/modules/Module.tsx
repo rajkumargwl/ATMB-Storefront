@@ -15,7 +15,6 @@ import WhyBusinessChooseUs from '~/components/modules/WhyBusinessChooseUs';
 import Testimonial from '~/components/modules/Testimonial';
 import BusinessAtFingertips from '~/components/modules/BusinessAtFingertips';
 import FAQ from '~/components/modules/FAQ';
-import Home from '~/components/heroes/Home';
 import FeaturesModule from '~/components/modules/FeaturesModule';
 import AboutHowItStartedSection from '~/components/modules/AboutHowItStartedSection';
 import AboutFeaturesSection from '~/components/modules/AboutFeaturesSection';
@@ -50,12 +49,24 @@ import SolutionMailboxBenefitFaq from '~/components/modules/SolutionMailboxBenef
 import SolutionMailboxLocationHowItWorks from '~/components/modules/SolutionMailboxLocationHowItWorks';
 import MarketplaceIntro from '~/components/modules/MarketplaceIntro';
 import MarketplaceCategories from '~/components/modules/MarketplaceCategories';
+
 import { HowItWorksHero } from './howitworkshero';
 import { HowItWorksVirtualbox } from './howitworks-virtualbox';
 import { HowItWorks2 } from './howitworks-2';
 import { BuiltForYou } from './builtforyou';
 import { HowItWork3Steps } from './howitwork3steps';
 import { HowItWorksFaq } from './howitworksfaq';
+import BusinessAcceleratorSection from '~/components/modules/BusinessAcceleratorSection';
+import BusinessTransformationSection from '~/components/modules/BusinessTransformationSection';
+import BusinessStrategySection from '~/components/modules/BusinessStrategySection';
+import BuisnessHowitWork from '~/components/modules/BuisnessHowitWork';
+import BusinessProfitSection from '~/components/modules/BusinessProfitSection';
+import BusinessGrowth from '~/components/modules/BusinessGrowth';
+import BusinessSupport from '~/components/modules/BusinessSupport';
+import BusinessBanner from '~/components/modules/BusinessBanner';
+import WebinarsTopicsSection from '~/components/modules/WebinarsTopicsSection';
+import NoOfficeSection from '~/components/modules/NoOfficeSection';
+import  AnytimeFeaturesModule from '~/components/modules/AnytimeFeaturesModule';
 // type Props = {
 //   imageAspectClassName?: string;
 //   module: SanityModule;
@@ -76,6 +87,63 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
 
 
   switch (module._type) {
+   
+
+      case 'anytimePhone':
+  return (
+    <>
+      {module.modules?.map((sub: any) => (
+        <Module key={sub._key} module={sub} />
+      ))}
+    </>
+  );
+  //  case 'solutionHeroModule':
+  //   return <SolutionHero data={module} />;
+  case 'noOfficeSection':
+  return <NoOfficeSection {...module} />;
+  case 'featuresSection':
+  return <AnytimeFeaturesModule {...module} />;
+
+    // Add this case to your switch statement
+   case 'acceleratorPageModule':
+  return (
+    <>
+      {module.modules?.map((sub: any) => (
+        <Module key={sub._key} module={sub} />
+      ))}
+    </>
+  );
+
+  
+    case 'businessAcceleratorSection':
+    return <BusinessAcceleratorSection data={module} />;
+
+
+   case 'businessTransformationSection':
+  return <BusinessTransformationSection {...module} />;
+   
+  case 'businessStrategySection':
+  return <BusinessStrategySection {...module} />;
+
+  case 'buisnesshowitwork':
+  return <BuisnessHowitWork {...module} />;
+
+  case 'businessProfitSection':
+  return <BusinessProfitSection {...module} />;
+
+  case 'businessGrowthToolkitSection':
+  return <BusinessGrowth data={module} />;
+
+  case 'businessSupportSection':
+  return <BusinessSupport data={module} />;
+  
+  case 'businessAcceleratorBannerSection':
+  return <BusinessBanner title={module.title} cta={module.cta} image={module.image} />;
+   
+  case 'webinarsTopicsSection':
+  return <WebinarsTopicsSection data={module} />;
+
+
     case 'howitworks':
       return (
         <>
@@ -256,11 +324,6 @@ case 'solutionMailboxBenefitFaqModule':
   case 'solutionMailboxLocationHowItWorksModule':
   return <SolutionMailboxLocationHowItWorks data={module} />;
 
-
-
-    // -----------------------
-    // Existing cases
-    // -----------------------
     case 'heroType':
       return <Home data={module}  />;
     
@@ -306,8 +369,8 @@ case 'solutionMailboxBenefitFaqModule':
     case 'homeSection4':
       return <Locations data={module} />;
     
-    case 'plans':
-      return <Plans data={module} bundles={bundles}/>;
+    // case 'plans':
+    //   return <Plans data={module} bundles={bundles}/>;
     
     case 'bundles':
       return <Bundles data={module} />;
@@ -337,7 +400,6 @@ case 'solutionMailboxBenefitFaqModule':
           ))}
         </>
       );
-
     case 'marketPlaceIntroSection':
       return <MarketplaceIntro data={module} />;  
 
@@ -345,8 +407,8 @@ case 'solutionMailboxBenefitFaqModule':
       return <MarketplaceCategories data={module} />;  
 
     
-    default:
-      console.warn(`No component found for module type: ${module._type}`);
-      return null;
+    // default:
+    //   console.warn(`No component found for module type: ${module._type}`);
+    //   return null;
   }
 }

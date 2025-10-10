@@ -48,33 +48,33 @@ export default function SearchBox({
     setQresults(filtered);
   }, [searchquery, results]);
 
-  // Optional: keep query in URL
-  useEffect(() => {
-    if (skipSearchQSync) return;
+//   // Optional: keep query in URL
+//   useEffect(() => {
+//     if (skipSearchQSync) return;
 
-    const params = new URLSearchParams(location.search);
+//     const params = new URLSearchParams(location.search);
     
-  //   if (searchquery.trim()) {
-  //     params.set("p", searchquery);
-  //   } else {
-  //     params.delete("p");
-  //   }
-  //   navigate(`?${params.toString()}`, { replace: true });
-  // }, [searchquery, navigate, location.search, skipSearchQSync]);
-  if (!searchquery.trim()) {
-     params.delete("p");
-     navigate(`?${params.toString()}`, { replace: true });
-     setQresults([]);
-     return;
-   }
+//   //   if (searchquery.trim()) {
+//   //     params.set("p", searchquery);
+//   //   } else {
+//   //     params.delete("p");
+//   //   }
+//   //   navigate(`?${params.toString()}`, { replace: true });
+//   // }, [searchquery, navigate, location.search, skipSearchQSync]);
+//   if (!searchquery.trim()) {
+//      params.delete("p");
+//      navigate(`?${params.toString()}`, { replace: true });
+//      setQresults([]);
+//      return;
+//    }
 
-   const timeout = setTimeout(() => {
-     params.set("p", searchquery);
-     navigate(`?${params.toString()}`, { replace: true });
-   }, 500);
+//    const timeout = setTimeout(() => {
+//      params.set("p", searchquery);
+//      navigate(`?${params.toString()}`, { replace: true });
+//    }, 500);
 
-   return () => clearTimeout(timeout);
- }, [searchquery, navigate, location.search, skipSearchQSync]);
+//    return () => clearTimeout(timeout);
+//  }, [searchquery, navigate, location.search, skipSearchQSync]);
 
   return (
     <div className="mt-[40px] md:mt-[64px] mb-4 md:mb-5 w-full max-w-[546px]">
