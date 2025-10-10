@@ -388,7 +388,14 @@ case 'solutionMailboxBenefitFaqModule':
 
     case 'marketPlaceCategoriesSection':
       return <MarketplaceCategories data={module} />;  
-
+      case 'pdpPageModule':
+        return (
+          <>
+            {module.modules?.map((sub: any) => (
+              <Module key={sub._key} module={sub} />
+            ))}
+          </>
+        );
     
     // default:
     //   console.warn(`No component found for module type: ${module._type}`);
