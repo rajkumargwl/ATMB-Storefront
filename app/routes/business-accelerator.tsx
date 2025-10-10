@@ -43,7 +43,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
   });
 
   if (!page) throw notFound();
-  console.log("page",JSON.stringify(page,null,2));
+
 
   const gids = fetchGids({ page, context });
 

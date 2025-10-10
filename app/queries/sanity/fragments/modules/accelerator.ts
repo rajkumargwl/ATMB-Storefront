@@ -174,7 +174,7 @@ export const BUSINESS_ACCELERATOR_MODULE = groq`
     },
 
     // 🔸 PLANS Section
-    (_type == "plansSection") => {
+    (_type == "plans") => {
       // Individual Products Tab
       individualProductsTab {
         heading,

@@ -29,9 +29,9 @@ export default function AffiliateProgramSection({
           <p className="font-Roboto text-LightGray font-medium leading-[27px] md:leading-[28px] text-[18px] md:text-[20px] tracking-[0px]">{label}</p>
         )}
         {heading && (
-          <h2 className="max-w-[464px] font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px]">
+          <h1 className="max-w-[464px] font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px]">
             {heading}
-          </h2>
+          </h1>
         )}
         {description && (
           <p className="text-base text-gray-600 mb-6">{description}</p>
