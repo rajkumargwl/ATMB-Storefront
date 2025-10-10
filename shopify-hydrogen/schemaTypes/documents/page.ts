@@ -44,6 +44,7 @@ export const pageType = defineType({
            { type: 'renterreferralprogram' },
           { type: 'howitworks' },
            { type: 'acceleratorPageModule' },
+           { type: 'pdpPageModule' },
           
         // add more modules if needed
       ],
