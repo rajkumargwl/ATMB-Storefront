@@ -308,8 +308,8 @@ type PricingModuleProps = {
                     
                   })}
 
-  </div>
-</div>
+            </div>
+          </div>
 
         {/* Tab Panels */}
         <div 

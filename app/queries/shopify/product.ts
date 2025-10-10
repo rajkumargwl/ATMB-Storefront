@@ -483,4 +483,94 @@ export const BUNDLE_PRODUCTS_QUERY = `#graphql
 
 
 
+// export const VARIANT_WITH_PRODUCT_QUERY = `#graphql
+//   ${PRODUCT_FIELDS}
+//   ${PRODUCT_VARIANT_FIELDS}
+
+//   query variantWithProduct($variantId: ID!) {
+//     productVariant: node(id: $variantId) {
+//       ... on ProductVariant {
+//         ...ProductVariantFields
+//         product {
+//           ...ProductFields
+//           metafields(identifiers: [{ namespace: "custom", key: "bundle_feature" }]) {
+//             key
+//             value
+//           }
+//           variants(first: 50) {
+//             nodes {
+//               ...ProductVariantFields
+//               metafields(identifiers: [{ namespace: "custom", key: "plan_type" }]) {
+//                 key
+//                 value
+//               }
+//             }
+//           }
+//         }
+//       }
+//     }
+//   }
+// `;
+
+
+
+export const VARIANT_WITH_PRODUCT_QUERY = `#graphql
+  ${PRODUCT_FIELDS}
+  ${PRODUCT_VARIANT_FIELDS}
+
+  query variantWithProduct($variantId: ID!) {
+    productVariant: node(id: $variantId) {
+      ... on ProductVariant {
+        ...ProductVariantFields
+
+        # Variant-level metafields
+        metafields(identifiers: [{ namespace: "custom", key: "bundle_items" }]) {
+          key
+          value
+          references(first: 20) {
+            edges {
+              node {
+                __typename
+                ... on ProductVariant {
+                  id
+                  title
+                  sku
+                  priceV2 { amount currencyCode }
+                  selectedOptions { name value }
+                  metafields(identifiers: [{ namespace: "custom", key: "plan_type" }]) {
+                    key
+                    value
+                  }
+                  product {
+                    id
+                    title
+                    handle
+                    featuredImage { url }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        product {
+          ...ProductFields
+          metafields(identifiers: [{ namespace: "custom", key: "bundle_feature" }]) {
+            key
+            value
+          }
+          variants(first: 50) {
+            nodes {
+              ...ProductVariantFields
+              metafields(identifiers: [{ namespace: "custom", key: "plan_type" }]) {
+                key
+                value
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+`;
 

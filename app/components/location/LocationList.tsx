@@ -609,14 +609,39 @@ export default function LocationsList({locations, initialQuery = ''}: LocationsL
                   </div>
 
                 {/* CTA Button */}
-                <button
+                {/* <button
                   onClick={() =>
                     navigate(`/PDP/virtual-mailbox?locationId=${loc._id}`)
                   }
                   className="hidden md:flex rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-[23px] py-[13px] transition-all"
                 >
                   Select
-                </button>
+                </button> */}
+                 <button
+                onClick={() => {
+                  const currentUrlParams = new URLSearchParams(window.location.search);
+                  const variantId = currentUrlParams.get("variantId");
+
+                  // Build query string with locationId
+                  const queryParams = new URLSearchParams();
+                  queryParams.set("locationId", loc._id);
+
+                  if (variantId) {
+                    // If variantId exists, add it and redirect to bundle-product
+                    queryParams.set("variantId", variantId);
+                    navigate(`/PDP/bundle-product?${queryParams.toString()}`);
+                  } else {
+                    // Otherwise, redirect to virtual-mailbox only with locationId
+                    navigate(`/PDP/virtual-mailbox?${queryParams.toString()}`);
+                  }
+                }}
+                className="hidden md:flex rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-[23px] py-[13px] transition-all"
+              >
+                Select
+           </button>
+
+
+
                 </div>
                 <div className='flex items-center justify-between md:hidden mt-6'>
                    <div className="flex  flex-col gap-[2px]">
