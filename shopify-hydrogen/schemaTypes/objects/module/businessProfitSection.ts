@@ -66,7 +66,9 @@ export const businessProfitSection = defineType({
       name: 'sideImage',
       title: 'Right Side Image',
       type: 'image',
-      options: {hotspot: true},
+        options: {
+    accept: 'image/*,.svg', // allows all images + svg
+  },
       description: 'Upload the main image that appears on the right (e.g., smiling businessman with money).',
       validation: (Rule) => Rule.required(),
     }),

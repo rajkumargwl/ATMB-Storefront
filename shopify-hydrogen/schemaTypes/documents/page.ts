@@ -46,6 +46,7 @@ export const pageType = defineType({
            { type: 'acceleratorPageModule' },
            { type: 'pdpPageModule' },
            { type: 'anytimePhone' },
+              { type: 'operatorsignup' },
         // add more modules if needed
       ],
     }),
