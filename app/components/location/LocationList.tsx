@@ -122,6 +122,7 @@ export default function LocationsList({locations, initialQuery = ''}: LocationsL
       
       useEffect(() => {
         if (!locations || locations.length === 0) return;
+        console.log('selectedCity',selectedCity)
       
         const query = selectedCity.trim().toLowerCase();
       
@@ -487,7 +488,7 @@ export default function LocationsList({locations, initialQuery = ''}: LocationsL
             className="px-3 py-2 cursor-pointer hover:bg-gray-100"
             onClick={() => {
               setSearchCity(cityObj.displayName || cityObj.city);
-              setSelectedCity(cityObj);
+              setSelectedCity(cityObj.displayName || cityObj.city);
               setShowSuggestions(false);
               //navigate(`/sublocations?q=${encodeURIComponent(cityObj.displayName || cityObj.city)}`, { replace: true });
               
