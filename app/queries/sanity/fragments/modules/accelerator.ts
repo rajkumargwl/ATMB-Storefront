@@ -112,7 +112,7 @@ export const BUSINESS_ACCELERATOR_MODULE = groq`
 
     // 🔸 Transformation Section
     (_type == "businessTransformationSection") => {
-      title,
+         title,
        "cards":items[] {
         heading,
         description,

@@ -38,7 +38,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
     query: ANYTIME_PHONE_PAGE_QUERY,
   });
 
-//   if (!page) throw notFound();
+  if (!page) throw notFound();
 
   const gids = fetchGids({ page, context });
 
