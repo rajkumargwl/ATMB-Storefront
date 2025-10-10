@@ -97,7 +97,7 @@ export async function loader({params, context}: LoaderFunctionArgs) {
     "url": asset->url
   }
 },
-
+ 
         virtualMailSection {
         heading,
         buttonText,
@@ -129,10 +129,10 @@ export default function CaseStudyPage() {
             <nav className="flex items-center flex-row gap-[7px] mb-5" aria-label="Breadcrumb">
               <ol className="flex items-center flex-row gap-[7px]">
                 <li><Link to={`/case-studies`}><span className="font-Roboto text-LightGray font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px]">Case Studies</span> </Link></li>
-                <li> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <li className="flex flex-row gap-[7px] items-center"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <path d="M10.6813 7.71732C10.8362 7.87232 10.8362 8.12732 10.6813 8.28232L6.68125 12.2823C6.52625 12.4373 6.27125 12.4373 6.11625 12.2823C5.96125 12.1273 5.96125 11.8723 6.11625 11.7173L9.83375 7.99982L6.11625 4.28232C5.96125 4.12732 5.96125 3.87232 6.11625 3.71732C6.27125 3.56232 6.52625 3.56232 6.68125 3.71732L10.6813 7.71732Z" fill="#091019"/>
-                  </svg></li>
-                <li> <span aria-current="page" className="font-Roboto text-PrimaryBlack font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px]">Case Study Detail</span> </li>
+                  </svg>
+                  <span aria-current="page" className="font-Roboto text-PrimaryBlack font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px]">Case Study Detail</span> </li>
               </ol>  
             </nav>
             <div>
@@ -191,6 +191,64 @@ export default function CaseStudyPage() {
             <PortableText value={caseStudy.content} components={components} />
           )}
         </div>
+<div className="w-full flex md:hidden flex-col order-3">
+          {/* Related Case Studies */}
+{caseStudy?.relatedCaseStudies?.length > 0 && (
+  <div className="bg-[#F6F6F6] p-6 rounded-[20px] border border-[#F6F6F6] mt-[-20px] flex md:hidden flex-col">
+    <h3 className="line-clamp-2 font-Roboto text-PrimaryBlack font-semibold leading-[28px] md:leading-[31.2px] text-[20px] md:text-[24px] tracking-[-0.3px] md:tracking-[-0.36px] mb-6">
+      Related Case Study
+    </h3>
+    <div className="space-y-5">
+      {caseStudy.relatedCaseStudies.map((related: any) => (
+        <Link
+          key={related?._id}
+          to={`/case-studies/${related?.slug ?? ""}`}
+          className="block overflow-hidden"
+        >
+          <div className="flex items-center gap-5">
+          {/* Image */}
+          {related?.heroImage?.url && (
+            <img
+              src={related.heroImage.url}
+              alt={related.heroImage?.alt || related?.title || "Case Study Image"}
+              className="w-[100px] md:w-[123px] h-[90px] md:h-[103px] rounded-[12px] object-cover "
+            />
+          )}
+ 
+          {/* Details */}
+          <div className="flex gap-3 flex-col">
+            <p className="mb-[0px] flex items-center gap-1 font-Roboto text-LightGray font-normal leading-[21px] md:leading-[21px] text-[14px] md:text-[14px] tracking-[0px]">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <path
+                  d="M7.80156 2.3999C8.13156 2.3999 8.40156 2.6699 8.40156 2.9999V4.7999H15.6016V2.9999C15.6016 2.6699 15.8716 2.3999 16.2016 2.3999C16.5316 2.3999 16.8016 2.6699 16.8016 2.9999V4.7999H18.0016C19.3253 4.7999 20.4016 5.87615 20.4016 7.1999V17.9999C20.4016 19.3237 19.3253 20.3999 18.0016 20.3999H6.00156C4.67781 20.3999 3.60156 19.3237 3.60156 17.9999V7.1999C3.60156 5.87615 4.67781 4.7999 6.00156 4.7999H7.20156V2.9999C7.20156 2.6699 7.47156 2.3999 7.80156 2.3999ZM18.0016 5.9999H6.00156C5.33781 5.9999 4.80156 6.53615 4.80156 7.1999V8.3999H19.2016V7.1999C19.2016 6.53615 18.6653 5.9999 18.0016 5.9999ZM19.2016 9.5999H4.80156V17.9999C4.80156 18.6637 5.33781 19.1999 6.00156 19.1999H18.0016C18.6653 19.1999 19.2016 18.6637 19.2016 17.9999V9.5999Z"
+                  fill="#4D4E4F"
+                />
+              </svg>
+              {new Date(related?.date).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })}
+            </p>
+            <h4 className="line-clamp-2 font-Roboto text-PrimaryBlack font-medium md:font-semibold leading-[27px] md:leading-[28px] text-[18px] md:text-[20px] tracking-[-0.3px] md:tracking-[-0.3px]">
+              {related?.title ?? "Untitled Case Study"}
+            </h4>
+          </div>
+          </div>
+        </Link>
+      ))}
+    </div>
+  </div>
+)}
+</div>
+ 
+       
  
         {/* Right: Sidebar */}
         <div className="w-full lg:w-[32.8%] xl:min-w-[436px] xl:mr-[-44px] md:sticky md:top-0 h-fit z-10 order-1 md:order-2">
@@ -228,11 +286,10 @@ export default function CaseStudyPage() {
           )}
  
          
-          {/* Related Case Studies */}
    {/* Related Case Studies */}
 {caseStudy?.relatedCaseStudies?.length > 0 && (
-  <div className="bg-[#F9F9F9] p-6 rounded-[20px]">
-    <h3 className="font-Roboto text-PrimaryBlack font-semibold leading-[28px] md:leading-[31.2px] text-[20px] md:text-[24px] tracking-[-0.3px] mb-4">
+  <div className="bg-[#F6F6F6] p-6 rounded-[20px] border border-[#F6F6F6] mt-6 hidden md:flex flex-col">
+    <h3 className="line-clamp-2 font-Roboto text-PrimaryBlack font-semibold leading-[28px] md:leading-[31.2px] text-[20px] md:text-[24px] tracking-[-0.3px] md:tracking-[-0.36px] mb-6">
       Related Case Study
     </h3>
     <div className="space-y-5">
@@ -240,24 +297,25 @@ export default function CaseStudyPage() {
         <Link
           key={related?._id}
           to={`/case-studies/${related?.slug ?? ""}`}
-          className="block bg-white rounded-[16px] overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+          className="block overflow-hidden"
         >
+          <div className="flex items-center gap-5">
           {/* Image */}
           {related?.heroImage?.url && (
             <img
               src={related.heroImage.url}
               alt={related.heroImage?.alt || related?.title || "Case Study Image"}
-              className="w-full h-[160px] object-cover"
+              className="w-[90px] md:w-[123px] h-[76px] md:h-[103px] rounded-[12px] object-cover "
             />
           )}
-
+ 
           {/* Details */}
-          <div className="p-4">
-            <p className="flex items-center gap-2 text-LightGray text-[14px] font-Roboto mb-2">
+          <div className="flex gap-3 flex-col">
+            <p className="flex items-center gap-1 font-Roboto text-LightGray font-normal leading-[21px] md:leading-[21px] text-[14px] md:text-[14px] tracking-[0px]">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
+                width="20"
+                height="20"
                 viewBox="0 0 24 24"
                 fill="none"
               >
@@ -272,16 +330,17 @@ export default function CaseStudyPage() {
                 day: "numeric",
               })}
             </p>
-            <h4 className="font-Roboto text-PrimaryBlack font-semibold text-[18px] leading-[24px]">
+            <h4 className="line-clamp-2 font-Roboto text-PrimaryBlack font-medium md:font-semibold leading-[27px] md:leading-[28px] text-[18px] md:text-[20px] tracking-[-0.3px] md:tracking-[-0.3px]">
               {related?.title ?? "Untitled Case Study"}
             </h4>
+          </div>
           </div>
         </Link>
       ))}
     </div>
   </div>
 )}
-
+ 
         </div>
       </div>
       </div>
@@ -295,7 +354,7 @@ export default function CaseStudyPage() {
               {caseStudy.virtualMailSection?.buttonText && (
                 <a
                   href={caseStudy.virtualMailSection?.buttonUrl ?? "#"}
-                  className="flex items-center justify-center bg-white text-PrimaryBlack font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full w-[193px] h-[52px]"
+                  className="flex items-center justify-center bg-white text-PrimaryBlack font-medium font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full w-[193px] h-[52px]"
                 >
                   {caseStudy.virtualMailSection.buttonText}
                 </a>
