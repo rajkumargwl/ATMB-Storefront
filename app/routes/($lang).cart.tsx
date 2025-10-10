@@ -175,6 +175,16 @@ console.log('Essentials Products in Cart page:', essentialsProducts);
       <Suspense fallback={<div className="flex justify-center"><SpinnerIcon /></div>}>
       <Await resolve={rootData?.cart}>
   {(cart) => {
+// console.log(
+//   cart.lines.edges.map((edge) => ({
+//     title11: edge.node.merchandise.product.title,
+//     attributes: edge.node.attributes.map(attr => ({
+//       key: attr.key,
+//       value: attr.value
+//     })),
+//   }))
+// );
+
    const availableEssentials = essentialsProducts.filter(
     (product) =>
       !cart.lines.edges.some(

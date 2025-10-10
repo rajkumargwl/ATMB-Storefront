@@ -11,6 +11,12 @@ import type { Product, ProductVariant } from '@shopify/hydrogen/storefront-api-t
 import { useCart } from '@shopify/hydrogen-react';
 import { useState, useEffect } from 'react';
 import { CartForm } from '@shopify/hydrogen';
+interface LocationData {
+  _id: string;
+  locationId: string;
+  displayName: string;
+  addressLine1: string;
+}
 
 // Location query
 const LOCATION_QUERY = /* groq */ `
@@ -46,7 +52,7 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
 
   if (!productVariant || !productVariant.product) throw notFound();
 
-  const location = await context.sanity.query({
+  const location = await context.sanity.query<LocationData>({
     query: LOCATION_QUERY,
     params: { id: locationId },
     cache,
@@ -63,10 +69,22 @@ export async function loader({ context, request }: LoaderFunctionArgs) {
 }
 
 export default function BundleDetails() {
-  const { location, header, footer, product, selectedVariant } = useLoaderData<typeof loader>();
+ // const { location, header, footer, product, selectedVariant } = useLoaderData<typeof loader>();
+  const { location, header, footer, product, selectedVariant } = useLoaderData<{
+    location: LocationData;
+    header: any;
+    footer: any;
+    product: Product;
+    selectedVariant: ProductVariant;
+  }>();
+  
   const { addLineItems } = useCart();
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
-
+  const locationProperties = Object.entries(location).map(([key, value]) => ({
+    key,
+    value: String(value), // Shopify requires string values
+  }));
+  
   // Parse bundle features
   const features: string[] = (() => {
     const raw =
@@ -139,36 +157,7 @@ export default function BundleDetails() {
       }
 
       return parsed;
-    })();
-
-
-    const handleAddToCart = async (variantId: string) => {
-      if (!selectedVariant) return;
-    
-      const gid = variantId.startsWith('gid://') ? variantId : `gid://shopify/ProductVariant/${variantId}`;
-    
-      const attributes: { key: string; value: string }[] = [
-        { key: 'Location', value: `${location.displayName} - ${location.addressLine1}` },
-        { key: 'Mailbox ID', value: location.locationId },
-        ...associatedProducts
-          .filter(item => item.title || (item.features?.length ?? 0) > 0)
-          .map((item, idx) => ({
-            key: `Associated Product ${idx + 1}`,
-            value: `${item.title ? `Title: ${item.title}` : ''} ${
-              item.features?.length ? `Features: ${item.features.join(', ')}` : ''
-            }`.trim(),
-          })),
-      ];
-    
-      await addLineItems({
-        lines: [{ merchandiseId: gid, quantity: 1, attributes }],
-      });
-    
-      // Manually redirect to cart
-      window.location.href = '/cart';
-    };
-    
-    
+    })(); 
 
   useEffect(() => {
     const storedLineId = sessionStorage.getItem('replaceLineId');
@@ -221,14 +210,13 @@ export default function BundleDetails() {
                       merchandiseId: selectedVariant.id,
                       quantity: 1,
                       attributes: [
-                        { key: 'Location', value: `${location.displayName} - ${location.addressLine1}` },
-                        { key: 'Mailbox ID', value: location.locationId },
+                        ...locationProperties,
                         ...associatedProducts
                           .filter(item => item.title || (item.features?.length ?? 0) > 0)
                           .map((item, idx) => ({
                             key: `Associated Product ${idx + 1}`,
-                            value: `${item.title ? `Title: ${item.title}` : ''} ${
-                              item.features?.length ? `Features: ${item.features.join(', ')}` : ''
+                            value: `${item.title ? `${item.title}` : ''} ${
+                              item.features?.length ? ` ${item.features.join(', ')}` : ''
                             }`.trim(),
                           })),
                       ],
@@ -241,13 +229,8 @@ export default function BundleDetails() {
                   Add to Cart
                 </button>
               </CartForm>
-)}
-              {/* <button
-              onClick={() => handleAddToCart(selectedVariant.id)}
-              className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-            >
-              Add to Cart
-            </button> */}
+        )}
+            
 
             </div>
           )}
