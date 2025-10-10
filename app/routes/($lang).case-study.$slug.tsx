@@ -87,11 +87,17 @@ export async function loader({params, context}: LoaderFunctionArgs) {
         quote,
         author
       },
-      relatedCaseStudies[]-> {
-        _id,
-        title,
-        "slug": slug.current
-      },
+    relatedCaseStudies[]-> {
+  _id,
+  title,
+  "slug": slug.current,
+  date,
+  heroImage {
+    alt,
+    "url": asset->url
+  }
+},
+
         virtualMailSection {
         heading,
         buttonText,
@@ -223,25 +229,59 @@ export default function CaseStudyPage() {
  
          
           {/* Related Case Studies */}
-          {caseStudy?.relatedCaseStudies?.length > 0 && (
-            <div className="bg-gray-50 p-5 rounded-lg shadow-sm">
-              <h3 className="text-lg font-semibold mb-4">
-                Related Case Study
-              </h3>
-              <ul className="space-y-2">
-                {caseStudy.relatedCaseStudies.map((related: any) => (
-                  <li key={related?._id}>
-                    <a
-                      href={`/case-studies/${related?.slug ?? ""}`}
-                      className="text-blue-600 underline text-sm"
-                    >
-                      {related?.title ?? "Untitled"}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+   {/* Related Case Studies */}
+{caseStudy?.relatedCaseStudies?.length > 0 && (
+  <div className="bg-[#F9F9F9] p-6 rounded-[20px]">
+    <h3 className="font-Roboto text-PrimaryBlack font-semibold leading-[28px] md:leading-[31.2px] text-[20px] md:text-[24px] tracking-[-0.3px] mb-4">
+      Related Case Study
+    </h3>
+    <div className="space-y-5">
+      {caseStudy.relatedCaseStudies.map((related: any) => (
+        <Link
+          key={related?._id}
+          to={`/case-studies/${related?.slug ?? ""}`}
+          className="block bg-white rounded-[16px] overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+        >
+          {/* Image */}
+          {related?.heroImage?.url && (
+            <img
+              src={related.heroImage.url}
+              alt={related.heroImage?.alt || related?.title || "Case Study Image"}
+              className="w-full h-[160px] object-cover"
+            />
           )}
+
+          {/* Details */}
+          <div className="p-4">
+            <p className="flex items-center gap-2 text-LightGray text-[14px] font-Roboto mb-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <path
+                  d="M7.80156 2.3999C8.13156 2.3999 8.40156 2.6699 8.40156 2.9999V4.7999H15.6016V2.9999C15.6016 2.6699 15.8716 2.3999 16.2016 2.3999C16.5316 2.3999 16.8016 2.6699 16.8016 2.9999V4.7999H18.0016C19.3253 4.7999 20.4016 5.87615 20.4016 7.1999V17.9999C20.4016 19.3237 19.3253 20.3999 18.0016 20.3999H6.00156C4.67781 20.3999 3.60156 19.3237 3.60156 17.9999V7.1999C3.60156 5.87615 4.67781 4.7999 6.00156 4.7999H7.20156V2.9999C7.20156 2.6699 7.47156 2.3999 7.80156 2.3999ZM18.0016 5.9999H6.00156C5.33781 5.9999 4.80156 6.53615 4.80156 7.1999V8.3999H19.2016V7.1999C19.2016 6.53615 18.6653 5.9999 18.0016 5.9999ZM19.2016 9.5999H4.80156V17.9999C4.80156 18.6637 5.33781 19.1999 6.00156 19.1999H18.0016C18.6653 19.1999 19.2016 18.6637 19.2016 17.9999V9.5999Z"
+                  fill="#4D4E4F"
+                />
+              </svg>
+              {new Date(related?.date).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })}
+            </p>
+            <h4 className="font-Roboto text-PrimaryBlack font-semibold text-[18px] leading-[24px]">
+              {related?.title ?? "Untitled Case Study"}
+            </h4>
+          </div>
+        </Link>
+      ))}
+    </div>
+  </div>
+)}
+
         </div>
       </div>
       </div>

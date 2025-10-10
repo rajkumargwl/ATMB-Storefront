@@ -45,7 +45,7 @@ export const pageType = defineType({
           { type: 'howitworks' },
            { type: 'acceleratorPageModule' },
            { type: 'pdpPageModule' },
-          
+           { type: 'anytimePhone' },
         // add more modules if needed
       ],
     }),
