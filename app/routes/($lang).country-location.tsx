@@ -62,7 +62,7 @@ export async function loader({context}: LoaderFunctionArgs) {
 export default function CountryLocationsPage() {
   const { countries, usLocations,locations } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
-
+console.log("locations",locations);
   return (
     // <div className="flex flex-col min-h-screen bg-white">
     //   <main className="flex-1 p-6 max-w-6xl mx-auto w-full">
@@ -181,7 +181,7 @@ export default function CountryLocationsPage() {
                 <div
                 key={index}
                 className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-200"
-                onClick={() => navigate(`/${encodeURIComponent(state.country)}/${encodeURIComponent(state.name)}`)}
+                onClick={() => navigate(`/l/${encodeURIComponent(state.country)}/${encodeURIComponent(state.name)}`)}
               >
                 <span className="group-hover:text-[#F15A24]">{state.name}</span>
                 {state && (
@@ -214,7 +214,7 @@ export default function CountryLocationsPage() {
         {countries.map((country, index) => {
             return (
                 <div key={index} className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-200"
-                onClick={() => navigate(`/country/${encodeURIComponent(country.name)}`)}
+                onClick={() => navigate(`/l/country/${encodeURIComponent(country.name)}`)}
                 >
                 <span className="group-hover:text-[#F15A24]">{country.name.trim()}</span>
                 {country.count && (

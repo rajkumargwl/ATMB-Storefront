@@ -74,6 +74,7 @@ import {aboutDetailedFeaturesSection} from './objects/module/aboutDetailedFeatur
 import {aboutFoundersSection} from './objects/module/aboutFoundersSection'
 import {aboutResourceAuthorsSection} from './objects/module/aboutResourceAuthorsSection'
 import {aboutUsModule} from './objects/module/aboutUsModule'
+import {pdpPageModule} from './objects/module/pdpPageModule'
 import { solutionsMailbox } from './objects/module/solutionsMailbox'
 import { prefectvirtualbox } from './objects/module/prefectvirtualbox'
 import {whyChooseVirtualMailbox} from './objects/module/whyChooseVirtualMailbox'
@@ -140,6 +141,7 @@ const objects = [
   featuresModule,
   //heroBanner,
   aboutUsModule,
+  pdpPageModule,
   detailedFeatureType,
   keyHighlights,
   header,
