@@ -122,8 +122,10 @@ import { businessAcceleratorSection } from './objects/module/businessAccelerator
 import { acceleratorPageModule } from './objects/module/acceleratorPageModule'
 import { businessGrowthToolkitSection } from './objects/module/businessGrowthToolkitSection'
 import { businessProfitSection } from './objects/module/businessProfitSection'
-
+import { noOfficeSection } from "./objects/module/noOfficeSection";
+import { featuresSection } from "./objects/module/featuresSection";
 import { businessAcceleratorBannerSection } from './objects/module/businessAcceleratorBannerSection'
+import {  anytimePhone } from './objects/module/anytimePhone'
 // Objects used as annotations must be imported first
 // Objects used as annotations must be imported first
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
@@ -244,7 +246,10 @@ contactUsSection,
   webinarsTopicsSection,
   acceleratorPageModule,
   buisnesshowitwork,
-  businessAcceleratorBannerSection
+  businessAcceleratorBannerSection,
+  noOfficeSection,
+  featuresSection,
+  anytimePhone
 ]
 
 import {portableTextType} from './portableText/portableTextType'
