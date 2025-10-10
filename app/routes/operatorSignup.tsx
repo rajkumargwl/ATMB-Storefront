@@ -32,9 +32,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
       query: OPERATOR_SIGNUP_PAGE,
     });
 
-    console.log('🎯 Operator Signup Page Data:', page);
-    console.log('📦 Operator Signup Modules:', page?.modules);
-
+  
     if (!page) {
       console.log('❌ Page not found');
       throw notFound();
@@ -57,7 +55,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
 export default function OperatorSignup() {
   const { page, gids } = useLoaderData<typeof loader>();
 
-  console.log('🎯 OperatorSignup component rendering with page:', page);
+ 
 
   return (
     <SanityPreview data={page} query={OPERATOR_SIGNUP_PAGE}>
@@ -65,8 +63,7 @@ export default function OperatorSignup() {
         <Suspense fallback={<div>Loading...</div>}>
           <Await resolve={gids}>
             {(resolvedGids) => {
-              console.log('🎯 Gids resolved:', resolvedGids);
-              console.log('🎯 Page modules:', page?.modules);
+             
               
               if (!page?.modules || page.modules.length === 0) {
                 return (
