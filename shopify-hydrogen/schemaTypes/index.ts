@@ -128,8 +128,16 @@ import { businessAcceleratorBannerSection } from './objects/module/businessAccel
 import {  anytimePhone } from './objects/module/anytimePhone'
 import { operatorsignupType } from './objects/module/operatorsignupType'
 import operatorSignupVideo from './objects/module/operatorSignupVideo'
-// Objects used as annotations must be imported first
-// Objects used as annotations must be imported first
+import { businessBenefitsSection } from './objects/module/businessBenefitsSection'
+import { businessIndustryRecognitionSection } from './objects/module/businessIndustryRecognitionSection'
+import { businessTrustedSection } from './objects/module/businessTrustedSection'
+import { clientSuccessStoriesSection } from './objects/module/clientSuccessStoriesSection'
+import { joinCtaBannerSection } from './objects/module/joinCtaBannerSection'
+import { smallBusinessChallengesSection } from './objects/module/smallBusinessChallengesSection'
+import { smallBusinessOwnerPage } from './objects/module/smallBusinessOwnerPage'
+import { smallBusinessOwnerSection } from './objects/module/smallBusinessOwnerSection'
+import { smartBusinessSection } from './objects/module/smartBusinessSection'
+import { faqWithComment } from './objects/module/faqWithComment'
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
 
 const objects = [
@@ -253,7 +261,18 @@ contactUsSection,
   featuresSection,
     operatorsignupType,
   operatorSignupVideo,
-  anytimePhone
+  anytimePhone,
+  businessBenefitsSection,
+  businessIndustryRecognitionSection,
+  businessTrustedSection,
+  clientSuccessStoriesSection,
+  joinCtaBannerSection,
+  smallBusinessChallengesSection,
+  smallBusinessOwnerPage,
+  smallBusinessOwnerSection,
+  smartBusinessSection,
+  faqWithComment
+
 ]
 
 import {portableTextType} from './portableText/portableTextType'
