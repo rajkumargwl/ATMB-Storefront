@@ -178,7 +178,7 @@ function LineItem({lineItem}: {lineItem: CartLine | ComponentizableCartLine}) {
           {attributes?.length > 0 && (
       <div className="mt-2 ">
     {attributes
-   //  .filter((attr) => VISIBLE_ATTRIBUTES.includes(attr.key))
+    //  .filter((attr) => VISIBLE_ATTRIBUTES.includes(attr.key))
       .map((attr) => (
         <p key={attr.key} className='font-Roboto text-LightGray font-normal leading-[24px] text-[16px] tracking-[0px]'>
            {attr.value}
@@ -307,7 +307,7 @@ function ItemRemoveButton({lineIds}: {lineIds: CartLine['id'][]}) {
 export function CartSummary({cart,cost}: {cart: Cart,cost: CartCost}) {
   const lines = flattenConnection(cart.lines);
   const VISIBLE_ATTRIBUTES = [
-    'locationId',
+    // 'locationId',
     'displayName',
     'addressLine1',
     'city',
@@ -428,7 +428,6 @@ export function CartActions({cart}: {cart: Cart}) {
       >
         Checkout 
       </Button>
-      
     </div>
   );
 }

@@ -36,7 +36,7 @@ export const loader: LoaderFunction = async ({ context, params }) => {
   const customerAccessToken = await context.session.get('customerAccessToken');
   
   if (customerAccessToken === null || customerAccessToken === undefined || customerAccessToken === '') {
-    return redirect('/create-account');
+   // return redirect('/create-account');
   }
 
   const [virtualMailbox, virtualPhone, BusinessAcc] = await Promise.all([
@@ -106,7 +106,38 @@ function CheckoutForm() {
       .catch(() => setError("Failed to load price ID"));
   }, []);
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    const { paymentMethod, error: pmError } = await stripe.createPaymentMethod({
+      type: "card",
+      card: cardElement,
+      billing_details: { email },
+    });
+    
+    if (pmError) {
+      setError(pmError.message || "Failed to create payment method");
+      setLoading(false);
+      return;
+    }
+    
+    // Send the token to backend to save for future payment
+    const res = await fetch("/api/save-payment-method", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        paymentMethodId: paymentMethod.id,
+        email,
+        customerId: rootData?.customer?.id,
+      }),
+    });
+    
+    const data = await res.json();
+    if (data.error) {
+      setError(data.error);
+    } else {
+      alert("Card saved successfully! You can pay later.");
+    }
+    setLoading(false);
+    
+    /*e.preventDefault();
     setLoading(true);
     setError(null);
 
@@ -186,7 +217,7 @@ function CheckoutForm() {
       alert("Subscription successful!");
     }
 
-    setLoading(false);
+    setLoading(false);*/
   };
 
   async function chargeAgain() {

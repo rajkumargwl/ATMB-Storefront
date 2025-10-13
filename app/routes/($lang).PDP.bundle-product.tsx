@@ -157,7 +157,37 @@ export default function BundleDetails() {
       }
 
       return parsed;
-    })(); 
+    })();
+
+
+    const handleAddToCart = async (variantId: string) => {
+      if (!selectedVariant) return;
+    
+      const gid = variantId.startsWith('gid://') ? variantId : `gid://shopify/ProductVariant/${variantId}`;
+    
+      const attributes: { key: string; value: string }[] = [
+        
+        { key: 'Location', value: `${location.displayName} - ${location.addressLine1}` },
+       // { key: 'Mailbox ID', value: location.locationId },
+        ...associatedProducts
+          .filter(item => item.title || (item.features?.length ?? 0) > 0)
+          .map((item, idx) => ({
+            key: `Associated Product ${idx + 1}`,
+            value: `${item.title ? `Title: ${item.title}` : ''} ${
+              item.features?.length ? `Features: ${item.features.join(', ')}` : ''
+            }`.trim(),
+          })),
+      ];
+    
+      await addLineItems({
+        lines: [{ merchandiseId: gid, quantity: 1, attributes }],
+      });
+    
+      // Manually redirect to cart
+      window.location.href = '/cart';
+    };
+    
+    
 
   useEffect(() => {
     const storedLineId = sessionStorage.getItem('replaceLineId');
@@ -210,6 +240,8 @@ export default function BundleDetails() {
                       merchandiseId: selectedVariant.id,
                       quantity: 1,
                       attributes: [
+                        //{ key: 'Location', value: `${location.displayName} - ${location.addressLine1}` },
+                        //{ key: 'Mailbox ID', value: location.locationId },
                         ...locationProperties,
                         ...associatedProducts
                           .filter(item => item.title || (item.features?.length ?? 0) > 0)
@@ -229,8 +261,13 @@ export default function BundleDetails() {
                   Add to Cart
                 </button>
               </CartForm>
-        )}
-            
+)}
+              {/* <button
+              onClick={() => handleAddToCart(selectedVariant.id)}
+              className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Add to Cart
+            </button> */}
 
             </div>
           )}
