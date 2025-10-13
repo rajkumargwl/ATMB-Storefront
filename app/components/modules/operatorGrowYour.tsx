@@ -1,5 +1,5 @@
 import { Link } from '@remix-run/react';
-
+ 
 interface OperatorGrowYourProps {
   module: {
     _type: 'affiliateProgramSection';
@@ -23,60 +23,61 @@ interface OperatorGrowYourProps {
     };
   };
 }
-
+ 
 export function OperatorGrowYour({ module }: OperatorGrowYourProps) {
   const { label, heading, description, ctaText, ctaUrl, image } = module;
-
+ 
   console.log('🎯 OperatorGrowYour COMPONENT CALLED!');
   console.log('📸 Image data:', image);
   console.log('🔗 Image URL:', image?.asset?.url);
-
+ 
   return (
-      <section className="px-5 py-[40px] md:py-[60px] lg:py-[95px]">
-      <div className="max-w-[1249px] mx-auto flex flex-col md:flex-row gap-8 lg:gap-[62px] items-center">
+      <section className="bg-white px-5 py-[40px] md:py-[54px] lg:py-[54px]">
+      <div className="max-w-[1240px] mx-auto flex flex-col md:flex-row gap-[62px] lg:gap-[62px] items-center">
         
         {/* Left Content: Text and CTA */}
-        <div className="w-full md:w-[50%] lg:w-[45%] flex flex-col justify-center space-y-4">
+        <div className="w-full md:w-[48.1%] space-y-5 md:space-y-5">
           
           {label && (
-            <p className="font-sans text-black/80 font-normal leading-normal text-[16px] md:text-[18px]">
+            <p className="font-Roboto text-LightGray font-medium leading-[27px] md:leading-[28px] text-[18px] md:text-[20px] tracking-[0px]">
               {label}
             </p>
           )}
           
          {heading && (
-            <h2 className="max-w-full font-sans text-PrimaryBlack font-bold leading-[36px] md:leading-[48px] text-[30px] md:text-[42px] tracking-tight">
+            <h1 className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px]">
               {heading}
-            </h2>
+            </h1>
           )}
         
           {description && (
-            <p className="font-sans text-PrimaryBlack font-normal leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px] mt-4">
+            <p className="font-Roboto text-LightGray font-medium leading-[27px] md:leading-[28px] text-[18px] md:text-[20px] tracking-[0px]">
               {description}
             </p>
           )}
           
           {ctaText && (
-            <Link 
-              to={ctaUrl || "#"} 
-              className="flex items-center justify-center w-full md:w-[249px] h-[44px] md:h-[52px] rounded-full bg-DarkOrange px-4 py-3 text-white font-Roboto font-normal text-[16px] md:text-[16px] leading-[16px] tracking-[0.08px] transition-all hover:scale-[1.01] hover:bg-[#DD5827]"
+            <Link
+              to={ctaUrl || "#"}
+              className="flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full w-full md:w-[193px] h-[52px]"
             >
               {ctaText}
             </Link>
           )}
         </div>
-{image?.asset?.url && (
-  <div className="w-full md:w-[50%] flex justify-center">
-    <img
-      src={image.asset.url}
-      alt={image.alt || 'Affiliate Program Image'}
-      className="w-full max-w-[538px] rounded-[20px] object-cover"
-      loading="lazy"
-    />
-  </div>
-)}
-
+          {image?.asset?.url && (
+            <div className="w-full md:w-[51.9%] relative">
+              <img
+                src={image.asset.url}
+                alt={image.alt || 'Affiliate Program Image'}
+                className="rounded-[20px] w-full max-h-[400px] object-cover"
+                loading="lazy"
+              />
+            </div>
+          )}
+ 
       </div>
     </section>
   );
 }
+ 
