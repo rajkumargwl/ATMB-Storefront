@@ -1,64 +1,64 @@
 import React from 'react';
-
+ 
 type FeatureCategory = {
   categoryTitle: string;
   icon: string;
   points: string[];
 };
-
+ 
 type FeaturesModuleProps = {
   title?: string;
   subtitle?: string;
   featureCategories?: FeatureCategory[];
 };
-
+ 
 export default function AnytimeFeaturesModule({
   title,
   subtitle,
   featureCategories = [],
 }: FeaturesModuleProps) {
   return (
-    <section className="w-full bg-white py-12 md:py-16 lg:py-20">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="bg-white  py-[40px] md:py-[60px] lg:py-[100px] px-5">
+      <div className="max-w-[1240px] mx-auto ">
         {/* Title */}
-        <div className="text-center mb-12">
+        <div className="flex flex-col items-center justify-center gap-5 md:gap-5 mb-[32px] md:mb-[64px]">
           {title && (
-            <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900">
+            <h2 className="text-center font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px]">
               {title}
             </h2>
           )}
           {subtitle && (
-            <p className="mt-2 text-gray-600 text-sm md:text-base">
+            <p className=" max-w-[514px] mx-auto text-center font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px]">
               {subtitle}
             </p>
           )}
         </div>
-
+ 
         {/* Feature Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {featureCategories.map((category, index) => (
             <div
               key={index}
-              className="p-6 bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-md transition-all duration-300"
+              className="border border-LightWhite rounded-[20px] p-6 flex flex-col gap-4 md:min-h-[474px]"
             >
               {/* Header */}
-              <div className="flex items-center gap-3 mb-4">
-                <div className="flex-shrink-0 bg-orange-100 p-3 rounded-full">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 min-w-[36px] bg-DarkOrange rounded-full flex items-center justify-center">
                   <img
                     src={category.icon}
                     alt={category.categoryTitle}
                     className="w-5 h-5"
                   />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900">
+                <h3 className="font-Roboto text-PrimaryBlack font-medium leading-[18px] md:leading-[28px] text-[18px] md:text-[20px] tracking-[0.09px] md:tracking-[-0.3px]">
                   {category.categoryTitle}
                 </h3>
               </div>
-
+ 
               {/* Points */}
-              <ul className="list-disc list-inside text-gray-700 text-sm space-y-1">
+              <ul className="list-disc list-inside flex flex-col gap-4">
                 {category.points.map((point, idx) => (
-                  <li key={idx}>{point}</li>
+                  <li key={idx} className='font-Roboto text-PrimaryBlack font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px]'>{point}</li>
                 ))}
               </ul>
             </div>
