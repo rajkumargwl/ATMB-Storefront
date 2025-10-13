@@ -30,7 +30,7 @@ export async function doLogout(context: AppLoadContext) {
   // Redirect to Microsoft logout endpoint
   const tenant = context.env.MS_ENTRA_TENANT_ID; // or your tenant ID
   // const postLogoutRedirectUri = "https://shopifystage.anytimehq.co/";
-  const postLogoutRedirectUri = context.env.STORE_DOMAIN;
+  const postLogoutRedirectUri = context.env.STORE_DOMAIN || 'https://shopifystage.anytimehq.co/';
   const logoutUrl = `https://login.anytimehq.co/${tenant}/oauth2/v2.0/logout?post_logout_redirect_uri=${encodeURIComponent(postLogoutRedirectUri)}`;
 
   return redirect(logoutUrl, { headers });
