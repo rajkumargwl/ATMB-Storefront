@@ -4,7 +4,7 @@ import { defineType, defineField } from "sanity";
 export const smallBusinessOwnerSection = defineType({
   name: "smallBusinessOwnerSection",
   title: "Small Business Owner Section",
-  type: "document",
+  type: "object",
  
 
   fields: [

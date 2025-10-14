@@ -3,7 +3,7 @@ import {defineType, defineField} from 'sanity'
 export const businessBenefitsSection = defineType({
   name: 'businessBenefitsSection',
   title: 'Business Benefits Section',
-  type: 'document',
+  type: 'object',
   fields: [
     defineField({
       name: 'heading',

@@ -53,7 +53,7 @@ import {spotType} from './objects/hotspot/spotType'
 import {menu} from './objects/shopify/menu'
 import {keyHighlights} from './objects/module/keyHighlights'
 import {detailedFeatureType} from './objects/module/detailedFeature'
-import solutions from './singletons/solutions'
+
 //import { heroBanner } from "./objects/module/heroBanner";
 // import { heroBanner } from "./objects/module/heroBanner";
 import location from './location'
@@ -293,6 +293,6 @@ import {homeType} from './singletons/homeType'
 import {settingsType} from './singletons/settingsType'
 
 
-const singletons = [homeType, settingsType,solutions,]
+const singletons = [homeType, settingsType,]
 
 export const schemaTypes = [...annotations, ...objects, ...singletons, ...blocks, ...documents,location]
