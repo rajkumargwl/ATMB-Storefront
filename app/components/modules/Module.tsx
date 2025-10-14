@@ -66,6 +66,9 @@ import BusinessSupport from '~/components/modules/BusinessSupport';
 import BusinessBanner from '~/components/modules/BusinessBanner';
 import WebinarsTopicsSection from '~/components/modules/WebinarsTopicsSection';
 
+import SmartBusiness from '~/components/modules/SmartBusiness';
+
+
 // 櫨 OPERATOR SIGNUP SPECIFIC COMPONENTS - SEPARATE DESIGN
 // NOTE: These files must exist in the current directory:
 // './OperatorSignupDebug', './operatorAdvantage', etc.
@@ -81,6 +84,15 @@ import { OperatorYourCompetitors } from './operatoryourcompetitors';
 import { OperatorYourBusiness } from './operatoryourbuisness';
 import NoOfficeSection from '~/components/modules/NoOfficeSection';
 import  AnytimeFeaturesModule from '~/components/modules/AnytimeFeaturesModule';
+import  SmallBusinessOwnerSection from '~/components/modules/SmallBusinessOwnerSection';
+
+import  BusinessClientSuccessStoriesSection from '~/components/modules/BusinessClientSuccessStoriesSection';
+import  BusinessIndustryRecognitionSection from '~/components/modules/BusinessIndustryRecognitionSection';
+import  BusinessTrustedSection from '~/components/modules/BusinessTrustedSection';
+import  SmallBusinessChallanges from '~/components/modules/SmallBusinessChallanges';
+import  BusinessBenefitsSection from '~/components/modules/BusinessBenefitsSection';
+import FaqWithComment from './FaqWithComment';
+import JoinCtaBannerSection from './JoinCtaBannerSection';
 type Props = {
   module: SanityModule | ProductWithNodes;
   homeSearchResults?: any;
@@ -111,9 +123,44 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
   case 'featuresSection':
   return <AnytimeFeaturesModule {...module} />;
  
-
-
    
+   case 'smallBusinessOwnerPage':
+  return (
+    <>
+      {module.modules?.map((sub: any) => (
+        <Module key={sub._key} module={sub} />
+      ))}
+    </>
+  );
+
+   case 'smallBusinessOwnerSection':
+  return <SmallBusinessOwnerSection {...module} />;
+  
+  case 'smallBusinessChallengesSection':
+  return <SmallBusinessChallanges {...module} />;
+
+case 'smartBusinessSection':
+  return <SmartBusiness {...module} />;
+ 
+  case 'businessBenefitsSection':
+  return <BusinessBenefitsSection {...module} />;
+
+  case 'businessTrustedSection':
+  return <BusinessTrustedSection {...module} />;
+
+   case 'businessIndustryRecognitionSection':
+  return <BusinessIndustryRecognitionSection {...module} />;
+    
+    case 'clientSuccessStoriesSection':
+    return <BusinessClientSuccessStoriesSection {...module} />;
+
+  case "faqWithComment":
+    return <FaqWithComment data={module} />;
+
+ case "joinCtaBannerSection":
+  return <JoinCtaBannerSection {...module} />;
+
+
     // 櫨 OPERATOR SIGNUP CONTAINER
     case 'operatorsignup':
       return (
@@ -461,8 +508,8 @@ case 'solutionMailboxBenefitFaqModule':
     case 'homeSection4':
       return <Locations data={module} />;
     
-    // case 'plans':
-    //   return <Plans data={module} bundles={bundles}/>;
+    case 'plans':
+      return <Plans data={module} bundles={bundles}/>;
     
     case 'bundles':
       return <Bundles data={module} />;

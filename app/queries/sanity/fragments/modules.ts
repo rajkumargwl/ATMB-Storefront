@@ -31,6 +31,7 @@ import { HOW_IT_WORKS_MODULE } from './modules/howitworksmodule';
 import { BUSINESS_ACCELERATOR_MODULE } from './modules/accelerator';
  import { OPERATOR_SIGNUP_FRAGMENT } from './modules/operatorsignup';
 import { ANYTIME_PHONE_MODULE } from './modules/anytimephone';
+import { SMALL_BUSINESS_OWNER_MODULE } from './modules/smallBusinessOwner';
 export const MODULES = groq`
   _key,
   _type,
@@ -123,5 +124,8 @@ export const MODULES = groq`
   },
     (_type == "operatorsignup") => {  
     ${OPERATOR_SIGNUP_FRAGMENT}
+  },
+  (_type == "smallBusinessOwnerPage") => {  
+    ${SMALL_BUSINESS_OWNER_MODULE}
   }
 `;
