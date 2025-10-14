@@ -4,7 +4,7 @@ import { StarIcon } from "@sanity/icons"; // You can change the icon
 export const featuresSection = defineType({
   name: "featuresSection",
   title: "Features Section",
-  type: "document",
+  type: "object",
   icon: StarIcon,
   fields: [
     defineField({
