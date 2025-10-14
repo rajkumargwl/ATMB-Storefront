@@ -1,3 +1,4 @@
+
 interface OperatorMailCenterProps {
   module: {
     title?: string;
@@ -12,7 +13,9 @@ interface OperatorMailCenterProps {
 export function OperatorMailCenter({module}: OperatorMailCenterProps) {
   const {title, subtitle, buttonText, buttonLink, backgroundColor = '#FF6600', textColor = '#FFFFFF'} = module;
  
-
+  console.log('🎯 OperatorMailCenter COMPONENT CALLED!');
+  console.log('📝 Module data:', module);
+ 
   return (
     <section
       className="px-5 py-[40px] md:py-[60px] lg:py-[80px] bg-PrimaryBlack relative z-[2] overflow-hidden"
@@ -32,7 +35,7 @@ export function OperatorMailCenter({module}: OperatorMailCenterProps) {
           </defs>
         </svg>
         </div>
-      <div className="mx-auto max-w-[1240px] text-center relatvie z-[2]">
+      <div className="mx-auto max-w-[1240px] text-center relative z-[2] flex flex-col items-center">
         {title && (
           <h2 className="max-w-[856px] mx-auto mb-8 text-center font-Roboto text-white font-semibold leading-[38.4px] md:leading-[61.6px] text-[32px] md:text-[56px] tracking-[-0.48px] md:tracking-[-1.12px]">
             {title}
@@ -45,16 +48,24 @@ export function OperatorMailCenter({module}: OperatorMailCenterProps) {
           </p>
         )}
         
-        {buttonText && buttonLink && (
-          <a
-            href={buttonLink}
-            className="inline-block bg-white text-orange-600 hover:bg-gray-100 font-semibold px-8 py-4 rounded-lg transition duration-300 transform hover:scale-105"
-            style={{color: backgroundColor}}
-          >
-            {buttonText}
-          </a>
-        )}
+          {buttonText && (
+            buttonLink ? (
+              <a
+                href={buttonLink}
+                className="flex items-center justify-center bg-DarkOrange text-white font-medium font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full w-full md:w-[221px] h-[52px] md:h-[52px]"
+                >
+                {buttonText}
+              </a>
+            ) : (
+              <button
+                className="flex items-center justify-center bg-DarkOrange text-white font-medium font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full w-full md:w-[221px] h-[52px] md:h-[52px]"
+              >
+                {buttonText}
+              </button>
+            )
+          )}
       </div>
     </section>
   );
 }
+ 

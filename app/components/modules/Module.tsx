@@ -74,25 +74,17 @@ import SmartBusiness from '~/components/modules/SmartBusiness';
 // './OperatorSignupDebug', './operatorAdvantage', etc.
 
 import { OperatorAdvantage } from './operatorAdvantage';
-import { OperatorGrowYour } from './operatorGrowYour';
+
 import { OperatorMailCenter } from './operatormailcenter';
 import { OperatorNowYourCustomer } from './operatornowyourcustomer';
 import { OperatorVideo } from './operatorvideo';
-import { OperatorThousand } from './operatorthousand';
-import { OperatorWhyJoin } from './operatorwhyjoin';
+
+
 import { OperatorYourCompetitors } from './operatoryourcompetitors';
-import { OperatorYourBusiness } from './operatoryourbuisness';
+
 import NoOfficeSection from '~/components/modules/NoOfficeSection';
 import  AnytimeFeaturesModule from '~/components/modules/AnytimeFeaturesModule';
-import  SmallBusinessOwnerSection from '~/components/modules/SmallBusinessOwnerSection';
-
-import  BusinessClientSuccessStoriesSection from '~/components/modules/BusinessClientSuccessStoriesSection';
-import  BusinessIndustryRecognitionSection from '~/components/modules/BusinessIndustryRecognitionSection';
-import  BusinessTrustedSection from '~/components/modules/BusinessTrustedSection';
-import  SmallBusinessChallanges from '~/components/modules/SmallBusinessChallanges';
-import  BusinessBenefitsSection from '~/components/modules/BusinessBenefitsSection';
-import FaqWithComment from './FaqWithComment';
-import JoinCtaBannerSection from './JoinCtaBannerSection';
+ 
 type Props = {
   module: SanityModule | ProductWithNodes;
   homeSearchResults?: any;
@@ -103,12 +95,24 @@ type Props = {
 
 export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery, bundles, pageType = 'default'}: Props) { // 争 Set default pageType
 
-  console.log("check bundles in module", bundles);
+ 
 
   // Helper boolean for conditional rendering
   const isOperatorPage = pageType === 'operator';
 
   switch (module._type) {
+     case 'anytimemobile':
+  return (
+    <>
+      {module.modules?.map((sub: any) => (
+        <Module key={sub._key} module={sub} />
+      ))}
+    </>
+  );
+  case 'downloadMailboxRenterAppsSection':
+  return <DownloadMailboxRenterApps {...module} />;
+  case 'smallBusinessOwnerAppDownloadSection':
+  return <SmallBusinessOwnerAppDownloadSection {...module} />;
 
     case 'anytimePhone':
   return (
@@ -170,39 +174,36 @@ case 'smartBusinessSection':
           ))}
         </>
       );
-
-
+ 
+ 
     // Operator specific modules using standard type names but conditional rendering
     
     // affilateProgramSection -> OperatorGrowYour / AffiliateProgramSection
-    case 'affiliateProgramSection':
-      return isOperatorPage 
-        ? <OperatorGrowYour module={module} /> 
-        : <AffiliateProgramSection {...module} />;
-
+   case 'affiliateProgramSection':
+      return <AffiliateProgramSection {...module} />;
+ 
     // whyJoinSection -> OperatorWhyJoin / WhyJoinSection
-    case 'whyJoinSection':
-      return isOperatorPage
-        ? <OperatorWhyJoin module={module} />
-        : <WhyJoinSection {...module} />;
-
+      case 'whyJoinSection':
+      return <WhyJoinSection {...module} />;
+ 
     // howitworks3steps -> OperatorNowYourCustomer / HowItWork3Steps
     case 'howitworks3steps':
       return isOperatorPage
         ? <OperatorNowYourCustomer module={module} />
         : <HowItWork3Steps data={module} />;
-
+    
+    // This is the FIRST (and correct) instance of operatorSignupVideo
+    case 'operatorSignupVideo':
+      return <OperatorVideo module={module} />;
+ 
     // businessAtFingertips -> OperatorYourBusiness / BusinessAtFingertips
-    case 'businessAtFingertips':
-      return isOperatorPage
-        ? <OperatorYourBusiness module={module} />
-        : <BusinessAtFingertips data={module} />;
-
-    // whyBusinessChooseUs -> OperatorAdvantage / RenterReferralWork / WhyBusinessChooseUs
-    case 'whyBusinessChooseUs':
-      if (isOperatorPage) {
+     case 'businessAtFingertips':
+      return <BusinessAtFingertips data={module} />;
+ 
+  case 'whyBusinessChooseUs':
+     
         return <OperatorAdvantage module={module} />;
-      }
+ 
       // Renter Referral Program Logic (module._key === '21b68d61ef37' was a key check)
       if (module._key === '21b68d61ef37') {
         return <RenterReferralWork data={module} />;
@@ -212,19 +213,16 @@ case 'smartBusinessSection':
         
     // testimonial -> OperatorThousand / Testimonial
     case 'testimonial':
-      return isOperatorPage
-        ? <OperatorThousand module={module} />
-        : <Testimonial data={module} />;
-
-    // The modules below are assumed to ONLY exist on the Operator Signup page, 
+      return  <Testimonial data={module} />;
+ 
+    // The modules below are assumed to ONLY exist on the Operator Signup page,
     // but we add the isOperatorPage check just in case.
-
+ 
     // New Operator-only type (formerly: operatorSignupDebug)
  
-
-    case 'operatorSignupVideo':
-      return <OperatorVideo module={module} />;
-
+ 
+     // The duplicate case for 'operatorSignupVideo' was here and has been REMOVED.
+ 
     case 'operatorYourCompetitors':
       return <OperatorYourCompetitors module={module} />;
       
@@ -233,13 +231,9 @@ case 'smartBusinessSection':
       return isOperatorPage
         ? <OperatorMailCenter module={module} />
         : <JoinTeamSection {...module} />;
-
-
-     // 櫨 END OPERATOR SIGNUP MODULES
-        
  
-
-
+ 
+     // 櫨 END OPERATOR SIGNUP MODULES
 
 
 
@@ -268,10 +262,10 @@ case 'smartBusinessSection':
 
   case 'buisnesshowitwork':
   return <BuisnessHowitWork {...module} />;
-
+ 
   case 'businessProfitSection':
   return <BusinessProfitSection {...module} />;
-
+ 
   case 'businessGrowthToolkitSection':
   return <BusinessGrowth data={module} />;
 
