@@ -20,7 +20,7 @@ It's designed to be used alongside our [pre-configured Studio][sanity-shopify-st
 
 This starter showcases a few patterns you can adopt when creating your own custom storefronts. Use Sanity and Hydrogen to delight customers with rich, shoppable editorial experiences that best tell your story.
 
-# Features
+# Featuress
 
 **[View the feature gallery][about]**
 
