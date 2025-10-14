@@ -53,7 +53,7 @@ import {spotType} from './objects/hotspot/spotType'
 import {menu} from './objects/shopify/menu'
 import {keyHighlights} from './objects/module/keyHighlights'
 import {detailedFeatureType} from './objects/module/detailedFeature'
-import solutions from './singletons/solutions'
+
 //import { heroBanner } from "./objects/module/heroBanner";
 // import { heroBanner } from "./objects/module/heroBanner";
 import location from './location'
@@ -128,8 +128,16 @@ import { businessAcceleratorBannerSection } from './objects/module/businessAccel
 import {  anytimePhone } from './objects/module/anytimePhone'
 import { operatorsignupType } from './objects/module/operatorsignupType'
 import operatorSignupVideo from './objects/module/operatorSignupVideo'
-// Objects used as annotations must be imported first
-// Objects used as annotations must be imported first
+import { businessBenefitsSection } from './objects/module/businessBenefitsSection'
+import { businessIndustryRecognitionSection } from './objects/module/businessIndustryRecognitionSection'
+import { businessTrustedSection } from './objects/module/businessTrustedSection'
+import { clientSuccessStoriesSection } from './objects/module/clientSuccessStoriesSection'
+import { joinCtaBannerSection } from './objects/module/joinCtaBannerSection'
+import { smallBusinessChallengesSection } from './objects/module/smallBusinessChallengesSection'
+import { smallBusinessOwnerPage } from './objects/module/smallBusinessOwnerPage'
+import { smallBusinessOwnerSection } from './objects/module/smallBusinessOwnerSection'
+import { smartBusinessSection } from './objects/module/smartBusinessSection'
+import { faqWithComment } from './objects/module/faqWithComment'
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
 
 const objects = [
@@ -253,7 +261,18 @@ contactUsSection,
   featuresSection,
     operatorsignupType,
   operatorSignupVideo,
-  anytimePhone
+  anytimePhone,
+  businessBenefitsSection,
+  businessIndustryRecognitionSection,
+  businessTrustedSection,
+  clientSuccessStoriesSection,
+  joinCtaBannerSection,
+  smallBusinessChallengesSection,
+  smallBusinessOwnerPage,
+  smallBusinessOwnerSection,
+  smartBusinessSection,
+  faqWithComment
+
 ]
 
 import {portableTextType} from './portableText/portableTextType'
@@ -274,6 +293,6 @@ import {homeType} from './singletons/homeType'
 import {settingsType} from './singletons/settingsType'
 
 
-const singletons = [homeType, settingsType,solutions,]
+const singletons = [homeType, settingsType,]
 
 export const schemaTypes = [...annotations, ...objects, ...singletons, ...blocks, ...documents,location]
