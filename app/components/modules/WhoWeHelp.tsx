@@ -276,7 +276,7 @@ export default function HomeHero({ data }: Props) {
                           />
                         ) : service.icon?.svgCode ? (
                           <span
-                            className="w-[28px] h-[28px] flex items-center justify-center mt-[5px]"
+                            className="w-[28px] h-[28px] flex items-center justify-center mt-[4px]"
                             dangerouslySetInnerHTML={{ __html: service.icon.svgCode }}
                           />
                         ) : (
