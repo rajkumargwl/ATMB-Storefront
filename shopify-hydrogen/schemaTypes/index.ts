@@ -141,7 +141,7 @@ import { faqWithComment } from './objects/module/faqWithComment'
 import { smallBusinessOwnerAppDownloadSection } from './objects/module/smallBusinessOwnerAppDownloadSection'
 import  { downloadMailboxRenterAppsSection } from './objects/module/downloadMailboxRenterAppsSection'
 import { anytimemobile } from './objects/module/anytimemobile'
-
+import {operatorYourCompetitors} from './objects/module/operatoryourcompetitors'
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
 
 const objects = [
@@ -278,7 +278,8 @@ contactUsSection,
   faqWithComment,
   smallBusinessOwnerAppDownloadSection,
   downloadMailboxRenterAppsSection,
-  anytimemobile
+  anytimemobile,
+    operatorYourCompetitors,
 
 ]
 

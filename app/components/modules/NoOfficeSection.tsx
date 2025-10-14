@@ -19,7 +19,7 @@ export default function NoOfficeSection({
   image,
 }: NoOfficeSectionProps) {
   return (
-    <section className="bg-PrimaryBlack md:bg-white  py-[40px] md:py-[60px] lg:py-[100px] px-5 relative z-[2] overflow-hidden">
+    <section className="bg-white  py-[40px] md:py-[60px] lg:py-[100px] px-5 relative z-[2] overflow-hidden">
       <div className="hidden md:flex absolute z-[1] top-[-20px] right-[0px] md:right-[0]">
         <svg xmlns="http://www.w3.org/2000/svg" width="530" height="478" viewBox="0 0 530 478" fill="none">
           <g filter="url(#filter0_f_4072_31800)">
@@ -51,7 +51,7 @@ export default function NoOfficeSection({
       <div className="relative z-[2] max-w-[1165px] mx-auto flex flex-col md:flex-row items-center gap-[44px] md:gap-[64px] lg:gap-[184px]">
         {/* Left: Text Content */}
         <div className="w-full md:w-[63.7%] flex flex-col">
-          <h2 className="mb-8 font-Roboto text-white md:text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px]">
+          <h2 className="mb-8 font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px]">
             {title}
           </h2>
  
@@ -62,13 +62,10 @@ export default function NoOfficeSection({
           <ul className="space-y-4">
             {features?.map((item, idx) => (
               <li key={idx} className="flex items-start gap-3">
-                <span className="hidden md:flex">
+                <span className="flex">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.154 4.31288C20.4202 4.50788 20.4802 4.88288 20.2852 5.15288L9.78523 19.5529C9.68023 19.6954 9.52273 19.7854 9.34648 19.7966C9.17023 19.8079 9.00148 19.7479 8.87398 19.6241L3.77398 14.5241C3.54148 14.2916 3.54148 13.9091 3.77398 13.6766C4.00648 13.4441 4.38898 13.4441 4.62148 13.6766L9.22648 18.2816L19.314 4.44788C19.509 4.18163 19.884 4.12163 20.154 4.31663V4.31288Z" fill="#FF6600"></path></svg>
                 </span>
-                <span className="flex md:hidden">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.154 4.31288C20.4202 4.50788 20.4802 4.88288 20.2852 5.15288L9.78523 19.5529C9.68023 19.6954 9.52273 19.7854 9.34648 19.7966C9.17023 19.8079 9.00148 19.7479 8.87398 19.6241L3.77398 14.5241C3.54148 14.2916 3.54148 13.9091 3.77398 13.6766C4.00648 13.4441 4.38898 13.4441 4.62148 13.6766L9.22648 18.2816L19.314 4.44788C19.509 4.18163 19.884 4.12163 20.154 4.31663V4.31288Z" fill="#FFFFFF"></path></svg>
-                </span>
-                <span className='font-Roboto text-white md:text-PrimaryBlack font-normal text-[18px] leading-[27px] tracking-[0px]'>{item.text}</span>
+                <span className='font-Roboto text-PrimaryBlack font-normal text-[18px] leading-[27px] tracking-[0px]'>{item.text}</span>
               </li>
             ))}
           </ul>
@@ -77,8 +74,8 @@ export default function NoOfficeSection({
         {/* Right: Image */}
         {image && (
           <div className="w-full md:w-[36.3%] flex flex-col relative z-[3]">
-            <div className="absolute z-[2]  bottom-[14px] md:bottom-[14x] right-[-10px] md:right-[-10px]">
-              <img src={real_life_bg3} alt="real_life-img-bg" className="w-[431px] h-[230px]" />
+            <div className="absolute z-[2]  bottom-[14px] md:bottom-[14px] left-[-10px] md:left-[auto] md:right-[-5px]">
+              <img src={real_life_bg3} alt="real_life-img-bg" className="max-w-fit w-[370px] md:w-[100%] lg:w-[431px] h-[220px] object-contain" />
             </div>
             <img
               src={image}
@@ -86,6 +83,7 @@ export default function NoOfficeSection({
               className="w-[356px] h-auto object-contain relative z-[4]"
               loading="lazy"
             />
+            <div className="absolute z-[5] w-full w-[345px] h-[100px]  bottom-[-2px] left-[10px] bg-[linear-gradient(181deg,rgba(255,255,255,0)_1.19%,#fff_95.25%)]"></div>
           </div>
         )}
       </div>

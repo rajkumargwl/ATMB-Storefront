@@ -39,7 +39,7 @@ export default function AnytimeFeaturesModule({
           {featureCategories.map((category, index) => (
             <div
               key={index}
-              className="border border-LightWhite rounded-[20px] p-6 flex flex-col gap-4 md:min-h-[474px]"
+              className="bg-white border border-LightWhite rounded-[12px] p-6 flex flex-col gap-4 md:min-h-[474px]"
             >
               {/* Header */}
               <div className="flex items-center gap-3">
@@ -47,10 +47,10 @@ export default function AnytimeFeaturesModule({
                   <img
                     src={category.icon}
                     alt={category.categoryTitle}
-                    className="w-5 h-5"
+                    className="w-4 h-4"
                   />
                 </div>
-                <h3 className="font-Roboto text-PrimaryBlack font-medium leading-[18px] md:leading-[28px] text-[18px] md:text-[20px] tracking-[0.09px] md:tracking-[-0.3px]">
+                <h3 className="font-Roboto text-PrimaryBlack font-medium md:font-semibold leading-[18px] md:leading-[28px] text-[18px] md:text-[20px] tracking-[0.09px] md:tracking-[-0.3px]">
                   {category.categoryTitle}
                 </h3>
               </div>
