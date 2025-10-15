@@ -505,8 +505,8 @@ case 'solutionMailboxBenefitFaqModule':
     case 'plans':
       return <Plans data={module} bundles={bundles}/>;
     
-    case 'bundles':
-      return <Bundles data={module} />;
+     case 'bundles':
+     return <Bundles data={module} />;
     
     // 'testimonial' is handled above for operator conditional rendering.
 
