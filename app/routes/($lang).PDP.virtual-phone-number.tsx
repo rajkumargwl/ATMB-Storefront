@@ -1,111 +1,184 @@
-// app/routes/($lang).plans.tsx
-import {useNavigate, useLoaderData} from '@remix-run/react';
+ 
+import {useNavigate, useLoaderData, Await} from '@remix-run/react';
 import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import Header from '~/components/global/Header';
 import Footer from '~/components/global/Footer';
-import {HEADER_QUERY} from '~/queries/sanity/header';
-import {FOOTER_QUERY} from '~/queries/sanity/footer';
-import {notFound} from '~/lib/utils';
+import {fetchGids, notFound} from '~/lib/utils';
 import {PRODUCT_QUERY} from '~/queries/shopify/product';
 import type {Product, ProductVariant} from '@shopify/hydrogen/storefront-api-types';
 import {type ShopifyAnalyticsProduct} from '@shopify/hydrogen';
 import AddToCartButton from '~/components/product/buttons/AddToCartButton';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, Suspense} from 'react';
 import ReplacePlanAddToCartButton from '~/components/cart/ReplacePlanAddToCartButton';
-
+import { SanityPreview } from 'hydrogen-sanity';
+import ModuleGrid from '~/components/modules/ModuleGrid';
+import clsx from 'clsx';
+import { PDP_PHONE_PAGE } from '~/queries/sanity/fragments/pages/pdpanytimephonepage';
+ 
+// -----------------
 // Loader
+// -----------------
 export async function loader({context, params, request}: LoaderFunctionArgs) {
   const cache = context.storefront.CacheCustom({
     mode: 'public',
     maxAge: 60,
     staleWhileRevalidate: 60,
   });
-
-  const [header, footer] = await Promise.all([
-    context.sanity.query({query: HEADER_QUERY, cache}),
-    context.sanity.query({query: FOOTER_QUERY, cache}),
-  ]);
-
-  if (!header || !footer) throw notFound();
-
+ 
+  // ✅ Fetch PDP page data from Sanity (same syntax as About Us)
+  const page = await context.sanity.query({
+    query: PDP_PHONE_PAGE,
+  });
+ 
+  if (!page) throw notFound();
+  console.log("dataaaa",JSON.stringify(page,null,2));
+  const gids = fetchGids({ page, context });
+ 
   const handle = params.handle ?? 'virtual-phone-number';
-
   const {product} = await context.storefront.query<{product: Product}>(PRODUCT_QUERY, {
     variables: {handle, selectedOptions: []},
   });
   if (!product) throw notFound();
-
+ 
   return defer({
-    header,
-    footer,
     product,
+    page,
+    gids,
   });
 }
-
+ 
+// -----------------
+// Component
+// -----------------
 export default function Plans() {
   const [replaceLineId, setReplaceLineId] = useState<string | null>(null);
-  const {header, footer, product} = useLoaderData<typeof loader>();
+  const { product, page, gids } = useLoaderData<typeof loader>();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
-
+ 
   const variants = (product?.variants?.nodes ?? []) as ProductVariant[];
-
   const filteredVariants = variants.filter((variant) => {
     const planTypeField = variant.metafields?.find((m) => m.key === 'plan_type');
     return planTypeField?.value?.toLowerCase() === billingCycle;
   });
-
   const sortedVariants = filteredVariants.sort((a, b) => a.position - b.position);
-
-  const productAnalytics: ShopifyAnalyticsProduct | null = selectedVariant
-    ? {
-        productGid: product.id,
-        variantGid: selectedVariant.id,
-        name: product.title,
-        variantName: selectedVariant.title,
-        brand: product.vendor,
-        price: selectedVariant.price.amount,
-        quantity: 1,
-      }
-    : null;
-useEffect(() => {
+ 
+  useEffect(() => {
     const storedLineId = sessionStorage.getItem('replaceLineId');
     if (storedLineId) setReplaceLineId(storedLineId);
   }, []);
+ 
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
       <main className="flex-1 p-6">
-        {/* Breadcrumb */}
         <p className="text-sm text-gray-500 mb-4">Home &gt; Anytime Phone</p>
-
+ 
+        {/* ✅ Sanity data rendering same as About Us */}
+        <SanityPreview data={page} query={PDP_PHONE_PAGE}>
+          {(page) => (
+            <Suspense>
+              <Await resolve={gids}>
+                {page?.modules && page.modules.length > 0 && (
+                  <div className={clsx('mb-0 mt-0 px-0', 'md:px-0')}>
+                    <ModuleGrid items={page.modules} />
+                  </div>
+                )}
+              </Await>
+            </Suspense>
+          )}
+        </SanityPreview>
+ 
+          {/* Inro Section */}
+          <section className="flex flex-col md:flex-row items-center gap-8 mb-16">
+          {/* LEFT SIDE - TEXT */}
+          {/* <div className="flex-1 space-y-6">
+            <h1 className="text-4xl font-bold text-gray-900">
+              {page.introSection?.heading}
+            </h1>
+ 
+            <p className="text-gray-600">{page.introSection?.description}</p>
+ 
+          
+            <div className="flex flex-wrap gap-4 mt-4">
+              {page.introSection?.features?.map((feat: any, i: number) => (
+                <div key={i} className="flex items-center gap-2">
+                  {feat.icon?.asset?.url && (
+                    <img
+                      src={feat.icon.asset.url}
+                      alt={feat.icon.asset.altText || 'icon'}
+                      className="w-5 h-5"
+                    />
+                  )}
+                  <span className="text-sm text-gray-700">{feat.text}</span>
+                </div>
+              ))}
+            </div>
+ 
+            {page.introSection?.testimonial && (
+              <div className="flex items-center gap-3 mt-8 bg-gray-100 p-4 rounded-lg max-w-md">
+                {page.introSection.testimonial.authorImage?.asset?.url && (
+                  <img
+                    src={page.introSection.testimonial.authorImage.asset.url}
+                    alt={page.introSection.testimonial.author}
+                    className="w-12 h-12 rounded-full"
+                  />
+                )}
+                <div>
+                  <p className="text-sm italic text-gray-700">
+                    “{page.introSection.testimonial.quote}”
+                  </p>
+                  <p className="text-sm font-semibold">
+                    {page.introSection.testimonial.author}
+                  </p>
+                  <p className="text-xs text-gray-500">
+                    {page.introSection.testimonial.role}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div> */}
+ 
+          {/* RIGHT SIDE - IMAGE */}
+          {/* <div className="flex-1 flex justify-center">
+            {page.introSection?.rightImage?.asset?.url && (
+              <img
+                src={page.introSection.rightImage.asset.url}
+                alt={page.introSection.rightImage.asset.altText || 'Intro image'}
+                className="rounded-xl shadow-lg w-full max-w-md"
+              />
+            )}
+          </div> */}
+        </section>
+        {/* END HERO SECTION */}
+ 
         {/* Product Title & Description */}
-
+ 
         <h2 className="text-2xl font-bold">{product.title}</h2>
         <p className="text-gray-600 mt-2">{product.description}</p>
-
+ 
         {/* Billing Toggle */}
         <div className="flex justify-end items-center gap-3 my-6">
   <span className="font-medium">Monthly</span>
-
+ 
   <button
     onClick={() =>
       setBillingCycle((prev) => (prev === 'monthly' ? 'yearly' : 'monthly'))
     }
-    className={`relative w-14 h-7 rounded-full transition-colors duration-300 
+    className={`relative w-14 h-7 rounded-full transition-colors duration-300
       ${billingCycle === 'yearly' ? 'bg-green-500' : 'bg-gray-300'}`}
   >
     <div
-      className={`absolute top-1 left-1 h-5 w-5 rounded-full bg-white shadow-md 
-        transition-transform duration-300 
+      className={`absolute top-1 left-1 h-5 w-5 rounded-full bg-white shadow-md
+        transition-transform duration-300
         ${billingCycle === 'yearly' ? 'translate-x-7' : 'translate-x-0'}`}
     />
   </button>
-
+ 
   <span className="font-medium">
     Yearly <span className="text-green-600">20% Off</span>
   </span>
 </div>
-
+ 
         {/* Plans */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {sortedVariants.map((variant, idx) => {
@@ -130,7 +203,7 @@ useEffect(() => {
                   US${variant.price.amount}
                   <span className="text-base font-normal">/{billingCycle}</span>
                 </p>
-
+ 
                 <ul className="mt-4 space-y-2">
                   {variant.selectedOptions.map((opt, i) => (
                     <li key={i} className="flex items-center gap-2">
@@ -139,7 +212,7 @@ useEffect(() => {
                     </li>
                   ))}
                 </ul>
-
+ 
                 <div className="mt-6">
                   <button
                     className={`w-full py-2 rounded-xl font-semibold ${
@@ -155,9 +228,9 @@ useEffect(() => {
             );
           })}
         </div>
-
+ 
         {/* Highlights */}
-        <div className="bg-black text-white rounded-xl mt-12 p-6 text-center">
+        {/* <div className="bg-black text-white rounded-xl mt-12 p-6 text-center">
           <h4 className="font-semibold mb-4">Key Highlights</h4>
           <div className="flex flex-wrap justify-center gap-4 text-sm">
             <span>Dedicated Local or Toll-Free Number</span>|
@@ -165,8 +238,8 @@ useEffect(() => {
             <span>Custom Greetings & Auto-Attendant</span>|
             <span>411 Directory Listing</span>
           </div>
-        </div>
-
+        </div> */}
+ 
         {/* Bottom Add to Cart */}
         {selectedVariant && (
           <div className="flex justify-between items-center mt-6 p-4 bg-white rounded-xl shadow-md">
