@@ -30,7 +30,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     query: PDP_PHONE_PAGE,
   });
  
-  if (!page) throw notFound();
+  //if (!page) throw notFound();
   console.log("dataaaa",JSON.stringify(page,null,2));
   const gids = fetchGids({ page, context });
  
