@@ -38,7 +38,7 @@ export function HowItWorks2({ data }: HowItWorks2Props) {
           </svg>
       </div>
       
-      <div className="max-w-[1236px] mx-auto">
+      <div className="max-w-[1236px] mx-auto relative z-[2]">
         <div className="flex flex-col items-center justify-center gap-4 md:gap-4 mb-[44px] md:mb-[64px]">
           <h2 className="font-Roboto text-white font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px]">
             {data.sectionTitle}

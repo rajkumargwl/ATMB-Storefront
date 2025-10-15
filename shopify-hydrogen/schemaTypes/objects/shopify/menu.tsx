@@ -4,7 +4,7 @@ import ShopifyMenuInput from '../../../components/shopify/ShopifyMenuInput';
 export const menu = defineField({
   name: 'shopifyMenu',
   title: 'Shopify Menu',
-  type: 'document',
+  type: 'object',
   fields: [
     defineField({
       name: 'selectedMenu',
