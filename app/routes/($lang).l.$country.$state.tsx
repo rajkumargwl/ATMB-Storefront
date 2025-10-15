@@ -491,10 +491,12 @@ export default function StatePage() {
                       <span className="mt-[28px] mb-[22px]"><Testimonial /></span>
 
                       {/* Quote */}
-                      <p className="transition-all duration-500 ease-in-out font-Roboto text-PrimaryBlack font-normal leading-[27px] md:leading-[27px] text-[18px] md:text-[18px] tracking-[0px] group-hover:text-white">
-                        {item.quote}
-                      </p>
-                      {item.readMoreText && (
+                      <p
+                      className="transition-all duration-500 ease-in-out font-Roboto text-PrimaryBlack font-normal leading-[27px] md:leading-[27px] text-[18px] md:text-[18px] tracking-[0px] group-hover:text-white overflow-hidden text-ellipsis line-clamp-6"
+                    >
+                      {item?.quote}
+                    </p>
+                      {item?.readMoreText && (
                         <a
                           href={item.readMoreUrl || "#"}
                           className="font-Roboto text-DarkOrange text-[14px] leading-[14px] tracking-[0.07px] font-normal mt-4 inline-block"

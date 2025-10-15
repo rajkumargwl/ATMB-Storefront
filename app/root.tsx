@@ -7,6 +7,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useLocation,
   useMatches,
   useRouteError,
 } from '@remix-run/react';
@@ -243,6 +244,9 @@ export default function App() {
   const hasUserConsent = true;
   const nonce = useNonce();
   useAnalytics(hasUserConsent);
+  const location = useLocation();
+  const hideHeaderFooterRoutes = ["/payment-success", "/payment-fail", "/order-confirmation"];
+  const hideHeaderFooter = hideHeaderFooterRoutes.includes(location.pathname);
  
   return (
     <html lang={locale.language}>
@@ -269,7 +273,9 @@ export default function App() {
             </a>
           </div>
           {/* 🔹 Global Header with search support */}
-          <Header data={header} searchQuery={q} searchResults={searchResults} isLoggedIn={isLoggedIn} customer={customer} />
+          {!hideHeaderFooter && (
+            <Header data={header} searchQuery={q} searchResults={searchResults} isLoggedIn={isLoggedIn} customer={customer} />
+          )}
           <CartProvider>
           <Layout key={`${locale.language}-${locale.country}`}>
            
@@ -279,7 +285,9 @@ export default function App() {
           </Layout>
           </CartProvider>
           {/* 🔹 Global Footer */}
+          {!hideHeaderFooter && (
           <Footer data={footer} />
+          )}
         </PreviewProvider>
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />

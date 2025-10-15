@@ -133,84 +133,85 @@ function CheckoutForm() {
   }, []);
   /*const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
-    setError(null);
+    window.location.href = "/order-confirmation";
+    // setLoading(true);
+    // setError(null);
 
-    if (!stripe || !elements) {
-      setError("Stripe has not loaded yet");
-      setLoading(false);
-      return;
-    }
+    // if (!stripe || !elements) {
+    //   setError("Stripe has not loaded yet");
+    //   setLoading(false);
+    //   return;
+    // }
 
-    const cardElement = elements.getElement(CardElement);
-    if (!cardElement) {
-      setError("Card Element not found");
-      setLoading(false);
-      return;
-    }
-    const draftRes = await fetch("/api/create-draft-order", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        lines: lines,
-        customerId: rootData?.customer?.id,  
-      }),
-    });
+    // const cardElement = elements.getElement(CardElement);
+    // if (!cardElement) {
+    //   setError("Card Element not found");
+    //   setLoading(false);
+    //   return;
+    // }
+    // const draftRes = await fetch("/api/create-draft-order", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({
+    //     lines: lines,
+    //     customerId: rootData?.customer?.id,  
+    //   }),
+    // });
     
-    const draftData = await draftRes.json();
-    console.log("Draft order created:", draftData);
+    // const draftData = await draftRes.json();
+    // console.log("Draft order created:", draftData);
   
-    if (!draftData?.data?.draftOrderCreate?.draftOrder?.id) {
-      setError("Failed to create draft order");
-      setLoading(false);
-      return;
-    }
+    // if (!draftData?.data?.draftOrderCreate?.draftOrder?.id) {
+    //   setError("Failed to create draft order");
+    //   setLoading(false);
+    //   return;
+    // }
   
-    const draftOrderId = draftData?.data?.draftOrderCreate?.draftOrder?.id;
+    // const draftOrderId = draftData?.data?.draftOrderCreate?.draftOrder?.id;
 
-    const { paymentMethod, error: pmError } = await stripe.createPaymentMethod({
-      type: "card",
-      card: cardElement,
-      billing_details: { email },
-    });
+    // const { paymentMethod, error: pmError } = await stripe.createPaymentMethod({
+    //   type: "card",
+    //   card: cardElement,
+    //   billing_details: { email },
+    // });
 
-    if (pmError) {
-      setError(pmError.message || "Failed to create payment method");
-      setLoading(false);
-      return;
-    }
+    // if (pmError) {
+    //   setError(pmError.message || "Failed to create payment method");
+    //   setLoading(false);
+    //   return;
+    // }
 
-    const res = await fetch("/api/create-payment-intent", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email,
-        paymentMethodId: paymentMethod.id,
-        priceId,
-      }),
-    });
+    // const res = await fetch("/api/create-payment-intent", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({
+    //     email,
+    //     paymentMethodId: paymentMethod.id,
+    //     priceId,
+    //   }),
+    // });
 
-    const data = (await res.json()) as {
-      clientSecret?: string;
-      error?: string;
-    };
+    // const data = (await res.json()) as {
+    //   clientSecret?: string;
+    //   error?: string;
+    // };
     
-    if (!data.clientSecret) {
-      setError(data.error || "Failed to get client secret");
-      setLoading(false);
-      return;
-    }
-    console.log("response data" , data);
+    // if (!data.clientSecret) {
+    //   setError(data.error || "Failed to get client secret");
+    //   setLoading(false);
+    //   return;
+    // }
+    // console.log("response data" , data);
    
 
-    const confirmResult = await stripe.confirmCardPayment(data.clientSecret);
-    console.log("Payment confirmation result:", confirmResult);
+    // const confirmResult = await stripe.confirmCardPayment(data.clientSecret);
+    // console.log("Payment confirmation result:", confirmResult);
 
-    if (confirmResult.error) {
-      setError(confirmResult.error.message || "Payment confirmation failed");
-    } else if (confirmResult.paymentIntent?.status === "succeeded") {
-      alert("Subscription successful!");
-    }
+    // if (confirmResult.error) {
+    //   setError(confirmResult.error.message || "Payment confirmation failed");
+    // } else if (confirmResult.paymentIntent?.status === "succeeded") {
+    //   alert("Subscription successful!");
+    // }
 
     setLoading(false);
   };*/

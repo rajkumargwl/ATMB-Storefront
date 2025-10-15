@@ -105,9 +105,12 @@ export default function Newsroom() {
           <div className="space-y-8">
             {visibleGroups.map(({ year, cards }) => (
               <section key={year}>
-                <h2 className="font-Roboto text-LightGray font-normal leading-[27px] text-[18px] tracking-[0px] mb-[32px]">
-                  {year}
-                </h2>
+                <div className=" mb-[32px] flex flex-row items-center gap-[29px]">
+                  <h2 className="font-Roboto text-LightGray font-normal leading-[27px] text-[18px] tracking-[0px]">
+                    {year}
+                  </h2>
+                  <span className="flex bg-LightWhite w-full h-[1px]"></span>
+                </div>
  
                 <div className="max-w-[1212px] mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-6 items-stretch">
                   
@@ -142,19 +145,8 @@ export default function Newsroom() {
                         )}
  
                         <div className="flex items-center gap-1">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-5 w-5 text-gray-500"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            strokeWidth={2}
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M8 7V3m8 4V3m-9 10h.01M16 13h.01M9 17h.01M15 17h.01M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                            />
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 21" fill="none">
+                            <path d="M6.5 2.5C6.775 2.5 7 2.725 7 3V4.5H13V3C13 2.725 13.225 2.5 13.5 2.5C13.775 2.5 14 2.725 14 3V4.5H15C16.1031 4.5 17 5.39687 17 6.5V15.5C17 16.6031 16.1031 17.5 15 17.5H5C3.89688 17.5 3 16.6031 3 15.5V6.5C3 5.39687 3.89688 4.5 5 4.5H6V3C6 2.725 6.225 2.5 6.5 2.5ZM15 5.5H5C4.44687 5.5 4 5.94688 4 6.5V7.5H16V6.5C16 5.94688 15.5531 5.5 15 5.5ZM16 8.5H4V15.5C4 16.0531 4.44687 16.5 5 16.5H15C15.5531 16.5 16 16.0531 16 15.5V8.5Z" fill="#091019"/>
                           </svg>
                           {card.date && (
                             <time dateTime={card.date} className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">
@@ -201,7 +193,7 @@ export default function Newsroom() {
             <div className="flex justify-center mt-8">
               <button
                 onClick={handleLoadMore}
-                className="flex items-center justify-center w-[151px] h-[44px] md:h-[52px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-PrimaryBlack border border-[#091019] px-4 py-[12px]"
+                className="flex items-center justify-center w-[151px] h-[44px] md:h-[52px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-PrimaryBlack border border-[#091019] px-4 py-[12px] bg-white"
               >
                 Load More
               </button>
