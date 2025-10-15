@@ -31,6 +31,9 @@ import { HOW_IT_WORKS_MODULE } from './modules/howitworksmodule';
 import { BUSINESS_ACCELERATOR_MODULE } from './modules/accelerator';
  import { OPERATOR_SIGNUP_FRAGMENT } from './modules/operatorsignup';
  import { PDP_PHONE_PAGE_MODULE } from './modules/pdpanytimephone';
+import { ANYTIME_PHONE_MODULE } from './modules/anytimephone';
+import { SMALL_BUSINESS_OWNER_MODULE } from './modules/smallBusinessOwner';
+import { ANYTIME_MOBILE_APP } from './modules/anytimemobileapp';
 export const MODULES = groq`
   _key,
   _type,
@@ -123,5 +126,10 @@ export const MODULES = groq`
   },
   (_type == "pdpPageModule") => {  
     ${PDP_PHONE_PAGE_MODULE}
+  (_type == "smallBusinessOwnerPage") => {  
+    ${SMALL_BUSINESS_OWNER_MODULE}
+  },
+    (_type == "anytimemobile") => {  
+    ${ANYTIME_MOBILE_APP}
   }
 `;

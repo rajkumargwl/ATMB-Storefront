@@ -52,7 +52,7 @@ import {shopifyProductVariantType} from './objects/shopify/shopifyProductVariant
 import {spotType} from './objects/hotspot/spotType'
 import {menu} from './objects/shopify/menu'
 import {keyHighlights} from './objects/module/keyHighlights'
-import solutions from './singletons/solutions'
+
 //import { heroBanner } from "./objects/module/heroBanner";
 // import { heroBanner } from "./objects/module/heroBanner";
 import location from './location'
@@ -136,6 +136,20 @@ import { PDPHowItWorks } from './objects/module/PDPHowItWorks'
 import {PDPIntroSection} from './objects/module/PDPIntroSection'
 import {PDPTestimonials} from './objects/module/PDPTestimonials'
 // Objects used as annotations must be imported first
+import { businessBenefitsSection } from './objects/module/businessBenefitsSection'
+import { businessIndustryRecognitionSection } from './objects/module/businessIndustryRecognitionSection'
+import { businessTrustedSection } from './objects/module/businessTrustedSection'
+import { clientSuccessStoriesSection } from './objects/module/clientSuccessStoriesSection'
+import { joinCtaBannerSection } from './objects/module/joinCtaBannerSection'
+import { smallBusinessChallengesSection } from './objects/module/smallBusinessChallengesSection'
+import { smallBusinessOwnerPage } from './objects/module/smallBusinessOwnerPage'
+import { smallBusinessOwnerSection } from './objects/module/smallBusinessOwnerSection'
+import { smartBusinessSection } from './objects/module/smartBusinessSection'
+import { faqWithComment } from './objects/module/faqWithComment'
+import { smallBusinessOwnerAppDownloadSection } from './objects/module/smallBusinessOwnerAppDownloadSection'
+import  { downloadMailboxRenterAppsSection } from './objects/module/downloadMailboxRenterAppsSection'
+import { anytimemobile } from './objects/module/anytimemobile'
+import {operatorYourCompetitors} from './objects/module/operatoryourcompetitors'
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
 
 const objects = [
@@ -266,7 +280,22 @@ contactUsSection,
   PDPWhyChooseAnytimePhone,
   PDPHowItWorks,
   PDPIntroSection,
-  PDPTestimonials
+  PDPTestimonials,
+  businessBenefitsSection,
+  businessIndustryRecognitionSection,
+  businessTrustedSection,
+  clientSuccessStoriesSection,
+  joinCtaBannerSection,
+  smallBusinessChallengesSection,
+  smallBusinessOwnerPage,
+  smallBusinessOwnerSection,
+  smartBusinessSection,
+  faqWithComment,
+  smallBusinessOwnerAppDownloadSection,
+  downloadMailboxRenterAppsSection,
+  anytimemobile,
+    operatorYourCompetitors,
+
 ]
 
 import {portableTextType} from './portableText/portableTextType'
@@ -286,6 +315,7 @@ const documents = [collectionType, colorThemeType, pageType, productType, produc
 import {homeType} from './singletons/homeType'
 import {settingsType} from './singletons/settingsType'
 
-const singletons = [homeType, settingsType,solutions,]
+
+const singletons = [homeType, settingsType,]
 
 export const schemaTypes = [...annotations, ...objects, ...singletons, ...blocks, ...documents,location]
