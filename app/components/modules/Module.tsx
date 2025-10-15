@@ -69,9 +69,7 @@ import WebinarsTopicsSection from '~/components/modules/WebinarsTopicsSection';
 import SmartBusiness from '~/components/modules/SmartBusiness';
 
 
-// 櫨 OPERATOR SIGNUP SPECIFIC COMPONENTS - SEPARATE DESIGN
-// NOTE: These files must exist in the current directory:
-// './OperatorSignupDebug', './operatorAdvantage', etc.
+
 
 import { OperatorAdvantage } from './operatorAdvantage';
 
@@ -84,7 +82,18 @@ import { OperatorYourCompetitors } from './operatoryourcompetitors';
 
 import NoOfficeSection from '~/components/modules/NoOfficeSection';
 import  AnytimeFeaturesModule from '~/components/modules/AnytimeFeaturesModule';
- 
+ import DownloadMailboxRenterApps from './DownloadMailboxRenterApps';
+ import SmallBusinessChallanges from './SmallBusinessChallanges';
+ import SmallBusinessOwnerAppDownloadSection from './SmallBusinessOwnerAppDownloadSection';
+ import SmallBusinessOwnerSection from './SmallBusinessOwnerSection';
+ import BusinessBenefitsSection from './BusinessBenefitsSection';
+ import BusinessTrustedSection from './BusinessTrustedSection';
+
+ import BusinessIndustryRecognitionSection from './BusinessIndustryRecognitionSection';
+ import BusinessClientSuccessStoriesSection from './BusinessClientSuccessStoriesSection';
+
+ import FaqWithComment from './FaqWithComment';
+ import JoinCtaBannerSection from './JoinCtaBannerSection';
 type Props = {
   module: SanityModule | ProductWithNodes;
   homeSearchResults?: any;
@@ -164,7 +173,8 @@ case 'smartBusinessSection':
  case "joinCtaBannerSection":
   return <JoinCtaBannerSection {...module} />;
 
-
+  case 'whyBusinessChooseUs':
+    return <WhyBusinessChooseUs data={module} />;
     // 櫨 OPERATOR SIGNUP CONTAINER
     case 'operatorsignup':
       return (
@@ -502,11 +512,11 @@ case 'solutionMailboxBenefitFaqModule':
     case 'homeSection4':
       return <Locations data={module} />;
     
-    case 'plans':
-      return <Plans data={module} bundles={bundles}/>;
+    // case 'plans':
+    //   return <Plans data={module} bundles={bundles}/>;
     
-     case 'bundles':
-     return <Bundles data={module} />;
+    //  case 'bundles':
+    //  return <Bundles data={module} />;
     
     // 'testimonial' is handled above for operator conditional rendering.
 
