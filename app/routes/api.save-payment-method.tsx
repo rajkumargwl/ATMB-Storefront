@@ -3,7 +3,7 @@ import Stripe from "stripe";
 
 export const action: ActionFunction = async ({ request, context }) => {
   const { env } = context;
-  const { email, paymentMethodId } = await request.json();
+  const { email, name, paymentMethodId } = await request.json();
 
   if (!paymentMethodId) {
     return new Response(
@@ -17,32 +17,35 @@ export const action: ActionFunction = async ({ request, context }) => {
   let customer;
 
   if (email) {
-    // Look for all customers with this email
-    const existingCustomers = await stripe.customers.list({ email, limit: 100 });
+    // Search for existing customers
+    const existingCustomers = await stripe.customers.list({ email, limit: 1 });
     if (existingCustomers.data.length > 0) {
-      // Reuse the first one (or you could choose logic for multiple)
       customer = existingCustomers.data[0];
+
+      // Update name if different or missing
+      if (name && customer.name !== name) {
+        await stripe.customers.update(customer.id, { name });
+      }
     } else {
-      // Create a new customer
-      customer = await stripe.customers.create({ email });
+      // Create new customer with email & name
+      customer = await stripe.customers.create({ email, name });
     }
   } else {
-    customer = await stripe.customers.create({});
+    // Create customer without email (rare case)
+    customer = await stripe.customers.create({ name });
   }
 
-  // Check if payment method is already attached
+  // Attach payment method if not already attached
   const attachedPaymentMethods = await stripe.paymentMethods.list({
     customer: customer.id,
     type: "card",
   });
 
-  const alreadyAttached = attachedPaymentMethods.data.some(pm => pm.id === paymentMethodId);
-
-  if (!alreadyAttached) {
+  if (!attachedPaymentMethods.data.some(pm => pm.id === paymentMethodId)) {
     await stripe.paymentMethods.attach(paymentMethodId, { customer: customer.id });
   }
 
-  // Update default payment method
+  // Set default payment method
   await stripe.customers.update(customer.id, {
     invoice_settings: { default_payment_method: paymentMethodId },
   });
