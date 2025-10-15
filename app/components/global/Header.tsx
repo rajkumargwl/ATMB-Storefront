@@ -10,7 +10,8 @@ import ArrowDownIcon from '~/components/icons/ArrowDownIcon';
 import LeftArrowBlack from '~/components/icons/LeftArrowBlack';
 import CloseIconBlack from '~/components/icons/CloseIconBlack';
 import LeftChevron from '~/components/icons/LeftChevron';
-
+import {CountrySelector} from '~/components/global/CountrySelector';
+import LanguageSwitcher from "./LanguageSwitcher";
 
 type HeaderProps = {
   data: {
@@ -29,6 +30,7 @@ type HeaderProps = {
   searchResults: any[];   // 👈 new
   searchQuery: string;    // 👈 new
   isLoggedIn: boolean;    // 👈 new
+  currentLanguage: string; // 👈 new
   customer?: {
     id: string;
     firstName: string;
@@ -38,7 +40,7 @@ type HeaderProps = {
 };
 
 
-export default function Header({ data, searchResults, searchQuery, isLoggedIn, customer }: HeaderProps) {
+export default function Header({ data, searchResults, searchQuery, isLoggedIn, customer, currentLanguage }: HeaderProps) {
   if (!data) return null;
 
   const { logo, menu, icon1, icon2, loginButton, getStartedButton } = data;
@@ -121,7 +123,6 @@ useEffect(() => {
     document.body.classList.remove("no-scroll");
   }
 }, [isMobileMenuOpen]);
-
 
   return (
     <header className=" relative z-[99] w-full bg-white px-5 border-b border-LightWhite lg:border-none">
@@ -263,6 +264,8 @@ useEffect(() => {
               </Link>
             )}
           </div>
+           {/* <LanguageSwitcher currentLanguage="en" /> */}
+          {/* <CountrySelector align="left" /> */}
 
           {/* Mobile menu button */}
           <button

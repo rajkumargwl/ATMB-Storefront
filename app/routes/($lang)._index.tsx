@@ -17,6 +17,7 @@ import {fetchGids, notFound, validateLocale} from '~/lib/utils';
 import {HOME_PAGE_QUERY} from '~/queries/sanity/home';
 import {HEADER_QUERY} from '~/queries/sanity/header';
 import {FOOTER_QUERY} from '~/queries/sanity/footer';
+import Header from '~/components/global/Header';
 const seo: SeoHandleFunction = ({data}) => ({
   title: data?.page?.seo?.title || 'Anytime Mailbox',
   description:
@@ -24,12 +25,20 @@ const seo: SeoHandleFunction = ({data}) => ({
     'A custom storefront powered by Hydrogen and Sanity',
 });
 import { fetchBundleProducts } from '~/lib/bundle.server';
+import { is } from 'date-fns/locale';
 
 export const handle = { seo };
 
 
 export async function loader({ context, params, request }: LoaderFunctionArgs) {
-  validateLocale({ context, params });
+  // validateLocale({ context, params });
+  const language = params.lang || 'en';
+ 
+  // Validate supported languages
+  const supportedLanguages = ['en', 'es'];
+  if (!supportedLanguages.includes(language)) {
+    throw notFound();
+  }
 
   const cache = context.storefront.CacheCustom({
     mode: 'public',
@@ -37,13 +46,48 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
     staleWhileRevalidate: 60,
   });
 
+  const customerAccessToken = await context.session.get('customerAccessToken');
+  let customer;
+  if (customerAccessToken) {
+    try {
+      customer = await context.storefront.query<{
+        customer: { id: string };
+      }>(
+        `#graphql
+          query customer($customerAccessToken: String!) {
+            customer(customerAccessToken: $customerAccessToken) {
+              id
+              firstName
+              lastName
+              email
+            }
+          }
+        `,
+        {
+          variables: {
+            customerAccessToken,
+          },
+        }
+      );
+  
+      // If the token is invalid, remove it from the session
+      // if (!customer) {
+      //   context.session.unset('customerAccessToken');
+      // }
+    } catch (error) {
+      console.error("Error fetching customer:", error);
+    }
+  }
+ 
+  const isAuthenticated = Boolean(customerAccessToken);
+
   
 
   // Fetch all at once
   const [page, header, footer,bundles] = await Promise.all([
-    context.sanity.query({ query: HOME_PAGE_QUERY, cache }),
-    context.sanity.query({ query: HEADER_QUERY, cache }),
-    context.sanity.query({ query: FOOTER_QUERY, cache }),
+    context.sanity.query({ query: HOME_PAGE_QUERY,  params: { language },cache }),
+    context.sanity.query({ query: HEADER_QUERY,  params: { language },cache }),
+    context.sanity.query({ query: FOOTER_QUERY, params: { language }, cache }),
     fetchBundleProducts(context), // Fetch bundle products
   ]);
  
@@ -94,19 +138,22 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
     gids,
     p,
     homeSearchResults: mergedSearchResults,
+    language,
     bundles, // Pass bundles to the frontend 
     analytics: { pageType: AnalyticsPageType.home },
+    isLoggedIn: isAuthenticated,
+    customer: customer?.customer || null,
   });
 }
 
 
 export default function Index() {
   //const { page, gids,  header, footer, mergedResults, q } = useLoaderData<typeof loader>();
-   const { page, gids, p, homeSearchResults,bundles} = useLoaderData<typeof loader>();
+   const { page, gids, p, homeSearchResults,bundles,q, header, isLoggedIn, customer, language} = useLoaderData<typeof loader>();
 
   return (
     <>
-     {/* <Header data={header} searchResults={mergedResults} searchQuery={q} /> */}
+     {/* <Header data={header} searchQuery={q} searchResults={homeSearchResults} isLoggedIn={isLoggedIn} customer={customer} currentLanguage={language} /> */}
 
 
       <SanityPreview data={page} query={HOME_PAGE_QUERY}>
