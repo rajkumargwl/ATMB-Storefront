@@ -258,9 +258,11 @@ function CheckoutForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          email,
+          email: customer.email,
+          name: customer.name, 
           paymentMethodId: paymentMethod.id,
         }),
+        
       });
   
       const data = await res.json();
@@ -268,7 +270,8 @@ function CheckoutForm() {
       console.log("Backend response:", data);
 
       if (data.success) {
-        alert("Payment method saved!");
+        //alert("Payment method saved!");
+        window.location.href = "/order-confirmation"; 
       } else {
         setError(data.error || "Failed to save payment method");
       }
