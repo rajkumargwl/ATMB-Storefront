@@ -1,6 +1,6 @@
 import {useLoaderData, useNavigate} from '@remix-run/react';
 import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import SearchBox from '~/components/SearchBox';
+import SearchBoxCountry from '~/components/SearchBoxCountry';
 import SearchIconBanner from '~/components/icons/SearchIconBanner';
 import ArrowRightCountries from "~/components/icons/ArrowRightCountries";
 import RightArrowWhite from '~/components/icons/RightArrowWhite';
@@ -165,8 +165,8 @@ export default function CountryLocationsPage() {
                 </span>
               </button> 
                </div> */} 
-                <SearchBox
-          placeholder="Enter address or zip code..."
+                <SearchBoxCountry
+          placeholder="Address, City or Zip Code..."
           buttonText="Search"
           initialQuery=""
           results={locations || []}
@@ -231,13 +231,13 @@ export default function CountryLocationsPage() {
                     navigate(`/l/${encodeURIComponent(state.country)}/${encodeURIComponent(state.name)}`)
                   }
                 >
-                  <span className="group-hover:text-[#F15A24]">{state.name}</span>
+                  <span className="group-hover:text-[#ff6600]">{state.name}</span>
                     {state && (
                       <>
                         <span className="text-[12px] bg-[#0000001a] font-[400] leading-[18px] text-[#091019] rounded-full w-6 h-6 items-center justify-center flex">
                           {state.count}
                         </span>
-                        <span className="opacity-0 group-hover:opacity-100 translate-x-[-6px] group-hover:translate-x-[0] transition-all duration-300 bg-[#F15A24] rounded-full w-6 h-6 flex items-center justify-center">
+                        <span className="opacity-0 group-hover:opacity-100 translate-x-[-6px] group-hover:translate-x-[0] transition-all duration-300 bg-[#ff6600] rounded-full w-6 h-6 flex items-center justify-center">
                           <ArrowRightCountries />
                         </span>
                       </>
@@ -266,13 +266,13 @@ export default function CountryLocationsPage() {
                   <div key={index} className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-200"
                   onClick={() => navigate(`/l/country/${encodeURIComponent(country.name)}`)}
                   >
-                    <span className="group-hover:text-[#F15A24]">{country.name.trim()}</span>
+                    <span className="group-hover:text-[#ff6600]">{country.name.trim()}</span>
                     {country.count && (
                       <>
                         <span className="text-[12px] bg-[#0000001a] font-[400] leading-[18px] text-[#091019] rounded-full w-6 h-6 items-center justify-center flex">
                           {country.count}
                         </span>
-                        <span className="opacity-0 group-hover:opacity-100 translate-x-[-6px] group-hover:translate-x-[0] transition-all duration-300 bg-[#F15A24] rounded-full w-6 h-6 flex items-center justify-center">
+                        <span className="opacity-0 group-hover:opacity-100 translate-x-[-6px] group-hover:translate-x-[0] transition-all duration-300 bg-[#ff6600] rounded-full w-6 h-6 flex items-center justify-center">
                           <ArrowRightCountries />
                         </span>
                       </>
