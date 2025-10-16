@@ -81,7 +81,14 @@ export default function SearchBoxCountry({
       {/* Input + Button */}
       <div className="flex items-center gap-[10px] pt-[8px] md:pt-[6px] pr-[8px] md:pr-[6px] pb-[8px] md:pb-[6px] pl-[16px] md:pl-[20px] bg-white border border-LightGray rounded-full shadow-sm overflow-hidden">
         <SearchIconBanner />
+        <label
+        htmlFor="address"
+        className="sr-only md:sr-only font-medium text-sm text-[#091019]"
+        >
+        Enter address or zip code
+        </label>
         <input
+          id="address"
           type="text"
           value={searchquery}
           onChange={(e) => setSearchquery(e.target.value)}

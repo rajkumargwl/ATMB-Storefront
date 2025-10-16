@@ -224,8 +224,9 @@ export default function CountryLocationsPage() {
           {columnedLocations.map((col, colIndex) => (
             <div key={colIndex} className="flex flex-col gap-5">
               {col.map((state, index) => (
-                <div
+                <button
                   key={index}
+                  type='button'
                   className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-200"
                   onClick={() =>
                     navigate(`/l/${encodeURIComponent(state.country)}/${encodeURIComponent(state.name)}`)
@@ -242,7 +243,7 @@ export default function CountryLocationsPage() {
                         </span>
                       </>
                     )}
-                </div>
+                </button>
               ))}
             </div>
           ))}
@@ -263,7 +264,10 @@ export default function CountryLocationsPage() {
           {columnedLocations2.map((col, colIndex) => (
             <div key={colIndex} className="flex flex-col gap-5">
               {col.map((country, index) => (
-                  <div key={index} className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-200"
+                  <button 
+                  key={index} 
+                  type='button'
+                  className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-200"
                   onClick={() => navigate(`/l/country/${encodeURIComponent(country.name)}`)}
                   >
                     <span className="group-hover:text-[#ff6600]">{country.name.trim()}</span>
@@ -277,7 +281,7 @@ export default function CountryLocationsPage() {
                         </span>
                       </>
                     )}
-                  </div>
+                  </button>
               ))}
             </div>
           ))}
