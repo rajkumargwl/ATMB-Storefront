@@ -215,13 +215,16 @@ export default function HomeHero({ data }: Props) {
                 {activeData.keyNeeds?.map((item, i) => (
                   <li
                     key={i}
-                    className="flex items-center gap-4 font-Roboto text-PrimaryBlack font-normal leading-[21px] md:leading-[24px] text-[14px] md:text-[16px] tracking-[0px]"
+                    className="flex items-start gap-4 font-Roboto text-PrimaryBlack font-normal leading-[21px] md:leading-[24px] text-[14px] md:text-[16px] tracking-[0px]"
                   >
-                    <CheckArrow />
-                    {item}
+                    <span className="flex-shrink-0 mt-1">
+                      <CheckArrow />
+                    </span>
+                    <span className="flex-1">{item}</span>
                   </li>
                 ))}
               </ul>
+
 
               {/* Testimonial */}
               {activeData.quote && (
