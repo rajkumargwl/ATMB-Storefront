@@ -231,8 +231,9 @@ export default function CountryPage() {
 
           <ul className="space-y-8">
             {states.map((state, index) => (
-              <div
+              <button
                 key={index}
+                type='button'
                 className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-300"
                 onClick={() => {
                   const loc = locations.find((l: any) => l.state === state.name);
@@ -246,7 +247,7 @@ export default function CountryPage() {
                 <span className="opacity-0 group-hover:opacity-100 translate-x-[-6px] group-hover:translate-x-[0] transition-all duration-300 bg-[#F15A24] rounded-full w-6 h-6 flex items-center justify-center">
                   <ArrowRightCountries />
                 </span>
-              </div>
+              </button>
             ))}
           </ul>
         </aside>
