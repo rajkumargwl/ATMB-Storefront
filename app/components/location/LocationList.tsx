@@ -402,6 +402,7 @@ export default function LocationsList({locations, initialQuery = ''}: LocationsL
   <div className="flex items-center gap-3 w-full relative">  
     <button
       className="rounded-full md:border md:border-LightWhite p-2 md:p-[11px]"
+      title='Back'
       onClick={() => navigate(-1)}
     >
       <LeftArrowBlack />
