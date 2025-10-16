@@ -1,15 +1,15 @@
 import React from 'react';
-
+ 
 type BrandLogo = {
   alt: string;
   url: string;
 };
-
+ 
 type CTA = {
   label: string;
   url?: string | null;
 };
-
+ 
 type Props = {
   title: string;
   description: string;
@@ -19,7 +19,7 @@ type Props = {
   primaryCta?: CTA;
   secondaryCta?: CTA;
 };
-
+ 
 export default function SmallBusinessOwnerSection({
   title,
   description,
@@ -30,21 +30,21 @@ export default function SmallBusinessOwnerSection({
   secondaryCta,
 }: Props) {
   return (
-    <section className="w-full bg-[#F9FAFB] py-16">
-      <div className="container mx-auto flex flex-col md:flex-row items-center justify-between px-6 md:px-12">
+    <section className="px-5 py-[40px] md:py-[60px] lg:pt-[74px] lg:pb-[79.5px] bg-white">
+      <div className="max-w-[1240px] mx-auto flex flex-col md:flex-row gap-[44px] md:gap-[65px] items-start">
         {/* LEFT CONTENT */}
-        <div className="md:w-1/2 space-y-6 text-center md:text-left">
-          <h1 className="text-3xl md:text-5xl font-bold text-gray-900 leading-tight">
+        <div className="w-full md:w-[54.21%] flex flex-col relative">
+          <h1 className="md:pt-[24.5px] max-w-[481px] mb-4 md:mb-5 font-Roboto text-PrimaryBlack font-semibold leading-[43.2px] md:leading-[43.2px] text-[36px] md:text-[36px] tracking-[-0.54px] md:tracking-[-0.54px]">
             {title}
           </h1>
-          <p className="text-lg text-gray-600">{description}</p>
-
+          <p className="max-w-[540px] mb-[32px] md:mb-[40px]  font-Roboto text-PrimaryBlack font-normal leading-[21px] md:leading-[27px] text-[14px] md:text-[18px] tracking-[0px]">{description}</p>
+ 
           {/* CTA BUTTONS */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+          <div className="flex flex-row gap-4 justify-start mb-[44px] md:mb-[108px]">
             {primaryCta?.label && (
               <a
                 href={primaryCta.url || '#'}
-                className="bg-blue-600 text-white hover:bg-blue-700 px-6 py-3 text-base font-semibold rounded-lg text-center"
+                className="flex items-center justify-center w-full md:w-[192px] bg-DarkOrange text-white font-Roboto font-normal leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-[16px] py-[12px] rounded-[100px]"
               >
                 {primaryCta.label}
               </a>
@@ -52,40 +52,41 @@ export default function SmallBusinessOwnerSection({
             {secondaryCta?.label && (
               <a
                 href={secondaryCta.url || '#'}
-                className="border border-blue-600 text-blue-600 hover:bg-blue-50 px-6 py-3 text-base font-semibold rounded-lg text-center"
+                className="flex items-center justify-center w-full md:w-[192px] bg-white text-PrimaryBlack font-Roboto font-normal leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-[15px] md:px-[16px] py-[12px] rounded-[100px] border border-PrimaryBlack"
               >
                 {secondaryCta.label}
               </a>
             )}
           </div>
-
+ 
           {/* TRUSTED TEXT */}
-          <p className="text-sm text-gray-500 mt-6">{trustedByText}</p>
-
+          <p className="mb-3 font-Roboto text-PrimaryBlack font-medium leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">{trustedByText}</p>
+ 
           {/* BRAND LOGOS */}
           {brandLogos.length > 0 && (
-            <div className="flex flex-wrap justify-center md:justify-start gap-6 mt-4">
+            <div className="flex flex-wrap items-center justify-start gap-x-8 gap-y-6">
               {brandLogos.map((logo, index) => (
                 <img
                   key={index}
                   src={logo.url}
                   alt={logo.alt}
-                  className="h-8 object-contain opacity-80 hover:opacity-100 transition"
+                  className="max-w-[100%] object-contain"
                 />
               ))}
             </div>
           )}
         </div>
-
+ 
         {/* RIGHT IMAGE */}
-        <div className="md:w-1/2 mt-10 md:mt-0 flex justify-center">
+        <div className="w-full md:w-[45.79%] relative w-full flex justify-center">
           <img
             src={ownerImage.url}
             alt="Small business owner"
-            className="max-w-md w-full h-auto object-contain"
+            className="rounded-[20px]  object-contain"
           />
         </div>
       </div>
     </section>
   );
 }
+ 

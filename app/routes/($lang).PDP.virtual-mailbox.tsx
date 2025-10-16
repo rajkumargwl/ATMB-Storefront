@@ -42,6 +42,14 @@ const LOCATION_QUERY = /* groq */ `
 `;
 
 export async function loader({context, params, request}: LoaderFunctionArgs) {
+  const language = params.lang || 'en';
+ 
+  // Validate supported languages
+  const supportedLanguages = ['en', 'es'];
+  if (!supportedLanguages.includes(language)) {
+    throw notFound();
+  }
+  
   const cache = context.storefront.CacheCustom({
     mode: 'public',
     maxAge: 60,
@@ -49,8 +57,8 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
   });
 
   const [header, footer] = await Promise.all([
-    context.sanity.query({query: HEADER_QUERY, cache}),
-    context.sanity.query({query: FOOTER_QUERY, cache}),
+    context.sanity.query({query: HEADER_QUERY,  params: { language }, cache}),
+    context.sanity.query({query: FOOTER_QUERY,  params: { language }, cache}),
   ]);
 
   if (!header || !footer) throw notFound();

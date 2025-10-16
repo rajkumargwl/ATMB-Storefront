@@ -19,8 +19,8 @@ interface OperatorAdvantageProps {
 export function OperatorAdvantage({module}: OperatorAdvantageProps) {
   const {heading, description, features} = module;
  
-  console.log('🎯 OperatorAdvantage COMPONENT CALLED!');
-  console.log('📝 Module data:', module);
+  // console.log('🎯 OperatorAdvantage COMPONENT CALLED!');
+  // console.log('📝 Module data:', module);
  
   return (
     <section className="bg-white  py-[40px] md:py-[60px] lg:py-[100px] px-5 ">

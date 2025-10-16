@@ -14,11 +14,20 @@ import { SanityPreview } from 'hydrogen-sanity';
 import ModuleGrid from '~/components/modules/ModuleGrid';
 import clsx from 'clsx';
 import { PDP_PHONE_PAGE } from '~/queries/sanity/fragments/pages/pdpanytimephonepage';
+import {HEADER_QUERY} from '~/queries/sanity/header';
+import {FOOTER_QUERY} from '~/queries/sanity/footer';
  
 // -----------------
 // Loader
 // -----------------
 export async function loader({context, params, request}: LoaderFunctionArgs) {
+  const language = params.lang || 'en';
+ 
+  // Validate supported languages
+  const supportedLanguages = ['en', 'es'];
+  if (!supportedLanguages.includes(language)) {
+    throw notFound();
+  }
   const cache = context.storefront.CacheCustom({
     mode: 'public',
     maxAge: 60,
@@ -34,6 +43,14 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
   console.log("dataaaa",JSON.stringify(page,null,2));
   const gids = fetchGids({ page, context });
  
+
+  const [header, footer] = await Promise.all([
+    context.sanity.query({query: HEADER_QUERY,params: { language }, cache}),
+    context.sanity.query({query: FOOTER_QUERY,params: { language }, cache}),
+  ]);
+
+  if (!header || !footer) throw notFound();
+
   const handle = params.handle ?? 'virtual-phone-number';
   const {product} = await context.storefront.query<{product: Product}>(PRODUCT_QUERY, {
     variables: {handle, selectedOptions: []},
