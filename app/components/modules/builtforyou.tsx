@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { PortableText } from '@portabletext/react';
  
 interface BuiltForYouProps {
   data: {
@@ -10,18 +11,18 @@ interface BuiltForYouProps {
       icon?: {
         url: string;
       };
-      tooltip?: string; // Used for tab icon title
+      tooltip?: string;
       label?: string;
       avatars?: Array<{
         url: string;
       }>;
-      sideText?: string;
+      sideText?: any;
       detailsHeading?: string;
       features?: Array<{
         icon?: {
           url: string;
         };
-        tooltip?: string; // Used for feature icon title
+        tooltip?: string;
         description?: string;
       }>;
     }>;
@@ -30,6 +31,38 @@ interface BuiltForYouProps {
  
 export function BuiltForYou({ data }: BuiltForYouProps) {
   const [activeTab, setActiveTab] = useState(0);
+ 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>, index: number) => {
+    if (!data.tabs) return;
+ 
+    switch (event.key) {
+      case 'ArrowRight':
+        event.preventDefault();
+        const nextIndex = (index + 1) % data.tabs.length;
+        setActiveTab(nextIndex);
+        break;
+      
+      case 'ArrowLeft':
+        event.preventDefault();
+        const prevIndex = (index - 1 + data.tabs.length) % data.tabs.length;
+        setActiveTab(prevIndex);
+        break;
+      
+      case 'Home':
+        event.preventDefault();
+        setActiveTab(0);
+        break;
+      
+      case 'End':
+        event.preventDefault();
+        const lastIndex = data.tabs.length - 1;
+        setActiveTab(lastIndex);
+        break;
+      
+      default:
+        break;
+    }
+  };
  
   return (
     <section className="bg-white px-5 py-[40px] md:py-[60px] lg:py-[100px]">
@@ -43,15 +76,15 @@ export function BuiltForYou({ data }: BuiltForYouProps) {
           </p>
         </div>
         <div className="flex flex-col items-center justify-center">
-            <h3 className="pb-4 md:pb-8 md:text-center font-Roboto text-PrimaryBlack font-medium leading-[27px] md:leading-[28px] text-[18px] md:text-[20px] tracking-[0px]">
-              {data.heading}
-            </h3>
+          <h3 className="pb-4 md:pb-8 md:text-center font-Roboto text-PrimaryBlack font-medium leading-[27px] md:leading-[28px] text-[18px] md:text-[20px] tracking-[0px]">
+            {data.heading}
+          </h3>
         </div>
  
         <div className="mb-[-16px] md:mb-[0px]">
           <div className="flex flex-col md:flex-row items-start gap-[44px] lg:gap-[100px]">
             
-            {/* Left Column for Tabs (Desktop) / Full column for Tabs & Content (Mobile) */}
+            {/* Left Column for Tabs */}
             <div className='w-full md:w-[37.8%] flex flex-col'>
               <div
                 role="tablist"
@@ -65,12 +98,13 @@ export function BuiltForYou({ data }: BuiltForYouProps) {
                       aria-selected={activeTab === index}
                       aria-controls={`tabpanel-${index}`}
                       id={`tab-${index}`}
-                      tabIndex={activeTab === index ? 0 : -1}
+                      tabIndex={0}
                       onClick={() => setActiveTab(index)}
+                      onKeyDown={(e) => handleKeyDown(e, index)}
                       className={`w-full text-left px-[16px] py-[18px] md:p-[18px] ${
                         activeTab === index
                           ? 'bg-PrimaryBlack rounded-[8px]'
-                          : 'bg-white mb-4 md:mb-[0px] border md:border-b md:border-x-0 md:border-t-0 border-LightWhite rounded-[8px] md:rounded-[0px]'
+                          : 'bg-white mb-4 md:mb-[0px] border md:border-b border-LightWhite rounded-[8px] md:rounded-[0px]'
                       }`}
                     >
                       <div className="flex items-center gap-4">
@@ -78,9 +112,9 @@ export function BuiltForYou({ data }: BuiltForYouProps) {
                           <img
                             src={tab.icon.url}
                             alt={tab.label || `Tab ${index + 1}`}
-                            className={`h-6 md:h-8 w-6 md:w-8 ${activeTab === index ? 'invert ' : ''}`}
+                            className={`h-6 md:h-8 w-6 md:w-8 ${activeTab === index ? 'invert' : ''}`}
                             title={tab.tooltip || ''}
-                            />
+                          />
                         )}
                         <span className={`font-Roboto font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]
                           ${activeTab === index ? 'text-white' : 'text-PrimaryBlack'}`}>
@@ -88,13 +122,14 @@ export function BuiltForYou({ data }: BuiltForYouProps) {
                         </span>
                       </div>
                     </button>
-                    {/* 👇 This block renders the tab content DIRECTLY BELOW the active tab button on MOBILE screens only. */}
+                    
+                    {/* Mobile content */}
                     {activeTab === index && (
                       <div
                         role="tabpanel"
                         id={`tabpanel-${activeTab}`}
                         aria-labelledby={`tab-${activeTab}`}
-                        className="w-full flex flex-col mt-4 mb-8 md:hidden" // MD:HIDDEN hides it on desktop
+                        className="w-full flex flex-col mt-4 mb-8 md:hidden"
                       >
                         {data.tabs?.[activeTab].avatars && (
                           <div className="mb-6 flex flex-col md:flex-row gap-4">
@@ -109,9 +144,9 @@ export function BuiltForYou({ data }: BuiltForYouProps) {
                               ))}
                             </div>
                             {data.tabs[activeTab].sideText && (
-                              <p className="max-w-[577px] font-Roboto font-normal leading-[21px] md:leading-[24px] text-[14px] md:text-[16px] tracking-[0px] text-PrimaryBlack">
-                                {data.tabs[activeTab].sideText}
-                              </p>
+                              <div className="max-w-[577px] font-Roboto font-normal leading-[21px] md:leading-[24px] text-[14px] md:text-[16px] tracking-[0px] text-PrimaryBlack">
+                                <PortableText value={data.tabs[activeTab].sideText} />
+                              </div>
                             )}
                           </div>
                         )}
@@ -145,13 +180,13 @@ export function BuiltForYou({ data }: BuiltForYouProps) {
               </div>
             </div>
  
-            {/* Right Column for Active Tab Content (Hidden on mobile) */}
+            {/* Desktop content */}
             {data.tabs?.[activeTab] && (
               <div
                 role="tabpanel"
                 id={`tabpanel-${activeTab}`}
                 aria-labelledby={`tab-${activeTab}`}
-                className="hidden md:flex w-full md:w-[62.2%] flex-col" // HIDDEN hides it on mobile, MD:FLEX makes it visible on desktop
+                className="hidden md:flex w-full md:w-[62.2%] flex-col"
               >
                 <div className="mb-6 flex flex-col md:flex-row gap-4">
                   {data.tabs[activeTab].avatars && (
@@ -167,9 +202,9 @@ export function BuiltForYou({ data }: BuiltForYouProps) {
                     </div>
                   )}
                   {data.tabs[activeTab].sideText && (
-                    <p className="max-w-[577px] font-Roboto font-normal leading-[21px] md:leading-[24px] text-[14px] md:text-[16px] tracking-[0px] text-PrimaryBlack">
-                      {data.tabs[activeTab].sideText}
-                    </p>
+                    <div className="max-w-[577px] font-Roboto font-normal leading-[21px] md:leading-[24px] text-[14px] md:text-[16px] tracking-[0px] text-PrimaryBlack">
+                      <PortableText value={data.tabs[activeTab].sideText} />
+                    </div>
                   )}
                 </div>
  
