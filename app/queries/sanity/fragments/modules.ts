@@ -126,6 +126,7 @@ export const MODULES = groq`
   },
   (_type == "pdpPageModule") => {  
     ${PDP_PHONE_PAGE_MODULE}
+  },
   (_type == "smallBusinessOwnerPage") => {  
     ${SMALL_BUSINESS_OWNER_MODULE}
   },
