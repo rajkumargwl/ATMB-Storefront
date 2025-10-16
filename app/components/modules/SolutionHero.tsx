@@ -1,4 +1,3 @@
-
 import { Link } from "@remix-run/react";
  
 type Overlay = {
@@ -61,7 +60,7 @@ export default function SolutionHero({ data }: Props) {
           </p>
  
           {data?.cta?.label && (
-            <Link to={data?.cta?.url || "#"} className="flex items-center justify-center w-full md:w-[207px] bg-DarkOrange text-white font-Roboto font-medium leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px[16px] py-[12px] rounded-[100px] overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]">
+            <Link to={data?.cta?.url || "#"} className="flex items-center justify-center w-full md:w-[207px] bg-DarkOrange text-white font-Roboto font-medium leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-[16px] py-[12px] rounded-[100px] overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]">
               {data.cta.label}             
             </Link>
           )}
@@ -116,7 +115,7 @@ export default function SolutionHero({ data }: Props) {
           </div>
  
           {/* Overlay Two */}
-          <div className="hidden md:flex items-center gap-3 absolute  top-[45px] lg:top-[45px] right-[-20px] xl:right-[-37px] max-w-[242px] p-4 rounded-[12px] border border-[#DCDCDC] bg-[rgba(255,255,255,0.70)] backdrop-blur-[12px]">
+          <div className="flex items-center gap-3 absolute top-[-14px]  md:top-[45px] lg:top-[45px] right-[-7px] md:right-[-20px] xl:right-[-37px] max-w-[242px] p-4 rounded-[12px] border border-[#DCDCDC] bg-[rgba(255,255,255,0.70)] backdrop-blur-[12px]">
             {data?.overlayTwo?.icon?.url && (
               <img src={data.overlayTwo.icon.url} alt="" className="w-6 h-6" />
             )}
@@ -129,5 +128,4 @@ export default function SolutionHero({ data }: Props) {
     </section>
   );
 }
- 
  

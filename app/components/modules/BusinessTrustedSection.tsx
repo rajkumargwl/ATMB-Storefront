@@ -1,5 +1,8 @@
 import React from "react";
 import spanBg from "~/components/media/span-bg.svg";
+import star1 from "~/components/media/Star1.svg";
+import star2 from "~/components/media/Star2.svg";
+import star3 from "~/components/media/Star3.svg";
  
 type Rating = {
   icon: { url: string };
@@ -63,15 +66,35 @@ const BusinessTrustedSection: React.FC<Props> = ({
           </div>
  
           {/* Ratings */}
-          <div className="flex flex-wrap gap-6 items-center">
+          <div className="flex flex-wrap gap-[16px] md:gap-[26px] items-center justify-between">
             {ratings.map((rating, idx) => (
-              <div key={idx} className="flex items-center gap-2">
+              <div key={idx} className="flex items-center gap-3 bg-white text-PrimaryBlack px-3 py-2 rounded-[12px]">
                 <img
                   src={rating.icon.url}
                   alt={`Rating ${rating.ratingText}`}
-                  className="w-8 h-8"
+                  className="w-6 md:w-10 h-6 md:h-10"
                 />
-                <p className="text-sm text-gray-700">{rating.ratingText}</p>
+                <div className="flex flex-col gap-0 md:gap-1">
+                 <div className="flex">
+                    {/* Static stars */}
+                    <img src={star1} alt="star" className="w-4 md:w-5 h-4 md:h-5" />
+                    <img src={star1} alt="star" className="w-5 h-5 hidden md:inline" />
+                    <img src={star1} alt="star" className="w-5 h-5 hidden md:inline" />
+                    <img src={star1} alt="star" className="w-5 h-5 hidden md:inline" />
+                    <img
+                      src={idx === 0 ? star2 : star3}
+                      alt="star"
+                      className="w-5 h-5 hidden md:inline"
+                    />
+                     <p className="md:hidden font-Roboto text-PrimaryBlack font-medium leading-[21px] text-[14px] tracking-[0px]">{rating.ratingText}</p>
+                  </div>
+                  {idx === 0 ? (
+                      <p className="font-Roboto text-PrimaryBlack font-normal leading-[18px] text-[12px] tracking-[0px]"><span className="hidden md:inline">4.5/5 on </span>Google Review</p>
+                    ) : (
+                      <p className="font-Roboto text-PrimaryBlack font-normal leading-[18px] text-[12px] tracking-[0px]"><span className="hidden md:inline">4/5 on </span>Shopper Approved</p>
+                    )}
+               
+                 </div>
               </div>
             ))}
           </div>

@@ -104,7 +104,7 @@ export function BuiltForYou({ data }: BuiltForYouProps) {
                       className={`w-full text-left px-[16px] py-[18px] md:p-[18px] ${
                         activeTab === index
                           ? 'bg-PrimaryBlack rounded-[8px]'
-                          : 'bg-white mb-4 md:mb-[0px] border md:border-b border-LightWhite rounded-[8px] md:rounded-[0px]'
+                          : 'bg-white mb-4 md:mb-[0px] border md:border-b md:border-l-0 md:border-r-0 md:border-t-0 border-LightWhite rounded-[8px] md:rounded-[0px]'
                       }`}
                     >
                       <div className="flex items-center gap-4">
