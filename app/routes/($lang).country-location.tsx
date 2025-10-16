@@ -63,6 +63,14 @@ export default function CountryLocationsPage() {
   const { countries, usLocations,locations } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
 console.log("locations",locations);
+const columns = window.innerWidth < 768 ? 2 : 4; // 2 cols mobile, 4 cols desktop
+const itemsPerCol = Math.ceil(usLocations.length / columns);
+
+// Split into columns
+const columnedLocations = Array.from({ length: columns }, (_, i) =>
+  usLocations.slice(i * itemsPerCol, (i + 1) * itemsPerCol)
+);
+
   return (
     // <div className="flex flex-col min-h-screen bg-white">
     //   <main className="flex-1 p-6 max-w-6xl mx-auto w-full">
@@ -115,7 +123,7 @@ console.log("locations",locations);
     // </div>
     <>
     <section className="bg-[#F6F6F6] text-gray-900 py-14 sm:py-10 px-[20px]">
-      <div className="bg-[#F6F6F6]  max-w-[1240px] mx-auto  max-1265px:px-4 max-1265px:gap-2 grid md:grid-cols-2 items-center">
+    <div className="bg-[#F6F6F6] max-w-[1240px] mx-auto max-1265px:px-4 max-1265px:gap-2 grid md:grid-cols-2 items-center gap-[62px]">
         {/* Left: Text Content */}
         <div >
             <h1 className="text-center md:text-left font-Roboto text-PrimaryBlack font-semibold leading-[38.4px] tracking-[-0.48px] text-[32px] md:text-[36px] md:leading-[43.2px] md:tracking-[-0.54px]">Virtual Mailbox Locations Across the United States and Worldwide</h1>
@@ -175,7 +183,7 @@ console.log("locations",locations);
         <h2 className="text-[24px] md:text-[32px] font-[600] text-[#091019] mb-[44px] leading-[31.2px] md:leading-[38.4px] tracking-[-0.36px] md:tracking-[-0.48px]">
             United States
         </h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 md:gap-x-6 md:gap-y-5 gap-x-4 gap-y-8">
+        {/* <div className="grid grid-cols-2 md:grid-cols-4 md:gap-x-6 md:gap-y-5 gap-x-4 gap-y-8">
         {usLocations.map((state, index) => {
             return (
                 <div
@@ -197,7 +205,34 @@ console.log("locations",locations);
               </div>
             );
             })}
-        </div>
+        </div> */}
+        <div className="grid grid-cols-2 md:grid-cols-4 md:gap-x-6 md:gap-y-5 gap-x-4 gap-y-8">
+    {columnedLocations.map((col, colIndex) => (
+      <div key={colIndex} className="flex flex-col gap-5">
+        {col.map((state, index) => (
+          <div
+            key={index}
+            className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-200"
+            onClick={() =>
+              navigate(`/l/${encodeURIComponent(state.country)}/${encodeURIComponent(state.name)}`)
+            }
+          >
+            <span className="group-hover:text-[#F15A24]">{state.name}</span>
+              {state && (
+                <>
+                  <span className="text-[12px] bg-[#0000001a] font-[400] leading-[18px] text-[#091019] rounded-full w-6 h-6 items-center justify-center flex">
+                    {state.count}
+                  </span>
+                  <span className="opacity-0 group-hover:opacity-100 translate-x-[-6px] group-hover:translate-x-[0] transition-all duration-300 bg-[#F15A24] rounded-full w-6 h-6 flex items-center justify-center">
+                    <ArrowRightCountries />
+                  </span>
+                </>
+              )}
+          </div>
+        ))}
+      </div>
+    ))}
+  </div>
         </div>
         </div>
     </section>
