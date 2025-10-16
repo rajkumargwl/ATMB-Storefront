@@ -110,7 +110,7 @@ export default function SearchBoxCountry({
                 qresults.map((item) => (
                   <li
                     key={item._id}
-                    className="cursor-pointer font-Roboto leading-[27px] text-[18px] tracking-[0px]"
+                    className="cursor-pointer font-Roboto leading-[27px] text-[18px] tracking-[0px] hover:text-[#ff6600]"
                     // onClick={() => {
                     //   setSkipSearchQSync(true);
                     //   setSearchquery("");
@@ -129,8 +129,8 @@ export default function SearchBoxCountry({
                     }, 200);
                     }}
                   >
-                    <span className="mr-2 font-medium text-PrimaryBlack">{item.name}</span>
-                    <span className="text-LightGray font-normal">
+                    <span className="mr-2 font-medium text-PrimaryBlack hover:text-[#ff6600]">{item.name}</span>
+                    <span className="text-LightGray font-normal hover:text-[#ff6600]">
                       {item.city}, {item.postalCode}
                     </span>
                   </li>
