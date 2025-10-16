@@ -4,6 +4,7 @@ import SearchBox from '~/components/SearchBox';
 import SearchIconBanner from '~/components/icons/SearchIconBanner';
 import ArrowRightCountries from "~/components/icons/ArrowRightCountries";
 import RightArrowWhite from '~/components/icons/RightArrowWhite';
+import { useEffect, useState } from 'react';
 
 // Loader
 export async function loader({context}: LoaderFunctionArgs) {
@@ -62,14 +63,27 @@ export async function loader({context}: LoaderFunctionArgs) {
 export default function CountryLocationsPage() {
   const { countries, usLocations,locations } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
-console.log("locations",locations);
-const columns = window.innerWidth < 768 ? 2 : 4; // 2 cols mobile, 4 cols desktop
-const itemsPerCol = Math.ceil(usLocations.length / columns);
 
-// Split into columns
-const columnedLocations = Array.from({ length: columns }, (_, i) =>
-  usLocations.slice(i * itemsPerCol, (i + 1) * itemsPerCol)
-);
+  const [columns, setColumns] = useState(4); // default desktop
+
+  useEffect(() => {
+    const updateColumns = () => {
+      setColumns(window.innerWidth < 768 ? 2 : 4);
+    };
+    updateColumns(); // run on mount
+    window.addEventListener("resize", updateColumns);
+    return () => window.removeEventListener("resize", updateColumns);
+  }, []);
+
+  const itemsPerCol = Math.ceil(usLocations.length / columns);
+  const columnedLocations = Array.from({ length: columns }, (_, i) =>
+    usLocations.slice(i * itemsPerCol, (i + 1) * itemsPerCol)
+  );
+
+  const itemsPerCol2 = Math.ceil(countries.length / columns);
+  const columnedLocations2 = Array.from({ length: columns }, (_, i) =>
+    countries.slice(i * itemsPerCol2, (i + 1) * itemsPerCol2)
+  );
 
   return (
     // <div className="flex flex-col min-h-screen bg-white">
@@ -207,32 +221,32 @@ const columnedLocations = Array.from({ length: columns }, (_, i) =>
             })}
         </div> */}
         <div className="grid grid-cols-2 md:grid-cols-4 md:gap-x-6 md:gap-y-5 gap-x-4 gap-y-8">
-    {columnedLocations.map((col, colIndex) => (
-      <div key={colIndex} className="flex flex-col gap-5">
-        {col.map((state, index) => (
-          <div
-            key={index}
-            className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-200"
-            onClick={() =>
-              navigate(`/l/${encodeURIComponent(state.country)}/${encodeURIComponent(state.name)}`)
-            }
-          >
-            <span className="group-hover:text-[#F15A24]">{state.name}</span>
-              {state && (
-                <>
-                  <span className="text-[12px] bg-[#0000001a] font-[400] leading-[18px] text-[#091019] rounded-full w-6 h-6 items-center justify-center flex">
-                    {state.count}
-                  </span>
-                  <span className="opacity-0 group-hover:opacity-100 translate-x-[-6px] group-hover:translate-x-[0] transition-all duration-300 bg-[#F15A24] rounded-full w-6 h-6 flex items-center justify-center">
-                    <ArrowRightCountries />
-                  </span>
-                </>
-              )}
-          </div>
-        ))}
-      </div>
-    ))}
-  </div>
+          {columnedLocations.map((col, colIndex) => (
+            <div key={colIndex} className="flex flex-col gap-5">
+              {col.map((state, index) => (
+                <div
+                  key={index}
+                  className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-200"
+                  onClick={() =>
+                    navigate(`/l/${encodeURIComponent(state.country)}/${encodeURIComponent(state.name)}`)
+                  }
+                >
+                  <span className="group-hover:text-[#F15A24]">{state.name}</span>
+                    {state && (
+                      <>
+                        <span className="text-[12px] bg-[#0000001a] font-[400] leading-[18px] text-[#091019] rounded-full w-6 h-6 items-center justify-center flex">
+                          {state.count}
+                        </span>
+                        <span className="opacity-0 group-hover:opacity-100 translate-x-[-6px] group-hover:translate-x-[0] transition-all duration-300 bg-[#F15A24] rounded-full w-6 h-6 flex items-center justify-center">
+                          <ArrowRightCountries />
+                        </span>
+                      </>
+                    )}
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
         </div>
         </div>
     </section>
@@ -246,26 +260,28 @@ const columnedLocations = Array.from({ length: columns }, (_, i) =>
             International
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 md:gap-x-6 md:gap-y-5 gap-x-4 gap-y-8">
-        {countries.map((country, index) => {
-            return (
-                <div key={index} className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-200"
-                onClick={() => navigate(`/l/country/${encodeURIComponent(country.name)}`)}
-                >
-                <span className="group-hover:text-[#F15A24]">{country.name.trim()}</span>
-                {country.count && (
-                    <>
-                    <span className="text-[12px] bg-[#0000001a] font-[400] leading-[18px] text-[#091019] rounded-full w-6 h-6 items-center justify-center flex">
-                      {country.count}
-                    </span>
-                    <span className="opacity-0 group-hover:opacity-100 translate-x-[-6px] group-hover:translate-x-[0] transition-all duration-300 bg-[#F15A24] rounded-full w-6 h-6 flex items-center justify-center">
-                      <ArrowRightCountries />
-                    </span>
-                  </>
-                )}
-                </div>
-            );
-            })}
-        </div>
+          {columnedLocations2.map((col, colIndex) => (
+            <div key={colIndex} className="flex flex-col gap-5">
+              {col.map((country, index) => (
+                  <div key={index} className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-200"
+                  onClick={() => navigate(`/l/country/${encodeURIComponent(country.name)}`)}
+                  >
+                    <span className="group-hover:text-[#F15A24]">{country.name.trim()}</span>
+                    {country.count && (
+                      <>
+                        <span className="text-[12px] bg-[#0000001a] font-[400] leading-[18px] text-[#091019] rounded-full w-6 h-6 items-center justify-center flex">
+                          {country.count}
+                        </span>
+                        <span className="opacity-0 group-hover:opacity-100 translate-x-[-6px] group-hover:translate-x-[0] transition-all duration-300 bg-[#F15A24] rounded-full w-6 h-6 flex items-center justify-center">
+                          <ArrowRightCountries />
+                        </span>
+                      </>
+                    )}
+                  </div>
+              ))}
+            </div>
+          ))}
+          </div>
         </div>
 
     </div>
