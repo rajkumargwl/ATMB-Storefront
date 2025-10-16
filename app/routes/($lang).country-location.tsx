@@ -137,7 +137,7 @@ export default function CountryLocationsPage() {
     // </div>
     <>
     <section className="bg-[#F6F6F6] text-gray-900 py-14 sm:py-10 px-[20px]">
-    <div className="bg-[#F6F6F6] max-w-[1240px] mx-auto max-1265px:px-4 max-1265px:gap-2 grid md:grid-cols-2 items-center gap-[62px]">
+    <div className="bg-[#F6F6F6] max-w-[1240px] mx-auto max-1265px:gap-2 grid md:grid-cols-2 items-center gap-[62px]">
         {/* Left: Text Content */}
         <div >
             <h1 className="text-center md:text-left font-Roboto text-PrimaryBlack font-semibold leading-[38.4px] tracking-[-0.48px] text-[32px] md:text-[36px] md:leading-[43.2px] md:tracking-[-0.54px]">Virtual Mailbox Locations Across the United States and Worldwide</h1>
