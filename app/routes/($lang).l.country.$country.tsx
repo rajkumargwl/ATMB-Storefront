@@ -218,13 +218,14 @@ export default function CountryPage() {
           <div className="flex items-center space-x-4 mb-6">
             <button
               className="rounded-full md:border md:border-LightWhite p-2 md:p-[11px]"
+              title='Back'
               onClick={() => navigate(-1)}
             >
               <LeftArrowBlack />
             </button>
 
             <h1 className="font-Roboto text-PrimaryBlack font-semibold text-[24px] leading-[31.2px] tracking-[-0.39px]">
-              {decodedCountry}
+            Virtual Mailbox in {decodedCountry}
             </h1>
           </div>
 
@@ -256,6 +257,19 @@ export default function CountryPage() {
             showMap ? 'block' : 'hidden md:block'
           }`}
         >
+          <div className="md:hidden flex items-center space-x-4 mb-6">
+            <button
+              className="rounded-full md:border md:border-LightWhite p-2 md:p-[11px]"
+              title='Back'
+              onClick={() => navigate(-1)}
+            >
+              <LeftArrowBlack />
+            </button>
+
+            <h1 className="font-Roboto text-PrimaryBlack font-semibold text-[24px] leading-[31.2px] tracking-[-0.39px]">
+            Virtual Mailbox in {decodedCountry}
+            </h1>
+          </div>
           <CountryMap
             locations={locations}
             onMarkerClick={(loc) => handleLocationClick(loc)}
