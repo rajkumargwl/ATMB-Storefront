@@ -8,6 +8,8 @@ import "swiper/css";
 import "swiper/css/navigation";
 import ArrowRightIcon from "~/components/icons/ArrowRightIcon";
 import ArrowLeftIcon from "~/components/icons/ArrowLeftIcon";
+import CityImage from "~/components/media/city.svg";
+import KeyFactor from "~/components/media/key-factor.svg";
 import Testimonial from "~/components/icons/Testimonial";
 
 // Loader
@@ -50,7 +52,7 @@ console.log("decodedCountry, decodedState", decodedCountry, decodedState);
 
     const dummyTestimonialData = {
       headline: "What Our Customers Say",
-      subheadline: "Real stories from real people",
+      subheadline: "Thousand trust Anytime Mailbox",
       testimonials: [
         {
           _key: "1",
@@ -127,7 +129,7 @@ console.log("decodedCountry, decodedState", decodedCountry, decodedState);
     };
 
     const dummyBusinessData = {
-      headline: "Advantages of a New South Wales Business Address",
+      headline: "Advantages of a " + locations[0]?.city + " Business Address",
       features: [
         {
           _key: "1",
@@ -139,7 +141,7 @@ console.log("decodedCountry, decodedState", decodedCountry, decodedState);
             // iconFile: {
             //   url: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
             // },
-            svg: '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="22" viewBox="0 0 18 22" fill="none"><path d="M17.5087 1.03025C17.3678 0.863969 17.1923 0.730393 16.9946 0.638819C16.7968 0.547244 16.5814 0.499873 16.3635 0.5H1.63495C1.41707 0.499973 1.20181 0.547411 1.00412 0.639013C0.806435 0.730615 0.631078 0.864183 0.490246 1.03043C0.349414 1.19667 0.246488 1.3916 0.188627 1.60165C0.130766 1.8117 0.119359 2.03184 0.1552 2.24675L0.65545 5.24675C0.7127 5.59739 0.893031 5.91615 1.16409 6.14583C1.43514 6.37551 1.77917 6.50108 2.13445 6.5H15.864C16.2192 6.50108 16.5633 6.37551 16.8343 6.14583C17.1054 5.91615 17.2857 5.59739 17.343 5.24675L17.8432 2.24675C17.8791 2.03185 17.8678 1.81171 17.8101 1.60162C17.7523 1.39154 17.6495 1.19656 17.5087 1.03025ZM15.8632 5H2.13445L1.63495 2H16.3642L15.8632 5ZM12.459 15.5H5.53945C5.30165 15.4997 5.06718 15.556 4.85539 15.6641C4.6436 15.7723 4.46056 15.9292 4.32137 16.122C4.18218 16.3148 4.09083 16.538 4.05486 16.7731C4.01888 17.0081 4.0393 17.2484 4.11445 17.474L5.1142 20.474C5.21384 20.7732 5.40524 21.0333 5.66119 21.2175C5.91713 21.4017 6.22462 21.5006 6.53995 21.5H11.4584C11.7737 21.5004 12.081 21.4015 12.3368 21.2173C12.5926 21.0331 12.7838 20.7731 12.8835 20.474L13.8832 17.474C13.9583 17.2484 13.9788 17.0083 13.9428 16.7732C13.9069 16.5382 13.8156 16.3151 13.6765 16.1223C13.5374 15.9295 13.3545 15.7726 13.1428 15.6644C12.9311 15.5562 12.6967 15.4998 12.459 15.5ZM11.4584 20H6.53995L5.53945 17H12.4582L11.4584 20Z" fill="white"/></svg>' 
+            svg: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.459 16.5C15.6966 16.4998 15.931 16.556 16.1426 16.6641C16.3542 16.7723 16.5377 16.9293 16.6768 17.1221C16.8159 17.3149 16.9064 17.5384 16.9424 17.7734C16.9783 18.0083 16.9579 18.2482 16.8828 18.4736L15.8838 21.4736C15.7842 21.7727 15.5927 22.0336 15.3369 22.2178C15.0811 22.4019 14.7732 22.5004 14.458 22.5H9.54004C9.22474 22.5005 8.91706 22.4019 8.66113 22.2178C8.40518 22.0336 8.2139 21.7728 8.11426 21.4736L7.11426 18.4736C7.03926 18.2483 7.01881 18.0082 7.05469 17.7734C7.09066 17.5384 7.18212 17.3149 7.32129 17.1221C7.46048 16.9293 7.64368 16.7722 7.85547 16.6641C8.06712 16.556 8.30142 16.4998 8.53906 16.5H15.459ZM8.53906 18L9.54004 21H14.458L15.458 18H8.53906ZM17.71 9C17.9478 8.99967 18.1827 9.05587 18.3945 9.16406C18.6063 9.27225 18.7895 9.42922 18.9287 9.62207C19.0679 9.81496 19.1594 10.0383 19.1953 10.2734C19.2312 10.5086 19.21 10.749 19.1348 10.9746L18.1348 13.9746C18.035 14.2736 17.8438 14.5337 17.5879 14.7178C17.332 14.9018 17.0242 15.0006 16.709 15H7.29101C6.97602 15.0004 6.66882 14.9017 6.41309 14.7178C6.1573 14.5337 5.96594 14.2735 5.86621 13.9746L4.86621 10.9746C4.79097 10.749 4.77078 10.5085 4.80664 10.2734C4.84255 10.0385 4.93322 9.81486 5.07226 9.62207C5.21137 9.42928 5.39476 9.27227 5.60644 9.16406C5.81805 9.05594 6.05241 8.99985 6.29004 9H17.71ZM7.29101 13.5H16.709L17.709 10.5H6.29004L7.29101 13.5ZM19.3633 1.5C19.5811 1.49987 19.7965 1.54722 19.9941 1.63867C20.1919 1.73025 20.3679 1.86399 20.5088 2.03027C20.6495 2.19657 20.7528 2.3915 20.8105 2.60156C20.8683 2.81163 20.8787 3.0322 20.8428 3.24707L20.3428 6.24707C20.2855 6.59757 20.105 6.9159 19.834 7.14551C19.563 7.3751 19.2194 7.501 18.8643 7.5H5.13476C4.77949 7.50108 4.43512 7.37519 4.16406 7.14551C3.89318 6.9159 3.71256 6.59752 3.65527 6.24707L3.15527 3.24707C3.11943 3.03216 3.13062 2.81162 3.18848 2.60156C3.24634 2.39153 3.34941 2.19651 3.49023 2.03027C3.63104 1.86408 3.80627 1.73026 4.00391 1.63867C4.20154 1.5471 4.41695 1.5 4.63476 1.5H19.3633ZM4.63476 3L5.13476 6H18.8633L19.3643 3H4.63476Z" fill="white"/></svg>' 
            },
         },
 
@@ -147,7 +149,7 @@ console.log("decodedCountry, decodedState", decodedCountry, decodedState);
           _key: "2",
           title: "Market Access",
           description:
-            "New South Wales, located in the southeastern region of Australia, provides businesses of any size domestic and international market access.",
+            locations[0]?.city + ", located in the southeastern region of Australia, provides businesses of any size domestic and international market access.",
           icon: {
             tooltipTitle: "Inventory",
             svg: '<svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none"><path d="M5.54352 5.46385C5.74977 5.0551 6.16227 4.8001 6.61977 4.8001H18.0535C18.5073 4.8001 18.9235 5.0551 19.126 5.46385L21.256 9.7276C21.3085 9.82885 21.3348 9.9451 21.3348 10.0576C21.3348 10.4663 21.001 10.8001 20.5923 10.8001H4.07727C3.66852 10.8001 3.33477 10.4663 3.33477 10.0576C3.33477 9.94135 3.36102 9.82885 3.41352 9.7276L5.54352 5.46385ZM2.13477 10.0576C2.13477 11.0813 2.92977 11.9213 3.93477 11.9926V18.6001C3.93477 19.5938 4.74102 20.4001 5.73477 20.4001H12.9348C13.9285 20.4001 14.7348 19.5938 14.7348 18.6001V12.0001H19.5348V19.8001C19.5348 20.1301 19.8048 20.4001 20.1348 20.4001C20.4648 20.4001 20.7348 20.1301 20.7348 19.8001V11.9963C21.7398 11.9251 22.5348 11.0851 22.5348 10.0613C22.5348 9.76135 22.4635 9.46135 22.3285 9.19135L20.1985 4.9276C19.7898 4.11385 18.961 3.6001 18.0498 3.6001H6.61977C5.71227 3.6001 4.87977 4.11385 4.47477 4.9276L2.34102 9.19135C2.20602 9.46135 2.13477 9.7576 2.13477 10.0613V10.0576ZM5.13477 15.6001V12.0001H13.5348V15.6001H5.13477ZM5.13477 16.8001H13.5348V18.6001C13.5348 18.9301 13.2648 19.2001 12.9348 19.2001H5.73477C5.40477 19.2001 5.13477 18.9301 5.13477 18.6001V16.8001Z" fill="white"/></svg>'
@@ -157,7 +159,7 @@ console.log("decodedCountry, decodedState", decodedCountry, decodedState);
           _key: "3",
           title: "Supportive Policies",
           description:
-            "New South Wales offers grants, subsidies, mentorship programs, and access to resources to support small businesses and startups.",
+            locations[0]?.city + " offers grants, subsidies, mentorship programs, and access to resources to support small businesses and startups.",
           icon: {
             tooltipTitle: "Dashboard Insights",
             svg: '<svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none"><path d="M6.66602 1.5H12.666V6C12.666 7.65469 14.0113 9 15.666 9H20.166V21C20.166 21.8297 19.4957 22.5 18.666 22.5H6.66602C5.83633 22.5 5.16602 21.8297 5.16602 21V3C5.16602 2.17031 5.83633 1.5 6.66602 1.5ZM14.166 2.12344L19.5426 7.5H15.666C14.8363 7.5 14.166 6.82969 14.166 6V2.12344ZM6.66602 0C5.01133 0 3.66602 1.34531 3.66602 3V21C3.66602 22.6547 5.01133 24 6.66602 24H18.666C20.3207 24 21.666 22.6547 21.666 21V8.74219C21.666 7.94531 21.352 7.18125 20.7895 6.61875L15.0426 0.876563C14.4801 0.314063 13.7207 0 12.9238 0H6.66602ZM8.91602 12C8.50352 12 8.16602 12.3375 8.16602 12.75C8.16602 13.1625 8.50352 13.5 8.91602 13.5H16.416C16.8285 13.5 17.166 13.1625 17.166 12.75C17.166 12.3375 16.8285 12 16.416 12H8.91602ZM8.91602 16.5C8.50352 16.5 8.16602 16.8375 8.16602 17.25C8.16602 17.6625 8.50352 18 8.91602 18H16.416C16.8285 18 17.166 17.6625 17.166 17.25C17.166 16.8375 16.8285 16.5 16.416 16.5H8.91602Z" fill="white"/></svg>'
@@ -229,7 +231,7 @@ export default function StatePage() {
    
     return (
       <>
-      <LocationsList locations={locations} />
+      <LocationsList locations={locations} isCityPage={true} country={decodedCountry} />
 
       <section className="px-5 py-[40px] md:py-[60px] lg:py-[100px] bg-[#F6F6F6]">
         <div className="max-w-[1240px] mx-auto flex flex-col md:flex-row gap-[44px] lg:gap-[142px] items-center">
@@ -237,7 +239,7 @@ export default function StatePage() {
           {/* Image Section */}
           <div className="w-full md:w-[50.3%] relative order-1 md:order-1">
             <img
-              src="https://cdn.sanity.io/images/m5xb8z9y/production/0a914c1742706760c5b68605cfccf1ea143c86e9-550x446.png"
+              src={CityImage}
               alt="How it started"
               className="rounded-[20px] w-full object-cover"
             />
@@ -246,18 +248,18 @@ export default function StatePage() {
           {/* Text Section */}
           <div className="w-full md:w-[49.7%] space-y-4 order-1 md:order-1">
             <h2 className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px]">
-            Why Get a Mailing Address in<br/><span className='text-[#FF6600]'>New South Wales</span> 
+            Why Get a Mailing Address in<br/><span className='text-[#FF6600]'>{locations[0]?.city}</span> 
             </h2>
 
             <div className="prose prose-lg how-started text-PrimaryBlack">
               <p>
-              New South Wales, Australia’s business capital, is an attractive destination for entrepreneurs looking to expand their market reach. With a thriving economy, a wide range of industries, and a strategic location in Australia, this region presents businesses with many opportunities for growth.
+              {locations[0]?.city}, Australia’s business capital, is an attractive destination for entrepreneurs looking to expand their market reach. With a thriving economy, a wide range of industries, and a strategic location in Australia, this region presents businesses with many opportunities for growth.
                 <br />
                 <br />
-                By setting up a virtual mailbox address in New South Wales, you get to call Australia’s top-performing region home. It is a prime spot for accessing markets in the Asia-Pacific region and is a top destination for investors.
+                By setting up a virtual mailbox address in {locations[0]?.city}, you get to call Australia’s top-performing region home. It is a prime spot for accessing markets in the Asia-Pacific region and is a top destination for investors.
                 <br />
                 <br />
-                With a Virtual Mailbox address in New South Wales, your business can tap into business opportunities and world-class markets.
+                With a Virtual Mailbox address in {locations[0]?.city}, your business can tap into business opportunities and world-class markets.
               </p>
             </div>
           </div>
@@ -336,7 +338,8 @@ export default function StatePage() {
             How Virtual Mailbox Works
           </h2>
 
-          <div className="relative flex flex-col md:flex-row items-center justify-between gap-14 md:gap-6">
+          <div className="relative flex flex-col md:flex-row items-start justify-between gap-14 md:gap-6">
+
             
             {/* Step 1 */}
             <div className="flex flex-col items-center text-center max-w-[386px]">
@@ -346,7 +349,7 @@ export default function StatePage() {
                 </svg>
               </div>
               <h3 className="font-[600] text-[18px] md:text-[24px] mb-4">
-                Select a New South Wales Address
+                Select a {locations[0]?.city} Address
               </h3>
               <p className="font-[400]  text-[14px] md:text-[18px] leading-[27px]">
                 Select a real street address and subscription plan by browsing our
@@ -372,7 +375,7 @@ export default function StatePage() {
                 We Receive Your Mail
               </h3>
               <p className="font-[400] text-[14px] md:text-[18px] leading-[27px]">
-                Have your mail and packages delivered to your New South Wales
+                Have your mail and packages delivered to your {locations[0]?.city}
                 address. We upload a photo of the mail items to the app.
               </p>
             </div>
@@ -614,7 +617,7 @@ export default function StatePage() {
               Plans start at $9.99
             </h2>
             <button className="bg-white text-[#041E2C] font-[400] text-[16px] leading-[16px] tracking-[0.08px] px-5 py-4 rounded-full hover:bg-gray-100 transition">
-              Get a New South Wales Address
+              Get a {locations[0]?.city} Address
             </button>
           </div>
 

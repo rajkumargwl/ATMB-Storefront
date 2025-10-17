@@ -111,5 +111,5 @@ export async function loader({context, request, params}: LoaderFunctionArgs) {
 
 export default function LocationsPage() {
   const {locations, q} = useLoaderData<typeof loader>();
-  return <LocationsList locations={locations} initialQuery={q} />;
+  return <LocationsList locations={locations} initialQuery={q} isCityPage={false} country="" />;
 }
