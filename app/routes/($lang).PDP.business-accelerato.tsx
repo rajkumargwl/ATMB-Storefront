@@ -1,31 +1,34 @@
 // app/routes/($lang).plans.tsx
 import {useLoaderData} from '@remix-run/react';
 import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import Header from '~/components/global/Header';
-import Footer from '~/components/global/Footer';
-import {HEADER_QUERY} from '~/queries/sanity/header';
-import {FOOTER_QUERY} from '~/queries/sanity/footer';
+
 import {notFound} from '~/lib/utils';
 import {PRODUCT_QUERY} from '~/queries/shopify/product';
 import type {Product, ProductVariant} from '@shopify/hydrogen/storefront-api-types';
 import {type ShopifyAnalyticsProduct} from '@shopify/hydrogen';
 import AddToCartButton from '~/components/product/buttons/AddToCartButton';
 import {useState} from 'react';
-
+import { PRODUCT_PAGE_QUERY } from '~/queries/sanity/product';
+import { SanityProductPage } from '~/lib/sanity';
+import ModuleGrid from '~/components/modules/ModuleGrid'; // Make sure this is imported
 // Loader
 export async function loader({context, params}: LoaderFunctionArgs) {
+  const language = params.lang || 'en';
+ 
+  // Validate supported languages
+  const supportedLanguages = ['en', 'es'];
+  if (!supportedLanguages.includes(language)) {
+    throw notFound();
+  }
+  
   const cache = context.storefront.CacheCustom({
     mode: 'public',
     maxAge: 60,
     staleWhileRevalidate: 60,
   });
 
-  const [header, footer] = await Promise.all([
-    context.sanity.query({query: HEADER_QUERY, cache}),
-    context.sanity.query({query: FOOTER_QUERY, cache}),
-  ]);
 
-  if (!header || !footer) throw notFound();
+
 
   const handle = params.handle ?? 'business-accelerato';
 
@@ -33,16 +36,26 @@ export async function loader({context, params}: LoaderFunctionArgs) {
     variables: {handle, selectedOptions: []},
   });
   if (!product) throw notFound();
+  
+   // Fetch PDP modules from Sanity
+  const [page] = await Promise.all([
+    context.sanity.query<SanityProductPage>({
+      query: PRODUCT_PAGE_QUERY,
+      params: { slug: handle },
+      cache,
+    }),
+  ]);
+
+
 
   return defer({
-    header,
-    footer,
+    page,
     product,
   });
 }
 
 export default function Plans() {
-  const {header, footer, product} = useLoaderData<typeof loader>();
+  const {page, product} = useLoaderData<typeof loader>();
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
 
   // Every product in Shopify has at least 1 default variant
@@ -98,9 +111,7 @@ export default function Plans() {
                 ${billingCycle === 'yearly' ? 'translate-x-7' : 'translate-x-0'}`}
             />
           </button>
-          <span className="font-medium">
-            Yearly <span className="text-green-600">20% Off</span>
-          </span>
+       
         </div>
 
         {/* Plan Card */}
@@ -110,7 +121,12 @@ export default function Plans() {
             US${displayPrice}
             <span className="text-base font-normal">/{billingCycle}</span>
           </p>
-
+          {/* Sanity Modules Grid */}
+                    {page?.modules && page.modules.length > 0 && (
+                      <div className="mb-8 mt-8 px-0 md:px-0">
+                        <ModuleGrid items={page.modules} searchQuery={''} homeSearchResults={[]} />
+                      </div>
+                    )}
           <div className="mt-6">
             <AddToCartButton
               lines={[{merchandiseId: defaultVariant.id, quantity: 1}]}
@@ -124,17 +140,7 @@ export default function Plans() {
             />
           </div>
         </div>
-
-        {/* Highlights */}
-        <div className="bg-black text-white rounded-xl mt-12 p-6 text-center">
-          <h4 className="font-semibold mb-4">Key Highlights</h4>
-          <div className="flex flex-wrap justify-center gap-4 text-sm">
-            <span>Dedicated Local or Toll-Free Number</span>|
-            <span>Unlimited Calling</span>|
-            <span>Custom Greetings & Auto-Attendant</span>|
-            <span>411 Directory Listing</span>
-          </div>
-        </div>
+     
       </main>
     </div>
   );

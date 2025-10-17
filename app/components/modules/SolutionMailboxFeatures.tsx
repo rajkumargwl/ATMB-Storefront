@@ -34,7 +34,7 @@ const SolutionMailboxFeatures: React.FC<SolutionMailboxFeaturesProps> = ({ data 
           <div className="w-full md:w-[50.3%] flex flex-col">         
             <div className="space-y-[44px]">
               {data.features.map((feature, index) => (
-                <div key={index} className="flex items-center gap-6">
+                <div key={index} className="flex items-center gap-6 md:gap-8">
                   <img
                     src={feature.icon.url}
                     alt={feature.featureTitle}

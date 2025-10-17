@@ -38,7 +38,7 @@ export default function BusinessTransformationSection({
             >
               {/* Icon */}
             {card.icon?.url && (
-          <div className="mb-6 w-11 h-11 bg-DarkOrange rounded-full flex items-center justify-center">
+          <div className="mb-5 md:mb-6 w-11 h-11 bg-DarkOrange rounded-full flex items-center justify-center">
             <img
               src={card.icon.url}
               alt="icon"
@@ -49,7 +49,7 @@ export default function BusinessTransformationSection({
  
  
               {/* Title */}
-               <h3 className="font-Roboto text-PrimaryBlack font-medium leading-[28px] md:leading-[33.6px] text-[20px] md:text-[24px] tracking-[0px] mb-4 md:mb-2">
+               <h3 className="font-Roboto text-PrimaryBlack font-medium leading-[28px] md:leading-[33.6px] text-[20px] md:text-[24px] tracking-[0px] mb-3 md:mb-2">
                 {card.heading}
               </h3>
  

@@ -8,8 +8,8 @@ interface OperatorVideoProps {
 export function OperatorVideo({module}: OperatorVideoProps) {
   const {youtubeUrl, thumbnail} = module;
  
-  console.log('🎯 OperatorVideo COMPONENT CALLED!');
-  console.log('📝 Module data:', module);
+  // console.log('🎯 OperatorVideo COMPONENT CALLED!');
+  // console.log('📝 Module data:', module);
  
   const getYouTubeId = (url: string) => {
     const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);

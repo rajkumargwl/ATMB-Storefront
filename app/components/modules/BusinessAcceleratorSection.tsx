@@ -22,9 +22,9 @@ export default function BusinessAcceleratorSection({ data }: BusinessAccelerator
       aria-labelledby="business-accelerator-title"
       role="region"
     >
-      <div className="max-w-[1240px] mx-auto flex flex-col md:flex-row gap-[62px] lg:gap-[62px] items-center">
+      <div className="max-w-[1240px] mx-auto flex flex-col md:flex-row gap-[62px] lg:gap-[135px] items-center">
         {/* Text Content */}
-        <div className="w-full md:w-[48.1%] space-y-5 md:space-y-5">
+        <div className="w-full md:w-[51.4%] space-y-5 md:space-y-5">
           {data.title && (
             <h2
               id="business-accelerator-title"
@@ -35,7 +35,7 @@ export default function BusinessAcceleratorSection({ data }: BusinessAccelerator
           )}
  
           {data.description && (
-            <p className="font-Roboto text-LightGray font-medium leading-[27px] md:leading-[28px] text-[18px] md:text-[20px] tracking-[0px]">
+            <p className="font-Roboto text-LightGray font-medium leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px]">
               {data.description}
             </p>
           )}
@@ -53,7 +53,7 @@ export default function BusinessAcceleratorSection({ data }: BusinessAccelerator
  
         {/* Image */}
         {data.image?.url && (
-          <div className="w-full md:w-[51.9%] relative">
+          <div className="w-full md:w-[48.6%] relative">
             <img
               src={data.image.url}
               alt={data.title ?? 'Business growth presentation'}
