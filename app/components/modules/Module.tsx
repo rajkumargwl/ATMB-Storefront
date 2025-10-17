@@ -102,6 +102,15 @@ import PDPCommonFeaturesSection from '~/components/modules/PDPCommonFeaturesSect
 
  import FaqWithComment from './FaqWithComment';
  import JoinCtaBannerSection from './JoinCtaBannerSection';
+import PdpDetailedFeaturesSection from './PdpDetailedFeaturesSection';
+import PdpMailCenterHighlightsSection from './PdpMailCenterHighlightsSection';
+import VirtualMailboxLocationCard from './VirtualMailboxLocationCard';
+import PdpFeatureGridSection from './PdpFeatureGridSection';
+import PdpAnytimePhoneSection from './PdpAnytimePhoneSection';
+import PdpCommonFeaturesSection from './PdpCommonFeaturesSection';
+import PDPWhyChooseAnytimePhone from './PdpWhyChooseAnytimePhone';
+import PdpWhyChooseAnytimePhone from './PdpWhyChooseAnytimePhone';
+
 type Props = {
   module: SanityModule | ProductWithNodes;
   homeSearchResults?: any;
@@ -132,6 +141,28 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
   return <DownloadMailboxRenterApps {...module} />;
   case 'smallBusinessOwnerAppDownloadSection':
   return <SmallBusinessOwnerAppDownloadSection {...module} />;
+
+
+
+ case 'pdpdetailedFeaturesSection':
+  return <PdpDetailedFeaturesSection {...module} />;
+ case 'pdpmailCenterHighlightsSection':
+  return <PdpMailCenterHighlightsSection {...module} />;
+   case 'pdpvirtualMailboxLocation':
+  return <VirtualMailboxLocationCard {...module} />;
+
+   
+   case 'pdpFeatureGridSection':
+  return <PdpFeatureGridSection data={module} />;
+   case 'pdpanytimePhoneSection':
+  return <PdpAnytimePhoneSection {...module} />;
+
+    case 'pdpCommonFeaturesSection':
+  return <PdpCommonFeaturesSection data={module} />;
+   case 'pdpwhyChooseAnytimePhoneSection':
+  return <PdpWhyChooseAnytimePhone data={module} />;
+
+
 
     case 'anytimePhone':
   return (
