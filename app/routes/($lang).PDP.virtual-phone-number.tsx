@@ -1,34 +1,18 @@
  
 import {useNavigate, useLoaderData, Await} from '@remix-run/react';
 import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-<<<<<<< HEAD
 
 import {notFound} from '~/lib/utils';
-=======
-import Header from '~/components/global/Header';
-import Footer from '~/components/global/Footer';
-import {fetchGids, notFound} from '~/lib/utils';
->>>>>>> origin/dev
 import {PRODUCT_QUERY} from '~/queries/shopify/product';
 import type {Product, ProductVariant} from '@shopify/hydrogen/storefront-api-types';
 import {type ShopifyAnalyticsProduct} from '@shopify/hydrogen';
 import AddToCartButton from '~/components/product/buttons/AddToCartButton';
 import {useState, useEffect, Suspense} from 'react';
 import ReplacePlanAddToCartButton from '~/components/cart/ReplacePlanAddToCartButton';
-<<<<<<< HEAD
 import { PRODUCT_PAGE_QUERY } from '~/queries/sanity/product';
 import { SanityProductPage } from '~/lib/sanity';
 import ModuleGrid from '~/components/modules/ModuleGrid'; // Make sure this is imported
-=======
 import { SanityPreview } from 'hydrogen-sanity';
-import ModuleGrid from '~/components/modules/ModuleGrid';
-import clsx from 'clsx';
-import { PDP_PHONE_PAGE } from '~/queries/sanity/fragments/pages/pdpanytimephonepage';
-import {HEADER_QUERY} from '~/queries/sanity/header';
-import {FOOTER_QUERY} from '~/queries/sanity/footer';
- 
-// -----------------
->>>>>>> origin/dev
 // Loader
 // -----------------
 export async function loader({context, params, request}: LoaderFunctionArgs) {
@@ -45,14 +29,11 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     staleWhileRevalidate: 60,
   });
  
-  // ✅ Fetch PDP page data from Sanity (same syntax as About Us)
-  const page = await context.sanity.query({
-    query: PDP_PHONE_PAGE,
-  });
+
  
   //if (!page) throw notFound();
-  console.log("dataaaa",JSON.stringify(page,null,2));
-  const gids = fetchGids({ page, context });
+  
+
  
 
 
@@ -73,10 +54,10 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
  
   return defer({
    
-     page,
+   
     product,
     page,
-    gids,
+   
   });
 }
  
@@ -113,7 +94,7 @@ export default function Plans() {
               <Await resolve={gids}>
                 {page?.modules && page.modules.length > 0 && (
                   <div className={clsx('mb-0 mt-0 px-0', 'md:px-0')}>
-                    <ModuleGrid items={page.modules} />
+                    <ModuleGrid items={page.modules} searchQuery={''} homeSearchResults={[]} />
                   </div>
                 )}
               </Await>
