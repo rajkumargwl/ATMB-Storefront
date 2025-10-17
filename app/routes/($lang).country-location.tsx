@@ -1,9 +1,10 @@
 import {useLoaderData, useNavigate} from '@remix-run/react';
 import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import SearchBox from '~/components/SearchBox';
+import SearchBoxCountry from '~/components/SearchBoxCountry';
 import SearchIconBanner from '~/components/icons/SearchIconBanner';
 import ArrowRightCountries from "~/components/icons/ArrowRightCountries";
 import RightArrowWhite from '~/components/icons/RightArrowWhite';
+import { useEffect, useState } from 'react';
 
 // Loader
 export async function loader({context}: LoaderFunctionArgs) {
@@ -62,7 +63,28 @@ export async function loader({context}: LoaderFunctionArgs) {
 export default function CountryLocationsPage() {
   const { countries, usLocations,locations } = useLoaderData<typeof loader>();
   const navigate = useNavigate();
-console.log("locations",locations);
+
+  const [columns, setColumns] = useState(4); // default desktop
+
+  useEffect(() => {
+    const updateColumns = () => {
+      setColumns(window.innerWidth < 768 ? 2 : 4);
+    };
+    updateColumns(); // run on mount
+    window.addEventListener("resize", updateColumns);
+    return () => window.removeEventListener("resize", updateColumns);
+  }, []);
+
+  const itemsPerCol = Math.ceil(usLocations.length / columns);
+  const columnedLocations = Array.from({ length: columns }, (_, i) =>
+    usLocations.slice(i * itemsPerCol, (i + 1) * itemsPerCol)
+  );
+
+  const itemsPerCol2 = Math.ceil(countries.length / columns);
+  const columnedLocations2 = Array.from({ length: columns }, (_, i) =>
+    countries.slice(i * itemsPerCol2, (i + 1) * itemsPerCol2)
+  );
+
   return (
     // <div className="flex flex-col min-h-screen bg-white">
     //   <main className="flex-1 p-6 max-w-6xl mx-auto w-full">
@@ -115,7 +137,7 @@ console.log("locations",locations);
     // </div>
     <>
     <section className="bg-[#F6F6F6] text-gray-900 py-14 sm:py-10 px-[20px]">
-      <div className="bg-[#F6F6F6]  max-w-[1240px] mx-auto  max-1265px:px-4 max-1265px:gap-2 grid md:grid-cols-2 items-center">
+    <div className="bg-[#F6F6F6] max-w-[1240px] mx-auto max-1265px:gap-2 grid md:grid-cols-2 items-center gap-[62px]">
         {/* Left: Text Content */}
         <div >
             <h1 className="text-center md:text-left font-Roboto text-PrimaryBlack font-semibold leading-[38.4px] tracking-[-0.48px] text-[32px] md:text-[36px] md:leading-[43.2px] md:tracking-[-0.54px]">Virtual Mailbox Locations Across the United States and Worldwide</h1>
@@ -143,8 +165,8 @@ console.log("locations",locations);
                 </span>
               </button> 
                </div> */} 
-                <SearchBox
-          placeholder="Enter address or zip code..."
+                <SearchBoxCountry
+          placeholder="Address, City or Zip Code..."
           buttonText="Search"
           initialQuery=""
           results={locations || []}
@@ -175,7 +197,7 @@ console.log("locations",locations);
         <h2 className="text-[24px] md:text-[32px] font-[600] text-[#091019] mb-[44px] leading-[31.2px] md:leading-[38.4px] tracking-[-0.36px] md:tracking-[-0.48px]">
             United States
         </h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 md:gap-x-6 md:gap-y-5 gap-x-4 gap-y-8">
+        {/* <div className="grid grid-cols-2 md:grid-cols-4 md:gap-x-6 md:gap-y-5 gap-x-4 gap-y-8">
         {usLocations.map((state, index) => {
             return (
                 <div
@@ -197,6 +219,34 @@ console.log("locations",locations);
               </div>
             );
             })}
+        </div> */}
+        <div className="grid grid-cols-2 md:grid-cols-4 md:gap-x-6 md:gap-y-5 gap-x-4 gap-y-8">
+          {columnedLocations.map((col, colIndex) => (
+            <div key={colIndex} className="flex flex-col gap-5">
+              {col.map((state, index) => (
+                <button
+                  key={index}
+                  type='button'
+                  className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-200"
+                  onClick={() =>
+                    navigate(`/l/${encodeURIComponent(state.country)}/${encodeURIComponent(state.name)}`)
+                  }
+                >
+                  <span className="group-hover:text-[#ff6600]">{state.name}</span>
+                    {state && (
+                      <>
+                        <span className="text-[12px] bg-[#0000001a] font-[400] leading-[18px] text-[#091019] rounded-full w-6 h-6 items-center justify-center flex">
+                          {state.count}
+                        </span>
+                        <span className="opacity-0 group-hover:opacity-100 translate-x-[-6px] group-hover:translate-x-[0] transition-all duration-300 bg-[#ff6600] rounded-full w-6 h-6 flex items-center justify-center">
+                          <ArrowRightCountries />
+                        </span>
+                      </>
+                    )}
+                </button>
+              ))}
+            </div>
+          ))}
         </div>
         </div>
         </div>
@@ -211,26 +261,31 @@ console.log("locations",locations);
             International
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 md:gap-x-6 md:gap-y-5 gap-x-4 gap-y-8">
-        {countries.map((country, index) => {
-            return (
-                <div key={index} className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-200"
-                onClick={() => navigate(`/l/country/${encodeURIComponent(country.name)}`)}
-                >
-                <span className="group-hover:text-[#F15A24]">{country.name.trim()}</span>
-                {country.count && (
-                    <>
-                    <span className="text-[12px] bg-[#0000001a] font-[400] leading-[18px] text-[#091019] rounded-full w-6 h-6 items-center justify-center flex">
-                      {country.count}
-                    </span>
-                    <span className="opacity-0 group-hover:opacity-100 translate-x-[-6px] group-hover:translate-x-[0] transition-all duration-300 bg-[#F15A24] rounded-full w-6 h-6 flex items-center justify-center">
-                      <ArrowRightCountries />
-                    </span>
-                  </>
-                )}
-                </div>
-            );
-            })}
-        </div>
+          {columnedLocations2.map((col, colIndex) => (
+            <div key={colIndex} className="flex flex-col gap-5">
+              {col.map((country, index) => (
+                  <button 
+                  key={index} 
+                  type='button'
+                  className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-200"
+                  onClick={() => navigate(`/l/country/${encodeURIComponent(country.name)}`)}
+                  >
+                    <span className="group-hover:text-[#ff6600]">{country.name.trim()}</span>
+                    {country.count && (
+                      <>
+                        <span className="text-[12px] bg-[#0000001a] font-[400] leading-[18px] text-[#091019] rounded-full w-6 h-6 items-center justify-center flex">
+                          {country.count}
+                        </span>
+                        <span className="opacity-0 group-hover:opacity-100 translate-x-[-6px] group-hover:translate-x-[0] transition-all duration-300 bg-[#ff6600] rounded-full w-6 h-6 flex items-center justify-center">
+                          <ArrowRightCountries />
+                        </span>
+                      </>
+                    )}
+                  </button>
+              ))}
+            </div>
+          ))}
+          </div>
         </div>
 
     </div>
