@@ -2,7 +2,7 @@ import {Money} from '@shopify/hydrogen';
 import {Link} from '~/components/Link';
 
 export default function CartBundleSection({bundleProducts}: {bundleProducts: any[]}) {
-  const {linesAdd} = useCart(); 
+  
   return (
     <div className="w-full lg:w-[50%]">
       {/* Header */}
@@ -97,32 +97,12 @@ export default function CartBundleSection({bundleProducts}: {bundleProducts: any
               )}
 
               {/* Upgrade Button */}
-              {bundle.associatedItems && bundle.associatedItems.length > 0 && (
-              <CartLinesAdd
-                lines={bundle.associatedItems.map(item => ({
-                  quantity: 1,
-                  merchandiseId: item.variantId,
-                }))}
-              >
-                {({submit}) => (
-                  <button
-                    type="button"
-                    className="mt-auto text-center bg-PrimaryBlack text-white py-2 rounded-full font-Roboto font-medium"
-                    onClick={() => submit()}
-                  >
-                    Upgrade to Bundle
-                  </button>
-                )}
-              </CartLinesAdd>
-            )}
-
-
-              {/* <Link
+              <Link
                 to={`/checkout/${bundle.monthlyVariantId?.split('/').pop()}`}
                 className="mt-auto text-center bg-PrimaryBlack text-white py-2 rounded-full font-Roboto font-medium"
               >
                 Upgrade to Bundle
-              </Link> */}
+              </Link>
             </div>
           );
         })}
