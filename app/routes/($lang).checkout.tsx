@@ -393,15 +393,15 @@ function CheckoutForm() {
                           </div>
                         </div>
                       
-                      <div className='max-w-[1240px] mx-auto gap-[24px] md:gap-[59px] flex flex-col lg:flex-row'>
+                      <div className='max-w-[1240px] mx-auto gap-[24px] md:gap-[24px] flex flex-col lg:flex-row'>
                         <div className='w-full lg:w-[65.35%]'>                
-                          <div role="row" className="flex flex-col p-6 border border-LightWhite rounded-[12px]">
+                          <div role="row" className="flex flex-col p-6 border border-[#DCDCDC] rounded-[12px]">
                             <h3 className="font-[400] md:font-[600] text-[#091019] md:text-[24px] md:leading-[31.2px] tracking-[-0.48px] text-[20px] leading-[28px]">Payment Details</h3>
                             <p className="text-[#4D4E4F] font-[400] text-[14px] leading-[21px] mt-1">
                               Your transaction and card details are fully secure with our encrypted payment system.
                             </p>
                        
-                                <form onSubmit={handleSubmit} className="space-y-6">
+                                <form onSubmit={handleSubmit} className="mt-[20px]">
                                 {error && <p className="text-red-500">{error}</p>}
 
                                 {/* Email optional */}
@@ -422,66 +422,66 @@ function CheckoutForm() {
                                 <div className="relative">
                                   <CardNumberElement
                                     options={{
-                                      style: { base: { fontSize: "16px", color: "#091019" }, invalid: { color: "#FF6600" } },
+                                      style: { base: { fontSize: "16px", color: "#091019" }, invalid: { color: "#FF6600" } }, placeholder: '1212 1212 1212 1212'
                                     }}
-                                    className="peer w-full border rounded px-4 pt-5 pb-2 text-[16px] leading-6"
+                                    className="peer font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
                                   />
-                                  <label className="absolute left-4 top-1 text-gray-500 text-[12px] transition-all peer-placeholder-shown:top-5 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-[16px]">
+                                  <label className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150">
                                     Card Number
                                   </label>
                                 </div>
 
                                 {/* Expiry & CVC */}
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-2 gap-4 mt-[20px]">
                                   <div className="relative">
                                     <CardExpiryElement
                                       options={{
-                                        style: { base: { fontSize: "16px", color: "#091019" }, invalid: { color: "#FF6600" } },
+                                        style: { base: { fontSize: "16px", color: "#091019" }, invalid: { color: "#FF6600" } }, placeholder: '12/2028'
                                       }}
-                                      className="peer w-full border rounded px-4 pt-5 pb-2 text-[16px] leading-6"
+                                      className="peer font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
                                     />
-                                    <label className="absolute left-4 top-1 text-gray-500 text-[12px] transition-all peer-placeholder-shown:top-5 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-[16px]">
+                                    <label className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150">
                                       Expiry Date
                                     </label>
                                   </div>
                                   <div className="relative">
                                     <CardCvcElement
                                       options={{
-                                        style: { base: { fontSize: "16px", color: "#091019" }, invalid: { color: "#FF6600" } },
+                                        style: { base: { fontSize: "16px", color: "#091019" }, invalid: { color: "#FF6600" } }, placeholder: '126'
                                       }}
-                                      className="peer w-full border rounded px-4 pt-5 pb-2 text-[16px] leading-6"
+                                      className="peer font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
                                     />
-                                    <label className="absolute left-4 top-1 text-gray-500 text-[12px] transition-all peer-placeholder-shown:top-5 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-[16px]">
+                                    <label className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150">
                                       CVV
                                     </label>
                                   </div>
                                 </div>
 
                                 {/* Zip & Cardholder */}
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-2 gap-4 mt-[20px]">
                                   <div className="relative">
                                     <input
                                       type="text"
-                                      placeholder=" "
-                                      className="peer w-full border rounded px-4 pt-5 pb-2 text-[16px] leading-6"
+                                      placeholder="11018"
+                                      className="peer font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#b3b3b3] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
                                     />
-                                    <label className="absolute left-4 top-1 text-gray-500 text-[12px] transition-all peer-placeholder-shown:top-5 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-[16px]">
+                                    <label className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#4D4E4F] transition-all duration-150">
                                       Zip Code
                                     </label>
                                   </div>
                                   <div className="relative">
                                     <input
                                       type="text"
-                                      placeholder=" "
-                                      className="peer w-full border rounded px-4 pt-5 pb-2 text-[16px] leading-6"
+                                      placeholder="John Doe"
+                                      className="peer font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#b3b3b3] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
                                     />
-                                    <label className="absolute left-4 top-1 text-gray-500 text-[12px] transition-all peer-placeholder-shown:top-5 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-[16px]">
+                                    <label className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#4D4E4F] transition-all duration-150">
                                       Card Holder Name
                                     </label>
                                   </div>
                                 </div>
                                {/* Terms & Payment Button */}
-                               <div className="flex items-center gap-2 mt-2">
+                               <div className="flex items-center gap-3 mt-[20px]">
                                 <input type="checkbox" id="agree" className="w-4 h-4 accent-[#FF6600]" />
                                 <label htmlFor="agree" className="text-[14px] text-[#4D4E4F] font-[400] leading-[21px]">
                                   I agree to the{' '}
@@ -497,7 +497,7 @@ function CheckoutForm() {
                                 <button
                                   type="submit"
                                   disabled={!stripe || loading}
-                                  className="w-full bg-orange-500 text-white px-4 py-3 rounded"
+                                  className="mt-5 bg-[#FF6600] h-[52px] hover:bg-[#e55a00] px-4 text-white font-medium text-[16px] py-3 rounded-full transition-all w-full"
                                 >
                                   {loading ? "Processing..." : "Make Payment" + (cart?.cost?.subtotalAmount?.amount ? ` - $${cart.cost.subtotalAmount.amount}` : '')}
                                 </button>
