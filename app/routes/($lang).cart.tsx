@@ -432,7 +432,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
     });
   }
 
-  console.log("Matching Bundles:", matchingBundles);
+ // console.log("Matching Bundles:", matchingBundles);
 
   return defer({
     bundleProducts: matchingBundles,
