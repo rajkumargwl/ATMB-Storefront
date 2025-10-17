@@ -79,9 +79,7 @@ import JoinCtaBannerSection from '~/components/modules/JoinCtaBannerSection';
 
 import FaqWithComment from './FaqWithComment';
 
-// 櫨 OPERATOR SIGNUP SPECIFIC COMPONENTS - SEPARATE DESIGN
-// NOTE: These files must exist in the current directory:
-// './OperatorSignupDebug', './operatorAdvantage', etc.
+
 
 import { OperatorAdvantage } from './operatorAdvantage';
 
@@ -94,7 +92,35 @@ import { OperatorYourCompetitors } from './operatoryourcompetitors';
 
 import NoOfficeSection from '~/components/modules/NoOfficeSection';
 import  AnytimeFeaturesModule from '~/components/modules/AnytimeFeaturesModule';
- 
+import  PDPIntroSection from '~/components/modules/PDPIntroSection';
+import PDPDetailedFeatureSection from '~/components/modules/PDPDetailedFeatureSection';
+import PDPHighlightsSection from '~/components/modules/PDPHighlightsSection';
+import PDPWhyChooseSection from '~/components/modules/PDPWhyChooseSection';
+import PDPHowItWorks from '~/components/modules/PDPHowItWorksSection';
+import PDPTestimonials from '~/components/modules/PDPTestimonialsSection';
+import PDPCommonFeaturesSection from '~/components/modules/PDPCommonFeaturesSection';
+
+ import DownloadMailboxRenterApps from './DownloadMailboxRenterApps';
+ import SmallBusinessChallanges from './SmallBusinessChallanges';
+ import SmallBusinessOwnerAppDownloadSection from './SmallBusinessOwnerAppDownloadSection';
+ import SmallBusinessOwnerSection from './SmallBusinessOwnerSection';
+ import BusinessBenefitsSection from './BusinessBenefitsSection';
+ import BusinessTrustedSection from './BusinessTrustedSection';
+
+ import BusinessIndustryRecognitionSection from './BusinessIndustryRecognitionSection';
+ import BusinessClientSuccessStoriesSection from './BusinessClientSuccessStoriesSection';
+
+ import FaqWithComment from './FaqWithComment';
+ import JoinCtaBannerSection from './JoinCtaBannerSection';
+import PdpDetailedFeaturesSection from './PdpDetailedFeaturesSection';
+import PdpMailCenterHighlightsSection from './PdpMailCenterHighlightsSection';
+import VirtualMailboxLocationCard from './VirtualMailboxLocationCard';
+import PdpFeatureGridSection from './PdpFeatureGridSection';
+import PdpAnytimePhoneSection from './PdpAnytimePhoneSection';
+import PdpCommonFeaturesSection from './PdpCommonFeaturesSection';
+import PDPWhyChooseAnytimePhone from './PdpWhyChooseAnytimePhone';
+import PdpWhyChooseAnytimePhone from './PdpWhyChooseAnytimePhone';
+
 type Props = {
   module: SanityModule | ProductWithNodes;
   homeSearchResults?: any;
@@ -104,8 +130,10 @@ type Props = {
 };
 
 export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery, bundles, pageType = 'default'}: Props) { // 争 Set default pageType
+  console.log("🚀 Module component rendered with type:", module?._type);
 
- 
+  console.log("check bundles in module", bundles);
+  console.log("pdp page module", module);
 
   // Helper boolean for conditional rendering
   const isOperatorPage = pageType === 'operator';
@@ -123,6 +151,28 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
   return <DownloadMailboxRenterApps {...module} />;
   case 'smallBusinessOwnerAppDownloadSection':
   return <SmallBusinessOwnerAppDownloadSection {...module} />;
+
+
+
+ case 'pdpdetailedFeaturesSection':
+  return <PdpDetailedFeaturesSection {...module} />;
+ case 'pdpmailCenterHighlightsSection':
+  return <PdpMailCenterHighlightsSection {...module} />;
+   case 'pdpvirtualMailboxLocation':
+  return <VirtualMailboxLocationCard {...module} />;
+
+   
+   case 'pdpFeatureGridSection':
+  return <PdpFeatureGridSection data={module} />;
+   case 'pdpanytimePhoneSection':
+  return <PdpAnytimePhoneSection {...module} />;
+
+    case 'pdpCommonFeaturesSection':
+  return <PdpCommonFeaturesSection data={module} />;
+   case 'pdpwhyChooseAnytimePhoneSection':
+  return <PdpWhyChooseAnytimePhone data={module} />;
+
+
 
     case 'anytimePhone':
   return (
@@ -174,7 +224,8 @@ case 'smartBusinessSection':
  case "joinCtaBannerSection":
   return <JoinCtaBannerSection {...module} />;
 
-
+  case 'whyBusinessChooseUs':
+    return <WhyBusinessChooseUs data={module} />;
     // 櫨 OPERATOR SIGNUP CONTAINER
     case 'operatorsignup':
       return (
@@ -347,7 +398,29 @@ case 'smartBusinessSection':
 
     // NOTE: 'whyBusinessChooseUs' is handled above for operator/renter conditional rendering.
     // The previous duplicate case is removed.
-
+    case 'pdpPageModule':
+      return (
+        <>
+       
+          {module.modules?.map((sub: any) => (
+            <Module key={sub._key} module={sub} pageType={pageType} />
+          ))}
+        </>
+      );
+    case 'PDPIntroSection':
+      return <PDPIntroSection {...module} />;
+    case 'PDPDetailedFeature':
+      return <PDPDetailedFeatureSection {...module} />;  
+    case 'PDPHighlights':
+      return <PDPHighlightsSection {...module} />;  
+    case 'PDPWhyChooseAnytimePhone':
+      return <PDPWhyChooseSection {...module} />;  
+    case 'PDPHowItWorks':
+      return <PDPHowItWorks {...module} />;  
+    case 'PDPTestimonials':
+      return <PDPTestimonials {...module} />;  
+    case 'PDPCommonFeatures':
+      return <PDPCommonFeaturesSection {...module} />;    
     case 'renterEditor':
       return <RenterReferralEditor data={module} />;
 
@@ -362,7 +435,7 @@ case 'smartBusinessSection':
           ))}
         </>
       );
-
+     
     case 'careersPageModule':
       return (
         <>
@@ -512,11 +585,11 @@ case 'solutionMailboxBenefitFaqModule':
     case 'homeSection4':
       return <Locations data={module} />;
     
-    case 'plans':
-      return <Plans data={module} bundles={bundles}/>;
+    // case 'plans':
+    //   return <Plans data={module} bundles={bundles}/>;
     
-     case 'bundles':
-     return <Bundles data={module} />;
+    //  case 'bundles':
+    //  return <Bundles data={module} />;
     
     // 'testimonial' is handled above for operator conditional rendering.
 
