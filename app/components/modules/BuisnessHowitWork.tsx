@@ -29,7 +29,7 @@ export default function BuisnessHowitWork({
     >
       <div className="max-w-[1240px] mx-auto text-center">
         {/* Title */}
-        <div className="flex flex-col items-center justify-center gap-5 md:gap-5 mb-[32px] md:mb-[64px]">
+        <div className="flex flex-col items-center justify-center gap-5 md:gap-5 mb-[44px] md:mb-[64px]">
         {title && (
           <h2
             id="buisness-howitwork-heading"
@@ -63,13 +63,13 @@ export default function BuisnessHowitWork({
               {/* Icon */}
               {step?.icon?.url && (
   <div
-    className="w-[80px] md:w-[80px] h-[80px] md:h-[80px] rounded-full bg-DarkOrange flex items-center justify-center mb-6 md:mb-8"
+    className="w-[60px] md:w-[80px] h-[60px] md:h-[80px] rounded-full bg-DarkOrange flex items-center justify-center mb-5 md:mb-8"
     aria-hidden="true"
   >
     <img
       src={step.icon.url}
       alt=""
-      className="w-8 md:w-8 h-8 md:h-8"
+      className="w-6 md:w-8 h-6 md:h-8"
     />
   </div>
 )}

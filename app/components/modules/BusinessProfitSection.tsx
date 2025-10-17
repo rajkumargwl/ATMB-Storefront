@@ -61,7 +61,7 @@ export default function BusinessProfitSection({
                 aria-labelledby={`feature-${index}-heading`}
               >
                 {/* Icon + Heading */}
-                <div className="flex flex-col items-start gap-6 mb-2">
+                <div className="flex flex-col items-start gap-5 md:gap-6 mb-3 md:mb-2">
                   <div className="w-11 h-11 bg-DarkOrange rounded-full flex items-center justify-center">
                   {item.icon?.url && (
                     <img
