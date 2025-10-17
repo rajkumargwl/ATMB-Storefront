@@ -65,7 +65,8 @@ export const builtForHowYouWorkToday = defineType({
             defineField({
               name: 'sideText',
               title: 'Side Text',
-              type: 'text',
+               type: "array",
+              of: [{ type: "block" }],
               description: 'E.g. Includes: Remote Workers, Digital Nomads...',
             }),
             defineField({

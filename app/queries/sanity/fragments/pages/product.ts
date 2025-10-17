@@ -4,7 +4,7 @@ import {COLOR_THEME} from '../colorTheme';
 import {CUSTOM_PRODUCT_OPTIONS} from '../customProductOptions';
 import {PORTABLE_TEXT} from '../portableText/portableText';
 import {SEO_SHOPIFY} from '../seoShopify';
-
+import { PRODUCT_MODULE_QUERY } from '../modules/pdpmodulequery';
 export const PRODUCT_PAGE = groq`
   _id,
   "available": !store.isDeleted && store.status == 'active',
@@ -20,4 +20,7 @@ export const PRODUCT_PAGE = groq`
   "gid": store.gid,
   ${SEO_SHOPIFY},
   "slug": store.slug.current,
+    modules[] {
+    ${PRODUCT_MODULE_QUERY}
+  }
 `;

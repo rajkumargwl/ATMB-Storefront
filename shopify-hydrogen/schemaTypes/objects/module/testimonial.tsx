@@ -1,9 +1,10 @@
 import { defineType, defineField } from 'sanity';
-
+import { CommentIcon } from '@sanity/icons'; // 🧩 Icon import
 export const testimonial = defineType({
   name: 'testimonial',
   title: 'Thousand Trust - Testimonials',
   type: 'object',
+  icon: CommentIcon,
   fields: [
     // Section heading
     defineField({

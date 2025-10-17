@@ -2,12 +2,12 @@ import { json, type LoaderFunctionArgs } from "@shopify/remix-oxygen";
 import { useLoaderData, Link } from "@remix-run/react";
 import { Image } from '@shopify/hydrogen';
 import { PortableText } from '@portabletext/react';
-
+ 
 // Helper to extract text content from PortableText blocks
 const extractText = (blocks: any[]) => {
   if (!blocks || !Array.isArray(blocks)) return "";
   let text = "";
-
+ 
   for (const block of blocks) {
     if (!block || !block.children) continue;
     for (const child of block.children) {
@@ -16,19 +16,19 @@ const extractText = (blocks: any[]) => {
       }
     }
   }
-
+ 
   return text;
 };
-
+ 
 // Truncate text to 120 chars
 const truncateText = (text: string, maxLength = 120) => {
   if (text.length <= maxLength) return text;
   return text.slice(0, maxLength) + "...";
 };
-
+ 
 export async function loader({ params, context }: LoaderFunctionArgs) {
   const { slug } = params;
-
+ 
   // Fetch the current news item
   const newsItem = await context.sanity.query({
     query: `*[_type == "news" && slug.current == $slug][0] {
@@ -56,14 +56,14 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
     }`,
     params: { slug },
   });
-
+ 
   if (!newsItem) throw new Response(null, { status: 404 });
-
+ 
   // Convert current news date to a year range
   const newsDate = new Date(newsItem.date);
   const startOfYear = new Date(Date.UTC(newsDate.getFullYear(), 0, 1, 0, 0, 0)); // Jan 1, 00:00 UTC
   const endOfYear = new Date(Date.UTC(newsDate.getFullYear(), 11, 31, 23, 59, 59)); // Dec 31, 23:59 UTC
-
+ 
   // Fetch related news from the same year
   let relatedNews = await context.sanity.query({
     query: `*[_type == "news" && date >= $start && date <= $end && slug.current != $slug]
@@ -78,7 +78,7 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
     }`,
     params: { start: startOfYear.toISOString(), end: endOfYear.toISOString(), slug },
   });
-
+ 
   // Fallback: if no related news in the same year, show recent 3
   if (!relatedNews?.length) {
     relatedNews = await context.sanity.query({
@@ -94,11 +94,11 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
       params: { slug },
     });
   }
-
+ 
   return json({ newsItem, relatedNews });
 }
-
-
+ 
+ 
 // PortableText components
 const ptComponents = {
   block: {
@@ -107,7 +107,7 @@ const ptComponents = {
   marks: {},
   types: {},
 };
-
+ 
 // Format date helper
 const formatDate = (dateString: string) => {
   if (!dateString) return "Date N/A";
@@ -122,23 +122,23 @@ const splitContent = (blocks: any[]) => {
   let strongCount = 0
   const mainBlocks: any[] = []
   const asideBlocks: any[] = []
-
+ 
   for (const block of blocks) {
     if (block._type === 'block' && block.children) {
       const hasStrong = block.children.some((c: any) => c.marks?.includes('strong'))
       if (hasStrong) strongCount += 1
     }
-
+ 
     if (strongCount === 2) {
       asideBlocks.push(block)
     } else {
       mainBlocks.push(block)
     }
   }
-
+ 
   return { mainBlocks, asideBlocks }
 }
-
+ 
  
 export default function NewsroomDetailPage() {
   const { newsItem, relatedNews } = useLoaderData<typeof loader>()
@@ -176,7 +176,7 @@ export default function NewsroomDetailPage() {
                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 21" fill="none" className="">
                             <path
                               d="M6.5 2.5C6.775 2.5 7 2.725 7 3V4.5H13V3C13 2.725 13.225 2.5 13.5 2.5C13.775 2.5 14 2.725 14 3V4.5H15C16.1031 4.5 17 5.39687 17 6.5V15.5C17 16.6031 16.1031 17.5 15 17.5H5C3.89688 17.5 3 16.6031 3 15.5V6.5C3 5.39687 3.89688 4.5 5 4.5H6V3C6 2.725 6.225 2.5 6.5 2.5ZM15 5.5H5C4.44687 5.5 4 5.94688 4 6.5V7.5H16V6.5C16 5.94688 15.5531 5.5 15 5.5ZM16 8.5H4V15.5C4 16.0531 4.44687 16.5 5 16.5H15C15.5531 16.5 16 16.0531 16 15.5V8.5Z"
-                              fill="#4D4E4F"
+                              fill="#091019"
                             />
                           </svg>
                            {new Date(newsItem.date).toLocaleDateString("en-US", {
@@ -249,7 +249,7 @@ export default function NewsroomDetailPage() {
               {relatedNews?.length > 0 && (
             <div className="flex flex-col gap-11 max-w-[1212px]">
               <h2 className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[61.6px] text-[24px] md:text-[56px] tracking-[-0.36px] md:tracking-[-1.12px]">
-                Related News
+                Related Newsrooms
               </h2>
           <div className="grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3 gap-6 md:gap-6">
             {relatedNews.map((item) => {
@@ -283,19 +283,9 @@ export default function NewsroomDetailPage() {
                           sizes="48px"
                         />
                         <div className="flex items-center gap-1">
-                           <svg xmlns="http://www.w3.org/2000/svg"
-                              className="h-5 w-5 text-gray-500"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              strokeWidth={2}
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M8 7V3m8 4V3m-9 10h.01M16 13h.01M9 17h.01M15 17h.01M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-                              />
-                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 21" fill="none">
+                            <path d="M6.5 2.5C6.775 2.5 7 2.725 7 3V4.5H13V3C13 2.725 13.225 2.5 13.5 2.5C13.775 2.5 14 2.725 14 3V4.5H15C16.1031 4.5 17 5.39687 17 6.5V15.5C17 16.6031 16.1031 17.5 15 17.5H5C3.89688 17.5 3 16.6031 3 15.5V6.5C3 5.39687 3.89688 4.5 5 4.5H6V3C6 2.725 6.225 2.5 6.5 2.5ZM15 5.5H5C4.44687 5.5 4 5.94688 4 6.5V7.5H16V6.5C16 5.94688 15.5531 5.5 15 5.5ZM16 8.5H4V15.5C4 16.0531 4.44687 16.5 5 16.5H15C15.5531 16.5 16 16.0531 16 15.5V8.5Z" fill="#091019"/>
+                          </svg>
                         <p className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">
                           {new Date(item.date).toLocaleDateString("en-US", {
                             month: "short",
@@ -344,4 +334,3 @@ export default function NewsroomDetailPage() {
     </div>
   )
 }
- 

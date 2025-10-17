@@ -218,20 +218,22 @@ export default function CountryPage() {
           <div className="flex items-center space-x-4 mb-6">
             <button
               className="rounded-full md:border md:border-LightWhite p-2 md:p-[11px]"
+              title='Back'
               onClick={() => navigate(-1)}
             >
               <LeftArrowBlack />
             </button>
 
             <h1 className="font-Roboto text-PrimaryBlack font-semibold text-[24px] leading-[31.2px] tracking-[-0.39px]">
-              {decodedCountry}
+            Virtual Mailbox in {decodedCountry}
             </h1>
           </div>
 
           <ul className="space-y-8">
             {states.map((state, index) => (
-              <div
+              <button
                 key={index}
+                type='button'
                 className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-300"
                 onClick={() => {
                   const loc = locations.find((l: any) => l.state === state.name);
@@ -245,7 +247,7 @@ export default function CountryPage() {
                 <span className="opacity-0 group-hover:opacity-100 translate-x-[-6px] group-hover:translate-x-[0] transition-all duration-300 bg-[#F15A24] rounded-full w-6 h-6 flex items-center justify-center">
                   <ArrowRightCountries />
                 </span>
-              </div>
+              </button>
             ))}
           </ul>
         </aside>
@@ -256,6 +258,19 @@ export default function CountryPage() {
             showMap ? 'block' : 'hidden md:block'
           }`}
         >
+          <div className="md:hidden flex items-center space-x-4 mb-6">
+            <button
+              className="rounded-full md:border md:border-LightWhite p-2 md:p-[11px]"
+              title='Back'
+              onClick={() => navigate(-1)}
+            >
+              <LeftArrowBlack />
+            </button>
+
+            <h1 className="font-Roboto text-PrimaryBlack font-semibold text-[24px] leading-[31.2px] tracking-[-0.39px]">
+            Virtual Mailbox in {decodedCountry}
+            </h1>
+          </div>
           <CountryMap
             locations={locations}
             onMarkerClick={(loc) => handleLocationClick(loc)}

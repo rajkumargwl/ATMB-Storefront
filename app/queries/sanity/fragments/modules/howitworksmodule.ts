@@ -1,12 +1,12 @@
 import groq from 'groq';
-
+ 
 export const HOW_IT_WORKS_MODULE = groq`
   _type,
   _key,
   modules[] {
     _type,
     _key,
-
+ 
     // How It Works Virtual Mailbox
     (_type == "howitworksVirtualbox") => {
       title,
@@ -24,7 +24,7 @@ export const HOW_IT_WORKS_MODULE = groq`
         alt
       }
     },
-
+ 
     // USPS Form 1583 Guide
     (_type == "uspsForm1583Guide") => {
       title,
@@ -34,7 +34,7 @@ export const HOW_IT_WORKS_MODULE = groq`
         alt
       }
     },
-
+ 
     // How It Works - 2
     (_type == "howitworks2") => {
       sectionTitle,
@@ -52,9 +52,9 @@ export const HOW_IT_WORKS_MODULE = groq`
         url
       }
     },
-
+ 
     // Built for How You Work Today
-    (_type == "builtForHowYouWorkToday") => {
+  (_type == "builtForHowYouWorkToday") => {
       title,
       subtitle,
       heading,
@@ -78,7 +78,6 @@ export const HOW_IT_WORKS_MODULE = groq`
         }
       }
     },
-
     // How It Works - 3 Steps
     (_type == "howitworks3steps") => {
       heading,
@@ -103,7 +102,7 @@ export const HOW_IT_WORKS_MODULE = groq`
         url
       }
     },
-
+ 
     // FAQ
     (_type == "faq") => {
       headline,

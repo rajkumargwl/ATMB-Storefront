@@ -14,16 +14,7 @@ export const OPERATOR_SIGNUP_FRAGMENT = groq`
       ctaText,
       ctaUrl,
       image {
-        asset->{
-          _id,
-          url,
-          metadata {
-            dimensions {
-              width,
-              height
-            }
-          }
-        },
+        "url": asset->url,
         alt
       }
     },
@@ -123,47 +114,33 @@ export const OPERATOR_SIGNUP_FRAGMENT = groq`
       backgroundColor,
       textColor
     },
-    (_type == "testimonial") => {
+  (_type == "testimonial") => {
       headline,
       subheadline,
       testimonials[] {
-        _key,
         type,
         rating,
         starIcon {
-          asset->{
-            _id,
-            url
-          }
+          "url": asset->url
         },
         quote,
         readMoreText,
         readMoreUrl,
         videoUrl,
         videoThumbnail {
-          asset->{
-            _id,
-            url
-          }
+          "url": asset->url
         },
         playIcon {
-          asset->{
-            _id,
-            url
-          }
+          "url": asset->url
         },
         authorName,
         authorTitle,
         authorImage {
-          asset->{
-            _id,
-            url
-          }
+          "url": asset->url
         }
       }
     },
-    (_type == "operatorYourCompetitors") => {
-      label,
+       (_type == "operatorYourCompetitors") => {
       heading,
       description,
       ctaText,

@@ -13,6 +13,7 @@ name: 'operatorsignup',
       of: [
   { type: 'affiliateProgramSection' },    
   { type: 'whyJoinSection' }, 
+  { type: 'operatorYourCompetitors' },  
    { type: 'howitworks3steps' },  
     {type: 'operatorSignupVideo'}, 
       {type: 'businessAtFingertips'},  

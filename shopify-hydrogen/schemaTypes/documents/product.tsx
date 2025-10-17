@@ -61,6 +61,40 @@ export const productType = defineType({
       type: 'seo',
       group: 'seo',
     }),
+    defineField({
+  name: 'hasPlansSection',
+  title: 'Has Plans Section',
+  type: 'boolean',
+  description: 'Enable this to display the Plans section on the Product Detail Page.',
+  group: 'editorial', // 👈 You can change this if needed
+  initialValue: false, // default off
+  options: {
+    layout: 'switch', // shows a toggle switch instead of a checkbox
+  },
+}),
+
+   defineField({
+      name: 'modules',
+      title: 'Modules',
+      type: 'array',
+      group: 'editorial',
+      description: 'Add Product Detail Page modules such as features, highlights, and location.',
+      of: [
+        {type: 'pdpdetailedFeaturesSection'},
+        {type: 'pdpmailCenterHighlightsSection'},
+        {type: 'pdpvirtualMailboxLocation'},
+         {type: 'testimonial'},
+         {type: 'whyJoinSection'},
+          {type: 'buisnesshowitwork'},
+          {type: 'pdpFeatureGridSection'},
+          {type: 'pdpwhyChooseAnytimePhoneSection'},
+           {type: 'pdpCommonFeaturesSection'},
+             {type: 'pdpanytimePhoneSection'},
+          
+         
+
+      ],
+    }),
   ],
   orderings: [
     {

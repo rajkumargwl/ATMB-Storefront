@@ -1,3 +1,4 @@
+
 interface OperatorAdvantageProps {
   module: {
     heading?: string;
@@ -14,18 +15,18 @@ interface OperatorAdvantageProps {
     }>;
   };
 }
-
+ 
 export function OperatorAdvantage({module}: OperatorAdvantageProps) {
   const {heading, description, features} = module;
-
-  console.log('🎯 OperatorAdvantage COMPONENT CALLED!');
-  console.log('📝 Module data:', module);
-
+ 
+  // console.log('🎯 OperatorAdvantage COMPONENT CALLED!');
+  // console.log('📝 Module data:', module);
+ 
   return (
-    <section className="bg-gray-50 py-16 px-4">
-      <div className="container mx-auto max-w-6xl">
+    <section className="bg-white  py-[40px] md:py-[60px] lg:py-[100px] px-5 ">
+      <div className="mx-auto max-w-[1240px]">
         {heading && (
-          <h2 className="text-3xl lg:text-4xl font-bold text-center text-gray-900 mb-4">
+          <h2 className="mb-[44px] md:mb-[56px] text-center font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px]">
             {heading}
           </h2>
         )}
@@ -37,13 +38,13 @@ export function OperatorAdvantage({module}: OperatorAdvantageProps) {
         )}
         
         {features && features.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature) => (
               <div
                 key={feature._key}
-                className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition duration-300"
+                className="bg-white rounded-[20px] p-6 border border-LightWhite md:min-h-[242px]"
               >
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
+                <div className="mb-[21px] md:mb-6 w-[44px] md:w-[44px] h-[44px] md:h-[44px] rounded-full bg-DarkOrange flex items-center justify-center">
                   {feature.icon?.upload?.asset?.url && (
                     <img
                       src={feature.icon.upload.asset.url}
@@ -54,13 +55,13 @@ export function OperatorAdvantage({module}: OperatorAdvantageProps) {
                 </div>
                 
                 {feature.title && (
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">
+                  <h3 className="mb-2 font-Roboto text-PrimaryBlack font-medium leading-[33.6px] md:leading-[33.6px] text-[24px] md:text-[24px] tracking-[0px]">
                     {feature.title}
                   </h3>
                 )}
                 
                 {feature.description && (
-                  <p className="text-gray-600 leading-relaxed">
+                  <p className="font-Roboto text-LightGray font-normal text-[14px] leading-[21px] tracking-[0px]">
                     {feature.description}
                   </p>
                 )}
@@ -72,3 +73,4 @@ export function OperatorAdvantage({module}: OperatorAdvantageProps) {
     </section>
   );
 }
+ 

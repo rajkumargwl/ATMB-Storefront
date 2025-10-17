@@ -1,66 +1,74 @@
+
+import {PortableText} from '@portabletext/react';
+ 
 interface OperatorYourCompetitorsProps {
   module: {
-    label?: string;
     heading?: string;
-    description?: string;
+    description?: any[]; // ← now array of blocks
     ctaText?: string;
     ctaUrl?: string;
-    image?: any;
+    image?: {
+      asset?: {
+        url: string;
+        _id?: string;
+      };
+      alt?: string;
+    };
   };
+  imageAspectClassName?: string;
 }
-
-export function OperatorYourCompetitors({module}: OperatorYourCompetitorsProps) {
-  const {label, heading, description, ctaText, ctaUrl, image} = module;
-
-  console.log('🎯 OperatorYourCompetitors COMPONENT CALLED!');
-  console.log('📝 Module data:', module);
-
+ 
+export function OperatorYourCompetitors({module, imageAspectClassName}: OperatorYourCompetitorsProps) {
+  const {heading, description, ctaText, ctaUrl, image} = module;
+ 
   return (
-    <section className="bg-gray-900 text-white py-16 px-4">
-      <div className="container mx-auto max-w-6xl">
-        <div className="flex flex-col lg:flex-row gap-12 items-center">
-          {/* Left Content */}
-          <div className="lg:w-1/2">
-            {label && (
-              <span className="inline-block bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm font-medium mb-4">
-                {label}
-              </span>
-            )}
-            
+    <section className="bg-[#F6F6F6] py-[40px] md:py-[60px] lg:py-[100px] px-5">
+      <div className="max-w-[1240px] mx-auto">
+        <div className="flex flex-col md:flex-row gap-[44px] md:gap-[62px] lg:gap-[108px] items-center">
+          {image?.asset?.url ? (
+            <div className="w-full md:w-[48.75%] order-2 md:order-1">
+              <img
+                src={image.asset.url}
+                alt={image.alt || 'Competitive Analysis'}
+                className={`rounded-[20px] w-full min-h-[300px] md:min-h-[506px] ${imageAspectClassName || 'object-cover'}`}
+              />
+            </div>
+          ) : (
+            <div className="w-full md:w-[48.75%] bg-gray-100 rounded-2xl shadow-xl h-96 flex items-center justify-center">
+              <span className="text-gray-500">Image placeholder</span>
+            </div>
+          )}
+ 
+          <div className="w-full md:w-[51.25%] relative flex flex-col gap-4 order-1 md:order-2">
             {heading && (
-              <h2 className="text-3xl lg:text-4xl font-bold mb-6">
+              <h2 className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px]">
                 {heading}
               </h2>
             )}
-            
+ 
             {description && (
-              <p className="text-gray-300 text-lg mb-8 leading-relaxed whitespace-pre-line">
-                {description}
-              </p>
+              <div className="font-Roboto text-PrimaryBlack font-normal leading-[21px] md:leading-[24px] text-[14px] md:text-[16px] tracking-[0px] flex flex-col gap-5">
+                <PortableText value={description} />
+              </div>
             )}
-            
+ 
             {ctaText && ctaUrl && (
               <a
                 href={ctaUrl}
-                className="inline-block bg-orange-500 hover:bg-orange-600 text-white font-semibold px-8 py-4 rounded-lg transition duration-300 transform hover:scale-105"
+                className="flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px] px-4 rounded-full w-full md:w-[227px] h-[44px] md:h-[52px]"
               >
                 {ctaText}
               </a>
             )}
+            {ctaText && !ctaUrl && (
+              <button className="flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px] px-4 rounded-full w-full md:w-[227px] h-[44px] md:h-[52px]">
+                {ctaText}
+              </button>
+            )}
           </div>
-
-          {/* Right Image */}
-          {image?.asset?.url && (
-            <div className="lg:w-1/2">
-              <img
-                src={image.asset.url}
-                alt={image.alt || 'Competitive Analysis'}
-                className="rounded-2xl shadow-2xl w-full"
-              />
-            </div>
-          )}
         </div>
       </div>
     </section>
   );
 }
+ 

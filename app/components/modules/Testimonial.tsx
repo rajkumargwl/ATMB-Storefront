@@ -316,8 +316,10 @@ export default function Testimonials({ data }: Props) {
                     <span className="mt-[28px] mb-[22px]"><Testimonial /></span>
 
                     {/* Quote */}
-                    <p className="transition-all duration-500 ease-in-out font-Roboto text-PrimaryBlack font-normal leading-[27px] md:leading-[27px] text-[18px] md:text-[18px] tracking-[0px] group-hover:text-white">
-                      {item.quote}
+                    <p
+                      className="transition-all duration-500 ease-in-out font-Roboto text-PrimaryBlack font-normal leading-[27px] md:leading-[27px] text-[18px] md:text-[18px] tracking-[0px] group-hover:text-white overflow-hidden text-ellipsis line-clamp-6"
+                    >
+                      {item?.quote}
                     </p>
                     {item.readMoreText && (
                       <a

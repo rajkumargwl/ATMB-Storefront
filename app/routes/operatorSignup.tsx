@@ -37,6 +37,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
       console.log('❌ Page not found');
       throw notFound();
     }
+    // console.log(JSON.stringify(page , null ,2));
 
     // Fix: Type assertion for fetchGids
     const gids = fetchGids({ page, context });

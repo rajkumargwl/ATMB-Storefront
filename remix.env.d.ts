@@ -28,7 +28,7 @@ declare global {
     SANITY_API_VERSION: string;
     SANITY_API_TOKEN: string;
     SANITY_PREVIEW_SECRET: string;
-    VITE_STRIPE_PUBLISHABLE_KEY: string;//added by dev
+    STRIPE_PUBLISHABLE_KEY: string;//added by dev
     STRIPE_SECRET_KEY: string; //added by dev
   }
 }

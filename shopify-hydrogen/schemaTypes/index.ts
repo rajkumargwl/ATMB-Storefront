@@ -52,8 +52,7 @@ import {shopifyProductVariantType} from './objects/shopify/shopifyProductVariant
 import {spotType} from './objects/hotspot/spotType'
 import {menu} from './objects/shopify/menu'
 import {keyHighlights} from './objects/module/keyHighlights'
-import {detailedFeatureType} from './objects/module/detailedFeature'
-import solutions from './singletons/solutions'
+
 //import { heroBanner } from "./objects/module/heroBanner";
 // import { heroBanner } from "./objects/module/heroBanner";
 import location from './location'
@@ -74,7 +73,6 @@ import {aboutDetailedFeaturesSection} from './objects/module/aboutDetailedFeatur
 import {aboutFoundersSection} from './objects/module/aboutFoundersSection'
 import {aboutResourceAuthorsSection} from './objects/module/aboutResourceAuthorsSection'
 import {aboutUsModule} from './objects/module/aboutUsModule'
-import {pdpPageModule} from './objects/module/pdpPageModule'
 import { solutionsMailbox } from './objects/module/solutionsMailbox'
 import { prefectvirtualbox } from './objects/module/prefectvirtualbox'
 import {whyChooseVirtualMailbox} from './objects/module/whyChooseVirtualMailbox'
@@ -128,8 +126,38 @@ import { businessAcceleratorBannerSection } from './objects/module/businessAccel
 import {  anytimePhone } from './objects/module/anytimePhone'
 import { operatorsignupType } from './objects/module/operatorsignupType'
 import operatorSignupVideo from './objects/module/operatorSignupVideo'
+//PDP Page Modules
+import {pdpPageModule} from './objects/module/pdpPageModule'
+import {PDPDetailedFeatureType} from './objects/module/PDPDetailedFeature'
+import {PDPCommonFeaturesType} from './objects/module/PDPCommonFeatures'
+import { PDPHighlights } from './objects/module/PDPHighlights'
+import {PDPWhyChooseAnytimePhone} from './objects/module/PDPWhyChooseAnytimePhone'
+import { PDPHowItWorks } from './objects/module/PDPHowItWorks'
+import {PDPIntroSection} from './objects/module/PDPIntroSection'
+import {PDPTestimonials} from './objects/module/PDPTestimonials'
 // Objects used as annotations must be imported first
-// Objects used as annotations must be imported first
+import { businessBenefitsSection } from './objects/module/businessBenefitsSection'
+import { businessIndustryRecognitionSection } from './objects/module/businessIndustryRecognitionSection'
+import { businessTrustedSection } from './objects/module/businessTrustedSection'
+import { clientSuccessStoriesSection } from './objects/module/clientSuccessStoriesSection'
+import { joinCtaBannerSection } from './objects/module/joinCtaBannerSection'
+import { smallBusinessChallengesSection } from './objects/module/smallBusinessChallengesSection'
+import { smallBusinessOwnerPage } from './objects/module/smallBusinessOwnerPage'
+import { smallBusinessOwnerSection } from './objects/module/smallBusinessOwnerSection'
+import { smartBusinessSection } from './objects/module/smartBusinessSection'
+import { faqWithComment } from './objects/module/faqWithComment'
+import { smallBusinessOwnerAppDownloadSection } from './objects/module/smallBusinessOwnerAppDownloadSection'
+import  { downloadMailboxRenterAppsSection } from './objects/module/downloadMailboxRenterAppsSection'
+import { anytimemobile } from './objects/module/anytimemobile'
+import {operatorYourCompetitors} from './objects/module/operatoryourcompetitors'
+import { pdpvirtualMailboxLocation } from './objects/module/pdpvirtualMailboxLocation'
+import { pdpdetailedFeaturesSection } from './objects/module/pdpdetailedFeaturesSection'
+import { pdpmailCenterHighlightsSection } from './objects/module/pdpmailCenterHighlightsSection'
+import { pdpanytimePhoneSection } from './objects/module/pdpanytimePhoneSection'
+import { pdpCommonFeaturesSection } from './objects/module/pdpCommonFeaturesSection'
+import { pdpwhyChooseAnytimePhoneSection } from './objects/module/pdpwhyChooseAnytimePhoneSection'
+import { pdpFeatureGridSection } from './objects/module/pdpFeatureGridSection'
+
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
 
 const objects = [
@@ -141,8 +169,6 @@ const objects = [
   featuresModule,
   //heroBanner,
   aboutUsModule,
-  pdpPageModule,
-  detailedFeatureType,
   keyHighlights,
   header,
   accordionGroupType,
@@ -253,7 +279,37 @@ contactUsSection,
   featuresSection,
     operatorsignupType,
   operatorSignupVideo,
-  anytimePhone
+  anytimePhone,
+  //PDP Page Modules
+  pdpPageModule,
+  PDPDetailedFeatureType,
+  PDPCommonFeaturesType,
+  PDPHighlights,
+  PDPWhyChooseAnytimePhone,
+  PDPHowItWorks,
+  PDPIntroSection,
+  PDPTestimonials,
+  businessBenefitsSection,
+  businessIndustryRecognitionSection,
+  businessTrustedSection,
+  clientSuccessStoriesSection,
+  joinCtaBannerSection,
+  smallBusinessChallengesSection,
+  smallBusinessOwnerPage,
+  smallBusinessOwnerSection,
+  smartBusinessSection,
+  faqWithComment,
+  smallBusinessOwnerAppDownloadSection,
+  downloadMailboxRenterAppsSection,
+  anytimemobile,
+    operatorYourCompetitors,
+pdpvirtualMailboxLocation,
+pdpdetailedFeaturesSection,
+pdpmailCenterHighlightsSection,
+pdpanytimePhoneSection,
+pdpCommonFeaturesSection,
+pdpFeatureGridSection,
+pdpwhyChooseAnytimePhoneSection
 ]
 
 import {portableTextType} from './portableText/portableTextType'
@@ -274,6 +330,6 @@ import {homeType} from './singletons/homeType'
 import {settingsType} from './singletons/settingsType'
 
 
-const singletons = [homeType, settingsType,solutions,]
+const singletons = [homeType, settingsType,]
 
 export const schemaTypes = [...annotations, ...objects, ...singletons, ...blocks, ...documents,location]

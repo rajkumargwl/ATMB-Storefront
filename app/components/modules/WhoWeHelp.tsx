@@ -215,13 +215,16 @@ export default function HomeHero({ data }: Props) {
                 {activeData.keyNeeds?.map((item, i) => (
                   <li
                     key={i}
-                    className="flex items-center gap-4 font-Roboto text-PrimaryBlack font-normal leading-[21px] md:leading-[24px] text-[14px] md:text-[16px] tracking-[0px]"
+                    className="flex items-start gap-4 font-Roboto text-PrimaryBlack font-normal leading-[21px] md:leading-[24px] text-[14px] md:text-[16px] tracking-[0px]"
                   >
-                    <CheckArrow />
-                    {item}
+                    <span className="flex-shrink-0 mt-1">
+                      <CheckArrow />
+                    </span>
+                    <span className="flex-1">{item}</span>
                   </li>
                 ))}
               </ul>
+
 
               {/* Testimonial */}
               {activeData.quote && (
@@ -258,55 +261,62 @@ export default function HomeHero({ data }: Props) {
                   const isActive = activeServiceIndex === idx;
                   return (
                     <div
-                      key={idx}
-                      className={`flex flex-col  relative rounded-[12px] transition-all duration-500 ${
-                        isActive ? "bg-[#F6F6F6] pt-5" : "bg-white py-5"
-                      } ${idx !== activeData.services.length - 1 ? "border-b border-LightWhite" : ""}`}
-                    >
-                      {/* Header */}
-                      <div className="flex items-start gap-3 px-6">
-                        <div className="w-[28px]">
-                          {service.icon?.upload?.url ? (
-                            <img
-                              src={service.icon.upload.url}
-                              alt={service.icon.upload.altText || service.title}
-                              className="w-[28px] h-[28px] object-contain" title={service.icon?.tooltipTitle}
-                            />
-                          ) : (
-                            <span className="w-[28px] h-[28px] block" />
-                          )}
-                        </div>
+                    key={idx}
+                    className={`flex flex-col relative rounded-[12px] transition-all duration-500 ${
+                      isActive ? "bg-[#F6F6F6] pt-5" : "bg-white py-5"
+                    } ${idx !== activeData.services.length - 1 ? "border-b border-LightWhite" : ""}`}
+                  >
+                    {/* Header */}
+                    <div className="flex items-start gap-3 px-6">
+                      {/* Icon container */}
+                      <div className="flex items-start justify-center w-[28px] h-[28px] flex-shrink-0">
+                        {service.icon?.upload?.url ? (
+                          <img
+                            src={service.icon.upload.url}
+                            alt={service.icon.upload.altText || service.title}
+                            className="w-[28px] h-[28px] object-contain"
+                            title={service.icon?.tooltipTitle}
+                          />
+                        ) : service.icon?.svgCode ? (
+                          <span
+                            className="w-[28px] h-[28px] flex items-center justify-center mt-[4px]"
+                            dangerouslySetInnerHTML={{ __html: service.icon.svgCode }}
+                          />
+                        ) : (
+                          <span className="w-[28px] h-[28px] block" />
+                        )}
+                      </div>
+                   
+                      {/* Text block */}
+                      <div className="flex-1">
                         <p className="font-Roboto text-PrimaryBlack font-medium leading-[27px] text-[18px] tracking-[0px]">
                           {service.title}
                         </p>
-                      </div>
-
-                      {/* Content with slide up effect */}
-                      <div
-                        className={`overflow-hidden ${
-                          isActive
-                            ? "max-h-40 opacity-100 translate-y-0 mt-1 transition-all duration-0"
-                            : "max-h-0 opacity-0 -translate-y-2 duration-0"
-                        }`}
-                      >
-                        {service.description && (
-                          <p className="pl-[64px] max-w-[380px] font-Roboto font-normal text-PrimaryBlack text-[14px] leading-[21px] tracking-[0px]">
+                  
+                        {isActive && service.description && (
+                          <p className="mt-1 font-Roboto font-normal text-PrimaryBlack text-[14px] leading-[21px] tracking-[0px]">
                             {service.description}
                           </p>
                         )}
-
-                        {/* Progress bar */}
-                        <div className="mt-5 w-full h-1 bg-gray-200 rounded-full overflow-hidden">
-                          <div
-                            className="h-1 bg-gradient-to-r from-[rgba(132,57,20,0.4)] to-[#091019] transition-[width] ease-linear"
-                            style={{
-                              width: `${isActive ? progress : 0}%`,
-                              transitionDuration: "10ms",
-                            }}
-                          />
-                        </div>
                       </div>
                     </div>
+                  
+                    {/* Progress bar */}
+                    {isActive && (
+                      <div className="mt-5 px-6 w-full h-1 bg-gray-200 rounded-full overflow-hidden">
+                        <div
+                          className="h-1 bg-gradient-to-r from-[rgba(132,57,20,0.4)] to-[#091019] transition-[width] ease-linear"
+                          style={{
+                            width: `${isActive ? progress : 0}%`,
+                            transitionDuration: "10ms",
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
+                  
+                  
+                  
                   );
                 })}
               </div>

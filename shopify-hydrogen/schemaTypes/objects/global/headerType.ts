@@ -71,6 +71,12 @@ export const header = defineType({
       type: "image",
       options: { hotspot: true },
     }),
+    defineField({
+      name: "icon3",
+      title: "Icon 3",
+      type: "image",
+      options: { hotspot: true },
+    }),
  
     // ✅ Login button
     defineField({

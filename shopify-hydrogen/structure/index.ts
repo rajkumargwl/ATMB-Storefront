@@ -7,7 +7,7 @@ import footer from './footerStructure'
 import pages from './pageStructure'
 import products from './productStructure'
 import settings from './settingStructure'
-import solutionsStructure from './solutionsStructure'
+
 //structure -> index.tsx
 /**
  * Structure overrides
@@ -49,7 +49,7 @@ export const structure: StructureResolver = (S, context) =>
   S.list()
     .title('Content')
     .items([
-      solutionsStructure(S, context),
+      
       home(S, context),
       header(S),
       footer(S),

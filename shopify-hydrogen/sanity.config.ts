@@ -11,6 +11,8 @@ import {imageHotspotArrayPlugin} from 'sanity-plugin-hotspot-array'
 import {media, mediaAssetSource} from 'sanity-plugin-media'
 import {customDocumentActions} from './plugins/customDocumentActions'
 import Navbar from './components/studio/Navbar'
+import {documentInternationalization} from '@sanity/document-internationalization' 
+
 
 const devOnlyPlugins = [visionTool()]
 
@@ -33,6 +35,14 @@ export default defineConfig({
     media(),
     datasetSwitcherPlugin({datasets: ['production', 'development']}), 
     ...(isDev ? devOnlyPlugins : []),
+    documentInternationalization({ // ✅ ADD THE PLUGIN HERE
+      supportedLanguages: [
+        {id: 'en', title: 'English'},
+        {id: 'es', title: 'Spanish'},
+      ],
+      // Replace with the names of the schemas you want to translate
+      schemaTypes: ['header', 'footer','home',], // ✅ CONFIGURE YOUR SCHEMAS
+    }),
   ],
 
   schema: {
@@ -57,4 +67,6 @@ export default defineConfig({
       navbar: Navbar,
     },
   },
+  
 })
+

@@ -4,7 +4,7 @@ import {UserIcon} from "@sanity/icons"
 export const founderModule = defineType({
   name: "founderModule",
   title: "Founder Module",
-  type: "document",
+  type: "object",
   icon: UserIcon,
   fields: [
     defineField({

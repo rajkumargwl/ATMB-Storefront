@@ -50,7 +50,7 @@ type PricingModuleProps = {
   export default function Pricingmodule({ data, bundles }: PricingModuleProps) {
   const [activeTab, setActiveTab] = useState<"individual" | "bundles">("individual");
   const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
-  console.log("bundles data", bundles);
+  // console.log("bundles data", bundles);
   const isYearly = billing === "yearly";
 
   const tabs = [

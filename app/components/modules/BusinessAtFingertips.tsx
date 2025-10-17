@@ -90,15 +90,25 @@ export default function BusinessAtFingerips({ data }: Props) {
                   ${isActive ? "md:row-span-2 bg-PrimaryBlack border-PrimaryBlack cursor-pointer" 
                             : "md:row-span-1 bg-white border-LightWhite cursor-pointer"} ${index === 0 ? "nth-4:bg-red-500" : ""}`}
               >
-                {/* Icon */}
+              {/* Icon */}
                 <div className="w-full">
                   <div className="bg-DarkOrange rounded-full p-[8px] md:p-[10px] mb-5 md:mb-6 inline-block">
-                    <img
-                      src={item.icon?.iconFile?.url || ""}
-                      alt={item.title}
-                      className="w-5 md:w-6 h-5 md:h-6 object-cover "
-                       title={item.icon?.tooltipTitle}
-                    />
+                    {item.icon?.iconCode ? (
+                      // Render SVG from code
+                      <div
+                        className="w-5 md:w-6 h-5 md:h-6 flex items-center justify-center"
+                        dangerouslySetInnerHTML={{ __html: item.icon.iconCode }}
+                        title={item.icon?.tooltipTitle}
+                      />
+                    ) : item.icon?.iconFile?.url ? (
+                      // Render image from file
+                      <img
+                        src={item.icon.iconFile.url}
+                        alt={item.title}
+                        className="w-5 md:w-6 h-5 md:h-6 object-cover"
+                        title={item.icon?.tooltipTitle}
+                      />
+                    ) : null}
                   </div>
                   {/* Title */}
                   <h3 className={`max-w-[100%] md:max-w-[238px] font-Roboto font-medium leading-[28px] md:leading-[33.6px] text-[20px] md:text-[24px] tracking-[0px]

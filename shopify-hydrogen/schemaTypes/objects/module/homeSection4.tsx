@@ -20,20 +20,10 @@ export const homeSection4 = defineType({
     }),
 
     // Search bar placeholder
-    defineField({
-      name: 'searchPlaceholder',
-      title: 'Search Placeholder',
-      type: 'string',
-      initialValue: 'Search by city...',
-    }),
+   
 
     // Section title (e.g. "Most Popular Locations")
-    defineField({
-      name: 'title',
-      title: 'Title',
-      type: 'string',
-      description: 'Heading above the top locations list',
-    }),
+    
 
     // Locations list
     defineField({

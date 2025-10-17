@@ -18,7 +18,7 @@ const BusinessBanner: React.FC<BusinessBannerProps> = ({ title, cta, image }) =>
       {/* Left Content */}
       <div className="relative z-[3] max-w-[1240px] mx-auto w-full flex flex-col md:flex-row gap-6">
       <div className="relative z-[4] w-full md:w-[67.3%] pb-[0] py-[40px] md:py-[60px] lg:py-[80px] flex flex-col justify-center px-5 md:px-[0]">
-        <h2 className="mb-[32px] max-w-[642px] font-Roboto text-white font-semibold leading-[38.4px] md:leading-[61.6px] text-[32px] md:text-[56px] tracking-[-0.48px] md:tracking-[-1.12px]">{title}</h2>
+        <h2 className="mb-[32px] max-w-[772px] font-Roboto text-white font-semibold leading-[38.4px] md:leading-[61.6px] text-[32px] md:text-[56px] tracking-[-0.48px] md:tracking-[-1.12px]">{title}</h2>
         {cta?.label && (
           <a
             href={cta.url ?? "#"}
@@ -34,7 +34,7 @@ const BusinessBanner: React.FC<BusinessBannerProps> = ({ title, cta, image }) =>
         <img
           src={image.url}
           alt={title}
-          className="w-full md:w-[398px] h-full object-contain"
+          className="w-full md:w-[398px] h-full md:max-h-[403px] object-contain"
         />
       </div>
       

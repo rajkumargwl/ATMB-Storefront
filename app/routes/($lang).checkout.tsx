@@ -1,13 +1,18 @@
 import { loadStripe } from "@stripe/stripe-js";
-import {Await, useLoaderData} from '@remix-run/react';
-import {Suspense} from 'react';
-import {useRootLoaderData} from '~/root'; 
 import {
   Elements,
   CardElement,
   useStripe,
   useElements,
+  CardNumberElement,
+  CardExpiryElement,
+  CardCvcElement
 } from "@stripe/react-stripe-js";
+
+import {Await, useLoaderData} from '@remix-run/react';
+import {Suspense} from 'react';
+import {useRootLoaderData} from '~/root'; 
+
 import { useEffect,useState } from "react";
 import type { LoaderFunction } from "@remix-run/node";
 
@@ -38,7 +43,24 @@ export const loader: LoaderFunction = async ({ context, params }) => {
   if (customerAccessToken === null || customerAccessToken === undefined || customerAccessToken === '') {
     return redirect('/create-account');
   }
+      // Fetch customer details
+      const customerData = await context.storefront.query<{ customer: { firstName: string; lastName: string; email: string } }>(`
+        query getCustomer($customerAccessToken: String!) {
+          customer(customerAccessToken: $customerAccessToken) {
+            firstName
+            lastName
+            email
+          }
+        }
+      `, {
+        variables: { customerAccessToken },
+      });
 
+      const customer = customerData.customer;
+
+      if (!customer) {
+        return redirect('/create-account');
+      }
   const [virtualMailbox, virtualPhone, BusinessAcc] = await Promise.all([
       context.storefront.query<{product: Product}>(PRODUCT_QUERY, {
         variables: {handle: 'virtual-mailbox', selectedOptions: []},
@@ -65,14 +87,18 @@ export const loader: LoaderFunction = async ({ context, params }) => {
     BusinessAcc.product,
   ];
   
-  console.log(AllProducts);
+  console.log(customer);
 
 
   return new Response(
     JSON.stringify({
-      stripePublishableKey: env.VITE_STRIPE_PUBLISHABLE_KEY,
+      stripePublishableKey: env.STRIPE_PUBLISHABLE_KEY,
       bundleProducts: [virtualMailbox.product, virtualPhone.product],
       essentialsProducts: AllProducts ?? [],
+      customer: {
+        name: `${customer.firstName} ${customer.lastName}`,
+        email: customer.email
+      }
     }),
     { headers: { "Content-Type": "application/json" } }
   );
@@ -88,7 +114,7 @@ function CheckoutForm() {
   const rootData = useRootLoaderData();
   const cart = rootData?.cart?._data;
   const lines = cart?.lines?.edges;
-  const { bundleProducts, essentialsProducts} = useLoaderData<typeof loader>();
+  const { bundleProducts, essentialsProducts,customer} = useLoaderData<typeof loader>();
   
   // Fetch priceId from backend on mount
   useEffect(() => {
@@ -105,90 +131,158 @@ function CheckoutForm() {
       })
       .catch(() => setError("Failed to load price ID"));
   }, []);
+  /*const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    window.location.href = "/order-confirmation";
+    // setLoading(true);
+    // setError(null);
+
+    // if (!stripe || !elements) {
+    //   setError("Stripe has not loaded yet");
+    //   setLoading(false);
+    //   return;
+    // }
+
+    // const cardElement = elements.getElement(CardElement);
+    // if (!cardElement) {
+    //   setError("Card Element not found");
+    //   setLoading(false);
+    //   return;
+    // }
+    // const draftRes = await fetch("/api/create-draft-order", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({
+    //     lines: lines,
+    //     customerId: rootData?.customer?.id,  
+    //   }),
+    // });
+    
+    // const draftData = await draftRes.json();
+    // console.log("Draft order created:", draftData);
+  
+    // if (!draftData?.data?.draftOrderCreate?.draftOrder?.id) {
+    //   setError("Failed to create draft order");
+    //   setLoading(false);
+    //   return;
+    // }
+  
+    // const draftOrderId = draftData?.data?.draftOrderCreate?.draftOrder?.id;
+
+    // const { paymentMethod, error: pmError } = await stripe.createPaymentMethod({
+    //   type: "card",
+    //   card: cardElement,
+    //   billing_details: { email },
+    // });
+
+    // if (pmError) {
+    //   setError(pmError.message || "Failed to create payment method");
+    //   setLoading(false);
+    //   return;
+    // }
+
+    // const res = await fetch("/api/create-payment-intent", {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json" },
+    //   body: JSON.stringify({
+    //     email,
+    //     paymentMethodId: paymentMethod.id,
+    //     priceId,
+    //   }),
+    // });
+
+    // const data = (await res.json()) as {
+    //   clientSecret?: string;
+    //   error?: string;
+    // };
+    
+    // if (!data.clientSecret) {
+    //   setError(data.error || "Failed to get client secret");
+    //   setLoading(false);
+    //   return;
+    // }
+    // console.log("response data" , data);
+   
+
+    // const confirmResult = await stripe.confirmCardPayment(data.clientSecret);
+    // console.log("Payment confirmation result:", confirmResult);
+
+    // if (confirmResult.error) {
+    //   setError(confirmResult.error.message || "Payment confirmation failed");
+    // } else if (confirmResult.paymentIntent?.status === "succeeded") {
+    //   alert("Subscription successful!");
+    // }
+
+    setLoading(false);
+  };*/
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-
+  
     if (!stripe || !elements) {
       setError("Stripe has not loaded yet");
       setLoading(false);
       return;
     }
-
-    const cardElement = elements.getElement(CardElement);
-    if (!cardElement) {
-      setError("Card Element not found");
-      setLoading(false);
-      return;
-    }
-    const draftRes = await fetch("/api/create-draft-order", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        lines: lines,
-        customerId: rootData?.customer?.id,  
-      }),
-    });
-    
-    const draftData = await draftRes.json();
-    console.log("Draft order created:", draftData);
   
-    if (!draftData?.data?.draftOrderCreate?.draftOrder?.id) {
-      setError("Failed to create draft order");
+    const cardNumberElement = elements.getElement(CardNumberElement);
+    const cardExpiryElement = elements.getElement(CardExpiryElement);
+    const cardCvcElement = elements.getElement(CardCvcElement);
+  
+    if (!cardNumberElement || !cardExpiryElement || !cardCvcElement) {
+      setError("Card elements not found");
       setLoading(false);
       return;
     }
   
-    const draftOrderId = draftData?.data?.draftOrderCreate?.draftOrder?.id;
+    try {
+      const { paymentMethod, error: pmError } = await stripe.createPaymentMethod({
+        type: "card",
+        card: cardNumberElement, 
+        //billing_details: email ? { email } : undefined,
+        billing_details: {
+          name: customer.name,
+          email: customer.email,
+        },
+      });
+  
+      if (pmError) {
+        setError(pmError.message || "Failed to create payment method");
+        setLoading(false);
+        return;
+      }
+  
+      // Send paymentMethod.id to your backend
+      const res = await fetch("/api/save-payment-method", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: customer.email,
+          name: customer.name, 
+          paymentMethodId: paymentMethod.id,
+        }),
+        
+      });
+  
+      const data = await res.json();
+      // Log the data to console
+      console.log("Backend response:", data);
 
-    const { paymentMethod, error: pmError } = await stripe.createPaymentMethod({
-      type: "card",
-      card: cardElement,
-      billing_details: { email },
-    });
-
-    if (pmError) {
-      setError(pmError.message || "Failed to create payment method");
+      if (data.success) {
+        //alert("Payment method saved!");
+        window.location.href = "/order-confirmation"; 
+      } else {
+        setError(data.error || "Failed to save payment method");
+      }
+    } catch (err) {
+      setError("Something went wrong, please try again.");
+    } finally {
       setLoading(false);
-      return;
     }
-
-    const res = await fetch("/api/create-payment-intent", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email,
-        paymentMethodId: paymentMethod.id,
-        priceId,
-      }),
-    });
-
-    const data = (await res.json()) as {
-      clientSecret?: string;
-      error?: string;
-    };
-    
-    if (!data.clientSecret) {
-      setError(data.error || "Failed to get client secret");
-      setLoading(false);
-      return;
-    }
-    console.log("response data" , data);
-   
-
-    const confirmResult = await stripe.confirmCardPayment(data.clientSecret);
-    console.log("Payment confirmation result:", confirmResult);
-
-    if (confirmResult.error) {
-      setError(confirmResult.error.message || "Payment confirmation failed");
-    } else if (confirmResult.paymentIntent?.status === "succeeded") {
-      alert("Subscription successful!");
-    }
-
-    setLoading(false);
   };
-
+  
+  
   async function chargeAgain() {
     const response = await fetch("/api/charge-again", {
       method: "POST",
@@ -299,110 +393,95 @@ function CheckoutForm() {
                           </div>
                         </div>
                       
-                      <div className='max-w-[1240px] mx-auto gap-[24px] md:gap-[59px] flex flex-col lg:flex-row'>
+                      <div className='max-w-[1240px] mx-auto gap-[24px] md:gap-[24px] flex flex-col lg:flex-row'>
                         <div className='w-full lg:w-[65.35%]'>                
-                          <div role="row" className="flex flex-col p-6 border border-LightWhite rounded-[12px]">
+                          <div role="row" className="flex flex-col p-6 border border-[#DCDCDC] rounded-[12px]">
                             <h3 className="font-[400] md:font-[600] text-[#091019] md:text-[24px] md:leading-[31.2px] tracking-[-0.48px] text-[20px] leading-[28px]">Payment Details</h3>
                             <p className="text-[#4D4E4F] font-[400] text-[14px] leading-[21px] mt-1">
                               Your transaction and card details are fully secure with our encrypted payment system.
                             </p>
-                            <form onSubmit={handleSubmit}>
-                             {error && <p className="text-[#FF6600] mt-1">{error}</p>}
-                                {/* <input
-                                  type="email"
-                                  placeholder="Email"
-                                  required
-                                  value={email}
-                                  onChange={(e) => setEmail(e.target.value)}
-                                  className="border p-2 rounded w-full"
-                                />
-                             <CardElement className="border p-2 rounded" /> */}
+                       
+                                <form onSubmit={handleSubmit} className="mt-[20px]">
+                                {error && <p className="text-red-500">{error}</p>}
 
-                            <div className="mt-6 flex flex-col gap-5">
-                              {/* Card Number */}
-                              <div className="relative">
-                                <input
-                                  id="cardNumber"
-                                  type="text"
-                                  placeholder="1234 5678 9012 3456"
-                                  className="font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
-                                />
-                                <label
-                                  htmlFor="cardNumber"
-                                  className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150"
-                                >
-                                  Card Number
-                                </label>
-                              </div>
-
-                              {/* Expiry Date & CVV */}
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="relative">
+                                {/* Email optional */}
+                                {/* <div className="relative">
                                   <input
-                                    id="expiryDate"
-                                    type="text"
-                                    placeholder="12/2028"
-                                    className="font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px]  placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
+                                    type="email"
+                                    placeholder=" "
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    className="peer w-full border rounded px-4 pt-5 pb-2 text-[16px] leading-6"
                                   />
-                                  <label
-                                    htmlFor="expiryDate"
-                                    className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F] leading-[18px]  peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150"
-                                  >
-                                    Expiry Date
+                                  <label className="absolute left-4 top-1 text-gray-500 text-[12px] transition-all peer-placeholder-shown:top-5 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-[16px]">
+                                    Email (optional)
+                                  </label>
+                                </div> */}
+
+                                {/* Card Number */}
+                                <div className="relative">
+                                  <CardNumberElement
+                                    options={{
+                                      style: { base: { fontSize: "16px", color: "#091019" }, invalid: { color: "#FF6600" } }, placeholder: '1212 1212 1212 1212'
+                                    }}
+                                    className="peer font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
+                                  />
+                                  <label className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150">
+                                    Card Number
                                   </label>
                                 </div>
 
-                                <div className="relative">
-                                  <input
-                                    id="cvv"
-                                    type="text"
-                                    placeholder="126"
-                                    className="font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2  leading-[24px] text-[16px] text-[#091019] placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
-                                  />
-                                  <label
-                                    htmlFor="cvv"
-                                    className="font-[400] absolute left-4 top-[10px] text-[12px]  leading-[18px] text-[#4D4E4F] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150"
-                                  >
-                                    CVV
-                                  </label>
-                                </div>
-                              </div>
-
-                              {/* Zip Code & Card Holder Name */}
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="relative">
-                                  <input
-                                    id="zipCode"
-                                    type="text"
-                                    placeholder="12458"
-                                    className="font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2  leading-[24px] text-[16px] text-[#091019] placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
-                                  />
-                                  <label
-                                    htmlFor="zipCode"
-                                    className="font-[400] absolute left-4 top-[10px] text-[12px]  leading-[18px] text-[#4D4E4F] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150"
-                                  >
-                                    Zip Code
-                                  </label>
+                                {/* Expiry & CVC */}
+                                <div className="grid grid-cols-2 gap-4 mt-[20px]">
+                                  <div className="relative">
+                                    <CardExpiryElement
+                                      options={{
+                                        style: { base: { fontSize: "16px", color: "#091019" }, invalid: { color: "#FF6600" } }, placeholder: '12/2028'
+                                      }}
+                                      className="peer font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
+                                    />
+                                    <label className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150">
+                                      Expiry Date
+                                    </label>
+                                  </div>
+                                  <div className="relative">
+                                    <CardCvcElement
+                                      options={{
+                                        style: { base: { fontSize: "16px", color: "#091019" }, invalid: { color: "#FF6600" } }, placeholder: '126'
+                                      }}
+                                      className="peer font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
+                                    />
+                                    <label className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150">
+                                      CVV
+                                    </label>
+                                  </div>
                                 </div>
 
-                                <div className="relative">
-                                  <input
-                                    id="cardHolder"
-                                    type="text"
-                                    placeholder="Scott Jerris"
-                                    className="font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2  leading-[24px] text-[16px] text-[#091019] placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
-                                  />
-                                  <label
-                                    htmlFor="cardHolder"
-                                    className="font-[400] absolute left-4 top-[10px] text-[12px]  leading-[18px] text-[#4D4E4F] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150"
-                                  >
-                                    Card Holder Name
-                                  </label>
+                                {/* Zip & Cardholder */}
+                                <div className="grid grid-cols-2 gap-4 mt-[20px]">
+                                  <div className="relative">
+                                    <input
+                                      type="text"
+                                      placeholder="11018"
+                                      className="peer font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#b3b3b3] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
+                                    />
+                                    <label className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#4D4E4F] transition-all duration-150">
+                                      Zip Code
+                                    </label>
+                                  </div>
+                                  <div className="relative">
+                                    <input
+                                      type="text"
+                                      placeholder="John Doe"
+                                      className="peer font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#b3b3b3] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
+                                    />
+                                    <label className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#4D4E4F] transition-all duration-150">
+                                      Card Holder Name
+                                    </label>
+                                  </div>
                                 </div>
-                              </div>
-
-                              {/* Terms & Payment Button */}
-                              <div className="flex items-center gap-2 mt-2">
+                               {/* Terms & Payment Button */}
+                               <div className="flex items-center gap-3 mt-[20px]">
                                 <input type="checkbox" id="agree" className="w-4 h-4 accent-[#FF6600]" />
                                 <label htmlFor="agree" className="text-[14px] text-[#4D4E4F] font-[400] leading-[21px]">
                                   I agree to the{' '}
@@ -415,12 +494,17 @@ function CheckoutForm() {
                                   </a>
                                 </label>
                               </div>
+                                <button
+                                  type="submit"
+                                  disabled={!stripe || loading}
+                                  className="mt-5 bg-[#FF6600] h-[52px] hover:bg-[#e55a00] px-4 text-white font-medium text-[16px] py-3 rounded-full transition-all w-full"
+                                >
+                                  {loading ? "Processing..." : "Make Payment" + (cart?.cost?.subtotalAmount?.amount ? ` - $${cart.cost.subtotalAmount.amount}` : '')}
+                                </button>
+                              </form>
 
-                              <button type="submit" className="mt-4 bg-[#FF6600] h-[52px] hover:bg-[#e55a00] text-white font-medium text-[16px] py-3 rounded-full transition-all">
-                                {loading ? "Processing..." : "Make Payment" + (cart?.cost?.subtotalAmount?.amount ? ` - $${cart.cost.subtotalAmount.amount}` : '')}
-                              </button>
-                            </div>
-                            </form>
+
+                          
                           </div>
                         </div>
                         <div className="w-full lg:w-[34.65%] md:sticky md:top-[80px] space-y-6">
