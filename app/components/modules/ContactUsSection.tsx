@@ -29,8 +29,10 @@ export default function ContactUsSection({ data, context }: ContactUsProps) {
     return null; // nothing to render if no data
   }
 
-  const HUBSPOT_PORTAL_ID = '244116084';
-  const HUBSPOT_FORM_ID = '3fb77e45-e6b4-4275-ad2f-4ef212666d0d';
+  // const HUBSPOT_PORTAL_ID = '244116084';
+  // const HUBSPOT_FORM_ID = '3fb77e45-e6b4-4275-ad2f-4ef212666d0d';
+  const HUBSPOT_PORTAL_ID = '47460136'; //client's HubSpot Portal ID
+  const HUBSPOT_FORM_ID = '24cefeaf-82b5-412a-976a-c348ec39d319'; //client's HubSpot Form ID
 
   return (
     <section className="px-5 py-[40px] md:py-[60px] lg:py-[100px] bg-white "aria-labelledby="contact-heading">

@@ -22,6 +22,7 @@ export const HEADER_QUERY = groq`
     },
     icon1 { "url": asset->url },
     icon2 { "url": asset->url },
+    icon3 { "url": asset->url },
     loginButton { label, link },
     getStartedButton { label, link },
     _updatedAt
@@ -45,6 +46,7 @@ export const HEADER_FALLBACK_QUERY = groq`
     },
     icon1 { "url": asset->url },
     icon2 { "url": asset->url },
+    icon3 { "url": asset->url },
     loginButton { label, link },
     getStartedButton { label, link },
     _updatedAt
