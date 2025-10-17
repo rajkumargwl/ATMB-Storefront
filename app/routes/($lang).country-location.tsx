@@ -189,7 +189,7 @@ export default function CountryLocationsPage() {
       </div>
     </section>
     
-    <section className="md:px-[100px] md:pt-[40px] md:pb-[60px] px-[20px] py-[40px]">
+    <section className="lg:px-[100px] md:pt-[40px] md:pb-[60px] px-[20px] py-[40px]">
     <div className="max-w-[1240px] mx-auto px-4">
 
         {/* United States Section */}
@@ -232,7 +232,7 @@ export default function CountryLocationsPage() {
                     navigate(`/l/${encodeURIComponent(state.country)}/${encodeURIComponent(state.name)}`)
                   }
                 >
-                  <span className="group-hover:text-[#ff6600]">{state.name}</span>
+                  <span className="group-hover:text-[#ff6600] w-min lg:w-auto text-left">{state.name}</span>
                     {state && (
                       <>
                         <span className="text-[12px] bg-[#0000001a] font-[400] leading-[18px] text-[#091019] rounded-full w-6 h-6 items-center justify-center flex">
@@ -252,7 +252,7 @@ export default function CountryLocationsPage() {
         </div>
     </section>
 
-    <section className="md:px-[100px] md:pt-[40px] md:pb-[60px] px-[20px] py-[40px] bg-[#F6F6F6]">
+    <section className="lg:px-[100px] md:pt-[40px] md:pb-[60px] px-[20px] py-[40px] bg-[#F6F6F6]">
     <div className="max-w-[1240px] mx-auto px-4">
 
         {/* International Section */}
@@ -270,7 +270,7 @@ export default function CountryLocationsPage() {
                   className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-200"
                   onClick={() => navigate(`/l/country/${encodeURIComponent(country.name)}`)}
                   >
-                    <span className="group-hover:text-[#ff6600]">{country.name.trim()}</span>
+                    <span className="group-hover:text-[#ff6600] w-min lg:w-auto text-left">{country.name.trim()}</span>
                     {country.count && (
                       <>
                         <span className="text-[12px] bg-[#0000001a] font-[400] leading-[18px] text-[#091019] rounded-full w-6 h-6 items-center justify-center flex">
