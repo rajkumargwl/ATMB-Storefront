@@ -11,6 +11,7 @@ import Location from "~/components/media/location.svg";
 import Location1 from "~/components/media/location1.svg";
 import LeftArrowBlack from '~/components/icons/LeftArrowBlack';
 import SearchWhite from "~/components/media/Search.svg";
+import ArrowDown from "~/components/media/arrowdown.svg";
 
 const services = [
     { name: "Mail Forwarding", icon: Location},
@@ -62,9 +63,11 @@ const services = [
 interface LocationsListProps {
   locations: LocationAPI[];
   initialQuery?: string;
+  isCityPage?: boolean;
+  country?: string;
 }
 
-export default function LocationsList({locations, initialQuery = ''}: LocationsListProps) {
+export default function LocationsList({locations, initialQuery = '', isCityPage, country}: LocationsListProps) {
     const [minVal, setMinVal] = useState(25);
     const [maxVal, setMaxVal] = useState(75);
     const [showMore, setShowMore] = useState(false);
@@ -113,6 +116,7 @@ export default function LocationsList({locations, initialQuery = ''}: LocationsL
   
     //   return matchCity && matchTier && matchPrice && matchFeatures;
     // });
+    
     useEffect(() => {
         if (initialQuery && !selectedCity) {
           setSelectedCity(initialQuery);
@@ -122,7 +126,7 @@ export default function LocationsList({locations, initialQuery = ''}: LocationsL
       
       useEffect(() => {
         if (!locations || locations.length === 0) return;
-        console.log('selectedCity',selectedCity)
+        
       
         const query = selectedCity.trim().toLowerCase();
       
@@ -341,205 +345,127 @@ export default function LocationsList({locations, initialQuery = ''}: LocationsL
         <div className={`w-full lg:w-[53%] ${
           showMap ? 'hidden md:block' : 'block'
         }`}>
-          <h1 className="font-Roboto text-PrimaryBlack font-semibold text-[24px] leading-[31.2px] tracking-[-0.39px] mb-4">
-            Virtual Mailbox in {selectedLocation?.city || 'Unknown'}
-          </h1>
+          {isCityPage && (
+            <div className="flex items-center gap-5 w-full relative mb-[24px]">
+              <button
+                className="rounded-full md:border md:border-LightWhite p-2 md:p-[11px]"
+                title="Back"
+                onClick={() => navigate(-1)}
+              >
+                <LeftArrowBlack />
+              </button>
 
-          {/* City Dropdown + Filter Icon */}
-          {/* <div className="flex items-center  justify-between gap-3 mb-4 md:mb-6">
-             <div className="flex items-center justify-between gap-3 w-full">  
-              <button className="rounded-full md:border md:border-LightWhite p-2 md:p-[11px]"
-               onClick={() => navigate("/")}>
+              {/* Stack p above h1 */}
+              <div className="flex flex-col">
+                <p className="text-[16px] text-[#4D4E4F] leading-[24px] font-[400]">{country}</p>
+                <h1 className="font-Roboto text-PrimaryBlack font-semibold md:text-[24px] text-[20px] md:leading-[31.2px] leading-[28px] tracking-[-0.36px]">
+                  Virtual Mailbox in {selectedLocation?.city || 'Unknown'}
+                </h1>
+              </div>
+            </div>
+          )}
+          <div className="flex items-center justify-between gap-3 mb-4 md:mb-6">
+            <div className="flex items-center gap-3 w-full relative">  
+              <button
+                className={`rounded-full md:border md:border-LightWhite p-2 md:p-[11px] ${isCityPage ? 'hidden' : ''}`}
+                title='Back'
+                onClick={() => navigate(-1)}
+              >
                 <LeftArrowBlack />
               </button>  
-                        
-             <div className="shadow-[0_6px_24px_0_rgba(0,0,0,0.05)] md:shadow-none flex items-center justify-between gap-[10px] w-full rounded-full border border-LightWhite py-[4px] md:py-[3px] pl-3 md:pl-4 pr-[4px] md:pr-[3px]">  
-              <select
-                value={searchCity}
-                onChange={(e) => setSearchCity(e.target.value)}
-                className="py-[3px] md:py-2  w-full bg-white font-Roboto text-PrimaryBlack font-normal text-[14px] md:text-[16px] leading-[20px] md:leading-[24px] tracking-[0px] appearance-none"
-              >
-                <option value="">Select a City</option>
-                {cities.map((city) => (
-                  <option key={city} value={city}>
-                    {city}
-                  </option>
-                ))}
-              </select>
-              <button
-  className="flex"
-  onClick={() => {
-    setSelectedCity("");
-    setSearchCity(""); // clear active search as well
-  }}
->
-  <CloseIconBlack />
-</button> 
-               <button className="flex items-center justify-center min-w-[32px] md:min-w-[48px] w-[32px] md:w-12 h-[32px] md:h-12 bg-DarkOrange rounded-full">
-                 <img
-                  src={SearchWhite}
-                  alt="Logo"
-                  className="w-[16px] md:w-[21px] h-[16px]  md:h-[21px] object-contain"
-                  onClick={() => setSelectedCity(searchCity)}
-                />
-              </button> 
-               </div>
-             </div>
-            <div className='flex items-center gap-[10px] px-[9px] md:px-4 py-[9px] md:py-3 border border-LightWhite rounded-full'>
-              <button
-              onClick={() => setShowFilters(true)}
-              className=""
-            >
-             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" className="w-5 h-5 md:w-6 md:h-6">
-              <path d="M21.25 11.9999H8.895M4.534 11.9999H2.75M4.534 11.9999C4.534 11.4217 4.76368 10.8672 5.17251 10.4584C5.58134 10.0496 6.13583 9.81989 6.714 9.81989C7.29217 9.81989 7.84666 10.0496 8.25549 10.4584C8.66432 10.8672 8.894 11.4217 8.894 11.9999C8.894 12.5781 8.66432 13.1326 8.25549 13.5414C7.84666 13.9502 7.29217 14.1799 6.714 14.1799C6.13583 14.1799 5.58134 13.9502 5.17251 13.5414C4.76368 13.1326 4.534 12.5781 4.534 11.9999ZM21.25 18.6069H15.502M15.502 18.6069C15.502 19.1852 15.2718 19.7403 14.8628 20.1492C14.4539 20.5582 13.8993 20.7879 13.321 20.7879C12.7428 20.7879 12.1883 20.5572 11.7795 20.1484C11.3707 19.7396 11.141 19.1851 11.141 18.6069M15.502 18.6069C15.502 18.0286 15.2718 17.4745 14.8628 17.0655C14.4539 16.6566 13.8993 16.4269 13.321 16.4269C12.7428 16.4269 12.1883 16.6566 11.7795 17.0654C11.3707 17.4742 11.141 18.0287 11.141 18.6069M11.141 18.6069H2.75M21.25 5.39289H18.145M13.784 5.39289H2.75M13.784 5.39289C13.784 4.81472 14.0137 4.26023 14.4225 3.8514C14.8313 3.44257 15.3858 3.21289 15.964 3.21289C16.2503 3.21289 16.5338 3.26928 16.7983 3.37883C17.0627 3.48839 17.3031 3.64897 17.5055 3.8514C17.7079 4.05383 17.8685 4.29415 17.9781 4.55864C18.0876 4.82313 18.144 5.10661 18.144 5.39289C18.144 5.67917 18.0876 5.96265 17.9781 6.22714C17.8685 6.49163 17.7079 6.73195 17.5055 6.93438C17.3031 7.13681 17.0627 7.29739 16.7983 7.40695C16.5338 7.5165 16.2503 7.57289 15.964 7.57289C15.3858 7.57289 14.8313 7.34321 14.4225 6.93438C14.0137 6.52555 13.784 5.97106 13.784 5.39289Z" stroke="#091019" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"/>
-            </svg>
-            </button>
-              <span className='hidden md:flex font-Roboto text-PrimaryBlack font-normal text-[16px] leading-[24px] tracking-[0px]'>Filters</span>
-            </div>
-            
-          </div> */}
- <div className="flex items-center justify-between gap-3 mb-4 md:mb-6">
-  <div className="flex items-center gap-3 w-full relative">  
-    <button
-      className="rounded-full md:border md:border-LightWhite p-2 md:p-[11px]"
-      title='Back'
-      onClick={() => navigate(-1)}
-    >
-      <LeftArrowBlack />
-    </button>  
-
-    <div className="flex flex-col w-full relative">
-  <div className="flex items-center gap-[10px] w-full rounded-full border border-LightWhite py-[4px] md:py-[3px] pl-3 md:pl-4 pr-[4px] md:pr-[3px] shadow-[0_6px_24px_0_rgba(0,0,0,0.05)] md:shadow-none bg-white">
-    <input
-      type="text"
-      value={searchCity}
-      onChange={(e) => {
-        setSearchCity(e.target.value);
-        setShowSuggestions(true); // show suggestions when typing
-       // navigate(`/sublocations?q=${encodeURIComponent(searchCity)}`, { replace: true });
-      }}
-      placeholder="Type a city"
-      className="flex-1 py-[3px] md:py-2 bg-white font-Roboto text-PrimaryBlack font-normal text-[14px] md:text-[16px] leading-[20px] md:leading-[24px] tracking-[0px] border-none outline-none"
-    />
-    {searchCity && (
-      <button
-        className="flex"
-        onClick={() => {
-          setSelectedCity("");
-          setSearchCity("");
-          setShowSuggestions(false); // hide suggestions when cleared
-        }}
-      >
-        <CloseIconBlack />
-      </button>
-    )}
-    <button
-      className="flex items-center justify-center min-w-[32px] md:min-w-[48px] w-[32px] md:w-12 h-[32px] md:h-12 bg-DarkOrange rounded-full"
-      onClick={() => setSelectedCity(searchCity)}
-    >
-      <img
-        src={SearchWhite}
-        alt="Logo"
-        className="w-[16px] md:w-[21px] h-[16px] md:h-[21px] object-contain"
-      />
-    </button>
-  </div>
-
-  {/* Autocomplete suggestions */}
-  {/* {showSuggestions && searchCity && cities.filter(city =>
-      city.toLowerCase().includes(searchCity.toLowerCase())
-    ).length > 0 && (
-    <ul className="absolute z-50 w-full bg-white border border-LightWhite rounded-b-md max-h-40 overflow-y-auto mt-12 shadow-md">
-      {cities
-        .filter((city) =>
-          city.toLowerCase().includes(searchCity.toLowerCase())
-        )
-        .map((city) => (
-          <li
-            key={city}
-            className="px-3 py-2 cursor-pointer hover:bg-gray-100"
-            onClick={() => {
-              setSearchCity(city);
-              setSelectedCity(city);
-              setShowSuggestions(false); // hide suggestions on select
-            }}
-          >
-            {city}
-          </li>
-        ))}
-    </ul>
-  )} */}
-    {showSuggestions &&
-  searchCity &&
-  combinedCities.filter(
-    (cityObj) =>
-      cityObj.city?.toLowerCase().includes(searchCity.toLowerCase()) ||
-      cityObj.displayName?.toLowerCase().includes(searchCity.toLowerCase())
-  ).length > 0 && (
-    <ul className="absolute z-50 w-full bg-white border border-LightWhite rounded-b-md max-h-40 overflow-y-auto mt-12 shadow-md">
-      {combinedCities
-        .filter(
-          (cityObj) =>
-            cityObj.city?.toLowerCase().includes(searchCity.toLowerCase()) ||
-            cityObj.displayName?.toLowerCase().includes(searchCity.toLowerCase())
-        )
-        .map((cityObj) => (
-          <li
-            key={cityObj.id}
-            className="px-3 py-2 cursor-pointer hover:bg-gray-100"
-            onClick={() => {
-              setSearchCity(cityObj.displayName || cityObj.city);
-              setSelectedCity(cityObj.displayName || cityObj.city);
-              setShowSuggestions(false);
-              //navigate(`/sublocations?q=${encodeURIComponent(cityObj.displayName || cityObj.city)}`, { replace: true });
               
-            }}
-          >
-            {cityObj.displayName} ({cityObj.city})
-          </li>
-        ))}
-    </ul>
-)} 
-{/*{showSuggestions && searchCity && 
-  cities
-    .filter(city => city.toLowerCase().includes(searchCity.toLowerCase()))
-    .length > 0 && (
-  <ul className="absolute z-50 w-full bg-white border border-LightWhite rounded-b-md max-h-40 overflow-y-auto mt-12 shadow-md">
-    {cities
-      .filter(city => city.toLowerCase().includes(searchCity.toLowerCase()))
-      .map((city, index) => (
-        <li
-          key={index}
-          className="px-3 py-2 cursor-pointer hover:bg-gray-100"
-          onClick={() => {
-            setSearchCity(city);
-            setSelectedCity(city);
-            setShowSuggestions(false);
-            navigate(`/sublocations?q=${encodeURIComponent(city)}`, { replace: true });
-          }}
-        >
-          {city}
-        </li>
-      ))}
-  </ul>
-)}*/}
 
-</div>
-  </div>
+              <div className="flex flex-col w-full relative">
+                <div className={`flex items-center gap-[10px] w-full rounded-full border border-LightWhite py-[4px] md:py-[3px] pl-3 md:pl-4 ${isCityPage ? 'pr-[4px] md:pr-[16px]' : 'pr-[4px] md:pr-[3px]'} shadow-[0_6px_24px_0_rgba(0,0,0,0.05)] md:shadow-none bg-white`}>
+                  <input
+                    type="text"
+                    value={searchCity}
+                    onChange={(e) => {
+                      setSearchCity(e.target.value);
+                      setShowSuggestions(true); // show suggestions when typing
+                    // navigate(`/sublocations?q=${encodeURIComponent(searchCity)}`, { replace: true });
+                    }}
+                    placeholder="Select City"
+                    className={`flex-1 py-[3px] md:py-2 bg-white font-Roboto text-PrimaryBlack font-normal text-[14px] md:text-[16px] leading-[20px] md:leading-[24px] tracking-[0px] border-none outline-none`}
+                  />
+                  {searchCity && (
+                    <button
+                      className="flex"
+                      onClick={() => {
+                        setSelectedCity("");
+                        setSearchCity("");
+                        setShowSuggestions(false); // hide suggestions when cleared
+                      }}
+                    >
+                      <CloseIconBlack />
+                    </button>
+                  )}
+                  <button
+                    className={`flex items-center justify-center min-w-[32px] md:min-w-[48px] w-[32px] md:w-12 h-[32px] md:h-12 bg-DarkOrange rounded-full ${isCityPage ? 'hidden' : ''}`}
+                    onClick={() => setSelectedCity(searchCity)}
+                  >
+                    <img
+                      src={SearchWhite}
+                      alt="Logo"
+                      className="w-[16px] md:w-[21px] h-[16px] md:h-[21px] object-contain"
+                    />
+                  </button>
+                  {!searchCity && ( <button
+                    className={`flex items-center justify-center min-w-[24px] md:min-w-[24px] w-[24px] md:w-[24px] h-[24px] md:h-[24px] rounded-full ${isCityPage ? '' : 'hidden'}`}
+                    onClick={() => setSelectedCity(searchCity)}
+                  >
+                    <img
+                      src={ArrowDown}
+                      alt="Logo"
+                      className="w-[16px] md:w-[13px] object-contain"
+                    />
+                  </button>
+                  )}
+                </div>
 
-  <div className="flex items-center gap-[10px] px-[9px] md:px-4 py-[9px] md:py-3 border border-LightWhite rounded-full">
-    <button onClick={() => setShowFilters(true)}>
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" className="w-5 h-5 md:w-6 md:h-6"> <path d="M21.25 11.9999H8.895M4.534 11.9999H2.75M4.534 11.9999C4.534 11.4217 4.76368 10.8672 5.17251 10.4584C5.58134 10.0496 6.13583 9.81989 6.714 9.81989C7.29217 9.81989 7.84666 10.0496 8.25549 10.4584C8.66432 10.8672 8.894 11.4217 8.894 11.9999C8.894 12.5781 8.66432 13.1326 8.25549 13.5414C7.84666 13.9502 7.29217 14.1799 6.714 14.1799C6.13583 14.1799 5.58134 13.9502 5.17251 13.5414C4.76368 13.1326 4.534 12.5781 4.534 11.9999ZM21.25 18.6069H15.502M15.502 18.6069C15.502 19.1852 15.2718 19.7403 14.8628 20.1492C14.4539 20.5582 13.8993 20.7879 13.321 20.7879C12.7428 20.7879 12.1883 20.5572 11.7795 20.1484C11.3707 19.7396 11.141 19.1851 11.141 18.6069M15.502 18.6069C15.502 18.0286 15.2718 17.4745 14.8628 17.0655C14.4539 16.6566 13.8993 16.4269 13.321 16.4269C12.7428 16.4269 12.1883 16.6566 11.7795 17.0654C11.3707 17.4742 11.141 18.0287 11.141 18.6069M11.141 18.6069H2.75M21.25 5.39289H18.145M13.784 5.39289H2.75M13.784 5.39289C13.784 4.81472 14.0137 4.26023 14.4225 3.8514C14.8313 3.44257 15.3858 3.21289 15.964 3.21289C16.2503 3.21289 16.5338 3.26928 16.7983 3.37883C17.0627 3.48839 17.3031 3.64897 17.5055 3.8514C17.7079 4.05383 17.8685 4.29415 17.9781 4.55864C18.0876 4.82313 18.144 5.10661 18.144 5.39289C18.144 5.67917 18.0876 5.96265 17.9781 6.22714C17.8685 6.49163 17.7079 6.73195 17.5055 6.93438C17.3031 7.13681 17.0627 7.29739 16.7983 7.40695C16.5338 7.5165 16.2503 7.57289 15.964 7.57289C15.3858 7.57289 14.8313 7.34321 14.4225 6.93438C14.0137 6.52555 13.784 5.97106 13.784 5.39289Z" stroke="#091019" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"/> </svg>
-    </button>
-    <span className="hidden md:flex font-Roboto text-PrimaryBlack font-normal text-[16px] leading-[24px] tracking-[0px]">
-      Filters
-    </span>
-  </div>
-</div>
+                {showSuggestions &&
+                  searchCity &&
+                  combinedCities.filter(
+                    (cityObj) =>
+                      cityObj.city?.toLowerCase().includes(searchCity.toLowerCase()) ||
+                      cityObj.displayName?.toLowerCase().includes(searchCity.toLowerCase())
+                  ).length > 0 && (
+                    <ul className="absolute z-50 w-full bg-white border border-LightWhite rounded-b-md max-h-40 overflow-y-auto mt-12 shadow-md">
+                      {combinedCities
+                        .filter(
+                          (cityObj) =>
+                            cityObj.city?.toLowerCase().includes(searchCity.toLowerCase()) ||
+                            cityObj.displayName?.toLowerCase().includes(searchCity.toLowerCase())
+                        )
+                        .map((cityObj) => (
+                          <li
+                            key={cityObj.id}
+                            className="px-3 py-2 cursor-pointer hover:bg-gray-100"
+                            onClick={() => {
+                              setSearchCity(cityObj.displayName || cityObj.city);
+                              setSelectedCity(cityObj.displayName || cityObj.city);
+                              setShowSuggestions(false);
+                              //navigate(`/sublocations?q=${encodeURIComponent(cityObj.displayName || cityObj.city)}`, { replace: true });
+                              
+                            }}
+                          >
+                            {cityObj.displayName} ({cityObj.city})
+                          </li>
+                        ))}
+                    </ul>
+                )} 
+              </div>
+            </div>
 
-
-
-          <p className="font-Roboto text-PrimaryBlack font-normal text-[14px] leading-[21px] tracking-[0px] mb-4">{filtered.length} locations found</p>
+            <div className="flex items-center gap-[10px] px-[9px] md:px-4 py-[9px] md:py-3 border border-LightWhite rounded-full">
+              <button onClick={() => setShowFilters(true)}>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" className="w-5 h-5 md:w-6 md:h-6"> <path d="M21.25 11.9999H8.895M4.534 11.9999H2.75M4.534 11.9999C4.534 11.4217 4.76368 10.8672 5.17251 10.4584C5.58134 10.0496 6.13583 9.81989 6.714 9.81989C7.29217 9.81989 7.84666 10.0496 8.25549 10.4584C8.66432 10.8672 8.894 11.4217 8.894 11.9999C8.894 12.5781 8.66432 13.1326 8.25549 13.5414C7.84666 13.9502 7.29217 14.1799 6.714 14.1799C6.13583 14.1799 5.58134 13.9502 5.17251 13.5414C4.76368 13.1326 4.534 12.5781 4.534 11.9999ZM21.25 18.6069H15.502M15.502 18.6069C15.502 19.1852 15.2718 19.7403 14.8628 20.1492C14.4539 20.5582 13.8993 20.7879 13.321 20.7879C12.7428 20.7879 12.1883 20.5572 11.7795 20.1484C11.3707 19.7396 11.141 19.1851 11.141 18.6069M15.502 18.6069C15.502 18.0286 15.2718 17.4745 14.8628 17.0655C14.4539 16.6566 13.8993 16.4269 13.321 16.4269C12.7428 16.4269 12.1883 16.6566 11.7795 17.0654C11.3707 17.4742 11.141 18.0287 11.141 18.6069M11.141 18.6069H2.75M21.25 5.39289H18.145M13.784 5.39289H2.75M13.784 5.39289C13.784 4.81472 14.0137 4.26023 14.4225 3.8514C14.8313 3.44257 15.3858 3.21289 15.964 3.21289C16.2503 3.21289 16.5338 3.26928 16.7983 3.37883C17.0627 3.48839 17.3031 3.64897 17.5055 3.8514C17.7079 4.05383 17.8685 4.29415 17.9781 4.55864C18.0876 4.82313 18.144 5.10661 18.144 5.39289C18.144 5.67917 18.0876 5.96265 17.9781 6.22714C17.8685 6.49163 17.7079 6.73195 17.5055 6.93438C17.3031 7.13681 17.0627 7.29739 16.7983 7.40695C16.5338 7.5165 16.2503 7.57289 15.964 7.57289C15.3858 7.57289 14.8313 7.34321 14.4225 6.93438C14.0137 6.52555 13.784 5.97106 13.784 5.39289Z" stroke="#091019" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"/> </svg>
+              </button>
+              <span className="hidden md:flex font-Roboto text-PrimaryBlack font-normal text-[16px] leading-[24px] tracking-[0px]">
+                Filters
+              </span>
+            </div>
+          </div>
 
           {/* Locations List */}
           <div className="space-y-4 max-h-[605px] overflow-y-auto">
@@ -737,7 +663,129 @@ export default function LocationsList({locations, initialQuery = ''}: LocationsL
         {/* Right Side Map */}
         <div className={`w-full lg:w-[47%] ${
           showMap ? 'block' : 'hidden md:block'
-        } ${showMap ? 'relative z-0' : 'z-0'}`}>
+        }`}>
+          <div></div> <div></div> <div></div>
+          {isCityPage && (
+            <div className="flex items-center gap-5 w-full relative mb-[24px] md:hidden">
+              <button
+                className="rounded-full md:border md:border-LightWhite p-2 md:p-[11px]"
+                title="Back"
+                onClick={() => navigate(-1)}
+              >
+                <LeftArrowBlack />
+              </button>
+
+              {/* Stack p above h1 */}
+              <div className="flex flex-col">
+                <p className="text-[16px] text-[#4D4E4F] leading-[24px] font-[400]">{country}</p>
+                <h1 className="font-Roboto text-PrimaryBlack font-semibold md:text-[24px] text-[20px] md:leading-[31.2px] leading-[28px] tracking-[-0.36px]">
+                  Virtual Mailbox in {selectedLocation?.city || 'Unknown'}
+                </h1>
+              </div>
+            </div>
+          )}
+          <div className="flex items-center justify-between gap-3 mb-4 md:mb-6 md:hidden">
+            <div className="flex items-center gap-3 w-full relative">  
+              <button
+                className={`rounded-full md:border md:border-LightWhite p-2 md:p-[11px] ${isCityPage ? 'hidden' : ''}`}
+                title='Back'
+                onClick={() => navigate(-1)}
+              >
+                <LeftArrowBlack />
+              </button>  
+              
+
+              <div className="flex flex-col w-full relative">
+                <div className={`flex items-center gap-[10px] w-full rounded-full border border-LightWhite py-[4px] md:py-[3px] pl-3 md:pl-4 ${isCityPage ? 'pr-[4px] md:pr-[16px]' : 'pr-[4px] md:pr-[3px]'} shadow-[0_6px_24px_0_rgba(0,0,0,0.05)] md:shadow-none bg-white`}>
+                  <input
+                    type="text"
+                    value={searchCity}
+                    onChange={(e) => {
+                      setSearchCity(e.target.value);
+                      setShowSuggestions(true); // show suggestions when typing
+                    // navigate(`/sublocations?q=${encodeURIComponent(searchCity)}`, { replace: true });
+                    }}
+                    placeholder="Select City"
+                    className={`flex-1 py-[3px] md:py-2 bg-white font-Roboto text-PrimaryBlack font-normal text-[14px] md:text-[16px] leading-[20px] md:leading-[24px] tracking-[0px] border-none outline-none`}
+                  />
+                  {searchCity && (
+                    <button
+                      className="flex"
+                      onClick={() => {
+                        setSelectedCity("");
+                        setSearchCity("");
+                        setShowSuggestions(false); // hide suggestions when cleared
+                      }}
+                    >
+                      <CloseIconBlack />
+                    </button>
+                  )}
+                  <button
+                    className={`flex items-center justify-center min-w-[32px] md:min-w-[48px] w-[32px] md:w-12 h-[32px] md:h-12 bg-DarkOrange rounded-full ${isCityPage ? 'hidden' : ''}`}
+                    onClick={() => setSelectedCity(searchCity)}
+                  >
+                    <img
+                      src={SearchWhite}
+                      alt="Logo"
+                      className="w-[16px] md:w-[21px] h-[16px] md:h-[21px] object-contain"
+                    />
+                  </button>
+                  {!searchCity && ( <button
+                    className={`flex items-center justify-center min-w-[24px] md:min-w-[24px] w-[24px] md:w-[24px] h-[24px] md:h-[24px] rounded-full ${isCityPage ? '' : 'hidden'}`}
+                    onClick={() => setSelectedCity(searchCity)}
+                  >
+                    <img
+                      src={ArrowDown}
+                      alt="Logo"
+                      className="w-[16px] md:w-[13px] object-contain"
+                    />
+                  </button>
+                  )}
+                </div>
+
+                {showSuggestions &&
+                  searchCity &&
+                  combinedCities.filter(
+                    (cityObj) =>
+                      cityObj.city?.toLowerCase().includes(searchCity.toLowerCase()) ||
+                      cityObj.displayName?.toLowerCase().includes(searchCity.toLowerCase())
+                  ).length > 0 && (
+                    <ul className="absolute z-50 w-full bg-white border border-LightWhite rounded-b-md max-h-40 overflow-y-auto mt-12 shadow-md">
+                      {combinedCities
+                        .filter(
+                          (cityObj) =>
+                            cityObj.city?.toLowerCase().includes(searchCity.toLowerCase()) ||
+                            cityObj.displayName?.toLowerCase().includes(searchCity.toLowerCase())
+                        )
+                        .map((cityObj) => (
+                          <li
+                            key={cityObj.id}
+                            className="px-3 py-2 cursor-pointer hover:bg-gray-100"
+                            onClick={() => {
+                              setSearchCity(cityObj.displayName || cityObj.city);
+                              setSelectedCity(cityObj.displayName || cityObj.city);
+                              setShowSuggestions(false);
+                              //navigate(`/sublocations?q=${encodeURIComponent(cityObj.displayName || cityObj.city)}`, { replace: true });
+                              
+                            }}
+                          >
+                            {cityObj.displayName} ({cityObj.city})
+                          </li>
+                        ))}
+                    </ul>
+                )} 
+              </div>
+            </div>
+
+            <div className="flex items-center gap-[10px] px-[9px] md:px-4 py-[9px] md:py-3 border border-LightWhite rounded-full">
+              <button onClick={() => setShowFilters(true)}>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" className="w-5 h-5 md:w-6 md:h-6"> <path d="M21.25 11.9999H8.895M4.534 11.9999H2.75M4.534 11.9999C4.534 11.4217 4.76368 10.8672 5.17251 10.4584C5.58134 10.0496 6.13583 9.81989 6.714 9.81989C7.29217 9.81989 7.84666 10.0496 8.25549 10.4584C8.66432 10.8672 8.894 11.4217 8.894 11.9999C8.894 12.5781 8.66432 13.1326 8.25549 13.5414C7.84666 13.9502 7.29217 14.1799 6.714 14.1799C6.13583 14.1799 5.58134 13.9502 5.17251 13.5414C4.76368 13.1326 4.534 12.5781 4.534 11.9999ZM21.25 18.6069H15.502M15.502 18.6069C15.502 19.1852 15.2718 19.7403 14.8628 20.1492C14.4539 20.5582 13.8993 20.7879 13.321 20.7879C12.7428 20.7879 12.1883 20.5572 11.7795 20.1484C11.3707 19.7396 11.141 19.1851 11.141 18.6069M15.502 18.6069C15.502 18.0286 15.2718 17.4745 14.8628 17.0655C14.4539 16.6566 13.8993 16.4269 13.321 16.4269C12.7428 16.4269 12.1883 16.6566 11.7795 17.0654C11.3707 17.4742 11.141 18.0287 11.141 18.6069M11.141 18.6069H2.75M21.25 5.39289H18.145M13.784 5.39289H2.75M13.784 5.39289C13.784 4.81472 14.0137 4.26023 14.4225 3.8514C14.8313 3.44257 15.3858 3.21289 15.964 3.21289C16.2503 3.21289 16.5338 3.26928 16.7983 3.37883C17.0627 3.48839 17.3031 3.64897 17.5055 3.8514C17.7079 4.05383 17.8685 4.29415 17.9781 4.55864C18.0876 4.82313 18.144 5.10661 18.144 5.39289C18.144 5.67917 18.0876 5.96265 17.9781 6.22714C17.8685 6.49163 17.7079 6.73195 17.5055 6.93438C17.3031 7.13681 17.0627 7.29739 16.7983 7.40695C16.5338 7.5165 16.2503 7.57289 15.964 7.57289C15.3858 7.57289 14.8313 7.34321 14.4225 6.93438C14.0137 6.52555 13.784 5.97106 13.784 5.39289Z" stroke="#091019" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"/> </svg>
+              </button>
+              <span className="hidden md:flex font-Roboto text-PrimaryBlack font-normal text-[16px] leading-[24px] tracking-[0px]">
+                Filters
+              </span>
+            </div>
+          </div>
           <div id="map" className="w-full h-[450px] md:h-[762px] rounded shadow" />
         </div>
       </div>
