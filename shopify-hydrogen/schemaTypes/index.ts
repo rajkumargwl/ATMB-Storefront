@@ -150,6 +150,14 @@ import { smallBusinessOwnerAppDownloadSection } from './objects/module/smallBusi
 import  { downloadMailboxRenterAppsSection } from './objects/module/downloadMailboxRenterAppsSection'
 import { anytimemobile } from './objects/module/anytimemobile'
 import {operatorYourCompetitors} from './objects/module/operatoryourcompetitors'
+import { pdpvirtualMailboxLocation } from './objects/module/pdpvirtualMailboxLocation'
+import { pdpdetailedFeaturesSection } from './objects/module/pdpdetailedFeaturesSection'
+import { pdpmailCenterHighlightsSection } from './objects/module/pdpmailCenterHighlightsSection'
+import { pdpanytimePhoneSection } from './objects/module/pdpanytimePhoneSection'
+import { pdpCommonFeaturesSection } from './objects/module/pdpCommonFeaturesSection'
+import { pdpwhyChooseAnytimePhoneSection } from './objects/module/pdpwhyChooseAnytimePhoneSection'
+import { pdpFeatureGridSection } from './objects/module/pdpFeatureGridSection'
+
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
 
 const objects = [
@@ -295,7 +303,13 @@ contactUsSection,
   downloadMailboxRenterAppsSection,
   anytimemobile,
     operatorYourCompetitors,
-
+pdpvirtualMailboxLocation,
+pdpdetailedFeaturesSection,
+pdpmailCenterHighlightsSection,
+pdpanytimePhoneSection,
+pdpCommonFeaturesSection,
+pdpFeatureGridSection,
+pdpwhyChooseAnytimePhoneSection
 ]
 
 import {portableTextType} from './portableText/portableTextType'

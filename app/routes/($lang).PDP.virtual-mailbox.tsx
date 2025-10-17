@@ -1,10 +1,6 @@
-// app/routes/($lang).plans.tsx
+
 import {useNavigate, useLoaderData} from '@remix-run/react';
 import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import Header from '~/components/global/Header';
-import Footer from '~/components/global/Footer';
-import {HEADER_QUERY} from '~/queries/sanity/header';
-import {FOOTER_QUERY} from '~/queries/sanity/footer';
 import {notFound} from '~/lib/utils';
 import {PRODUCT_QUERY} from '~/queries/shopify/product';
 import type {Product, ProductVariant} from '@shopify/hydrogen/storefront-api-types';
@@ -13,6 +9,9 @@ import AddToCartButton from '~/components/product/buttons/AddToCartButton';
 import {useState, useEffect} from 'react';
 import ReplacePlanAddToCartButton from '~/components/cart/ReplacePlanAddToCartButton';
 import {useCart} from '@shopify/hydrogen-react';
+import { PRODUCT_PAGE_QUERY } from '~/queries/sanity/product';
+import { SanityProductPage } from '~/lib/sanity';
+import ModuleGrid from '~/components/modules/ModuleGrid'; // Make sure this is imported
 
 // Location query from Sanity
 const LOCATION_QUERY = /* groq */ `
@@ -43,25 +42,18 @@ const LOCATION_QUERY = /* groq */ `
 
 export async function loader({context, params, request}: LoaderFunctionArgs) {
   const language = params.lang || 'en';
- 
+
   // Validate supported languages
   const supportedLanguages = ['en', 'es'];
   if (!supportedLanguages.includes(language)) {
     throw notFound();
   }
-  
+
   const cache = context.storefront.CacheCustom({
     mode: 'public',
     maxAge: 60,
     staleWhileRevalidate: 60,
   });
-
-  const [header, footer] = await Promise.all([
-    context.sanity.query({query: HEADER_QUERY,  params: { language }, cache}),
-    context.sanity.query({query: FOOTER_QUERY,  params: { language }, cache}),
-  ]);
-
-  if (!header || !footer) throw notFound();
 
   const handle = params.handle ?? 'virtual-mailbox';
 
@@ -81,35 +73,42 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     params: {id: locationId},
     cache,
   });
-
   if (!location) throw notFound();
 
+  // Fetch PDP modules from Sanity
+  const [page] = await Promise.all([
+    context.sanity.query<SanityProductPage>({
+      query: PRODUCT_PAGE_QUERY,
+      params: { slug: handle },
+      cache,
+    }),
+  ]);
+ 
   return defer({
     location,
-    header,
-    footer,
+    page,
     product,
   });
 }
 
 export default function Plans() {
-  const {lines} = useCart();
-  console.log('Cart lines in Plans page:', lines);
+  // const {lines} = useCart();
+  // console.log('Cart lines in Plans page:', lines);
   const [replaceLineId, setReplaceLineId] = useState<string | null>(null);
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
-  const {location, header, footer, product} = useLoaderData<typeof loader>();
+  const {location, product, page} = useLoaderData<typeof loader>();
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
 
   const variants = (product?.variants?.nodes ?? []) as ProductVariant[];
 
-  // ✅ Filter by billing cycle from metafields
+  // Filter by billing cycle from metafields
   const filteredVariants = variants.filter((variant) => {
     const planTypeField = variant.metafields?.find((m) => m.key === 'plan_type');
     return planTypeField?.value?.toLowerCase() === billingCycle;
   });
 
-  // ✅ Sort by Shopify's built-in `position`
+  // Sort by Shopify's built-in `position`
   const sortedVariants = filteredVariants.sort((a, b) => a.position - b.position);
 
   const productAnalytics: ShopifyAnalyticsProduct | null = selectedVariant
@@ -123,17 +122,18 @@ export default function Plans() {
         quantity: 1,
       }
     : null;
-    const locationProperties = Object.entries(location).map(([key, value]) => ({
-      key,
-      value: String(value), // Shopify requires string values
-    }));
+
+  const locationProperties = Object.entries(location).map(([key, value]) => ({
+    key,
+    value: String(value), // Shopify requires string values
+  }));
 
   useEffect(() => {
     const storedLineId = sessionStorage.getItem('replaceLineId');
     if (storedLineId) setReplaceLineId(storedLineId);
     console.log('Replace line ID from sessionStorage:', storedLineId);
   }, []);
-  
+
   return (
     <>
       <div className="flex flex-col min-h-screen">
@@ -141,9 +141,9 @@ export default function Plans() {
           {/* Breadcrumb + Title */}
           <div className="mb-8">
             <p className="text-sm text-gray-500">Virtual Mailbox &gt; Locations &gt; Plans</p>
-            <h2 className="text-2xl font-bold mt-2">{product.title}</h2>
-            <p className="text-lg font-semibold">{location.displayName}</p>
-            <p className="text-gray-600">{location.addressLine1}</p>
+            <h2 className="text-2xl font-bold mt-2">{product?.title}</h2>
+            <p className="text-lg font-semibold">{location?.displayName}</p>
+            <p className="text-gray-600">{location?.addressLine1}</p>
             <p className="text-gray-600">
               Mailbox ID: <span className="font-bold">#{location.locationId}</span>
             </p>
@@ -216,40 +216,23 @@ export default function Plans() {
             })}
           </div>
 
+          {/* Sanity Modules Grid */}
+          {page?.modules && page.modules.length > 0 && (
+            <div className="mb-8 mt-8 px-0 md:px-0">
+              <ModuleGrid items={page.modules} searchQuery={''} homeSearchResults={[]} />
+            </div>
+          )}
+
           {/* Add to Cart */}
           <div className="flex justify-center pt-6">
-            {/* <AddToCartButton
-              lines={
-                selectedVariant
-                  ? [
-                      {
-                        merchandiseId: selectedVariant.id,
-                        quantity: 1,
-                        attributes: locationProperties,
-                      },
-                    ]
-                  : []
-              }
-              disabled={!selectedVariant || !selectedVariant.availableForSale}
-              analytics={
-                productAnalytics
-                  ? {
-                      products: [productAnalytics],
-                      totalValue: parseFloat(productAnalytics.price),
-                    }
-                  : undefined
-              }
-              buttonClassName="w-full mt-2"
-              text={selectedVariant ? 'Add to Cart' : 'Select a Plan First'}
-            /> */}
             <ReplacePlanAddToCartButton
-  selectedVariant={selectedVariant}
-  replaceLineId={replaceLineId}
-  locationProperties={locationProperties}
-  disabled={!selectedVariant || !selectedVariant.availableForSale}
-  buttonClassName="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600"
-  text={selectedVariant ? 'Add to Cart' : 'Select a Plan First'}
-/>
+              selectedVariant={selectedVariant}
+              replaceLineId={replaceLineId}
+              locationProperties={locationProperties}
+              disabled={!selectedVariant || !selectedVariant.availableForSale}
+              buttonClassName="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600"
+              text={selectedVariant ? 'Add to Cart' : 'Select a Plan First'}
+            />
           </div>
         </main>
       </div>

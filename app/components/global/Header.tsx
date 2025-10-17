@@ -24,6 +24,7 @@ type HeaderProps = {
     }[];
     icon1?: { url: string };
     icon2?: { url: string };
+    icon3?: { url: string };
     loginButton?: { label: string; link?: string | null };
     getStartedButton?: { label: string; link?: string | null };
   };
@@ -43,7 +44,7 @@ type HeaderProps = {
 export default function Header({ data, searchResults, searchQuery, isLoggedIn, customer, currentLanguage }: HeaderProps) {
   if (!data) return null;
 
-  const { logo, menu, icon1, icon2, loginButton, getStartedButton } = data;
+  const { logo, menu, icon1, icon2,icon3, loginButton, getStartedButton } = data;
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
    const [results, setResults] = useState(searchResults || []);
@@ -213,6 +214,17 @@ useEffect(() => {
                 alt="Cart"
                 title="Cart"
                 className="h-6 w-6 object-contain"
+              />
+            </Link>
+          )}
+           {icon3?.url && (
+             <Link
+               to="#">
+              <img
+                src={icon3.url}
+                alt="Language"
+                title="Language"
+                className="h-6 w-6 object-contain hidden md:inline-block"
               />
             </Link>
           )}

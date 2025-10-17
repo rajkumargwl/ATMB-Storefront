@@ -1,28 +1,23 @@
  
 import {useNavigate, useLoaderData, Await} from '@remix-run/react';
 import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import Header from '~/components/global/Header';
-import Footer from '~/components/global/Footer';
-import {fetchGids, notFound} from '~/lib/utils';
+
+import {notFound} from '~/lib/utils';
 import {PRODUCT_QUERY} from '~/queries/shopify/product';
 import type {Product, ProductVariant} from '@shopify/hydrogen/storefront-api-types';
 import {type ShopifyAnalyticsProduct} from '@shopify/hydrogen';
 import AddToCartButton from '~/components/product/buttons/AddToCartButton';
 import {useState, useEffect, Suspense} from 'react';
 import ReplacePlanAddToCartButton from '~/components/cart/ReplacePlanAddToCartButton';
+import { PRODUCT_PAGE_QUERY } from '~/queries/sanity/product';
+import { SanityProductPage } from '~/lib/sanity';
+import ModuleGrid from '~/components/modules/ModuleGrid'; // Make sure this is imported
 import { SanityPreview } from 'hydrogen-sanity';
-import ModuleGrid from '~/components/modules/ModuleGrid';
-import clsx from 'clsx';
-import { PDP_PHONE_PAGE } from '~/queries/sanity/fragments/pages/pdpanytimephonepage';
-import {HEADER_QUERY} from '~/queries/sanity/header';
-import {FOOTER_QUERY} from '~/queries/sanity/footer';
- 
-// -----------------
 // Loader
 // -----------------
 export async function loader({context, params, request}: LoaderFunctionArgs) {
   const language = params.lang || 'en';
- 
+   
   // Validate supported languages
   const supportedLanguages = ['en', 'es'];
   if (!supportedLanguages.includes(language)) {
@@ -34,33 +29,35 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     staleWhileRevalidate: 60,
   });
  
-  // ✅ Fetch PDP page data from Sanity (same syntax as About Us)
-  const page = await context.sanity.query({
-    query: PDP_PHONE_PAGE,
-  });
+
  
   //if (!page) throw notFound();
-  console.log("dataaaa",JSON.stringify(page,null,2));
-  const gids = fetchGids({ page, context });
+  
+
  
 
-  const [header, footer] = await Promise.all([
-    context.sanity.query({query: HEADER_QUERY,params: { language }, cache}),
-    context.sanity.query({query: FOOTER_QUERY,params: { language }, cache}),
-  ]);
 
-  if (!header || !footer) throw notFound();
 
   const handle = params.handle ?? 'virtual-phone-number';
+    const [page] = await Promise.all([
+      context.sanity.query<SanityProductPage>({
+        query: PRODUCT_PAGE_QUERY,
+        params: { slug: handle },
+        cache,
+      }),
+    ]);
+
   const {product} = await context.storefront.query<{product: Product}>(PRODUCT_QUERY, {
     variables: {handle, selectedOptions: []},
   });
   if (!product) throw notFound();
  
   return defer({
+   
+   
     product,
     page,
-    gids,
+   
   });
 }
  
@@ -69,7 +66,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
 // -----------------
 export default function Plans() {
   const [replaceLineId, setReplaceLineId] = useState<string | null>(null);
-  const { product, page, gids } = useLoaderData<typeof loader>();
+  const {page, product} = useLoaderData<typeof loader>();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
  
@@ -97,7 +94,7 @@ export default function Plans() {
               <Await resolve={gids}>
                 {page?.modules && page.modules.length > 0 && (
                   <div className={clsx('mb-0 mt-0 px-0', 'md:px-0')}>
-                    <ModuleGrid items={page.modules} />
+                    <ModuleGrid items={page.modules} searchQuery={''} homeSearchResults={[]} />
                   </div>
                 )}
               </Await>
@@ -245,18 +242,13 @@ export default function Plans() {
             );
           })}
         </div>
- 
-        {/* Highlights */}
-        {/* <div className="bg-black text-white rounded-xl mt-12 p-6 text-center">
-          <h4 className="font-semibold mb-4">Key Highlights</h4>
-          <div className="flex flex-wrap justify-center gap-4 text-sm">
-            <span>Dedicated Local or Toll-Free Number</span>|
-            <span>Unlimited Calling</span>|
-            <span>Custom Greetings & Auto-Attendant</span>|
-            <span>411 Directory Listing</span>
-          </div>
-        </div> */}
- 
+
+         {/* Sanity Modules Grid */}
+                 {page?.modules && page.modules.length > 0 && (
+                   <div className="mb-8 mt-8 px-0 md:px-0">
+                     <ModuleGrid items={page.modules} />
+                   </div>
+                 )}
         {/* Bottom Add to Cart */}
         {selectedVariant && (
           <div className="flex justify-between items-center mt-6 p-4 bg-white rounded-xl shadow-md">
