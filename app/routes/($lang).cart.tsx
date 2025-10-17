@@ -503,15 +503,17 @@ export default function Cart() {
         )}
 
         {!cart?.lines?.edges?.length && (
-          <div className="mx-auto max-w-[1240px] text-center flex flex-col gap-6">
-            <h1 className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[38.4px] text-[24px] md:text-[32px] tracking-[-0.36px] md:tracking-[-0.48px]">Your Cart is Empty</h1>
-            <p className="font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Looks like you haven't added anything to your cart yet.</p>
-            <a
-              href="/"
-              className="flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto text-[16px] tracking-[0.08px] py-[12px] px-4 rounded-full h-[52px]"
-            >
-              Continue Shopping
-            </a>
+          <div className='px-5 py-[40px] md:py-[60px] lg:py-[150px]'>
+            <div className="mx-auto max-w-[1240px] text-center flex flex-col items-center  gap-6">
+              <h1 className="text-center font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px]">Your Cart is Empty</h1>
+              <p className="font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Looks like you haven't added anything to your cart yet.</p>
+              <a
+                href="/"
+                className="flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto text-[16px] tracking-[0.08px] py-[12px] px-4 rounded-full h-[52px] min-w-[207px]"
+              >
+                Continue Shopping
+              </a>
+            </div>
           </div>
         )}
       </>

@@ -22,7 +22,7 @@ import SpinnerIcon from '~/components/icons/Spinner';
 import {Link} from '~/components/Link';
 import {useCartFetchers} from '~/hooks/useCartFetchers';
 import {useRootLoaderData} from '~/root';
-
+import ChangePlanButton from './ChangePlanButton';
 export function CartLineItems({
   linesObj,
 }: {
@@ -199,7 +199,7 @@ function LineItem({lineItem}: {lineItem: CartLine | ComponentizableCartLine}) {
         >
          Change Location
         </Link>
-        {(merchandise.product.handle==='virtual-mailbox')? <Link
+        {/* {(merchandise.product.handle==='virtual-mailbox')? <Link
         to={`/PDP/${merchandise.product.handle}?locationId=${attributes?.find(attr => attr.key === 'locationId')?.value}`}
         className="p-2 p-2 font-Roboto text-PrimaryBlack font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px] md:tracking-[0.07px]
                       underline decoration-solid decoration-skip-ink-auto decoration-auto underline-offset-auto"
@@ -213,18 +213,35 @@ function LineItem({lineItem}: {lineItem: CartLine | ComponentizableCartLine}) {
       >
       Change Plan
       </Link>
-      }
+      } */}
+      <ChangePlanButton
+        lineId={lineItem.id}
+        productHandle={merchandise.product.handle}
+        locationId={attributes?.find(attr => attr.key === 'locationId')?.value ?? undefined}
+       />
+            
+      
+            {/* Quantity */}
+            {/* <CartItemQuantity line={lineItem} submissionQuantity={updating} /> */}
+      
+            {/* Price */}
+            <div className="flex  font-Roboto text-PrimaryBlack font-medium leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px] md:tracking-[0.07px]">
+              {updating ? (
+                <SpinnerIcon width={24} height={24} />
+              ) : (
+                <Money data={lineItem.cost.totalAmount} />
+              )}
+            </div>
       <div role="cell" className="flex flex-col items-end justify-between">
         <ItemRemoveButton lineIds={[lineItem.id]} />
       </div>
       </div>
       </div>
+      </div>
 
       </div>
 
 
-      
-    </div>
   );
 }
 
@@ -307,7 +324,7 @@ function ItemRemoveButton({lineIds}: {lineIds: CartLine['id'][]}) {
 export function CartSummary({cart,cost}: {cart: Cart,cost: CartCost}) {
   const lines = flattenConnection(cart.lines);
   const VISIBLE_ATTRIBUTES = [
-    // 'locationId',
+     'locationId',
     'displayName',
     'addressLine1',
     'city',
@@ -376,7 +393,7 @@ export function CartSummary({cart,cost}: {cart: Cart,cost: CartCost}) {
           </span>
         </div>
         <div
-          className="flex justify-between mt-1"role="row">
+          className="flex justify-between mt-3"role="row">
           <span className="font-Roboto text-[#262626] font-normal leading-[24px] text-[16px] tracking-[0px]" role="rowheader">
             Taxes & Fees
           </span>
