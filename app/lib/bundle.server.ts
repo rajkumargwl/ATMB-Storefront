@@ -129,7 +129,7 @@ export async function fetchBundleProducts(context: any, billing: "monthly" | "ye
         variant.node.metafields.some(mf => mf && (mf.references?.edges?.length > 0 || !!mf.value))
       )
     );
-    console.log("Fetched bundle products:", bundleProducts);
+
     return bundleProducts.map((product) => parseBundleProduct(product, billing));
   } catch (err: any) {
     console.error("Failed to fetch bundle products:", err);
