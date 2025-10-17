@@ -82,6 +82,14 @@ import { OperatorYourCompetitors } from './operatoryourcompetitors';
 
 import NoOfficeSection from '~/components/modules/NoOfficeSection';
 import  AnytimeFeaturesModule from '~/components/modules/AnytimeFeaturesModule';
+import  PDPIntroSection from '~/components/modules/PDPIntroSection';
+import PDPDetailedFeatureSection from '~/components/modules/PDPDetailedFeatureSection';
+import PDPHighlightsSection from '~/components/modules/PDPHighlightsSection';
+import PDPWhyChooseSection from '~/components/modules/PDPWhyChooseSection';
+import PDPHowItWorks from '~/components/modules/PDPHowItWorksSection';
+import PDPTestimonials from '~/components/modules/PDPTestimonialsSection';
+import PDPCommonFeaturesSection from '~/components/modules/PDPCommonFeaturesSection';
+
  import DownloadMailboxRenterApps from './DownloadMailboxRenterApps';
  import SmallBusinessChallanges from './SmallBusinessChallanges';
  import SmallBusinessOwnerAppDownloadSection from './SmallBusinessOwnerAppDownloadSection';
@@ -112,8 +120,10 @@ type Props = {
 };
 
 export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery, bundles, pageType = 'default'}: Props) { // 争 Set default pageType
+  console.log("🚀 Module component rendered with type:", module?._type);
 
- 
+  console.log("check bundles in module", bundles);
+  console.log("pdp page module", module);
 
   // Helper boolean for conditional rendering
   const isOperatorPage = pageType === 'operator';
@@ -378,7 +388,29 @@ case 'smartBusinessSection':
 
     // NOTE: 'whyBusinessChooseUs' is handled above for operator/renter conditional rendering.
     // The previous duplicate case is removed.
-
+    case 'pdpPageModule':
+      return (
+        <>
+       
+          {module.modules?.map((sub: any) => (
+            <Module key={sub._key} module={sub} pageType={pageType} />
+          ))}
+        </>
+      );
+    case 'PDPIntroSection':
+      return <PDPIntroSection {...module} />;
+    case 'PDPDetailedFeature':
+      return <PDPDetailedFeatureSection {...module} />;  
+    case 'PDPHighlights':
+      return <PDPHighlightsSection {...module} />;  
+    case 'PDPWhyChooseAnytimePhone':
+      return <PDPWhyChooseSection {...module} />;  
+    case 'PDPHowItWorks':
+      return <PDPHowItWorks {...module} />;  
+    case 'PDPTestimonials':
+      return <PDPTestimonials {...module} />;  
+    case 'PDPCommonFeatures':
+      return <PDPCommonFeaturesSection {...module} />;    
     case 'renterEditor':
       return <RenterReferralEditor data={module} />;
 
@@ -393,7 +425,7 @@ case 'smartBusinessSection':
           ))}
         </>
       );
-
+     
     case 'careersPageModule':
       return (
         <>

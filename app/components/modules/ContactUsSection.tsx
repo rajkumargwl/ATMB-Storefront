@@ -24,10 +24,13 @@ type ContactUsProps = {
   };
 };
 
-export default function ContactUsSection({ data }: ContactUsProps) {
+export default function ContactUsSection({ data, context }: ContactUsProps) {
   if (!data) {
     return null; // nothing to render if no data
   }
+
+  const HUBSPOT_PORTAL_ID = '244116084';
+  const HUBSPOT_FORM_ID = '3fb77e45-e6b4-4275-ad2f-4ef212666d0d';
 
   return (
     <section className="px-5 py-[40px] md:py-[60px] lg:py-[100px] bg-white "aria-labelledby="contact-heading">
@@ -61,7 +64,32 @@ export default function ContactUsSection({ data }: ContactUsProps) {
             <p className="mt-1 mb-8 font-Roboto text-PrimaryBlack font-normal leading-[21px] md:leading-[24px] text-[14px] md:text-[16px] tracking-[0px]">{data.formDescription}</p>
           )}
 
-          <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+          <form className="space-y-5" onSubmit={async (e) => {
+              e.preventDefault();
+
+              const formData = new FormData(e.target);
+              const data = {
+                fields: [
+                  { name: "company", value: formData.get("company") },
+                  { name: "firstname", value: formData.get("firstname") },
+                  { name: "lastname", value: formData.get("lastname") },
+                  { name: "email", value: formData.get("email") },
+                  { name: "phone", value: formData.get("phone") },
+                  { name: "what_best_describes_you_", value: formData.get("what_best_describes_you_") },
+                  { name: "how_did_you_hear_about_us_", value: formData.get("how_did_you_hear_about_us_") },
+                  { name: "message", value: formData.get("message") },
+                ],
+              };
+
+              await fetch(`https://api.hsforms.com/submissions/v3/integration/submit/${HUBSPOT_PORTAL_ID}/${HUBSPOT_FORM_ID}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+              });
+
+              alert("Thank you! Your form has been submitted.");
+              e.target.reset();
+            }}>
             {/* Name */}
             <div className="relative">
               <label htmlFor="name"
@@ -69,7 +97,7 @@ export default function ContactUsSection({ data }: ContactUsProps) {
               >
                 Company Name
               </label>
-              <input type="text" id="name" name="name" placeholder="ABC Corporation" required
+              <input type="text" id="company" name="company" placeholder="ABC Corporation" required
                 className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px]
                 font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px] 
                 placeholder:font-Roboto placeholder:text-PrimaryBlack placeholder:font-normal placeholder:leading-[24px]  placeholder:text-[16px]  placeholder:tracking-[0px]"
@@ -82,7 +110,7 @@ export default function ContactUsSection({ data }: ContactUsProps) {
               >
                 First Name
               </label>
-              <input type="text" id="name" name="name" placeholder="Scott" required
+              <input type="text" id="firstname" name="firstname" placeholder="Scott" required
                 className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px]
                 font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px] 
                 placeholder:font-Roboto placeholder:text-PrimaryBlack placeholder:font-normal placeholder:leading-[24px]  placeholder:text-[16px]  placeholder:tracking-[0px]"
@@ -94,7 +122,7 @@ export default function ContactUsSection({ data }: ContactUsProps) {
               >
                 Last Name
               </label>
-              <input type="text" id="name" name="name" placeholder="Morrison" required
+              <input type="text" id="lastname" name="lastname" placeholder="Morrison" required
                 className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px]
                 font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px] 
                 placeholder:font-Roboto placeholder:text-PrimaryBlack placeholder:font-normal placeholder:leading-[24px]  placeholder:text-[16px]  placeholder:tracking-[0px]"
@@ -108,7 +136,7 @@ export default function ContactUsSection({ data }: ContactUsProps) {
                   >
                     Email
                   </label>
-                  <input type="text" id="name" name="name" placeholder="scott.morrison@example.com" required
+                  <input type="email" id="email" name="email" placeholder="scott.morrison@example.com" required
                     className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px]
                     font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px] 
                     placeholder:font-Roboto placeholder:text-PrimaryBlack placeholder:font-normal placeholder:leading-[24px]  placeholder:text-[16px]  placeholder:tracking-[0px]"
@@ -120,7 +148,7 @@ export default function ContactUsSection({ data }: ContactUsProps) {
                 >
                   Phone Number
                 </label>
-                <input type="text" id="name" name="name" placeholder="123-456-7890" required
+                <input type="text" id="phone" name="phone" placeholder="123-456-7890" required
                   className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px]
                   font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px] 
                   placeholder:font-Roboto placeholder:text-PrimaryBlack placeholder:font-normal placeholder:leading-[24px]  placeholder:text-[16px]  placeholder:tracking-[0px]"
@@ -133,7 +161,7 @@ export default function ContactUsSection({ data }: ContactUsProps) {
               >
                 Which best describes you?
               </label>
-              <input type="text" id="name" name="name" placeholder="Small business owner" required
+              <input type="text" id="what_best_describes_you_" name="what_best_describes_you_" placeholder="Small business owner" required
                 className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px]
                 font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px] 
                 placeholder:font-Roboto placeholder:text-PrimaryBlack placeholder:font-normal placeholder:leading-[24px]  placeholder:text-[16px]  placeholder:tracking-[0px]"
@@ -145,7 +173,7 @@ export default function ContactUsSection({ data }: ContactUsProps) {
               >
                 How did you hear about us?
               </label>
-              <input type="text" id="name" name="name" placeholder="Instagram" required
+              <input type="text" id="how_did_you_hear_about_us_" name="how_did_you_hear_about_us_" placeholder="Instagram" required
                 className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px]
                 font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px] 
                 placeholder:font-Roboto placeholder:text-PrimaryBlack placeholder:font-normal placeholder:leading-[24px]  placeholder:text-[16px]  placeholder:tracking-[0px]"
@@ -159,7 +187,8 @@ export default function ContactUsSection({ data }: ContactUsProps) {
                Tell us how we can help you
               </label>
               <textarea  rows={4}
-                required placeholder="Looking for a reliable mailbox service" required
+                required placeholder="Looking for a reliable mailbox service"
+                id="message" name="message"
                 className="block w-full rounded-[8px] border border-LightWhite bg-white h-[126px] pl-[12px] pt-[24px] pb-[10px]
                 font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px] 
                 placeholder:font-Roboto placeholder:text-PrimaryBlack placeholder:font-normal placeholder:leading-[24px]  placeholder:text-[16px]  placeholder:tracking-[0px]"

@@ -52,7 +52,6 @@ import {shopifyProductVariantType} from './objects/shopify/shopifyProductVariant
 import {spotType} from './objects/hotspot/spotType'
 import {menu} from './objects/shopify/menu'
 import {keyHighlights} from './objects/module/keyHighlights'
-import {detailedFeatureType} from './objects/module/detailedFeature'
 
 //import { heroBanner } from "./objects/module/heroBanner";
 // import { heroBanner } from "./objects/module/heroBanner";
@@ -74,7 +73,6 @@ import {aboutDetailedFeaturesSection} from './objects/module/aboutDetailedFeatur
 import {aboutFoundersSection} from './objects/module/aboutFoundersSection'
 import {aboutResourceAuthorsSection} from './objects/module/aboutResourceAuthorsSection'
 import {aboutUsModule} from './objects/module/aboutUsModule'
-import {pdpPageModule} from './objects/module/pdpPageModule'
 import { solutionsMailbox } from './objects/module/solutionsMailbox'
 import { prefectvirtualbox } from './objects/module/prefectvirtualbox'
 import {whyChooseVirtualMailbox} from './objects/module/whyChooseVirtualMailbox'
@@ -128,6 +126,16 @@ import { businessAcceleratorBannerSection } from './objects/module/businessAccel
 import {  anytimePhone } from './objects/module/anytimePhone'
 import { operatorsignupType } from './objects/module/operatorsignupType'
 import operatorSignupVideo from './objects/module/operatorSignupVideo'
+//PDP Page Modules
+import {pdpPageModule} from './objects/module/pdpPageModule'
+import {PDPDetailedFeatureType} from './objects/module/PDPDetailedFeature'
+import {PDPCommonFeaturesType} from './objects/module/PDPCommonFeatures'
+import { PDPHighlights } from './objects/module/PDPHighlights'
+import {PDPWhyChooseAnytimePhone} from './objects/module/PDPWhyChooseAnytimePhone'
+import { PDPHowItWorks } from './objects/module/PDPHowItWorks'
+import {PDPIntroSection} from './objects/module/PDPIntroSection'
+import {PDPTestimonials} from './objects/module/PDPTestimonials'
+// Objects used as annotations must be imported first
 import { businessBenefitsSection } from './objects/module/businessBenefitsSection'
 import { businessIndustryRecognitionSection } from './objects/module/businessIndustryRecognitionSection'
 import { businessTrustedSection } from './objects/module/businessTrustedSection'
@@ -161,8 +169,6 @@ const objects = [
   featuresModule,
   //heroBanner,
   aboutUsModule,
-  pdpPageModule,
-  detailedFeatureType,
   keyHighlights,
   header,
   accordionGroupType,
@@ -274,6 +280,15 @@ contactUsSection,
     operatorsignupType,
   operatorSignupVideo,
   anytimePhone,
+  //PDP Page Modules
+  pdpPageModule,
+  PDPDetailedFeatureType,
+  PDPCommonFeaturesType,
+  PDPHighlights,
+  PDPWhyChooseAnytimePhone,
+  PDPHowItWorks,
+  PDPIntroSection,
+  PDPTestimonials,
   businessBenefitsSection,
   businessIndustryRecognitionSection,
   businessTrustedSection,
