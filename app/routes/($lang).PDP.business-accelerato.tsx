@@ -92,7 +92,18 @@ export default function Plans() {
         {/* Product Title & Description */}
         <h2 className="text-2xl font-bold">{product.title}</h2>
         <p className="text-gray-600 mt-2">{product.description}</p>
-
+         <div className="mt-6">
+            <AddToCartButton
+              lines={[{merchandiseId: defaultVariant.id, quantity: 1}]}
+              disabled={!defaultVariant.availableForSale}
+              analytics={{
+                products: [productAnalytics],
+                totalValue: parseFloat(productAnalytics.price),
+              }}
+              buttonClassName="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600 w-full"
+              text="Add to Cart"
+            />
+          </div>
         {/* Billing Toggle */}
         <div className="flex justify-end items-center gap-3 my-6">
           <span className="font-medium">Monthly</span>
@@ -127,18 +138,7 @@ export default function Plans() {
                         <ModuleGrid items={page.modules} searchQuery={''} homeSearchResults={[]} />
                       </div>
                     )}
-          <div className="mt-6">
-            <AddToCartButton
-              lines={[{merchandiseId: defaultVariant.id, quantity: 1}]}
-              disabled={!defaultVariant.availableForSale}
-              analytics={{
-                products: [productAnalytics],
-                totalValue: parseFloat(productAnalytics.price),
-              }}
-              buttonClassName="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600 w-full"
-              text="Add to Cart"
-            />
-          </div>
+         
         </div>
      
       </main>

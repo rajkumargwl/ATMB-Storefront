@@ -88,19 +88,7 @@ export default function Plans() {
         <p className="text-sm text-gray-500 mb-4">Home &gt; Anytime Phone</p>
  
         {/* ✅ Sanity data rendering same as About Us */}
-        <SanityPreview data={page} query={PDP_PHONE_PAGE}>
-          {(page) => (
-            <Suspense>
-              <Await resolve={gids}>
-                {page?.modules && page.modules.length > 0 && (
-                  <div className={clsx('mb-0 mt-0 px-0', 'md:px-0')}>
-                    <ModuleGrid items={page.modules} searchQuery={''} homeSearchResults={[]} />
-                  </div>
-                )}
-              </Await>
-            </Suspense>
-          )}
-        </SanityPreview>
+       
  
           {/* Inro Section */}
           <section className="flex flex-col md:flex-row items-center gap-8 mb-16">

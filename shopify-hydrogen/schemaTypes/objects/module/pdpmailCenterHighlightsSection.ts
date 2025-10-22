@@ -4,7 +4,7 @@ import {Building2} from 'lucide-react';
 export  const pdpmailCenterHighlightsSection =  defineType({
   name: 'pdpmailCenterHighlightsSection',
   title: 'Mail Center Highlights Section',
-  type: 'document',
+  type: 'object',
   icon: Building2,
   fields: [
     defineField({
