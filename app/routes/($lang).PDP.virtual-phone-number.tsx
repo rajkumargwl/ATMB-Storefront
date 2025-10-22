@@ -1,7 +1,6 @@
- 
 import {useNavigate, useLoaderData, Await} from '@remix-run/react';
 import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-
+ 
 import {notFound} from '~/lib/utils';
 import {PRODUCT_QUERY} from '~/queries/shopify/product';
 import type {Product, ProductVariant} from '@shopify/hydrogen/storefront-api-types';
@@ -15,8 +14,8 @@ import ModuleGrid from '~/components/modules/ModuleGrid'; // Make sure this is i
 import { SanityPreview } from 'hydrogen-sanity';
 // Loader
 // -----------------
- import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
- const seo: SeoHandleFunction = ({data}) => ({
+import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
+const seo: SeoHandleFunction = ({data}) => ({
   title: data?.page?.seo?.title || 'Virtual phone number',
   description:
     data?.page?.seo?.description ||
@@ -37,15 +36,15 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     staleWhileRevalidate: 60,
   });
  
-
+ 
  
   //if (!page) throw notFound();
   
-
  
-
-
-
+ 
+ 
+ 
+ 
   const handle = params.handle ?? 'virtual-phone-number';
     const [page] = await Promise.all([
       context.sanity.query<SanityProductPage>({
@@ -54,7 +53,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
         cache,
       }),
     ]);
-
+ 
   const {product} = await context.storefront.query<{product: Product}>(PRODUCT_QUERY, {
     variables: {handle, selectedOptions: []},
   });
@@ -92,8 +91,8 @@ export default function Plans() {
  
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
-      <main className="flex-1 p-6">
-        <p className="text-sm text-gray-500 mb-4">Home &gt; Anytime Phone</p>
+      <main className="flex-1">
+        {/* <p className="text-sm text-gray-500 mb-4">Home &gt; Anytime Phone</p> */}
  
         {/* ✅ Sanity data rendering same as About Us */}
        
@@ -238,7 +237,7 @@ export default function Plans() {
             );
           })}
         </div>
-
+ 
          {/* Sanity Modules Grid */}
                  {page?.modules && page.modules.length > 0 && (
                    <div className="mb-8 mt-8 px-0 md:px-0">
