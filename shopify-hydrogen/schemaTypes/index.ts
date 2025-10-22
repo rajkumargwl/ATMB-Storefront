@@ -157,7 +157,7 @@ import { pdpanytimePhoneSection } from './objects/module/pdpanytimePhoneSection'
 import { pdpCommonFeaturesSection } from './objects/module/pdpCommonFeaturesSection'
 import { pdpwhyChooseAnytimePhoneSection } from './objects/module/pdpwhyChooseAnytimePhoneSection'
 import { pdpFeatureGridSection } from './objects/module/pdpFeatureGridSection'
-
+import  { productplans }  from './objects/module/productplans'
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
 
 const objects = [
@@ -309,7 +309,8 @@ pdpmailCenterHighlightsSection,
 pdpanytimePhoneSection,
 pdpCommonFeaturesSection,
 pdpFeatureGridSection,
-pdpwhyChooseAnytimePhoneSection
+pdpwhyChooseAnytimePhoneSection,
+productplans
 ]
 
 import {portableTextType} from './portableText/portableTextType'

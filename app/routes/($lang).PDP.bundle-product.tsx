@@ -11,6 +11,14 @@ import type { Product, ProductVariant } from '@shopify/hydrogen/storefront-api-t
 import { useCart } from '@shopify/hydrogen-react';
 import { useState, useEffect } from 'react';
 import { CartForm } from '@shopify/hydrogen';
+ import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
+ const seo: SeoHandleFunction = ({data}) => ({
+  title: data?.page?.seo?.title || 'Anytime Mailbox',
+  description:
+    data?.page?.seo?.description ||
+    'A custom storefront powered by Hydrogen and Sanity',
+});
+export const handle = { seo };
 interface LocationData {
   _id: string;
   locationId: string;
