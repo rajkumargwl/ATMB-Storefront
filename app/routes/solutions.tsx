@@ -62,7 +62,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
 
   const gids = fetchGids({ page, context });
 
-  
+   console.log("soultion page data",JSON.stringify(page,null,2));
   return defer({
     page,
     relatedPosts,
@@ -115,7 +115,7 @@ const renderAuthorDateRelated = (author: string | undefined, date: string | unde
 );
  
  
-// To render author + date
+
 
 
 

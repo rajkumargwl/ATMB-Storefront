@@ -71,12 +71,40 @@ export const solutionMailboxBenefitFaqModule = defineType({
               type: 'string',
               description: 'E.g. "Can I use this for government or bank mail?"',
             }),
-            defineField({
+              defineField({
               name: 'answer',
               title: 'Answer',
-              type: 'text',
-              rows: 2,
-              description: 'Short answer to the FAQ',
+              type: 'array',
+              of: [
+                {
+                  type: 'block',
+                  styles: [
+                    { title: 'Normal', value: 'normal' },
+                    { title: 'Heading', value: 'h4' },
+                  ],
+                  marks: {
+                    decorators: [
+                      { title: 'Bold', value: 'strong' },
+                      { title: 'Italic', value: 'em' },
+                    ],
+                    annotations: [
+                      {
+                        name: 'link',
+                        type: 'object',
+                        title: 'Link',
+                        fields: [
+                          {
+                            name: 'href',
+                            type: 'url',
+                            title: 'URL',
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                },
+              ],
+              description: 'Rich text answer (supports formatting and links)',
             }),
           ],
           preview: {
