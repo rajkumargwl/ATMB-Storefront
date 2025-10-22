@@ -15,6 +15,14 @@ import ModuleGrid from '~/components/modules/ModuleGrid'; // Make sure this is i
 import { SanityPreview } from 'hydrogen-sanity';
 // Loader
 // -----------------
+ import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
+ const seo: SeoHandleFunction = ({data}) => ({
+  title: data?.page?.seo?.title || 'Virtual phone number',
+  description:
+    data?.page?.seo?.description ||
+    'A custom storefront powered by Hydrogen and Sanity',
+});
+export const handle = { seo };
 export async function loader({context, params, request}: LoaderFunctionArgs) {
   const language = params.lang || 'en';
    
