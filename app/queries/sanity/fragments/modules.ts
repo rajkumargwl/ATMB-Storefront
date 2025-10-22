@@ -133,4 +133,8 @@ export const MODULES = groq`
     (_type == "anytimemobile") => {  
     ${ANYTIME_MOBILE_APP}
   }
+    ,
+    (_type == "anytimePhone") => {  
+    ${ANYTIME_PHONE_MODULE}
+  }
 `;
