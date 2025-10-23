@@ -1,5 +1,6 @@
 import { Link } from '@remix-run/react';
 import CallWhite from '~/components/icons/CallWhite';
+import {usePrefixPathWithLocale} from '~/lib/utils';
 
 type FooterProps = {
   data: {
@@ -141,7 +142,7 @@ export default function Footer({ data }: FooterProps) {
                   {data.companyColumn.links?.map((link, idx) => (
                     <li key={idx}>
                       <Link
-                        to={link.link || '#'}
+                        to={(usePrefixPathWithLocale(link.link) || '#')}
                         className="tracking-[0px] font-Roboto text-LightWhite text-[14px] leading-[21px] font-normal py-1 inline-block"
                       >
                         {link.label}
@@ -162,7 +163,7 @@ export default function Footer({ data }: FooterProps) {
                   {data.servicesColumn.links?.map((link, idx) => (
                     <li key={idx}>
                       <Link
-                        to={link.link || '#'}
+                        to={(usePrefixPathWithLocale(link.link) || '#')}
                         className="tracking-[0px] font-Roboto text-LightWhite text-[14px] leading-[21px] font-normal py-1 inline-block"
                       >
                         {link.label}
@@ -183,7 +184,7 @@ export default function Footer({ data }: FooterProps) {
                   {data.locationsColumn.links?.map((link, idx) => (
                     <li key={idx}>
                       <Link
-                        to={link.link || '#'}
+                         to={(usePrefixPathWithLocale(link.link) || '#')}
                         className={`tracking-[0px] font-Roboto ${
                           link.highlight
                             ? 'text-DarkOrange md:text-LightWhite text-[14px] leading-[21px] font-normal py-1 inline-block'
@@ -217,7 +218,7 @@ export default function Footer({ data }: FooterProps) {
                     )}
                       {item?.link ? (
                         <a
-                          href={item?.link}
+                          href={usePrefixPathWithLocale(item?.link)}
                           className="tracking-[0px] font-Roboto text-LightWhite text-[14px] leading-[21px] font-normal py-1 inline-block"
                         >
                           {item?.label} {item?.value}
@@ -274,7 +275,7 @@ export default function Footer({ data }: FooterProps) {
           {/* Bottom Links */}
           <div className="flex flex-wrap justify-center gap-4 md:gap-6">
             {data.bottomLinks?.map((link, idx) => (
-              <Link key={idx} to={link.link || '#'} className="tracking-[0px] font-Roboto text-[14px] leading-[21px] font-normal text-white">
+              <Link key={idx} to={usePrefixPathWithLocale(link.link) || '#'} className="tracking-[0px] font-Roboto text-[14px] leading-[21px] font-normal text-white">
                 {link.label}
               </Link>
             ))}
