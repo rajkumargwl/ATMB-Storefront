@@ -50,7 +50,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
   
     
     const gids = fetchGids({ page, context });
-   console.log("pageeeeeeeee",JSON.stringify(page,null,2));
+  
     return defer({
       page,
       gids,
