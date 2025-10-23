@@ -78,7 +78,7 @@ export default function BusinessStrategySection({
  
         {/* Right: Text Content */}
         <div className='w-full md:w-[48%]'>
-          <h2 className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px] mb-4">
+          <h2 className="max-w-[515px] font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px] mb-4">
             {title}
           </h2>
  

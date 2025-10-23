@@ -88,7 +88,7 @@ import PDPHighlightsSection from '~/components/modules/PDPHighlightsSection';
 import PDPWhyChooseSection from '~/components/modules/PDPWhyChooseSection';
 import PDPHowItWorks from '~/components/modules/PDPHowItWorksSection';
 import PDPTestimonials from '~/components/modules/PDPTestimonialsSection';
-import PDPCommonFeaturesSection from '~/components/modules/PDPCommonFeaturesSection';
+// import PDPCommonFeaturesSection from '~/components/modules/PDPCommonFeaturesSection';
 
  import DownloadMailboxRenterApps from './DownloadMailboxRenterApps';
  import SmallBusinessChallanges from './SmallBusinessChallanges';
@@ -116,7 +116,7 @@ type Props = {
   homeSearchResults?: any;
   searchQuery?: string | null;
   bundles?: any[];
-  pageType?: 'operator' | 'default'; // 争 ADDED pageType PROP
+  pageType?: 'operator' | 'default' ; // 争 ADDED pageType PROP
 };
 
 export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery, bundles, pageType = 'default'}: Props) { // 争 Set default pageType
@@ -405,10 +405,10 @@ case 'smartBusinessSection':
       return <PDPHowItWorks {...module} />;  
     case 'PDPTestimonials':
       return <PDPTestimonials {...module} />;  
-    case 'PDPCommonFeatures':
-      return <PDPCommonFeaturesSection {...module} />;    
+    // case 'PDPCommonFeatures':
+    //   return <PDPCommonFeaturesSection {...module} />;    
     case 'renterEditor':
-      return <RenterReferralEditor data={module} />;
+      return <RenterReferralEditor data={module} />;x``
 
     // -----------------------
     // About Us nested sections
