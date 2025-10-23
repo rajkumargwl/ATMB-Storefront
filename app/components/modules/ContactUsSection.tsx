@@ -29,6 +29,7 @@ export default function ContactUsSection({ data }: ContactUsProps) {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+  
     const formData = new FormData(e.currentTarget);
     const payload = Object.fromEntries(formData.entries()); // convert to JSON
   
@@ -40,19 +41,19 @@ export default function ContactUsSection({ data }: ContactUsProps) {
       });
   
       const result = await response.json();
+  
       if (result.success) {
-        alert("✅ Thank you! Your form has been submitted.");
-        e.currentTarget.reset();
+        alert("Thank you! Your form has been submitted.");
+        e.currentTarget?.reset(); 
       } else {
-        alert(`❌ Error submitting form: ${result.error}`);
+        alert(`Error submitting form: ${result.error}`);
       }
     } catch (error: any) {
       console.error("Form submission error:", error);
-      alert(`❌ Error submitting form: ${error.message}`);
+      alert(`Error submitting form: ${error.message}`);
     }
   };
   
-
   return (
     <section className="px-5 py-[40px] md:py-[60px] lg:py-[100px] bg-white" aria-labelledby="contact-heading">
       <div className="max-w-[1240px] mx-auto">
@@ -140,7 +141,54 @@ export default function ContactUsSection({ data }: ContactUsProps) {
           </div>
 
           {/* RIGHT: Support + Quick Links */}
-          {/* ... your support and quick links JSX remains unchanged ... */}
+          <aside className="w-full lg:w-[40.2%]" aria-labelledby="support-heading quick-links-heading">
+            {/* Support Section */}
+            {data.supportSection && (
+              <div className="bg-[#F6F6F6] border border-LightWhite rounded-[12px] p-6" aria-labelledby="support-heading">
+                {data.supportSection.sectionTitle && <h2 id="support-heading" className="font-Roboto text-PrimaryBlack font-semibold leading-[28px] md:leading-[31.2px] text-[20px] md:text-[24px] tracking-[-0.3px] md:tracking-[-0.36px]">{data.supportSection.sectionTitle}</h2>}
+                {data.supportSection.sectionDescription && <p className="mt-1 mb-6 font-Roboto text-PrimaryBlack font-normal leading-[24px] text-[16px]">{data.supportSection.sectionDescription}</p>}
+                <ul className="space-y-6">
+                  {data.supportSection.supportItems?.map((item, idx) => (
+                    <li key={idx} className="px-5 py-4 border border-LightWhite rounded-[12px] bg-white flex gap-4">
+                      {item.icon?.url && <img src={item.icon.url} alt="" className="w-8 h-8" aria-hidden="true" />}
+                      <div className="flex flex-col gap-2">
+                        {item.title && <span className="font-Roboto text-PrimaryBlack font-medium text-[18px]">{item.title}</span>}
+                        {item.contacts && <ul className="space-y-2">{item.contacts.map((contact, cIdx) => (
+                          <li key={cIdx} className="flex gap-2 items-center">
+                            {contact.icon?.url && <img src={contact.icon.url} alt="" className="w-6" aria-hidden="true" />}
+                            {contact.phoneLink ? (
+                              <a href={contact.phoneLink} className="font-Roboto text-LightWhite text-[14px]" aria-label={`Call ${contact.number}`}>{contact.number}</a>
+                            ) : (
+                              <span className="font-Roboto text-LightGray text-[14px]"><a href={`tel:${contact.number}`}>{contact.number}</a></span>
+                            )}
+                          </li>
+                        ))}</ul>}
+                        {item.note && <p className="font-Roboto text-LightGray text-[14px]">{item.note}</p>}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Quick Links */}
+            {data.quickLinks && data.quickLinks.length > 0 && (
+              <nav className="mt-6 md:mt-8 bg-white border border-LightWhite rounded-[12px] p-6" aria-labelledby="quick-links-heading">
+                <h2 id="quick-links-heading" className="mb-6 font-Roboto text-PrimaryBlack font-semibold text-[24px]">Quick Links</h2>
+                <ul className="list-none space-y-4">
+                  {data.quickLinks.map((link, idx) => (
+                    <li key={idx}>
+                      {link.url ? (
+                        <a href={link.url} className="font-Roboto text-DarkOrange text-[18px] underline">{link.label}</a>
+                      ) : (
+                        <span className="font-Roboto text-DarkOrange text-[18px] underline">{link.label}</span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+            )}
+          </aside>
         </div>
       </div>
     </section>
