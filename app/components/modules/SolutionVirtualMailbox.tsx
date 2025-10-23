@@ -41,11 +41,11 @@ export default function SolutionVirtualMailbox({data}: Props) {
             </h2>
           )}
  
-          {data.description && (
-            <div className="solution-right-content leading-relaxed">
-              <PortableText value={data.description} />
-            </div>
-          )}
+         {Array.isArray(data.description) &&
+ data.description[0]?._type === "block" && (
+  <PortableText value={data.description} />
+)}
+
         </div>
       </div>
     </section>
