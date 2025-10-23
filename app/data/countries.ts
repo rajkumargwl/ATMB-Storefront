@@ -25,4 +25,10 @@ export const countries: Localizations = {
     label: 'Norway (NOK kr)',
     currency: 'NOK',
   },
+  '/en-es': {
+    language: 'EN',
+    country: 'ES',
+    label: 'Spain (Euro €)',
+    currency: 'EUR',
+  },
 };

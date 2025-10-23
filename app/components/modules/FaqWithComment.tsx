@@ -4,6 +4,7 @@ import type { SanityFAQ } from "~/lib/sanity";
 import PlusFAQ from "~/components/icons/PlusFAQ";
 import CloseFAQ from "~/components/icons/CloseFAQ";
 import RightArrowWhite from "~/components/icons/RightArrowWhite";
+import {usePrefixPathWithLocale} from '~/lib/utils';
  
 type Props = {
   data: SanityFAQ;
@@ -106,7 +107,7 @@ export default function FaqWithComment({ data }: Props) {
  
           {/* View All Button */}
           <div className="flex justify-center mt-11 md:mt-14 md:hidden">
-            <Link to="/faq">
+            <Link to={usePrefixPathWithLocale('/faq')}>
               <span className="group relative flex items-center justify-center bg-DarkOrange text-white font-Roboto font-medium leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-4 md:px-[143px] rounded-[100px] min-w-[205px] overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]">
                 <span className="relative flex items-center">
                   View All FAQs
