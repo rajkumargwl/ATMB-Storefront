@@ -120,11 +120,7 @@ type Props = {
 };
 
 export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery, bundles, pageType = 'default'}: Props) { // 争 Set default pageType
-  console.log("🚀 Module component rendered with type:", module?._type);
-
-  console.log("check bundles in module", bundles);
-  console.log("pdp page module", module);
-
+ 
   // Helper boolean for conditional rendering
   const isOperatorPage = pageType === 'operator';
 

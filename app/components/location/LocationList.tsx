@@ -101,6 +101,14 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
           : [...prev, feature],
       );
     };
+
+    const [tempPlanTier, setTempPlanTier] = useState(planTier);
+    const [tempMinPrice, setTempMinPrice] = useState(minPrice);
+    const [tempMaxPrice, setTempMaxPrice] = useState(maxPrice);
+    const [tempSelectedFeatures, setTempSelectedFeatures] =
+      useState(selectedFeatures);
+    const [tempMinVal, setTempMinVal] = useState(minVal);
+    const [tempMaxVal, setTempMaxVal] = useState(maxVal);
   
     // const filtered = locations.filter((loc) => {
     //   const matchCity = selectedCity ? loc.city === selectedCity : true;
@@ -162,7 +170,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
         if (newFiltered.length > 0) {
           setSelectedLocation(newFiltered[0]);
         } else {
-          setSelectedLocation(null);
+         // setSelectedLocation(null);
         }
       }, [selectedCity, planTier, minPrice, maxPrice, selectedFeatures, locations]);
   
@@ -792,7 +800,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
       </div>
 
       {/* Filter Popup */}
-      {showFilters && (
+      {/* {showFilters && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-[12px] border border-LightWhite max-w-[467px] w-full">
            <div className="flex items-center justify-between  mb-6">
@@ -805,7 +813,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
             </button>           
            </div> 
             <div className="space-y-4">
-              {/* Plan Tier */}
+          
               <div>
                 <label className="block font-Roboto text-PrimaryBlack font-normal text-[14px] leading-[21px] tracking-[0px] mb-3">Plan Tier</label>
                 <div className='flex relative'>
@@ -829,15 +837,12 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                 </div>
               </div>
 
-              {/* Price Range */}
               <div>
                 <label className="block  font-Roboto text-PrimaryBlack font-normal text-[14px] leading-[21px] tracking-[0px]">Price Range / Month</label>
                 
               <div className="relative w-full h-3 mt-3 mb-3">
-                    {/* Slider Track */}
                     <div className="bg-LightWhite absolute top-1/2 w-full h-[6px] bg-PrmaryBlack rounded-[10px] -translate-y-1/2"></div>
 
-                    {/* Active Range */}
                     <div
                       className="absolute top-1/2 h-[6px] bg-[#0B111A] rounded -translate-y-1/2"
                       style={{
@@ -845,8 +850,6 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                         right: `${100 - maxVal}%`,
                       }}
                     ></div>
-
-                    {/* Left Thumb */}
                     <input
                       type="range"
                       min="0"
@@ -855,7 +858,6 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                       onChange={(e) => setMinVal(Math.min(Number(e.target.value), maxVal - 1))}
                       className="absolute top-[-5px] w-full appearance-none bg-transparent pointer-events-none"
                     />
-                    {/* Right Thumb */}
                     <input
                       type="range"
                       min="0"
@@ -865,7 +867,6 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                       className="absolute top-[-5px] w-full appearance-none bg-transparent pointer-events-none"
                     />
 
-                    {/* Style thumbs */}
                     <style jsx>{`
                       input[type="range"]::-webkit-slider-thumb {
                         pointer-events: auto;
@@ -898,7 +899,6 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                     onChange={(e) => setMinPrice(Number(e.target.value))}
                     className="border border-LightWhite w-20 px-3 py-2 rounded-[8px] font-Roboto text-PrimaryBlack font-normal text-[16px] leading-[24px] tracking-[0px]"
                   />
-                  {/* <span>—</span> */}
                   <input
                     type="number"
                     value={maxPrice}
@@ -908,7 +908,6 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                 </div>
               </div>
 
-              {/* Features */}
               <div className="grid grid-cols-2 gap-2">
                 {uniqueFeatures.map((feature) => (
            
@@ -936,7 +935,6 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
               </div>
             </div>
 
-            {/* Buttons */}
             <div className="mt-[93px] flex justify-center gap-4">
               <button
                  onClick={() => {
@@ -967,7 +965,222 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
             </div>
           </div>
         </div>
-      )}
+      )} */}
+{/* Filter Popup */}
+{showFilters && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div className="bg-white p-6 rounded-[12px] border border-LightWhite max-w-[467px] w-full">
+     <div className="flex items-center justify-between  mb-6">
+      <h2 className="font-Roboto text-PrimaryBlack font-semibold text-[24px] leading-[31.2px] tracking-[-0.36px]">Filters</h2>
+        <button onClick={() => setShowFilters(false)}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
+            <path d="M19.0227 6.32363C19.2552 6.09113 19.2552 5.70863 19.0227 5.47613C18.7902 5.24363 18.4077 5.24363 18.1752 5.47613L11.9989 11.6524L5.82266 5.47613C5.59016 5.24363 5.20766 5.24363 4.97516 5.47613C4.74266 5.70863 4.74266 6.09113 4.97516 6.32363L11.1514 12.4999L4.97516 18.6761C4.74266 18.9086 4.74266 19.2911 4.97516 19.5236C5.20766 19.7561 5.59016 19.7561 5.82266 19.5236L11.9989 13.3474L18.1752 19.5236C18.4077 19.7561 18.7902 19.7561 19.0227 19.5236C19.2552 19.2911 19.2552 18.9086 19.0227 18.6761L12.8464 12.4999L19.0227 6.32363Z" fill="#091019"/>
+          </svg>
+        </button>
+      </div>
+
+          <div className="space-y-4">
+            {/* Plan Tier */}
+            <div>
+              <label className="block font-Roboto text-PrimaryBlack font-normal text-[14px] leading-[21px] tracking-[0px] mb-3">
+                Plan Tier
+              </label>
+              <div className="flex relative">
+                <select
+                  value={tempPlanTier}
+                  onChange={(e) => setTempPlanTier(e.target.value)}
+                  className="relative z-[2] border border-LightWhite bg-transparent px-3 py-[18.5px] rounded-[8px] w-full font-Roboto text-PrimaryBlack font-normal text-[14px] leading-[21px] tracking-[0px] appearance-none"
+                >
+                  <option value="">All Tiers</option>
+                  {uniqueTiers.map((tier) => (
+                    <option key={tier} value={tier}>
+                      {tier}
+                    </option>
+                  ))}
+                </select>
+                <span className="absolute right-[10px] top-[20px] z-[1]">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="20"
+                    height="20"
+                    viewBox="0 0 20 20"
+                    fill="none"
+                  >
+                    <path
+                      d="M9.64531 13.353C9.83906 13.5468 10.1578 13.5468 10.3516 13.353L15.3516 8.35303C15.5453 8.15928 15.5453 7.84053 15.3516 7.64678C15.1578 7.45303 14.8391 7.45303 14.6453 7.64678L9.99844 12.2937L5.35156 7.64678C5.15781 7.45303 4.83906 7.45303 4.64531 7.64678C4.45156 7.84053 4.45156 8.15928 4.64531 8.35303L9.64531 13.353Z"
+                      fill="#091019"
+                    />
+                  </svg>
+                </span>
+              </div>
+            </div>
+
+            {/* Price Range */}
+            <div>
+              <label className="block font-Roboto text-PrimaryBlack font-normal text-[14px] leading-[21px] tracking-[0px]">
+                Price Range / Month
+              </label>
+
+              <div className="relative w-full h-3 mt-3 mb-3">
+                {/* Slider Track */}
+                <div className="bg-LightWhite absolute top-1/2 w-full h-[6px] bg-PrmaryBlack rounded-[10px] -translate-y-1/2"></div>
+
+                {/* Active Range */}
+                <div
+                className="absolute top-1/2 h-[6px] bg-[#0B111A] rounded -translate-y-1/2"
+                  style={{
+                    left: `${tempMinVal}%`,
+                    right: `${100 - tempMaxVal}%`,
+                  }}
+                ></div>
+
+                {/* Left Thumb */}
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={tempMinVal}
+                  onChange={(e) =>
+                    setTempMinVal(Math.min(Number(e.target.value), tempMaxVal - 1))
+                  }
+                  className="absolute top-[-5px] w-full appearance-none bg-transparent pointer-events-none"
+                />
+                {/* Right Thumb */}
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={tempMaxVal}
+                  onChange={(e) =>
+                    setTempMaxVal(Math.max(Number(e.target.value), tempMinVal + 1))
+                  }
+                  className="absolute top-[-5px] w-full appearance-none bg-transparent pointer-events-none"
+                />
+                <style jsx>{`
+                  input[type="range"]::-webkit-slider-thumb {
+                    pointer-events: auto;
+                    -webkit-appearance: none;
+                    height: 20px;
+                    width: 20px;
+                    border-radius: 50%;
+                    background: white;
+                    border: 3px solid #091019;
+                    cursor: pointer;
+                    position: relative;
+                  }
+                  input[type="range"]::-moz-range-thumb {
+                    pointer-events: auto;
+                    height: 20px;
+                    width: 20px;
+                    border-radius: 50%;
+                    background: white;
+                    border: 3px solid #091019;
+                    cursor: pointer;
+                  }
+                `}</style>
+              </div>
+
+              <div className="flex items-center justify-between gap-2 mt-3">
+                <input
+                  type="number"
+                  value={tempMinPrice}
+                  onChange={(e) => setTempMinPrice(Number(e.target.value))}
+                  className="border border-LightWhite w-20 px-3 py-2 rounded-[8px] font-Roboto text-PrimaryBlack font-normal text-[16px] leading-[24px] tracking-[0px]"
+                />
+                <input
+                  type="number"
+                  value={tempMaxPrice}
+                  onChange={(e) => setTempMaxPrice(Number(e.target.value))}
+                  className="border border-LightWhite w-20 px-3 py-2 rounded-[8px] font-Roboto text-PrimaryBlack font-normal text-[16px] leading-[24px] tracking-[0px]"
+                />
+              </div>
+            </div>
+
+            {/* Features */}
+            <div className="grid grid-cols-2 gap-2">
+              {uniqueFeatures.map((feature) => (
+                <label
+                  key={feature}
+                  className="flex items-center gap-2 font-Roboto text-PrimaryBlack font-normal text-[14px] leading-[21px] tracking-[0px] cursor-pointer"
+                >
+                  <input
+                    type="checkbox"
+                    checked={tempSelectedFeatures.includes(feature)}
+                    onChange={() => {
+                      if (tempSelectedFeatures.includes(feature)) {
+                        setTempSelectedFeatures(
+                          tempSelectedFeatures.filter((f) => f !== feature)
+                        );
+                      } else {
+                        setTempSelectedFeatures([
+                          ...tempSelectedFeatures,
+                          feature,
+                        ]);
+                      }
+                    }}
+                    className="peer hidden"
+                  />
+                  <span className="w-4 h-4 border border-[#4D4E4F] rounded-[4px] bg-white peer-checked:bg-PrimaryBlack flex items-center justify-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="10"
+                      height="8"
+                      viewBox="0 0 10 8"
+                      fill="none"
+                    >
+                      <path
+                        d="M3.41823 7.41621C3.67656 7.67871 4.10156 7.67871 4.3599 7.41621L9.69323 2.08288C9.95573 1.82455 9.95573 1.39954 9.69323 1.14121C9.43489 0.878711 9.0099 0.878711 8.75156 1.14121L3.88906 6.00371L1.69323 3.80788C1.4349 3.54538 1.0099 3.54538 0.751563 3.80788C0.489062 4.06621 0.489062 4.49121 0.751563 4.74954L3.41823 7.41621Z"
+                        fill="white"
+                      />
+                    </svg>
+                  </span>
+                  {feature}
+                </label>
+              ))}
+            </div>
+
+            {/* Buttons */}
+            <div className="mt-[93px] flex justify-center gap-4">
+              <button
+                onClick={() => {
+                  setTempPlanTier("");
+                  setTempMinPrice(0);
+                  setTempMaxPrice(100);
+                  setTempSelectedFeatures([]);
+                  setTempMinVal(0);
+                  setTempMaxVal(100);
+
+                  // Also reset main filters
+                  setPlanTier("");
+                  setMinPrice(0);
+                  setMaxPrice(100);
+                  setSelectedFeatures([]);
+                }}
+                className="w-1/2 rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-5 py-[13px] transition-all hover:scale-[1.02] hover:bg-[#F3F3F3]"
+              >
+                Reset
+              </button>
+
+              <button
+                onClick={() => {
+                  setPlanTier(tempPlanTier);
+                  setMinPrice(tempMinPrice);
+                  setMaxPrice(tempMaxPrice);
+                  setSelectedFeatures(tempSelectedFeatures);
+                  setMinVal(tempMinVal);
+                  setMaxVal(tempMaxVal);
+                  setShowFilters(false);
+                }}
+                className="flex items-center justify-center w-1/2 rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-[13px] font-normal leading-[16px] tracking-[0.08px] text-base gap-2 transition-all hover:scale-[1.02] hover:bg-[#DD5827]"
+              >
+                Apply Filters
+              </button>
+            </div>
+          </div>
+        
+    </div>
+  </div>
+)}
 
 
  {/* Toggle button for mobile */}
