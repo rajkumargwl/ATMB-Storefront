@@ -7,6 +7,7 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
+  useLocation,
   useMatches,
   useRouteError,
 } from '@remix-run/react';
@@ -26,7 +27,7 @@ import {
 } from '@shopify/remix-oxygen';
 import {CartProvider} from '@shopify/hydrogen-react';
 import {getPreview, PreviewProvider} from 'hydrogen-sanity';
- 
+
 import {GenericError} from '~/components/global/GenericError';
 import {Layout} from '~/components/global/Layout';
 import {NotFound} from '~/components/global/NotFound';
@@ -44,6 +45,8 @@ import Header from '~/components/global/Header';
 import Footer from '~/components/global/Footer';
 import {HEADER_QUERY} from '~/queries/sanity/header';
 import {FOOTER_QUERY} from '~/queries/sanity/footer';
+import {fetchGids, notFound} from '~/lib/utils';
+
 const seo: SeoHandleFunction<typeof loader> = ({data}) => ({
   title: data?.layout?.seo?.title,
   titleTemplate: `%s${
@@ -92,7 +95,15 @@ export const links: LinksFunction = () => {
     {rel: 'stylesheet', href: swiperNavStyles},
   ];
 };
-export async function loader({request, context}: LoaderFunctionArgs) {
+export async function loader({request, context, params}: LoaderFunctionArgs) {
+  const language = params.lang || 'en';
+ 
+  // Validate supported languages
+  const supportedLanguages = ['en', 'es'];
+  if (!supportedLanguages.includes(language)) {
+    throw notFound();
+  }
+
   const {cart} = context;
   const customerAccessToken = await context.session.get('customerAccessToken');
   let customer;
@@ -141,10 +152,11 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     context.storefront.query<{shop: Shop}>(SHOP_QUERY),
     context.sanity.query<SanityLayout>({query: LAYOUT_QUERY, cache}),
   ]);
+
   const [header, footer] = await Promise.all([
-    context.sanity.query({query: HEADER_QUERY, cache}),
-    context.sanity.query({query: FOOTER_QUERY, cache}),
-  ]);
+      context.sanity.query({ query: HEADER_QUERY,  params: { language },cache }),
+      context.sanity.query({ query: FOOTER_QUERY, params: { language }, cache }),
+    ]);
 
   // 🔹 Handle search param
   const url = new URL(request.url);
@@ -228,6 +240,7 @@ export async function loader({request, context}: LoaderFunctionArgs) {
     customer: customer ? customer.customer : null,
     customerAccessToken,
     isLoggedIn: isAuthenticated,
+    language
   });
 }
  
@@ -237,12 +250,15 @@ export const useRootLoaderData = () => {
 };
  
 export default function App() {
-  const {preview, header, footer, q, searchResults,  isLoggedIn, customer, ...data} =
-    useLoaderData<SerializeFrom<typeof loader>>();
+  const {preview, header, footer, q, searchResults,  isLoggedIn, customer, language, ...data} = useLoaderData<typeof loader>();
   const locale = data.selectedLocale ?? DEFAULT_LOCALE;
   const hasUserConsent = true;
   const nonce = useNonce();
+
   useAnalytics(hasUserConsent);
+  const location = useLocation();
+  const hideHeaderFooterRoutes = ["/payment-success", "/payment-fail", "/order-confirmation"];
+  const hideHeaderFooter = hideHeaderFooterRoutes.includes(location.pathname);
  
   return (
     <html lang={locale.language}>
@@ -269,7 +285,9 @@ export default function App() {
             </a>
           </div>
           {/* 🔹 Global Header with search support */}
-          <Header data={header} searchQuery={q} searchResults={searchResults} isLoggedIn={isLoggedIn} customer={customer} />
+          {!hideHeaderFooter && (
+            <Header data={header} searchQuery={q} searchResults={searchResults} isLoggedIn={isLoggedIn} customer={customer} currentLanguage={language} />
+          )}
           <CartProvider>
           <Layout key={`${locale.language}-${locale.country}`}>
            
@@ -279,7 +297,9 @@ export default function App() {
           </Layout>
           </CartProvider>
           {/* 🔹 Global Footer */}
+          {!hideHeaderFooter && (
           <Footer data={footer} />
+          )}
         </PreviewProvider>
         <ScrollRestoration nonce={nonce} />
         <Scripts nonce={nonce} />

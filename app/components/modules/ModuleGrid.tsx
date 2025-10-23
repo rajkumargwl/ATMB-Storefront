@@ -103,7 +103,7 @@ type ModuleGridProps = {
 //export default function ModuleGrid({items, homeSearchResults, searchQuery}: Props) {
   export default function ModuleGrid({ items, homeSearchResults, searchQuery, bundles }: ModuleGridProps) {
 
-    console.log("homeSearchResults in modulegrid", homeSearchResults);
+    // console.log("bundles in modulegrid", bundles);
   return (
     <>
        {items.map((item, index) => {

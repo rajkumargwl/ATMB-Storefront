@@ -78,7 +78,7 @@ const BusinessGrowth: React.FC<{ data: BusinessGrowthToolkitProps }> = ({ data }
                <img
               src={circleOrange}
               alt="Circle Orange"
-              className="max-w-[224px] md:max-w-[325px] lg:max-w-[459px] mt-[-20px] md:mt-[-38px]"
+              className="max-w-[224px] md:max-w-[325px] lg:max-w-[459px] mt-[-20px] md:mt-[-48px]"
             />
             </div>
         </div>
