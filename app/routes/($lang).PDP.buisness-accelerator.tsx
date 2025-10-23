@@ -11,6 +11,15 @@ import { PRODUCT_PAGE_QUERY } from '~/queries/sanity/product';
 import { SanityProductPage } from '~/lib/sanity';
 import ModuleGrid from '~/components/modules/ModuleGrid'; // Make sure this is imported
 import { Link } from 'react-router-dom';
+
+import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
+const seo: SeoHandleFunction = ({data}) => ({
+  title: data?.page?.seo?.title || 'Buisness Accelerator',
+  description:
+    data?.page?.seo?.description ||
+    'A custom storefront powered by Hydrogen and Sanity',
+});
+export const handle = { seo };
 // Loader
 export async function loader({context, params}: LoaderFunctionArgs) {
   const language = params.lang || 'en';
