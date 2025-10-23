@@ -11,9 +11,13 @@ export const renterreferralprogramType = defineType({
       name: 'modules',
       type: 'array',
       of: [
-        { type: 'aboutIntroSection' },
-        { type: 'whyBusinessChooseUs' }, 
+      
+       
+       { type: 'inviteAFriendSection' },
+         { type: 'referralStep' }, 
+         { type: 'renterReferralBannerModule' }, 
         { type: 'renterEditor' }, 
+
       ],
     }),
   ],

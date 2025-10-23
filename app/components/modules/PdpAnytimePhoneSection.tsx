@@ -82,11 +82,11 @@ const PdpAnytimePhoneSection: React.FC<Props> = ({
       </div>
  
       <div className="relative z-[2] max-w-[1240px] mx-auto flex flex-col md:flex-row gap-[24px] md:gap-[40px]">
-      
-        
+     
+       
         {/* ---------- Left Content ---------- */}
-        <div className="w-full md:w-[60.14%] flex flex-col">
-        
+        <div className="w-full md:w-[60%] flex flex-col">
+       
  
           {/* Title */}
           <h1 id="anytime-phone-section"
@@ -167,42 +167,75 @@ const PdpAnytimePhoneSection: React.FC<Props> = ({
          
  
         {/* ---------- Right Image ---------- */}
-        {mainImage?.url && (
-          <div className="w-full md:w-[39.86%] p-6 md:p-8 bg-white border border-LightWhite rounded-[24px]">
-            <h2 className="mb-[11px] font-Roboto text-PrimaryBlack font-semibold leading-[28px] md:leading-[31.2px] text-[20px] md:text-[24px] tracking-[-0.3px] md:tracking-[-0.36px]">Business Accelerator</h2>
-            <p className="mb-5 md:mb-6 font-Roboto text-LightGray font-normal leading-[21px] md:leading-[24px] text-[14px] md:text-[16px] tracking-[0px]">Resources, mentorship, and tools to grow faster.</p>
-            <p className="mb-1 font-Roboto text-[#4B5563] font-normal text-[14px] leading-[21px] tracking-[0px]">Starting from</p>
-            <p className="mb-5 md:mb-6 font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[38.4px] text-[24px] md:text-[32px] tracking-[-0.36px] md:tracking-[-0.48px]">$19.99
-              <span className="font-Roboto text-[#4B5563] font-normal text-[14px] leading-[21px] tracking-[0px]">/month</span>
-              </p>
-            <ul className="flex flex-col gap-4 mb-8 md:mb-10 pt-5 md:pt-6 border-t border-LightWhite">
-              <li className="flex items-center gap-3">
-                <span className="flex items-center justify-center w-[24px] h-[24px]"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
-                    <path d="M16.5544 0.110975C16.8206 0.305975 16.8806 0.680975 16.6856 0.950975L6.18563 15.351C6.08063 15.4935 5.92313 15.5835 5.74688 15.5947C5.57063 15.606 5.40188 15.546 5.27438 15.4222L0.174375 10.3222C-0.058125 10.0897 -0.058125 9.70722 0.174375 9.47472C0.406875 9.24222 0.789375 9.24222 1.02188 9.47472L5.62688 14.0797L15.7144 0.245975C15.9094 -0.0202754 16.2844 -0.0802754 16.5544 0.114725V0.110975Z" fill="#091019"/>
-                  </svg></span>
-                  <span className="font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Expert guidance</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <span className="flex items-center justify-center w-[24px] h-[24px]"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
-                    <path d="M16.5544 0.110975C16.8206 0.305975 16.8806 0.680975 16.6856 0.950975L6.18563 15.351C6.08063 15.4935 5.92313 15.5835 5.74688 15.5947C5.57063 15.606 5.40188 15.546 5.27438 15.4222L0.174375 10.3222C-0.058125 10.0897 -0.058125 9.70722 0.174375 9.47472C0.406875 9.24222 0.789375 9.24222 1.02188 9.47472L5.62688 14.0797L15.7144 0.245975C15.9094 -0.0202754 16.2844 -0.0802754 16.5544 0.114725V0.110975Z" fill="#091019"/>
-                  </svg></span>
-                  <span className="font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Partner network</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <span className="flex items-center justify-center w-[24px] h-[24px]"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
-                    <path d="M16.5544 0.110975C16.8206 0.305975 16.8806 0.680975 16.6856 0.950975L6.18563 15.351C6.08063 15.4935 5.92313 15.5835 5.74688 15.5947C5.57063 15.606 5.40188 15.546 5.27438 15.4222L0.174375 10.3222C-0.058125 10.0897 -0.058125 9.70722 0.174375 9.47472C0.406875 9.24222 0.789375 9.24222 1.02188 9.47472L5.62688 14.0797L15.7144 0.245975C15.9094 -0.0202754 16.2844 -0.0802754 16.5544 0.114725V0.110975Z" fill="#091019"/>
-                  </svg></span>
-                  <span className="font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Growth planning tools</span>
-              </li>
-            </ul>
-            <a className="flex items-center justify-center w-full h-[44px] md:h-[52px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-PrimaryBlack border border-[#091019] px-4 py-[12px] bg-white" href="">Add to Cart</a>
-            {/* <img
-              src={mainImage.url}
-              alt={mainImage.alt || title}
-              className="rounded-2xl shadow-md max-w-full h-auto"
-            /> */}
-          </div>
-        )}
+{/* ---------- Right Image or Fallback ---------- */}
+<div className="w-full md:w-[40%]">
+  {mainImage?.url ? (
+    // ✅ If image is available in response
+    <img
+      src={mainImage.url}
+      alt={mainImage.alt || title}
+      className="rounded-[20px]max-w-full h-auto object-cover"
+    />
+  ) : (
+    // ❌ If no image in response, show hardcoded content
+    <>
+    <div className=" p-6 md:p-8 bg-white border border-LightWhite rounded-[24px]">
+      <h2 className="mb-[11px] font-Roboto text-PrimaryBlack font-semibold leading-[28px] md:leading-[31.2px] text-[20px] md:text-[24px] tracking-[-0.3px] md:tracking-[-0.36px]">
+        Business Accelerator
+      </h2>
+      <p className="mb-5 md:mb-6 font-Roboto text-LightGray font-normal leading-[21px] md:leading-[24px] text-[14px] md:text-[16px] tracking-[0px]">
+        Resources, mentorship, and tools to grow faster.
+      </p>
+      <p className="mb-1 font-Roboto text-[#4B5563] font-normal text-[14px] leading-[21px] tracking-[0px]">
+        Starting from
+      </p>
+      <p className="mb-5 md:mb-6 font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[38.4px] text-[24px] md:text-[32px] tracking-[-0.36px] md:tracking-[-0.48px]">
+        $19.99
+        <span className="font-Roboto text-[#4B5563] font-normal text-[14px] leading-[21px] tracking-[0px]">
+          /month
+        </span>
+      </p>
+      <ul className="flex flex-col gap-4 mb-8 md:mb-10 pt-5 md:pt-6 border-t border-LightWhite">
+        <li className="flex items-center gap-3">
+          <span className="flex items-center justify-center w-[24px] h-[24px]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
+              <path d="M16.5544 0.110975C16.8206 0.305975 16.8806 0.680975 16.6856 0.950975L6.18563 15.351C6.08063 15.4935 5.92313 15.5835 5.74688 15.5947C5.57063 15.606 5.40188 15.546 5.27438 15.4222L0.174375 10.3222C-0.058125 10.0897 -0.058125 9.70722 0.174375 9.47472C0.406875 9.24222 0.789375 9.24222 1.02188 9.47472L5.62688 14.0797L15.7144 0.245975C15.9094 -0.0202754 16.2844 -0.0802754 16.5544 0.114725V0.110975Z" fill="#091019"/>
+            </svg>
+          </span>
+          <span className="font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">
+            Expert guidance
+          </span>
+        </li>
+        <li className="flex items-center gap-3">
+          <span className="flex items-center justify-center w-[24px] h-[24px]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
+              <path d="M16.5544 0.110975C16.8206 0.305975 16.8806 0.680975 16.6856 0.950975L6.18563 15.351C6.08063 15.4935 5.92313 15.5835 5.74688 15.5947C5.57063 15.606 5.40188 15.546 5.27438 15.4222L0.174375 10.3222C-0.058125 10.0897 -0.058125 9.70722 0.174375 9.47472C0.406875 9.24222 0.789375 9.24222 1.02188 9.47472L5.62688 14.0797L15.7144 0.245975C15.9094 -0.0202754 16.2844 -0.0802754 16.5544 0.114725V0.110975Z" fill="#091019"/>
+            </svg>
+          </span>
+          <span className="font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">
+            Partner network
+          </span>
+        </li>
+        <li className="flex items-center gap-3">
+          <span className="flex items-center justify-center w-[24px] h-[24px]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
+              <path d="M16.5544 0.110975C16.8206 0.305975 16.8806 0.680975 16.6856 0.950975L6.18563 15.351C6.08063 15.4935 5.92313 15.5835 5.74688 15.5947C5.57063 15.606 5.40188 15.546 5.27438 15.4222L0.174375 10.3222C-0.058125 10.0897 -0.058125 9.70722 0.174375 9.47472C0.406875 9.24222 0.789375 9.24222 1.02188 9.47472L5.62688 14.0797L15.7144 0.245975C15.9094 -0.0202754 16.2844 -0.0802754 16.5544 0.114725V0.110975Z" fill="#091019"/>
+            </svg>
+          </span>
+          <span className="font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">
+            Growth planning tools
+          </span>
+        </li>
+      </ul>
+      <a className="flex items-center justify-center w-full h-[44px] md:h-[52px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-PrimaryBlack border border-[#091019] px-4 py-[12px] bg-white" href="">
+        Add to Cart
+      </a>
+      </div>
+    </>
+  )}
+</div>
+ 
+       
       </div>
     </section>
   );
