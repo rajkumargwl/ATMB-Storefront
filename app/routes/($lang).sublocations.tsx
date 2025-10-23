@@ -14,12 +14,6 @@ import {notFound} from '~/lib/utils';
  export const handle = { seo };
 export async function loader({context, request, params}: LoaderFunctionArgs) {
   const language = params.lang || 'en';
- 
-  // Validate supported languages
-  const supportedLanguages = ['en', 'es'];
-  if (!supportedLanguages.includes(language)) {
-    throw notFound();
-  }
 
   const cache = context.storefront.CacheCustom({mode: 'public', maxAge: 60, staleWhileRevalidate: 60});
 
