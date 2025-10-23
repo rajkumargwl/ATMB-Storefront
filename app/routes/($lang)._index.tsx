@@ -31,14 +31,8 @@ export const handle = { seo };
 
 
 export async function loader({ context, params, request }: LoaderFunctionArgs) {
-  // validateLocale({ context, params });
+  validateLocale({ context, params });
   const language = params.lang || 'en';
- 
-  // Validate supported languages
-  const supportedLanguages = ['en', 'es'];
-  if (!supportedLanguages.includes(language)) {
-    throw notFound();
-  }
 
   const cache = context.storefront.CacheCustom({
     mode: 'public',

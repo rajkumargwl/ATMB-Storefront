@@ -3,6 +3,8 @@ import { useLoaderData, Link } from "@remix-run/react";
 import { Image } from "@shopify/hydrogen";
 import { useState } from "react";
 import { PortableText } from "@portabletext/react";
+import {usePrefixPathWithLocale} from '~/lib/utils';
+
   import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
   const seo: SeoHandleFunction = ({data}) => ({
    title: data?.page?.seo?.title || 'Newsroom | Anytime Mailbox',
@@ -123,7 +125,7 @@ export default function Newsroom() {
                   
                   {cards.map((card, idx) => (
                     <Link
-                            to={card.externalLink}
+                            to={usePrefixPathWithLocale(card.externalLink)}
                             className="flex md:min-h-[358px]"
                           >
                     <article
@@ -182,7 +184,7 @@ export default function Newsroom() {
                         )}
  
                         <Link
-                          to={card.externalLink}
+                          to={usePrefixPathWithLocale(card.externalLink)}
                           className="hidden inline-block text-blue-600 font-medium hover:text-blue-700 transition-colors"
                         >
                           Read More →
