@@ -38,7 +38,7 @@ export default defineConfig({
     documentInternationalization({ // ✅ ADD THE PLUGIN HERE
       supportedLanguages: [
         {id: 'en', title: 'English'},
-        {id: 'es', title: 'Spanish'},
+        {id: 'en-es', title: 'Spanish'},
       ],
       // Replace with the names of the schemas you want to translate
       schemaTypes: ['header', 'footer','home',], // ✅ CONFIGURE YOUR SCHEMAS
