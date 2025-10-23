@@ -310,7 +310,10 @@ pdpanytimePhoneSection,
 pdpCommonFeaturesSection,
 pdpFeatureGridSection,
 pdpwhyChooseAnytimePhoneSection,
-productplans
+productplans,
+referralStep,
+renterReferralBannerModule,
+inviteAFriendSection
 ]
 
 import {portableTextType} from './portableText/portableTextType'
@@ -329,6 +332,9 @@ const documents = [collectionType, colorThemeType, pageType, productType, produc
 
 import {homeType} from './singletons/homeType'
 import {settingsType} from './singletons/settingsType'
+import { referralStep } from './objects/module/referralStep'
+import { renterReferralBannerModule } from './objects/module/renterReferralBannerModule'
+import { inviteAFriendSection } from './objects/module/inviteAFriend'
 
 
 const singletons = [homeType, settingsType,]

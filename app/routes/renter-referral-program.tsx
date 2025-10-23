@@ -47,10 +47,10 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
       throw notFound();
     }
     
-    console.log('Page successfully fetched by slug.' ,pageResults);
+  
     
     const gids = fetchGids({ page, context });
-
+   console.log("pageeeeeeeee",JSON.stringify(page,null,2));
     return defer({
       page,
       gids,
