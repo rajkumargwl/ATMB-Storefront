@@ -136,5 +136,9 @@ export const MODULES = groq`
     ,
     (_type == "anytimePhone") => {  
     ${ANYTIME_PHONE_MODULE}
+  },
+   (_type == "renterreferralprogram") => {  
+    ${RENTER_REFERRAL_FRAGMENT}
   }
+
 `;
