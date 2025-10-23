@@ -2,7 +2,14 @@ import { json, type LoaderFunctionArgs } from "@shopify/remix-oxygen";
 import { useLoaderData, Link } from "@remix-run/react";
 import { Image } from '@shopify/hydrogen';
 import { PortableText } from '@portabletext/react';
- 
+  import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
+  const seo: SeoHandleFunction = ({data}) => ({
+   title: data?.page?.seo?.title || 'Anytime Mailbox',
+   description:
+     data?.page?.seo?.description ||
+     'A custom storefront powered by Hydrogen and Sanity',
+ });
+ export const handle = { seo };
 // Helper to extract text content from PortableText blocks
 const extractText = (blocks: any[]) => {
   if (!blocks || !Array.isArray(blocks)) return "";

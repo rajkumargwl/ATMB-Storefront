@@ -1,60 +1,54 @@
 import groq from 'groq';
 
 export const RENTER_REFERRAL_FRAGMENT = groq`
-  _key,
   _type,
+  _key,
   modules[] {
-    _key,
     _type,
-    // About Intro Section - handles both hero and no-catch sections
-    (_type == "aboutIntroSection") => {
-      label,
+    _key,
+
+    // 🧠 Invite a Friend Section
+    (_type == "inviteAFriendSection") => {
+      sectionTitle,
       heading,
-      highlightedText,
       description,
-      buttonText,
-      buttonLink,
-      image {
-        asset-> {
-          url,
-          metadata {
-            dimensions
-          }
-        }
+      cta {
+        label,
+        url
+      },
+      mainImage {
+        "url": asset->url,
+        alt
       }
     },
-    // Why Business Choose Us
-    (_type == "whyBusinessChooseUs") => {
+
+    // 👣 Referral Steps Section
+    (_type == "referralStep") => {
       heading,
-      description,
-      features[] {
-        _key,
+      subheading,
+      steps[] {
         title,
         description,
         icon {
-          upload {
-            asset-> {
-              url,
-              metadata {
-                dimensions
-              }
-            }
-          },
-          svgCode,
-          tooltipTitle,
-          asset-> { // Duplicate asset definition but kept as per your original file
-            url,
-            metadata {
-              dimensions
-            }
-          }
+          "url": asset->url
         }
       }
     },
-    // Renter Editor
+
+    // 🎁 Renter Referral Banner Section
+    (_type == "renterReferralBannerModule") => {
+      sectionTitle,
+      buttonText,
+      buttonLink,
+      image {
+        "url": asset->url
+      }
+    },
+
+    // 🧾 Renter Editor Section (Terms & Conditions)
     (_type == "renterEditor") => {
       title,
-      terms[]
+      terms
     }
   }
 `;

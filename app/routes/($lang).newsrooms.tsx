@@ -3,7 +3,14 @@ import { useLoaderData, Link } from "@remix-run/react";
 import { Image } from "@shopify/hydrogen";
 import { useState } from "react";
 import { PortableText } from "@portabletext/react";
- 
+  import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
+  const seo: SeoHandleFunction = ({data}) => ({
+   title: data?.page?.seo?.title || 'Newsroom | Anytime Mailbox',
+   description:
+     data?.page?.seo?.description ||
+     'Our Newsroom is the source for news about Anytime Mailbox. Read press releases, get updates, watch video and download images',
+ });
+ export const handle = { seo };
 export async function loader({ context }: LoaderFunctionArgs) {
   const newsItems = await context.sanity.query({
     query: `*[_type == "news"] | order(date desc) {

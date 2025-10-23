@@ -1,7 +1,16 @@
 // app/routes/case-studies.tsx
- 
+
 import {json, type LoaderFunctionArgs} from "@shopify/remix-oxygen";
 import {useLoaderData, Link} from "@remix-run/react";
+
+ import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
+ const seo: SeoHandleFunction = ({data}) => ({
+  title: data?.page?.seo?.title || 'Case Studies | Anytime Mailbox',
+  description:
+    data?.page?.seo?.description ||
+    'Why partner with Anytime Mailbox? Because a virtual mailbox offering generates new revenue and profit. These case studies show you how.',
+});
+export const handle = { seo };
  
 export async function loader({context}: LoaderFunctionArgs) {
  
