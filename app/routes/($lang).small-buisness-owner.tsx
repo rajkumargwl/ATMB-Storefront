@@ -22,7 +22,7 @@ import { SMALL_BUSINESS_OWNER_PAGE_QUERY } from '~/queries/sanity/fragments/page
 const seo: SeoHandleFunction = ({ data }) => ({
   title:
     data?.page?.seo?.title ||
-    'Small Business Owner - Sanity x Hydrogen',
+    'Small Business Owner - Anytime Mailbox',
   description:
     data?.page?.seo?.description ||
     'Run your business anywhere without the hassle — explore features built for small business owners.',

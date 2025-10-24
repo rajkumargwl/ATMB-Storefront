@@ -1,7 +1,6 @@
- 
 import {useNavigate, useLoaderData, Await} from '@remix-run/react';
 import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-
+ 
 import {notFound} from '~/lib/utils';
 import {PRODUCT_QUERY} from '~/queries/shopify/product';
 import type {Product, ProductVariant} from '@shopify/hydrogen/storefront-api-types';
@@ -15,6 +14,14 @@ import ModuleGrid from '~/components/modules/ModuleGrid'; // Make sure this is i
 import { SanityPreview } from 'hydrogen-sanity';
 // Loader
 // -----------------
+import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
+const seo: SeoHandleFunction = ({data}) => ({
+  title: data?.page?.seo?.title || 'Virtual phone number',
+  description:
+    data?.page?.seo?.description ||
+    'A custom storefront powered by Hydrogen and Sanity',
+});
+export const handle = { seo };
 export async function loader({context, params, request}: LoaderFunctionArgs) {
   const language = params.lang || 'en';
    
@@ -29,14 +36,9 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     staleWhileRevalidate: 60,
   });
  
-
+ 
  
   //if (!page) throw notFound();
-  
-
- 
-
-
 
   const handle = params.handle ?? 'virtual-phone-number';
     const [page] = await Promise.all([
@@ -46,7 +48,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
         cache,
       }),
     ]);
-
+ 
   const {product} = await context.storefront.query<{product: Product}>(PRODUCT_QUERY, {
     variables: {handle, selectedOptions: []},
   });
@@ -84,23 +86,11 @@ export default function Plans() {
  
   return (
     <div className="flex flex-col min-h-screen bg-gray-50">
-      <main className="flex-1 p-6">
-        <p className="text-sm text-gray-500 mb-4">Home &gt; Anytime Phone</p>
+      <main className="flex-1">
+        {/* <p className="text-sm text-gray-500 mb-4">Home &gt; Anytime Phone</p> */}
  
         {/* ✅ Sanity data rendering same as About Us */}
-        <SanityPreview data={page} query={PDP_PHONE_PAGE}>
-          {(page) => (
-            <Suspense>
-              <Await resolve={gids}>
-                {page?.modules && page.modules.length > 0 && (
-                  <div className={clsx('mb-0 mt-0 px-0', 'md:px-0')}>
-                    <ModuleGrid items={page.modules} searchQuery={''} homeSearchResults={[]} />
-                  </div>
-                )}
-              </Await>
-            </Suspense>
-          )}
-        </SanityPreview>
+       
  
           {/* Inro Section */}
           <section className="flex flex-col md:flex-row items-center gap-8 mb-16">
@@ -166,12 +156,12 @@ export default function Plans() {
         {/* END HERO SECTION */}
  
         {/* Product Title & Description */}
- 
+{/*  
         <h2 className="text-2xl font-bold">{product.title}</h2>
-        <p className="text-gray-600 mt-2">{product.description}</p>
+        <p className="text-gray-600 mt-2">{product.description}</p> */}
  
         {/* Billing Toggle */}
-        <div className="flex justify-end items-center gap-3 my-6">
+        {/* <div className="flex justify-end items-center gap-3 my-6">
   <span className="font-medium">Monthly</span>
  
   <button
@@ -192,9 +182,9 @@ export default function Plans() {
     Yearly <span className="text-green-600">20% Off</span>
   </span>
 </div>
- 
+  */}
         {/* Plans */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {sortedVariants.map((variant, idx) => {
             const isSelected = selectedVariant?.id === variant.id;
             return (
@@ -241,7 +231,124 @@ export default function Plans() {
               </div>
             );
           })}
-        </div>
+        </div> */}
+ {/* Billing Toggle */}
+<div className="flex justify-center items-center gap-3 mb-10">
+  <span
+    className={`font-medium ${
+      billingCycle === 'monthly' ? 'text-black' : 'text-gray-500'
+    }`}
+  >
+    Monthly
+  </span>
+  <button
+    onClick={() =>
+      setBillingCycle((prev) =>
+        prev === 'monthly' ? 'yearly' : 'monthly',
+      )
+    }
+    className={`relative w-16 h-8 rounded-full transition-colors duration-300 ${
+      billingCycle === 'yearly' ? 'bg-green-500' : 'bg-gray-300'
+    }`}
+  >
+    <div
+      className={`absolute top-1 left-1 h-6 w-6 rounded-full bg-white shadow-md transition-transform duration-300 ${
+        billingCycle === 'yearly' ? 'translate-x-8' : 'translate-x-0'
+      }`}
+    />
+  </button>
+  <span
+    className={`font-medium ${
+      billingCycle === 'yearly' ? 'text-black' : 'text-gray-500'
+    }`}
+  >
+    Yearly <span className="text-green-600 text-sm font-semibold">20% Off</span>
+  </span>
+</div>
+
+{/* Dynamic Plan Cards */}
+<div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+  {product?.variants?.nodes?.map((variant: ProductVariant, index: number) => {
+    const basePrice = parseFloat(variant.price.amount);
+    const yearlyPrice = (basePrice * 12 * 0.8).toFixed(2);
+    const displayPrice =
+      billingCycle === 'monthly' ? basePrice.toFixed(2) : yearlyPrice;
+
+    // Example logic for “Most Popular” badge
+    const isMostPopular =
+      variant.title?.toLowerCase().includes('50') || index === 1;
+
+    const features = [
+      variant.title.toLowerCase().includes('unlimited')
+        ? 'No live answering minutes'
+        : `${variant.title.split(' ')[1]} Live answering minutes`,
+      'Appointment scheduling',
+      'Appointment scheduling App',
+    ];
+
+    return (
+      <div
+        key={variant.id}
+        className={`relative rounded-2xl p-8 flex flex-col ${
+          isMostPopular
+            ? 'border-2 border-orange-500 shadow-md bg-white'
+            : 'border border-gray-200 shadow-sm bg-white'
+        }`}
+      >
+        {isMostPopular && (
+          <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-orange-100 text-orange-600 text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1">
+            🔥 Most Popular
+          </span>
+        )}
+        <h3 className="text-lg font-semibold mb-2">{variant.title}</h3>
+        <p className="text-2xl font-bold mb-4">
+          ${displayPrice}
+          <span className="text-base font-normal text-gray-500">
+            /{billingCycle}
+          </span>
+        </p>
+
+        <ul className="space-y-2 text-gray-700 flex-1">
+          {features.map((f) => (
+            <li key={f}>✓ {f}</li>
+          ))}
+        </ul>
+
+        {/* <AddToCartButton
+          lines={[{ merchandiseId: variant.id, quantity: 1 }]}
+          disabled={!variant.availableForSale}
+          analytics={{
+            products: [
+              {
+                productGid: product.id,
+                variantGid: variant.id,
+                name: product.title,
+                variantName: variant.title,
+                brand: product.vendor,
+                price: displayPrice,
+                quantity: 1,
+              },
+            ],
+            totalValue: parseFloat(displayPrice),
+          }}
+          buttonClassName={`py-3 mt-6 rounded-xl font-semibold w-full transition ${
+            isMostPopular
+              ? 'bg-orange-500 hover:bg-orange-600 text-white'
+              : 'border border-black text-black hover:bg-gray-100'
+          }`}
+          text="Add to Cart"
+        /> */}
+         <ReplacePlanAddToCartButton
+                    selectedVariant={variant}
+                    replaceLineId={replaceLineId}
+                    locationProperties={[]}
+                    buttonClassName="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600"
+                    text="Add to Cart"
+                  />
+      </div>
+    );
+  })}
+</div>
 
          {/* Sanity Modules Grid */}
                  {page?.modules && page.modules.length > 0 && (
@@ -249,41 +356,7 @@ export default function Plans() {
                      <ModuleGrid items={page.modules} />
                    </div>
                  )}
-        {/* Bottom Add to Cart */}
-        {selectedVariant && (
-          <div className="flex justify-between items-center mt-6 p-4 bg-white rounded-xl shadow-md">
-            <div>
-              <h5 className="font-bold">{selectedVariant.title}</h5>
-              <p className="text-red-600 font-semibold">
-                US${selectedVariant.price.amount}/{billingCycle}
-              </p>
-            </div>
-            {/* <AddToCartButton
-              lines={[
-                {merchandiseId: selectedVariant.id, quantity: 1},
-              ]}
-              disabled={!selectedVariant.availableForSale}
-              analytics={
-                productAnalytics
-                  ? {
-                      products: [productAnalytics],
-                      totalValue: parseFloat(productAnalytics.price),
-                    }
-                  : undefined
-              }
-              buttonClassName="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600"
-              text="Add to Cart"
-            /> */}
-             <ReplacePlanAddToCartButton
-              selectedVariant={selectedVariant}
-              replaceLineId={replaceLineId}
-              locationProperties={[]}
-              disabled={!selectedVariant || !selectedVariant.availableForSale}
-              buttonClassName="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600"
-              text={selectedVariant ? 'Add to Cart' : 'Select a Plan First'}
-            />
-          </div>
-        )}
+    
       </main>
     </div>
   );

@@ -23,6 +23,9 @@ export const pageType = defineType({
       validation: (Rule) => Rule.required(),
     }),
     
+  
+
+
     // 👇 Page Modules
         // 👇 Page Modules
     defineField({
@@ -51,6 +54,13 @@ export const pageType = defineType({
               {type: 'anytimemobile'}
         // add more modules if needed
       ],
+    }),
+
+       defineField({
+      name: 'seo',
+      title: 'SEO',
+      type: 'seo',
+      group: 'seo',
     }),
    
   ],

@@ -96,13 +96,16 @@ export const links: LinksFunction = () => {
   ];
 };
 export async function loader({request, context, params}: LoaderFunctionArgs) {
-  const language = params.lang || 'en';
+  let language = params.lang || 'en';
+  if(language !== 'en-es'){
+    language = 'en';
+  }
  
   // Validate supported languages
-  const supportedLanguages = ['en', 'es'];
-  if (!supportedLanguages.includes(language)) {
-    throw notFound();
-  }
+  // const supportedLanguages = ['en', 'es'];
+  // if (!supportedLanguages.includes(language)) {
+  //   throw notFound();
+  // }
 
   const {cart} = context;
   const customerAccessToken = await context.session.get('customerAccessToken');

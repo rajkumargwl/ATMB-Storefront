@@ -135,5 +135,8 @@ export const PRODUCT_MODULE_QUERY = groq`
       icon { "url": asset->url },
       features[]
     }
+  },
+   (_type == "productplans") => {
+    enablePlansSection
   }
 `;

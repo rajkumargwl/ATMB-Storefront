@@ -4,7 +4,7 @@ import { MapPin } from 'lucide-react'
 export const pdpvirtualMailboxLocation = defineType({
   name: 'pdpvirtualMailboxLocation',
   title: 'Virtual Mailbox Location',
-  type: 'document',
+  type: 'object',
   icon: MapPin,
 
   fields: [

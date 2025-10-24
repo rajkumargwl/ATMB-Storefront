@@ -112,7 +112,7 @@ export default function Homedata({ data }: Props) {
               modules={[FreeMode]}
               freeMode={true}
               slidesPerView={"auto"}
-              spaceBetween={16}
+              spaceBetween={32}
               className="!overflow-visible"
             >
               {data.logos?.map((item, index) => (
@@ -128,7 +128,7 @@ export default function Homedata({ data }: Props) {
           </div>
 
           {/* Desktop (no swipe, same design) */}
-          <div className="hidden lg:flex flex-wrap justify-start items-center gap-[8px] lg:gap-[9px] xl:gap-[57px]">
+          <div className="hidden lg:flex flex-wrap justify-start items-center gap-[8px] lg:gap-[40px] xl:gap-[57px]">
             {data.logos?.map((item, index) => (
               <img
                 key={index}

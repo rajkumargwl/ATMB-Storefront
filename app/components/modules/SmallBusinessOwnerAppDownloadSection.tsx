@@ -58,7 +58,7 @@ const SmallBusinessOwnerAppDownloadSection: React.FC<SmallBusinessOwnerAppDownlo
               >
                 <img
                   src={btn.icon?.url}
-                  alt={`Download button ${index + 1}`}
+                  alt={`Mail Center Operator Apps : Download from Store`}
                   className="w-full object-cover"
                 />
               </a>

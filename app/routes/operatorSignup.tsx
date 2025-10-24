@@ -16,7 +16,7 @@ import { fetchGids, notFound, validateLocale } from '~/lib/utils';
 import { OPERATOR_SIGNUP_PAGE } from '~/queries/sanity/fragments/pages/operatorsignupPage';
 
 const seo: SeoHandleFunction<typeof loader> = ({ data }) => ({
-  title: data?.page?.seo?.title || 'Operator Signup - Anytime Mailbox',
+  title: data?.page?.seo?.title || 'Operator Signup | Anytime Mailbox',
   description:
     data?.page?.seo?.description ||
     'Become an Anytime Mailbox operator and grow your business with virtual mailbox services.',

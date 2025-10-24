@@ -232,12 +232,10 @@ export async function action({request, context}: ActionFunctionArgs) {
 export async function loader({ context }: LoaderFunctionArgs) {
   const { storefront, cart } = context;
 
-  //Get cart product handles
   const cartData = await cart.get();
   const cartHandles =
     cartData?.lines?.edges?.map((line) => line.node.merchandise.product.handle) || [];
 
-  // Fetch essential standalone products
   const [virtualMailbox, virtualPhone, BusinessAcc] = await Promise.all([
     storefront.query<{ product: Product }>(PRODUCT_QUERY, { variables: { handle: 'virtual-mailbox', selectedOptions: [] } }),
     storefront.query<{ product: Product }>(PRODUCT_QUERY, { variables: { handle: 'virtual-phone-number', selectedOptions: [] } }),
@@ -246,7 +244,6 @@ export async function loader({ context }: LoaderFunctionArgs) {
 
   const essentialsProducts = [virtualMailbox.product, virtualPhone.product, BusinessAcc.product];
 
-  // Fetch all bundle products
   const allBundles = await storefront.query(BUNDLE_PRODUCTS_QUERY, {
     variables: { country: "US", language: "EN" },
   });
@@ -256,43 +253,51 @@ export async function loader({ context }: LoaderFunctionArgs) {
   const matchingBundles: any[] = [];
 
   for (const bundle of bundles) {
-    //Skip bundle if the bundle itself is already in cart
     if (cartHandles.includes(bundle.handle)) continue;
 
-    // Collect all associated items from all variants
     const associatedItemsMap = new Map<string, any>();
 
-    bundle.variants.edges.forEach((variantEdge) => {
+    // Collect all associated items for this bundle
+    for (const variantEdge of bundle.variants.edges) {
       const bundleItemsField = variantEdge.node.metafields?.find(
         (mf) => mf?.key === "bundle_items"
       );
-      if (!bundleItemsField?.references?.edges) return;
+      const refs = bundleItemsField?.references?.edges || [];
 
-      bundleItemsField.references.edges.forEach((ref) => {
-        const handle = ref.node.product?.handle;
-        if (handle && !associatedItemsMap.has(handle)) {
+      for (const ref of refs) {
+        const product = ref.node.product;
+        const variant = ref.node;
+        if (!product) continue;
+
+        const handle = product.handle || product.id;
+
+        // Deduplicate globally and per bundle
+        if (!associatedItemsMap.has(handle) && !displayedHandles.has(handle)) {
+          const featuresMf = variant.metafields?.find((mf: any) => mf.key === "features");
+          let features: string[] = [];
+          if (featuresMf?.value) {
+            try { features = JSON.parse(featuresMf.value); } catch { features = [featuresMf.value]; }
+          }
+
           associatedItemsMap.set(handle, {
-            productId: ref.node.product?.id,
+            productId: product.id,
             productHandle: handle,
-            productTitle: ref.node.product?.title,
-            variantId: ref.node.id,
-            variantTitle: ref.node.title,
-            price: ref.node.priceV2?.amount ?? null,
-            currency: ref.node.priceV2?.currencyCode ?? "USD",
-            inCart: cartHandles.includes(handle), 
+            productTitle: product.title,
+            variantId: variant.id,
+            variantTitle: variant.title,
+            price: variant.priceV2?.amount ?? null,
+            currency: variant.priceV2?.currencyCode ?? "USD",
+            inCart: cartHandles.includes(handle),
+            features,
           });
+
+          displayedHandles.add(handle); // mark as displayed globally
         }
-      });
-    });
+      }
+    }
 
     const associatedItems = Array.from(associatedItemsMap.values());
     if (associatedItems.length === 0) continue;
-
-    // Avoid showing duplicate bundles
-    const hasDisplayedItem = associatedItems.some(item => displayedHandles.has(item.productHandle));
-    if (hasDisplayedItem) continue;
-
-    associatedItems.forEach(item => displayedHandles.add(item.productHandle));
 
     const monthlyVariant = bundle.variants.edges.find(v => v.node.title.toLowerCase() === "monthly")?.node;
     const yearlyVariant = bundle.variants.edges.find(v => v.node.title.toLowerCase() === "yearly")?.node;
@@ -328,14 +333,14 @@ export async function loader({ context }: LoaderFunctionArgs) {
     });
   }
 
- // console.log("Matching Bundles:", matchingBundles);
-
   return defer({
     bundleProducts: matchingBundles,
     cart: cartData,
     essentialsProducts,
   });
 }
+
+
 
 export default function Cart() {
   const rootData = useRootLoaderData();

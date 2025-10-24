@@ -5,9 +5,16 @@ import {notFound} from '~/lib/utils';
 import {WPPost} from '../../shopify-hydrogen/schemaTypes/wpPost';
 import {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
+import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
 const FIRST_PAGE_SIZE = 11;
 const NEXT_PAGE_SIZE = 12;
- 
+ const seo: SeoHandleFunction = ({data}) => ({
+  title: data?.page?.seo?.title || 'Virtual Mailbox Blog: Tips, News & Guides',
+  description:
+    data?.page?.seo?.description ||
+    'Explore virtual mailbox tips, guides, and news to streamline mail management and boost productivity',
+});
+export const handle = { seo };
 export async function loader({context, request}: LoaderFunctionArgs) {
   const url = new URL(request.url);
   const offset = Number(url.searchParams.get('offset') || 0);

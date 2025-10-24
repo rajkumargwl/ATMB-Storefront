@@ -2,7 +2,7 @@ import {Listbox} from '@headlessui/react';
 import {useFetcher, useLocation, useMatches} from '@remix-run/react';
 import {CartForm} from '@shopify/hydrogen';
 import clsx from 'clsx';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import invariant from 'tiny-invariant';
 
 import {ChevronDownIcon} from '~/components/icons/ChevronDown';
@@ -14,12 +14,14 @@ import {useRootLoaderData} from '~/root';
 
 type Props = {
   align?: 'center' | 'left' | 'right';
+  onChange?: () => void;
 };
 
-export function CountrySelector({align = 'center'}: Props) {
+export function CountrySelector({align = 'center', onChange}: Props) {
   const fetcher = useFetcher();
 
   const [listboxOpen, setListboxOpen] = useState(false);
+  const [pendingLocale, setPendingLocale] = useState<Locale | null>(null);
 
   const fetcherLocaleLabel = fetcher?.formData?.get('label');
 
@@ -37,32 +39,42 @@ export function CountrySelector({align = 'center'}: Props) {
     : '';
 
   const setLocale = (newLocale: Locale) => {
-    invariant(newLocale, 'newLocale is required');
-    const newLocalePrefix = `${newLocale?.language}-${newLocale?.country}`;
-
-    if (newLocalePrefix !== selectedLocalePrefix) {
-      const countryUrlPath = getCountryUrlPath({
-        countryLocale: newLocale,
-        defaultLocalePrefix,
-        pathWithoutLocale,
-      });
-
-      fetcher.submit(
-        {
-          cartFormInput: JSON.stringify({
-            action: CartForm.ACTIONS.BuyerIdentityUpdate,
-            inputs: {
-              buyerIdentity: {
-                countryCode: newLocale.country,
+      const newLocalePrefix = `${newLocale?.language}-${newLocale?.country}`;
+      if (newLocalePrefix !== selectedLocalePrefix) {
+        const countryUrlPath = getCountryUrlPath({
+          countryLocale: newLocale,
+          defaultLocalePrefix,
+          pathWithoutLocale,
+        });
+  
+        setPendingLocale(newLocale); // track pending locale change
+  
+        fetcher.submit(
+          {
+            cartFormInput: JSON.stringify({
+              action: CartForm.ACTIONS.BuyerIdentityUpdate,
+              inputs: {
+                buyerIdentity: {
+                  countryCode: newLocale.country,
+                },
               },
-            },
-          }),
-          redirectTo: countryUrlPath,
-        },
-        {method: 'post', action: '/cart?index'},
-      );
-    }
-  };
+            }),
+            redirectTo: countryUrlPath,
+          },
+          { method: 'post', action: '/cart?index' },
+        );
+      }
+    };
+  
+    // ✅ Close dropdown after fetcher is done
+    useEffect(() => {
+      if (pendingLocale && fetcher.state === 'idle') {
+        setPendingLocale(null);
+        if (onChange) onChange();
+      }
+    }, [fetcher.state, pendingLocale, onChange]);
+  
+    const isLoading = fetcher.state !== 'idle';
 
   return (
     <>
@@ -73,21 +85,46 @@ export function CountrySelector({align = 'center'}: Props) {
             <div className="relative inline-flex">
               <Listbox.Button
                 className={clsx(
-                  'flex h-[2.4rem] items-center rounded-sm bg-darkGray bg-opacity-0 px-3 py-2 text-sm font-bold duration-150',
+                  'flex h-[2rem] items-center rounded-sm  text-[16px] font-bold duration-150', //bg-darkGray bg-opacity-0
                   'hover:bg-opacity-10',
                 )}
               >
                 <span className="mr-2">
                   {fetcherLocaleLabel || selectedLocale.label}
                 </span>
-                <ChevronDownIcon className={clsx(open && 'rotate-180')} />
+                
+                {/* ✅ Loader Spinner */}
+                {isLoading ? (
+                  <svg
+                    className="animate-spin h-4 w-4 text-gray-500 ml-1"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    ></path>
+                  </svg>
+                ) : (
+                  <ChevronDownIcon className={clsx(open && 'rotate-180')} />
+                )}
               </Listbox.Button>
 
               <Listbox.Options
                 className={clsx(
-                  'absolute top-full z-10 mt-3 min-w-[150px] overflow-hidden rounded shadow',
+                  'absolute top-full z-10 mt-0 min-w-[150px] overflow-hidden rounded shadow',
                   align === 'center' && 'left-1/2 -translate-x-1/2',
-                  align === 'left' && 'left-0',
+                  align === 'left' && 'left-[-9px]',
                   align === 'right' && 'right-0',
                 )}
               >

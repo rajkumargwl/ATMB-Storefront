@@ -5,6 +5,17 @@ import { WPPost } from "../../shopify-hydrogen/schemaTypes/wpPost";
 import { toHTML } from '@portabletext/to-html';
 import type { PortableTextBlock } from '@portabletext/types';
 import { Link } from 'react-router-dom';
+import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
+const seo: SeoHandleFunction = ({ data }) => ({
+  title: data?.post?.title 
+    ? `${data.post.title} | Anytime Mailbox`
+    : 'How Digital Nomads Keep One U.S. Address for Taxes & Banking | Anytime Mailbox',
+  description: data?.post?.content 
+    ? getPlainText(data.post.content).slice(0, 160) // optional: first 160 chars as description
+    : 'Find out how digital nomads can keep one U.S. address for taxes and banking...'
+});
+
+export const handle = { seo };
 export async function loader({ context, params }: LoaderFunctionArgs) {
   const { slug } = params;
   if (!slug) throw notFound();

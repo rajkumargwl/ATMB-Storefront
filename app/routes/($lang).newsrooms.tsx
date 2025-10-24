@@ -3,7 +3,16 @@ import { useLoaderData, Link } from "@remix-run/react";
 import { Image } from "@shopify/hydrogen";
 import { useState } from "react";
 import { PortableText } from "@portabletext/react";
- 
+import {usePrefixPathWithLocale} from '~/lib/utils';
+
+  import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
+  const seo: SeoHandleFunction = ({data}) => ({
+   title: data?.page?.seo?.title || 'Newsroom | Anytime Mailbox',
+   description:
+     data?.page?.seo?.description ||
+     'Our Newsroom is the source for news about Anytime Mailbox. Read press releases, get updates, watch video and download images',
+ });
+ export const handle = { seo };
 export async function loader({ context }: LoaderFunctionArgs) {
   const newsItems = await context.sanity.query({
     query: `*[_type == "news"] | order(date desc) {
@@ -116,7 +125,7 @@ export default function Newsroom() {
                   
                   {cards.map((card, idx) => (
                     <Link
-                            to={card.externalLink}
+                            to={usePrefixPathWithLocale(card.externalLink)}
                             className="flex md:min-h-[358px]"
                           >
                     <article
@@ -175,7 +184,7 @@ export default function Newsroom() {
                         )}
  
                         <Link
-                          to={card.externalLink}
+                          to={usePrefixPathWithLocale(card.externalLink)}
                           className="hidden inline-block text-blue-600 font-medium hover:text-blue-700 transition-colors"
                         >
                           Read More →
