@@ -39,12 +39,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
  
  
   //if (!page) throw notFound();
-  
- 
- 
- 
- 
- 
+
   const handle = params.handle ?? 'virtual-phone-number';
     const [page] = await Promise.all([
       context.sanity.query<SanityProductPage>({
