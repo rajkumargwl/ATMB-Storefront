@@ -534,8 +534,8 @@ case 'solutionMailboxBenefitFaqModule':
     case 'homeSection4':
       return <Locations data={module} />;
     
-    // case 'plans':
-    //   return <Plans data={module} bundles={bundles}/>;
+    case 'plans':
+      return <Plans data={module} bundles={bundles}/>;
     
     //  case 'bundles':
     //  return <Bundles data={module} />;
