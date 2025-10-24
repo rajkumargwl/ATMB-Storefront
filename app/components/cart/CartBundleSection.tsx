@@ -1,4 +1,4 @@
-import {Money} from '@shopify/hydrogen';
+import {Money,CartForm} from '@shopify/hydrogen';
 import {Link} from '~/components/Link';
 
 export default function CartBundleSection({bundleProducts}: {bundleProducts: any[]}) {
@@ -30,6 +30,9 @@ export default function CartBundleSection({bundleProducts}: {bundleProducts: any
                     100,
                 )
               : null;
+
+        // Select correct variant ID (monthly or yearly) 
+        const variantId = bundle.billing === 'monthly' ? bundle.monthlyVariantId : bundle.yearlyVariantId;
 
           return (
             <div
@@ -74,7 +77,7 @@ export default function CartBundleSection({bundleProducts}: {bundleProducts: any
                           </span>
                         )}
                       </div>
-                      {/* Optional: Add product features below title */}
+                     
                       {item.features && (
                         <ul className="mt-1 text-[13px] text-gray-600 space-y-1">
                           {item.features.map((f: string, fIdx: number) => (
@@ -95,14 +98,23 @@ export default function CartBundleSection({bundleProducts}: {bundleProducts: any
                   ))}
                 </ul>
               )}
-
-              {/* Upgrade Button */}
-              <Link
-                to={`/checkout/${bundle.monthlyVariantId?.split('/').pop()}`}
-                className="mt-auto text-center bg-PrimaryBlack text-white py-2 rounded-full font-Roboto font-medium"
-              >
-                Upgrade to Bundle
-              </Link>
+              {/*Add to Cart Button */}
+                  <CartForm
+              action={CartForm.ACTIONS.LinesAdd}
+              inputs={{
+                lines: [{ merchandiseId: variantId, quantity: 1 }],
+              }}
+            >
+              {(props: { state: string }) => (
+                <button
+                  type="submit"
+                  disabled={props.state !== 'idle'}
+                  className="flex items-center justify-center gap-[12px] w-full md:w-[202px] h-[44px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-PrimaryBlack border border-[#091019] px-4 py-[12px]"
+                  >
+                  {props.state !== 'idle' ? 'Adding...' : 'Add to Cart'}
+                </button>
+              )}
+            </CartForm>
             </div>
           );
         })}
