@@ -1,5 +1,5 @@
 import { loadStripe } from "@stripe/stripe-js";
-import {Await, useLoaderData} from '@remix-run/react';
+import {Await, useLoaderData, useNavigate} from '@remix-run/react';
 import {Suspense} from 'react';
 import {useRootLoaderData} from '~/root'; 
 import {
@@ -91,6 +91,7 @@ export default function CheckoutPage() {
   const rootData = useRootLoaderData();
   const { bundleProducts, essentialsProducts, cart, BusinessAcc, LiveReceptionist} = useLoaderData<typeof loader>();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
+  const navigate = useNavigate();
 
   const LiveReceptionistProductAnalytics: ShopifyAnalyticsProduct | null = selectedVariant
       ? {
@@ -198,14 +199,33 @@ export default function CheckoutPage() {
             </li>
           </ul>
 
-          <button className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold transition">
+          {/* <button className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold transition">
             Add Business Accelerator
-          </button>
+          </button> */}
+          <AddToCartWithDraftOrderButton
+              lines={[
+                {merchandiseId: BusinessAcc?.product?.variants?.nodes[0]?.id, quantity: 1},
+              ]}
+              customerId={rootData?.customer?.id}
+              disabled={!BusinessAcc?.product?.variants?.nodes[0]?.availableForSale}
+              analytics={
+                BusinessAccProductAnalytics
+                  ? {
+                      products: [BusinessAccProductAnalytics],
+                      totalValue: parseFloat(BusinessAccProductAnalytics.price),
+                    }
+                  : undefined
+              }
+              buttonClassName="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold transition"
+              text="Add Business Accelerator"
+            /> 
         </div>
       </div>
 
       {/* No Thanks Button */}
-      <button className="mt-8 border border-gray-400 text-gray-700 hover:bg-gray-100 py-2 px-6 rounded-full transition">
+      <button className="mt-8 border border-gray-400 text-gray-700 hover:bg-gray-100 py-2 px-6 rounded-full transition" onClick={() => {
+        navigate('/payment-success');
+      }}>
         No Thanks, Continue
       </button>
     </div>
