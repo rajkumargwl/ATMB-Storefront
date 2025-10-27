@@ -419,6 +419,68 @@ export const PRODUCT_METAFIELDS_QUERY = `#graphql
   }
 `;
 
+// export const BUNDLE_PRODUCTS_QUERY = `#graphql
+//   query bundleProducts(
+//     $country: CountryCode
+//     $language: LanguageCode
+//   ) @inContext(country: $country, language: $language) {
+//     products(first: 50) {
+//       nodes {
+//         id
+//         title
+//         handle
+//         description
+//         featuredImage { url }
+
+//         # Product-level metafield for bundle_feature
+//         metafields(identifiers: [{ namespace: "custom", key: "bundle_feature" }]) {
+//           key
+//           type
+//           value
+//         }
+
+//         variants(first: 50) {
+//           edges {
+//             node {
+//               id
+//               title
+//               priceV2 { amount currencyCode }
+//               compareAtPriceV2 { amount currencyCode } 
+              
+//               # Variant-level metafield for bundle_items
+//               metafields(identifiers: [{ namespace: "custom", key: "bundle_items" }]) {
+//                 key
+//                 type
+//                 value
+//                 references(first: 20) {
+//                   edges {
+//                     node {
+//                       __typename
+//                       ... on ProductVariant {
+//                         id
+//                         title
+//                         sku
+//                         priceV2 { amount currencyCode }
+//                         selectedOptions { name value }
+//                         product {
+//                           id
+//                           title
+//                           handle
+//                           featuredImage { url }
+//                         }
+//                       }
+//                     }
+//                   }
+//                 }
+//               }
+//             }
+//           }
+//         }
+//       }
+//     }
+//   }
+// `;
+
 export const BUNDLE_PRODUCTS_QUERY = `#graphql
   query bundleProducts(
     $country: CountryCode
@@ -462,6 +524,12 @@ export const BUNDLE_PRODUCTS_QUERY = `#graphql
                         sku
                         priceV2 { amount currencyCode }
                         selectedOptions { name value }
+                        # Include the features metafield here
+                        metafields(identifiers: [{ namespace: "custom", key: "features" }]) {
+                          key
+                          type
+                          value
+                        }
                         product {
                           id
                           title
@@ -480,7 +548,6 @@ export const BUNDLE_PRODUCTS_QUERY = `#graphql
     }
   }
 `;
-
 
 
 export const VARIANT_WITH_PRODUCT_QUERY = `#graphql
