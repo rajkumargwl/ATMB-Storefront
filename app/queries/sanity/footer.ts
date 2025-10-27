@@ -1,4 +1,4 @@
-export const FOOTER_QUERY = `*[_type == "footer"] | order(_updatedAt desc)[0] {
+export const FOOTER_QUERY = `*[_type == "footer" && (language == $language || !defined(language))] | order(_updatedAt desc)[0] {
   title,
   logo {
     asset->{
