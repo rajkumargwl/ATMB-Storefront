@@ -554,6 +554,79 @@ body.no-scroll {
 .no-office-sec p strong {
   font-weight: 500;
 }
+.rental-text h1,
+.rental-text h2 {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 31.2px;
+    color: #091019;
+    letter-spacing: -0.36px;
+    font-family: Roboto, "sans-serif";
+    margin-bottom: 24px;
+}
+.rental-text h3 {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 27px;
+    letter-spacing: 0px;
+    color: #4D4E4F;
+    font-family: Roboto, "sans-serif";
+}
+.rental-text h3 strong {
+    font-weight: 400;
+}
+.rental-text p {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 27px;
+    letter-spacing: 0px;
+    color: #091019;
+    font-family: Roboto, "sans-serif";
+    margin-bottom: 24px;
+}
+.rental-text a {
+    text-decoration-line: underline;
+    text-decoration-style: solid;
+    text-decoration-skip-ink: auto;
+    text-decoration-thickness: auto;
+    text-underline-offset: auto;
+    text-underline-position: from-font;
+}
+.rental-text strong {
+    font-weight: 600;
+}
+.rental-text ol,
+.rental-text ul {
+    margin-bottom: 24px;
+    padding-left: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+.rental-text ol ol,
+.rental-text ul ul {
+  margin-bottom: 0px;
+}
+.rental-text ul li {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 27px;
+    letter-spacing: 0px;
+    color: #091019;
+    font-family: "Roboto", "sans-serif";
+    list-style-type: disc;
+    list-style-position: outside;
+}
+.rental-text ol li {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 27px;
+    letter-spacing: 0px;
+    color: #091019;
+    font-family: "Roboto", "sans-serif";
+    list-style-type: decimal;
+    list-style-position: outside;
+}
  
  
 /* responsive css */
@@ -665,5 +738,20 @@ body.no-scroll {
 .no-office-sec p {
     font-size: 16px;
     line-height: 24px;
+}
+.rental-text h1, .rental-text h2 {
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 27px;
+}
+.rental-text p,
+.rental-text ol li,
+.rental-text ul li,
+.rental-text h3 {
+    font-size: 16px;
+    line-height: 24px;
+}
+.rental-text ol, .rental-text ul {
+    padding-left: 18px;
 }
 }

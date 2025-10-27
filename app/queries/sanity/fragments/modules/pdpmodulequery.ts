@@ -1,9 +1,9 @@
 import groq from "groq";
-
+ 
 export const PRODUCT_MODULE_QUERY = groq`
   _type,
   _key,
-
+ 
   // 🔹 PDP Virtual Mailbox Location
   (_type == "pdpvirtualMailboxLocation") => {
     locationTitle,
@@ -22,18 +22,35 @@ export const PRODUCT_MODULE_QUERY = groq`
       address
     }
   },
-
-  // 🔹 PDP Mail Center Highlights Section
-  (_type == "pdpmailCenterHighlightsSection") => {
-    companyName,
-    isVerified,
-    icon { "url": asset->url },
-    designation,
-    partnerLogos[] { "url": asset->url },
-    highlightsTitle,
-    highlights[]
-  },
+// 🔹 PDP Mail Center Highlights Section
+(_type == "pdpmailCenterHighlightsSection") => {
+  companyName,
+  isVerified,
+  icon { "url": asset->url },
+  designation,
+  partnerLogos[] { "url": asset->url },
+  highlightsTitle,
+  highlights[] {
+    value,
+    class
+  }
+},
 (_type == "pdpanytimePhoneSection") => {
+    title,
+    description,
+    features[] {
+      text,
+      icon { "url": asset->url }
+    },
+    testimonial {
+      quote,
+      authorName,
+      authorTitle,
+      authorImage { "url": asset->url }
+    },
+    mainImage { "url": asset->url }
+  },
+  (_type == "pdpanytimePhonebannerSection") => {
     title,
     description,
     features[] {
@@ -64,7 +81,7 @@ export const PRODUCT_MODULE_QUERY = groq`
       }
     }
   },
-
+ 
   // 🔹 Testimonials
   (_type == "testimonial") => {
     headline,
@@ -84,7 +101,7 @@ export const PRODUCT_MODULE_QUERY = groq`
       authorImage { "url": asset->url }
     }
   },
-
+ 
   // 🔹 PDP - Why Choose Anytime Phone Section
   (_type == "pdpwhyChooseAnytimePhoneSection") => {
     title,
@@ -96,7 +113,7 @@ export const PRODUCT_MODULE_QUERY = groq`
     },
     mainImage { "url": asset->url }
   },
-
+ 
   // 🔹 Why Join Section
   (_type == "whyJoinSection") => {
     heading,
@@ -104,7 +121,7 @@ export const PRODUCT_MODULE_QUERY = groq`
       text
     }
   },
-
+ 
   // 🔹 Business Accelerator Section (How It Works)
   (_type == "buisnesshowitwork") => {
     title,
@@ -115,7 +132,7 @@ export const PRODUCT_MODULE_QUERY = groq`
       icon { "url": asset->url }
     }
   },
-
+ 
   // 🔹 PDP Feature Grid Section
   (_type == "pdpFeatureGridSection") => {
     heading,
@@ -125,7 +142,7 @@ export const PRODUCT_MODULE_QUERY = groq`
       icon { "url": asset->url }
     }
   },
-
+ 
   // 🔹 PDP Common Features Section
   (_type == "pdpCommonFeaturesSection") => {
     heading,

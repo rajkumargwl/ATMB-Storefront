@@ -81,9 +81,8 @@ export const productType = defineType({
            {type: 'pdpCommonFeaturesSection'},
              {type: 'pdpanytimePhoneSection'},
              {type: 'productplans'},
-          
-         
-
+            {type: 'pdpanytimePhonebannerSection'},
+        
       ],
     }),
   ],

@@ -158,6 +158,8 @@ import { pdpCommonFeaturesSection } from './objects/module/pdpCommonFeaturesSect
 import { pdpwhyChooseAnytimePhoneSection } from './objects/module/pdpwhyChooseAnytimePhoneSection'
 import { pdpFeatureGridSection } from './objects/module/pdpFeatureGridSection'
 import  { productplans }  from './objects/module/productplans'
+
+import { pdpanytimePhonebannerSection } from './objects/module/pdpanytimebanner'
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
 
 const objects = [
@@ -313,7 +315,8 @@ pdpwhyChooseAnytimePhoneSection,
 productplans,
 referralStep,
 renterReferralBannerModule,
-inviteAFriendSection
+inviteAFriendSection,
+pdpanytimePhonebannerSection
 ]
 
 import {portableTextType} from './portableText/portableTextType'

@@ -37,9 +37,7 @@ import ContactUsSection from '~/components/modules/ContactUsSection';
 import AffiliateProgramSection from '~/components/modules/AffiliateProgramSection';
 import WhyJoinSection from '~/components/modules/WhyJoinSection';
 import StepsSection from '~/components/modules/StepsSection';
-import { RenterReferralHero } from '~/components/modules/renter-referralhero';
 import { RenterReferralWork } from '~/components/modules/renter-referralwork';
-import { RenterReferralNoCatch } from '~/components/modules/renter-referralno-catch';
 import { RenterReferralEditor } from '~/components/modules/renter-referraleditor';
 import SolutionHero from '~/components/modules/SolutionHero';
 import SolutionVirtualMailbox from '~/components/modules/SolutionVirtualMailbox';
@@ -65,6 +63,7 @@ import BusinessGrowth from '~/components/modules/BusinessGrowth';
 import BusinessSupport from '~/components/modules/BusinessSupport';
 import BusinessBanner from '~/components/modules/BusinessBanner';
 import WebinarsTopicsSection from '~/components/modules/WebinarsTopicsSection';
+import PlansWithoutBundles from '~/components/modules/PlansWithoutBundles';
 
 import SmartBusiness from '~/components/modules/SmartBusiness';
 
@@ -82,12 +81,6 @@ import { OperatorYourCompetitors } from './operatoryourcompetitors';
 
 import NoOfficeSection from '~/components/modules/NoOfficeSection';
 import  AnytimeFeaturesModule from '~/components/modules/AnytimeFeaturesModule';
-import  PDPIntroSection from '~/components/modules/PDPIntroSection';
-import PDPDetailedFeatureSection from '~/components/modules/PDPDetailedFeatureSection';
-import PDPHighlightsSection from '~/components/modules/PDPHighlightsSection';
-import PDPWhyChooseSection from '~/components/modules/PDPWhyChooseSection';
-import PDPHowItWorks from '~/components/modules/PDPHowItWorksSection';
-import PDPTestimonials from '~/components/modules/PDPTestimonialsSection';
 // import PDPCommonFeaturesSection from '~/components/modules/PDPCommonFeaturesSection';
 
  import DownloadMailboxRenterApps from './DownloadMailboxRenterApps';
@@ -120,10 +113,12 @@ type Props = {
   searchQuery?: string | null;
   bundles?: any[];
   pageType?: 'operator' | 'default' ; // 争 ADDED pageType PROP
+  highlights?: any[];
 };
 
-export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery, bundles, pageType = 'default'}: Props) { // 争 Set default pageType
+export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery, bundles, pageType = 'default',highlights,productData}: Props) { // 争 Set default pageType
  
+ console.log("highlights in module.tsx", highlights);
   // Helper boolean for conditional rendering
   const isOperatorPage = pageType === 'operator';
 
@@ -146,20 +141,22 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
  case 'pdpdetailedFeaturesSection':
   return <PdpDetailedFeaturesSection {...module} />;
  case 'pdpmailCenterHighlightsSection':
-  return <PdpMailCenterHighlightsSection {...module} />;
+  return <PdpMailCenterHighlightsSection {...module} highlights={highlights} />;
    case 'pdpvirtualMailboxLocation':
   return <VirtualMailboxLocationCard {...module} />;
 
    
    case 'pdpFeatureGridSection':
   return <PdpFeatureGridSection data={module} />;
-   case 'pdpanytimePhoneSection':
+   case 'pdpanytimePhonebannerSection':
   return <PdpAnytimePhoneSection {...module} />;
 
     case 'pdpCommonFeaturesSection':
   return <PdpCommonFeaturesSection data={module} />;
    case 'pdpwhyChooseAnytimePhoneSection':
   return <PdpWhyChooseAnytimePhone data={module} />;
+ case 'productplans':
+  return <PlansWithoutBundles product={productData} />;
 
 
 
@@ -364,6 +361,7 @@ case 'smartBusinessSection':
 
     case 'renterReferralBannerModule':
   return <RefferalBanner data={module} />
+
     
     case 'pdpPageModule':
       return (
