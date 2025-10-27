@@ -98,14 +98,15 @@ type ModuleGridProps = {
   searchQuery: string;
   homeSearchResults: any[];
   bundles?: any[]; // 🔹 add this
+  highlights?: any[]; 
   productData?:any[];
   
 };
 
 //export default function ModuleGrid({items, homeSearchResults, searchQuery}: Props) {
-  export default function ModuleGrid({ items, homeSearchResults, searchQuery, bundles ,productData,  }: ModuleGridProps) {
 
-    // console.log("bundles in modulegrid", bundles);
+  export default function ModuleGrid({ items, homeSearchResults, searchQuery, bundles ,highlights,productData}: ModuleGridProps) {
+ 
   return (
     <>
        {items.map((item, index) => {
@@ -119,6 +120,7 @@ type ModuleGridProps = {
            bundles={bundles} 
            productData={productData}
           
+           highlights={highlights}
          />
          );
        })}
