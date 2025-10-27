@@ -63,6 +63,7 @@ import BusinessGrowth from '~/components/modules/BusinessGrowth';
 import BusinessSupport from '~/components/modules/BusinessSupport';
 import BusinessBanner from '~/components/modules/BusinessBanner';
 import WebinarsTopicsSection from '~/components/modules/WebinarsTopicsSection';
+import PlansWithoutBundles from '~/components/modules/PlansWithoutBundles';
 
 import SmartBusiness from '~/components/modules/SmartBusiness';
 
@@ -114,7 +115,7 @@ type Props = {
   pageType?: 'operator' | 'default' ; // 争 ADDED pageType PROP
 };
 
-export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery, bundles, pageType = 'default'}: Props) { // 争 Set default pageType
+export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery, bundles, pageType = 'default',productData}: Props) { // 争 Set default pageType
  
   // Helper boolean for conditional rendering
   const isOperatorPage = pageType === 'operator';
@@ -152,6 +153,8 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
   return <PdpCommonFeaturesSection data={module} />;
    case 'pdpwhyChooseAnytimePhoneSection':
   return <PdpWhyChooseAnytimePhone data={module} />;
+ case 'productplans':
+  return <PlansWithoutBundles product={productData} />;
 
 
 

@@ -48,6 +48,21 @@ export const PRODUCT_MODULE_QUERY = groq`
     },
     mainImage { "url": asset->url }
   },
+  (_type == "pdpanytimePhonebannerSection") => {
+    title,
+    description,
+    features[] {
+      text,
+      icon { "url": asset->url }
+    },
+    testimonial {
+      quote,
+      authorName,
+      authorTitle,
+      authorImage { "url": asset->url }
+    },
+    mainImage { "url": asset->url }
+  },
   // 🔹 PDP Detailed Features Section
   (_type == "pdpdetailedFeaturesSection") => {
     title,
