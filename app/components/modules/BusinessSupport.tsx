@@ -91,7 +91,7 @@ const BusinessSupport: React.FC<{ data: BusinessSupportProps }> = ({ data }) => 
            <div className="absolute z-[2]  bottom-[40px] md:bottom-[27px] right-[-65px] md:right-[-33px] left-[-5px] md:left-[-30px]">
               <img src={RealLifeImg} alt="real_life-img-bg" className="w-[421px] h-[271px]" />
           </div>
-          <div className="absolute z-[5] w-full w-[385px] h-[75px]  bottom-[-2px] left-[-20px] bg-[linear-gradient(187deg,rgba(9,16,25,0)_6.26%,#091019_95.69%)]">
+          <div className="opacity-25 absolute z-[5] w-full w-[385px] h-[75px]  bottom-[-2px] left-[-20px] bg-[linear-gradient(187deg,rgba(9,16,25,0)_6.26%,#091019_95.69%)]">
              
           </div>
         </div>
