@@ -124,7 +124,6 @@ type Props = {
 
 export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery, bundles, pageType = 'default'}: Props) { // 争 Set default pageType
  
-
   // Helper boolean for conditional rendering
   const isOperatorPage = pageType === 'operator';
 
@@ -534,8 +533,8 @@ case 'solutionMailboxBenefitFaqModule':
     case 'homeSection4':
       return <Locations data={module} />;
     
-    // case 'plans':
-    //   return <Plans data={module} bundles={bundles}/>;
+    case 'plans':
+      return <Plans data={module} bundles={bundles}/>;
     
     //  case 'bundles':
     //  return <Bundles data={module} />;

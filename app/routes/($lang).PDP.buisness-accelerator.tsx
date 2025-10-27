@@ -112,7 +112,7 @@ export default function Plans() {
           </div>
  
         {/* Product Title & Description */}
-        <div className="px-5 pt-[24px] md:pt-[32px] hidden">
+        {/* <div className="px-5 pt-[24px] md:pt-[32px] hidden">
         <h2 className="text-2xl font-bold">{product.title}</h2>
         <p className="text-gray-600 mt-2">{product.description}</p>
          <div className="mt-6">
@@ -127,8 +127,7 @@ export default function Plans() {
               text="Add to Cart"
             />
           </div>
-        {/* Billing Toggle */}
-        <div className="flex justify-end items-center gap-3 my-6">
+        {/* <div className="flex justify-end items-center gap-3 my-6">
           <span className="font-medium">Monthly</span>
           <button
             onClick={() =>
@@ -146,24 +145,110 @@ export default function Plans() {
             />
           </button>
        
-        </div>
-        </div>
+        </div> 
+        </div> */}
  
         {/* Plan Card */}
-        <div className="rounded-2xl border p-6 shadow-sm bg-white hidden">
+        {/* <div className="rounded-2xl border p-6 shadow-sm bg-white hidden">
           <h3 className="text-xl font-bold">{product.title}</h3>
           <p className="text-2xl font-semibold mt-2">
             US${displayPrice}
             <span className="text-base font-normal">/{billingCycle}</span>
           </p>
-          </div>
+          </div> */}
+          {/* Billing Toggle */}
+          <div className="w-full md:w-[40%]">
+<div className="flex justify-end items-center gap-3 my-6">
+  <span className="font-medium text-[#4B5563]">Monthly</span>
+  <button
+    onClick={() =>
+      setBillingCycle((prev) => (prev === 'monthly' ? 'yearly' : 'monthly'))
+    }
+    className={`relative w-14 h-7 rounded-full transition-colors duration-300 ${
+      billingCycle === 'yearly' ? 'bg-green-500' : 'bg-gray-300'
+    }`}
+  >
+    <div
+      className={`absolute top-1 left-1 h-5 w-5 rounded-full bg-white shadow-md transition-transform duration-300 ${
+        billingCycle === 'yearly' ? 'translate-x-7' : 'translate-x-0'
+      }`}
+    />
+  </button>
+  <span className="font-medium text-[#4B5563]">Yearly</span>
+</div>
+
+{/* Plan Card */}
+<div className="p-6 md:p-8 bg-white border border-[#E5E7EB] rounded-[24px] shadow-sm">
+  <h2 className="mb-[11px] font-Roboto text-[#091019] font-semibold leading-[28px] md:leading-[31.2px] text-[20px] md:text-[24px] tracking-[-0.3px] md:tracking-[-0.36px]">
+    {product?.title}
+  </h2>
+
+  <p className="mb-5 md:mb-6 font-Roboto text-[#6B7280] font-normal leading-[21px] md:leading-[24px] text-[14px] md:text-[16px]">
+    {/* {product?.description || 'Resources, mentorship, and tools to grow faster.'} */}
+    Resources, mentorship, and tools to grow faster.
+  </p>
+
+  <p className="mb-1 font-Roboto text-[#4B5563] font-normal text-[14px] leading-[21px]">
+    Starting from
+  </p>
+
+  <p className="mb-5 md:mb-6 font-Roboto text-[#091019] font-semibold leading-[31.2px] md:leading-[38.4px] text-[24px] md:text-[32px] tracking-[-0.36px] md:tracking-[-0.48px]">
+    ${displayPrice}
+    <span className="font-Roboto text-[#4B5563] font-normal text-[14px] leading-[21px]">
+      /{billingCycle}
+    </span>
+  </p>
+
+  <ul className="flex flex-col gap-4 mb-8 md:mb-10 pt-5 md:pt-6 border-t border-[#E5E7EB]">
+    {[
+      'Expert guidance',
+      'Partner network',
+      'Growth planning tools',
+    ].map((feature, index) => (
+      <li key={index} className="flex items-center gap-3">
+        <span className="flex items-center justify-center w-[24px] h-[24px]">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="17"
+            height="16"
+            viewBox="0 0 17 16"
+            fill="none"
+          >
+            <path
+              d="M16.5544 0.110975C16.8206 0.305975 16.8806 0.680975 16.6856 0.950975L6.18563 15.351C6.08063 15.4935 5.92313 15.5835 5.74688 15.5947C5.57063 15.606 5.40188 15.546 5.27438 15.4222L0.174375 10.3222C-0.058125 10.0897 -0.058125 9.70722 0.174375 9.47472C0.406875 9.24222 0.789375 9.24222 1.02188 9.47472L5.62688 14.0797L15.7144 0.245975C15.9094 -0.0202754 16.2844 -0.0802754 16.5544 0.114725V0.110975Z"
+              fill="#091019"
+            />
+          </svg>
+        </span>
+        <span className="font-Roboto text-[#091019] text-[16px] leading-[24px]">
+          {feature}
+        </span>
+      </li>
+    ))}
+  </ul>
+
+  {/* <button className="flex items-center justify-center w-full h-[44px] md:h-[52px] rounded-[100px] font-normal text-[16px] text-[#091019] border border-[#091019] px-4 py-[12px] bg-white hover:bg-[#091019] hover:text-white transition">
+    Add to Cart
+  </button> */}
+  <AddToCartButton
+              lines={[{merchandiseId: defaultVariant.id, quantity: 1}]}
+              disabled={!defaultVariant.availableForSale}
+              analytics={{
+                products: [productAnalytics],
+                totalValue: parseFloat(productAnalytics.price),
+              }}
+              buttonClassName="flex items-center justify-center w-full h-[44px] md:h-[52px] rounded-[100px] font-normal text-[16px] text-[#091019] border border-[#091019] px-4 py-[12px] bg-white hover:bg-[#091019] hover:text-white transition"
+              text="Add to Cart"
+            />
+</div>
+</div>
           {/* Sanity Modules Grid */}
                     {page?.modules && page.modules.length > 0 && (
                       <div className="mb-0 mt-0 px-0 md:px-0">
                         <ModuleGrid items={page.modules} searchQuery={''} homeSearchResults={[]} />
                       </div>
                     )}
-          <div className="mt-6 hidden">
+          {/* <div className="mt-6 hidden">
             <AddToCartButton
               lines={[{merchandiseId: defaultVariant.id, quantity: 1}]}
               disabled={!defaultVariant.availableForSale}
@@ -174,7 +259,7 @@ export default function Plans() {
               buttonClassName="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600 w-full"
               text="Add to Cart"
             />
-          </div>
+          </div> */}
         
      
       </main>

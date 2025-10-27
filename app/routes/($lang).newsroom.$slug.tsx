@@ -2,7 +2,9 @@ import { json, type LoaderFunctionArgs } from "@shopify/remix-oxygen";
 import { useLoaderData, Link } from "@remix-run/react";
 import { Image } from '@shopify/hydrogen';
 import { PortableText } from '@portabletext/react';
-  import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
+import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
+import {usePrefixPathWithLocale} from '~/lib/utils';
+
   const seo: SeoHandleFunction = ({data}) => ({
    title: data?.page?.seo?.title || 'Anytime Mailbox',
    description:
@@ -266,7 +268,7 @@ export default function NewsroomDetailPage() {
                 return (
                   <Link
                     key={item._id}
-                    to={`/newsroom/${item.slug}`}
+                    to={usePrefixPathWithLocale(`/newsroom/${item.slug}`)}
                     className="flex md:min-h-[358px]"
                   >
                     <div className="bg-white group border border-LightWhite rounded-[20px] p-6 hover:border-PrimaryBlack relative overflow-hidden">

@@ -25,7 +25,7 @@ import {
   redirect,
 } from '@shopify/remix-oxygen';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
-import {PRODUCT_QUERY, ALL_PRODUCTS_QUERY} from '~/queries/shopify/product';
+import {PRODUCT_QUERY, ALL_PRODUCTS_QUERY,BUNDLE_PRODUCTS_QUERY} from '~/queries/shopify/product';
 import {notFound} from '~/lib/utils';
 import {isLocalPath} from '~/lib/utils';
 import invariant from 'tiny-invariant';
@@ -131,45 +131,222 @@ export async function action({request, context}: ActionFunctionArgs) {
     {status, headers},
   );
 }
-export async function loader({context}: LoaderFunctionArgs) {
+// export async function loader({context}: LoaderFunctionArgs) {
   
-  const [virtualMailbox, virtualPhone, BusinessAcc] = await Promise.all([
-    context.storefront.query<{product: Product}>(PRODUCT_QUERY, {
-      variables: {handle: 'virtual-mailbox', selectedOptions: []},
-    }),
-    context.storefront.query<{product: Product}>(PRODUCT_QUERY, {
-      variables: {handle: 'virtual-phone-number', selectedOptions: []},
-    }),
-    context.storefront.query<{product: Product}>(PRODUCT_QUERY, {
-      variables: {handle: 'business-accelerato', selectedOptions: []},
-    }),
-    // context.storefront.query(ALL_PRODUCTS_QUERY, {
-    //   variables: {first: 50}, 
-    // }),
+//   const [virtualMailbox, virtualPhone, BusinessAcc] = await Promise.all([
+//     context.storefront.query<{product: Product}>(PRODUCT_QUERY, {
+//       variables: {handle: 'virtual-mailbox', selectedOptions: []},
+//     }),
+//     context.storefront.query<{product: Product}>(PRODUCT_QUERY, {
+//       variables: {handle: 'virtual-phone-number', selectedOptions: []},
+//     }),
+//     context.storefront.query<{product: Product}>(PRODUCT_QUERY, {
+//       variables: {handle: 'business-accelerato', selectedOptions: []},
+//     }),
+//     // context.storefront.query(ALL_PRODUCTS_QUERY, {
+//     //   variables: {first: 50}, 
+//     // }),
     
+//   ]);
+
+//   if (!virtualMailbox?.product || !virtualPhone?.product || !BusinessAcc?.product) {
+//     throw notFound();
+//   }
+//  // Combine them into an array
+// const AllProducts = [
+//   virtualMailbox.product,
+//   virtualPhone.product,
+//   BusinessAcc.product,
+// ];
+
+// console.log(AllProducts);
+//   return defer({
+//     bundleProducts: [virtualMailbox.product, virtualPhone.product],
+//     essentialsProducts: AllProducts ?? [],
+//   });
+// }
+
+
+// export async function loader({context}: LoaderFunctionArgs) {
+//   const {storefront, session, cart} = context;
+
+  
+//   const [virtualMailbox, virtualPhone, BusinessAcc] = await Promise.all([
+//     storefront.query<{product: Product}>(PRODUCT_QUERY, {
+//       variables: {handle: 'virtual-mailbox', selectedOptions: []},
+//     }),
+//     storefront.query<{product: Product}>(PRODUCT_QUERY, {
+//       variables: {handle: 'virtual-phone-number', selectedOptions: []},
+//     }),
+//     storefront.query<{product: Product}>(PRODUCT_QUERY, {
+//       variables: {handle: 'business-accelerato', selectedOptions: []},
+//     }),
+//   ]);
+
+//   const essentialsProducts = [
+//     virtualMailbox.product,
+//     virtualPhone.product,
+//     BusinessAcc.product,
+//   ];
+
+  
+//   const cartData = await cart.get(); // Hydrogen Cart API
+//   const cartHandles = cartData?.lines?.edges?.map(
+//     (line) => line.node.merchandise.product.handle
+//   ) || [];
+
+//   //console.log('Cart object:', JSON.stringify(cartData, null, 2));
+//   //console.log('Cart product handles:', cartHandles);
+
+ 
+//   const allBundles = await storefront.query(BUNDLE_PRODUCTS_QUERY, {
+//     variables: {country: 'US', language: 'EN'},
+//   });
+// console.log("bundle data:", allBundles);
+//   const bundleProducts = allBundles?.products?.nodes?.filter((bundle) => {
+//     return bundle.variants.edges.some((variantEdge) => {
+//       const bundleItemsField = variantEdge.node.metafields?.find(
+//         (mf) => mf?.key === 'bundle_items'
+//       );
+
+//       if (!bundleItemsField?.references?.edges) return false;
+
+//       return bundleItemsField.references.edges.some(
+//         (ref) => cartHandles.includes(ref.node.product.handle)
+//       );
+//     });
+//   }) || [];
+
+//   // Fallback if no bundles match
+//   const bundlesToShow = bundleProducts.length > 0
+//     ? bundleProducts
+//     : [virtualMailbox.product, virtualPhone.product];
+
+//   return defer({
+//     essentialsProducts,
+//     bundleProducts: bundlesToShow,
+//     cart: cartData,
+//   });
+// }
+
+export async function loader({ context }: LoaderFunctionArgs) {
+  const { storefront, cart } = context;
+
+  const cartData = await cart.get();
+  const cartHandles =
+    cartData?.lines?.edges?.map((line) => line.node.merchandise.product.handle) || [];
+
+  const [virtualMailbox, virtualPhone, BusinessAcc] = await Promise.all([
+    storefront.query<{ product: Product }>(PRODUCT_QUERY, { variables: { handle: 'virtual-mailbox', selectedOptions: [] } }),
+    storefront.query<{ product: Product }>(PRODUCT_QUERY, { variables: { handle: 'virtual-phone-number', selectedOptions: [] } }),
+    storefront.query<{ product: Product }>(PRODUCT_QUERY, { variables: { handle: 'business-accelerato', selectedOptions: [] } }),
   ]);
 
-  if (!virtualMailbox?.product || !virtualPhone?.product || !BusinessAcc?.product) {
-    throw notFound();
-  }
- // Combine them into an array
-const AllProducts = [
-  virtualMailbox.product,
-  virtualPhone.product,
-  BusinessAcc.product,
-];
+  const essentialsProducts = [virtualMailbox.product, virtualPhone.product, BusinessAcc.product];
 
-console.log(AllProducts);
+  const allBundles = await storefront.query(BUNDLE_PRODUCTS_QUERY, {
+    variables: { country: "US", language: "EN" },
+  });
+  const bundles = allBundles?.products?.nodes || [];
+
+  const displayedHandles = new Set<string>();
+  const matchingBundles: any[] = [];
+
+  for (const bundle of bundles) {
+    if (cartHandles.includes(bundle.handle)) continue;
+
+    const associatedItemsMap = new Map<string, any>();
+
+    // Collect all associated items for this bundle
+    for (const variantEdge of bundle.variants.edges) {
+      const bundleItemsField = variantEdge.node.metafields?.find(
+        (mf) => mf?.key === "bundle_items"
+      );
+      const refs = bundleItemsField?.references?.edges || [];
+
+      for (const ref of refs) {
+        const product = ref.node.product;
+        const variant = ref.node;
+        if (!product) continue;
+
+        const handle = product.handle || product.id;
+
+        // Deduplicate globally and per bundle
+        if (!associatedItemsMap.has(handle) && !displayedHandles.has(handle)) {
+          const featuresMf = variant.metafields?.find((mf: any) => mf.key === "features");
+          let features: string[] = [];
+          if (featuresMf?.value) {
+            try { features = JSON.parse(featuresMf.value); } catch { features = [featuresMf.value]; }
+          }
+
+          associatedItemsMap.set(handle, {
+            productId: product.id,
+            productHandle: handle,
+            productTitle: product.title,
+            variantId: variant.id,
+            variantTitle: variant.title,
+            price: variant.priceV2?.amount ?? null,
+            currency: variant.priceV2?.currencyCode ?? "USD",
+            inCart: cartHandles.includes(handle),
+            features,
+          });
+
+          displayedHandles.add(handle); // mark as displayed globally
+        }
+      }
+    }
+
+    const associatedItems = Array.from(associatedItemsMap.values());
+    if (associatedItems.length === 0) continue;
+
+    const monthlyVariant = bundle.variants.edges.find(v => v.node.title.toLowerCase() === "monthly")?.node;
+    const yearlyVariant = bundle.variants.edges.find(v => v.node.title.toLowerCase() === "yearly")?.node;
+
+    const bundleFeatureMf = bundle.metafields?.find((mf: any) => mf.key === "bundle_feature");
+    let bundleFeature: string[] = [];
+    if (bundleFeatureMf?.value) {
+      try {
+        const parsed = JSON.parse(bundleFeatureMf.value);
+        if (Array.isArray(parsed)) bundleFeature = parsed;
+      } catch {
+        bundleFeature = [bundleFeatureMf.value];
+      }
+    }
+
+    matchingBundles.push({
+      id: bundle.id,
+      title: bundle.title,
+      handle: bundle.handle,
+      description: bundle.description,
+      image: bundle.featuredImage?.url ?? null,
+      price: monthlyVariant?.priceV2?.amount ?? null,
+      compareAtPrice: monthlyVariant?.compareAtPriceV2?.amount ?? null,
+      yearlyPrice: yearlyVariant?.priceV2?.amount ?? null,
+      yearlyCompareAtPrice: yearlyVariant?.compareAtPriceV2?.amount ?? null,
+      currency: monthlyVariant?.priceV2?.currencyCode ?? "USD",
+      monthlyVariantId: monthlyVariant?.id ?? null,
+      yearlyVariantId: yearlyVariant?.id ?? null,
+      billing: "monthly",
+      bundleFeature,
+      associatedItems,
+      itemsInCart: associatedItems.filter(i => i.inCart).map(i => i.productHandle),
+    });
+  }
+
   return defer({
-    bundleProducts: [virtualMailbox.product, virtualPhone.product],
-    essentialsProducts: AllProducts ?? [],
+    bundleProducts: matchingBundles,
+    cart: cartData,
+    essentialsProducts,
   });
 }
+
+
+
 export default function Cart() {
   const rootData = useRootLoaderData();
   const { bundleProducts, essentialsProducts} = useLoaderData<typeof loader>();
   
-console.log('Essentials Products in Cart page:', essentialsProducts);
+//console.log('Essentials Products in Cart page:', essentialsProducts);
   return (
     <section className="">
       <Suspense fallback={<div className="flex justify-center"><SpinnerIcon /></div>}>

@@ -12,6 +12,25 @@ import { PRODUCT_PAGE_QUERY } from '~/queries/sanity/product';
 import { SanityProductPage } from '~/lib/sanity';
 import ModuleGrid from '~/components/modules/ModuleGrid'; // Make sure this is imported
 import { Link } from 'react-router-dom';
+import Recycling from "~/components/icons/Recycle.png";
+import OnlineStorage from "~/components/icons/Storage.png";
+import MailForwarding from "~/components/icons/send.png";
+import LocalPickup from "~/components/icons/Frame.png";
+import Scan from "~/components/icons/scan.png";
+import Toprated from "~/components/icons/Badge.png";
+import Premium from "~/components/icons/Crown.png";
+import defaultIcon from "~/components/icons/default.png";
+ 
+
+const services = [
+    { name: "Mail Forwarding", icon: MailForwarding },
+    { name: "Document Scanning", icon: Scan },
+    { name: "Local Pickup", icon: LocalPickup },
+    { name: "Recycling", icon: Recycling },
+    { name: "Online Storage", icon: OnlineStorage },
+    { name: "Top Rated", icon: Toprated },
+    { name: "Premium Address", icon: Premium },
+  ];
   import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
   const seo: SeoHandleFunction = ({data}) => ({
    title: data?.page?.seo?.title || 'Vitual Mailbox',
@@ -106,6 +125,8 @@ export default function Plans() {
   const {location, product, page} = useLoaderData<typeof loader>();
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
+  console.log('Page data:', page);
+  console.log('Location data:', location);
  
   const variants = (product?.variants?.nodes ?? []) as ProductVariant[];
  
@@ -134,6 +155,12 @@ export default function Plans() {
     key,
     value: String(value), // Shopify requires string values
   }));
+  const isTopRated = location?.ratingList?.some(
+    (r: any) => r.type === 'TOPRATED'
+  );
+  const enablePlansSection = page?.modules?.some(
+    (mod) => mod._type === "productplans" && mod.enablePlansSection === true
+  );
  
   useEffect(() => {
     const storedLineId = sessionStorage.getItem('replaceLineId');
@@ -159,21 +186,21 @@ export default function Plans() {
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                       <path d="M10.6813 7.71732C10.8362 7.87232 10.8362 8.12732 10.6813 8.28232L6.68125 12.2823C6.52625 12.4373 6.27125 12.4373 6.11625 12.2823C5.96125 12.1273 5.96125 11.8723 6.11625 11.7173L9.83375 7.99982L6.11625 4.28232C5.96125 4.12732 5.96125 3.87232 6.11625 3.71732C6.27125 3.56232 6.52625 3.56232 6.68125 3.71732L10.6813 7.71732Z" fill="#091019"/>
                     </svg>
-                      <Link to={`#`} aria-current="page"><span className="font-Roboto text-PrimaryBlack font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px]">Anaheim - Ball Rd</span> </Link></li>
+                      <Link to={`#`} aria-current="page"><span className="font-Roboto text-PrimaryBlack font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px]">{location?.displayName} </span> </Link></li>
                 </ol>  
             </nav>          
            
-            <h2 className="text-2xl font-bold mt-2">{product?.title}</h2>
+            {/* <h2 className="text-2xl font-bold mt-2">{product?.title}</h2>
             <p className="text-lg font-semibold">{location?.displayName}</p>
             <p className="text-gray-600">{location?.addressLine1}</p>
             <p className="text-gray-600">
               Mailbox ID: <span className="font-bold">#{location.locationId}</span>
-            </p>
+            </p> */}
           </div>
           </div>
  
           {/* Billing cycle toggle */}
-          <div className="flex justify-center items-center gap-4 mb-8">
+          {/* <div className="flex justify-center items-center gap-4 mb-8">
             <span
               onClick={() => setBillingCycle('monthly')}
               className={`cursor-pointer px-4 py-2 rounded-full font-medium ${
@@ -195,9 +222,9 @@ export default function Plans() {
               Yearly
             </span>
           </div>
- 
+  */}
           {/* Plans Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          {/* <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             {sortedVariants.map((variant) => {
               const isSelected = selectedVariant?.id === variant.id;
               return (
@@ -237,8 +264,271 @@ export default function Plans() {
                 </div>
               );
             })}
-          </div>
- 
+          </div> */}
+ {/* Location Info Section */}
+<div className="max-w-[1240px] mx-auto mt-12 px-5 md:px-0">
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+    
+    {/* Left: Location Title and Features */}
+    <div>
+      <h2 className="text-[28px] font-bold text-PrimaryBlack mb-2">
+        {location?.displayName} 
+      </h2>
+
+      <div className="flex items-center gap-3 mb-4">
+      {isTopRated && (
+
+        <div className="flex items-center gap-1 text-[#FF7A00] font-medium text-sm">
+          {/* <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6l4 2" />
+          </svg> */}
+          <img src={Toprated} alt="Top Rated" className="w-4 h-4"/>
+          <span>TOP RATED</span>
+        </div>
+      )}
+        <span className="text-gray-400">|</span>
+        <div className="flex items-center gap-1 text-[#0070F3] font-medium text-sm">
+          {/* <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+          </svg> */}
+          <img src={Premium} alt="Premium Address" className="w-4 h-4"/>
+          <span>PREMIUM ADDRESS</span>
+        </div>
+      </div>
+
+      {/* Features */}
+      <div className="bg-[#F8F8F8] border border-[#EAEAEA] rounded-[12px] p-6">
+        <h3 className="text-gray-700 font-semibold mb-3">Services</h3>
+        <div className="flex flex-wrap gap-x-6 gap-y-3">
+          {/* {location?.featureList?.length > 0 ? (
+            location.featureList.map((feature) => (
+              <div key={feature._key} className="flex items-center gap-2 text-[16px] text-gray-800">
+                <span className="text-[#FF7A00]">📦</span>
+                <span>{feature.label}</span>
+              </div>
+            ))
+          ) : (
+            <p className="text-gray-500 text-sm">No services available</p>
+          )} */}
+            {location?.featureList?.length > 0 ? (
+          location.featureList.map((feature) => {
+            const matchedService = services.find(
+              (service) =>
+                service.name.toLowerCase() === feature.label.toLowerCase()
+            );
+
+            return (
+              <div
+                key={feature._key}
+                className="flex items-center gap-2 text-[16px] text-gray-800"
+              >
+                <img
+                  src={matchedService?.icon ||defaultIcon}
+                  alt={feature.label}
+                  className="w-5 h-5"
+                />
+                <span>{feature.label}</span>
+              </div>
+            );
+          })
+        ) : (
+          <p className="text-gray-500 text-sm">No services available</p>
+        )}
+        
+  
+
+
+
+        </div>
+      </div>
+    </div>
+
+    {/* Right: Address Preview */}
+    <div className="border border-dashed border-gray-400 rounded-[12px] p-6">
+      <h3 className="text-gray-600 font-medium mb-4">Your Real Street Address Preview</h3>
+      <p className="text-PrimaryBlack font-semibold">Your Name</p>
+      <p className="text-PrimaryBlack font-semibold mb-2">Your Company Name</p>
+      <p>{location?.addressLine1}</p>
+      <p>
+        Ste #<span className="font-semibold">MAILBOX</span>
+      </p>
+      <p>
+        {location?.city}, {location?.state} {location?.postalCode}
+      </p>
+      <p>{location?.country}</p>
+    </div>
+  </div>
+</div>
+{/* plans */}
+{enablePlansSection && (
+   <section className="py-9">
+<div className="flex justify-center mb-10">
+        <div className="flex items-center bg-gray-100 rounded-full p-1">
+          <button
+            onClick={() => setBillingCycle("monthly")}
+            className={`px-6 py-2 text-sm font-semibold rounded-full transition-all ${
+              billingCycle === "monthly"
+                ? "bg-orange-500 text-white shadow"
+                : "text-gray-600"
+            }`}
+          >
+            Monthly
+          </button>
+          <button
+            onClick={() => setBillingCycle("yearly")}
+            className={`px-6 py-2 text-sm font-semibold rounded-full transition-all ${
+              billingCycle === "yearly"
+                ? "bg-orange-500 text-white shadow"
+                : "text-gray-600"
+            }`}
+          >
+            Yearly (Save 20%)
+          </button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* {sortedVariants.map((variant) => {
+          const isSelected = selectedVariant?.id === variant.id;
+          const isPopular = variant.title === "Silver";
+
+          // Safe price parsing
+          const rawAmount = variant?.price?.amount ?? 0;
+          const parsed =
+            typeof rawAmount === "number"
+              ? rawAmount
+              : parseFloat(String(rawAmount).replace(/[^0-9.-]+/g, ""));
+          const monthlyPrice = Number.isFinite(parsed) ? parsed : 0;
+
+          // Apply billing cycle logic
+          const displayPrice =
+            billingCycle === "Yearly"
+              ? (monthlyPrice * 12 * 0.8).toFixed(2)
+              : monthlyPrice.toFixed(2);
+
+          const currency = variant?.price?.currencyCode ?? "$";
+
+          return (
+            <div
+              key={variant.id}
+              onClick={() => setSelectedVariant(variant)}
+              className={`relative rounded-3xl border bg-white p-8 shadow-sm cursor-pointer transition-all duration-300 hover:shadow-lg ${
+                isSelected
+                  ? "border-orange-500 ring-2 ring-orange-200"
+                  : "border-gray-200"
+              }`}
+            >
+              {isPopular && (
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-orange-100 text-orange-600 text-sm font-semibold px-3 py-1 rounded-full flex items-center gap-1">
+                  🔥 Most Popular
+                </span>
+              )}
+
+              <h3 className="text-xl font-bold mt-2">{variant.title}</h3>
+              <p className="text-sm text-gray-500 mt-2">Starting from</p>
+              <p className="text-2xl font-bold mt-1">
+                {currency}
+                {displayPrice}
+                <span className="text-base font-normal text-gray-500">
+                  /{billingCycle.toLowerCase()}
+                </span>
+              </p>
+
+              <ul className="mt-6 space-y-3 text-left">
+                {variant.selectedOptions.map((opt, i) => (
+                  <li key={i} className="flex items-center gap-3 text-gray-700">
+                    <span className="text-green-600">✔</span>
+                    <span>{opt.value}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <div className="flex justify-center pt-6">
+                <ReplacePlanAddToCartButton
+                  selectedVariant={selectedVariant}
+                  replaceLineId={replaceLineId}
+                  locationProperties={locationProperties}
+                 // disabled={!selectedVariant || !selectedVariant.availableForSale}
+                  buttonClassName="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600"
+                  text={selectedVariant ? "Add to Cart" : "Select a Plan First"}
+                />
+              </div>
+
+            </div>
+          );
+        })} */}
+       
+  {sortedVariants.map((variant) => {
+    const isPopular = variant.title === "Silver";
+
+    // Safe price parsing
+    const rawAmount = variant?.price?.amount ?? 0;
+    const parsed =
+      typeof rawAmount === "number"
+        ? rawAmount
+        : parseFloat(String(rawAmount).replace(/[^0-9.-]+/g, ""));
+    const monthlyPrice = Number.isFinite(parsed) ? parsed : 0;
+
+    // Apply billing cycle logic
+    const displayPrice =
+      billingCycle === "yearly"
+        ? (monthlyPrice * 12 * 0.8).toFixed(2)
+        : monthlyPrice.toFixed(2);
+
+    const currency = variant?.price?.currencyCode ?? "$";
+
+    return (
+      <div
+        key={variant.id}
+        className="relative rounded-3xl border bg-white p-8 shadow-sm transition-all duration-300 hover:shadow-lg border-gray-200"
+      >
+        {/* Most Popular Badge */}
+        {isPopular && (
+          <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-orange-100 text-orange-600 text-sm font-semibold px-3 py-1 rounded-full flex items-center gap-1">
+            🔥 Most Popular
+          </span>
+        )}
+
+        {/* Title and Price */}
+        <h3 className="text-xl font-bold mt-2">{variant.title}</h3>
+        <p className="text-sm text-gray-500 mt-2">Starting from</p>
+        <p className="text-2xl font-bold mt-1">
+          {currency}
+          {displayPrice}
+          <span className="text-base font-normal text-gray-500">
+            /{billingCycle.toLowerCase()}
+          </span>
+        </p>
+
+        {/* Features */}
+        <ul className="mt-6 space-y-3 text-left">
+          {variant.selectedOptions.map((opt, i) => (
+            <li key={i} className="flex items-center gap-3 text-gray-700">
+              <span className="text-green-600">✔</span>
+              <span>{opt.value}</span>
+            </li>
+          ))}
+        </ul>
+
+        {/* Add to Cart Button (Always Visible) */}
+        <div className="flex justify-center pt-6">
+          <ReplacePlanAddToCartButton
+            selectedVariant={variant}
+            replaceLineId={replaceLineId}
+            locationProperties={locationProperties}
+            buttonClassName="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600"
+            text="Add to Cart"
+          />
+        </div>
+      </div>
+    );
+  })}
+
+
+      </div>
+      </section>
+      )}
+
           {/* Sanity Modules Grid */}
           {page?.modules && page.modules.length > 0 && (
             <div className="mb-0 mt-0 px-0 md:px-0">
@@ -246,17 +536,7 @@ export default function Plans() {
             </div>
           )}
  
-          {/* Add to Cart */}
-          <div className="flex justify-center pt-6">
-            <ReplacePlanAddToCartButton
-              selectedVariant={selectedVariant}
-              replaceLineId={replaceLineId}
-              locationProperties={locationProperties}
-              disabled={!selectedVariant || !selectedVariant.availableForSale}
-              buttonClassName="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600"
-              text={selectedVariant ? 'Add to Cart' : 'Select a Plan First'}
-            />
-          </div>
+          
         </main>
       </div>
     </>
