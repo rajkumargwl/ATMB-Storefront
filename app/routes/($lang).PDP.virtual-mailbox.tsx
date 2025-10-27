@@ -22,7 +22,7 @@ import Premium from "~/components/icons/Crown.png";
 import defaultIcon from "~/components/icons/default.png";
  
 
-const services = [
+const servicesIcons = [
     { name: "Mail Forwarding", icon: MailForwarding },
     { name: "Document Scanning", icon: Scan },
     { name: "Local Pickup", icon: LocalPickup },
@@ -127,6 +127,22 @@ export default function Plans() {
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   console.log('Page data:', page);
   console.log('Location data:', location);
+  const highlights = Array.from(
+    new Set(
+      location.featureList
+        .filter((feature) => feature.class === "HIGHLIGHT")
+        .map((feature) => feature.label)
+    )
+  );
+
+  const services = Array.from(
+    new Set(
+      location.featureList
+        .filter((feature) => feature.class !== "HIGHLIGHT")
+        .map((feature) => feature.label)
+    )
+  );
+
  
   const variants = (product?.variants?.nodes ?? []) as ProductVariant[];
  
@@ -277,7 +293,7 @@ export default function Plans() {
 
       <div className="flex items-center gap-3 mb-4">
       {isTopRated && (
-
+    <>
         <div className="flex items-center gap-1 text-[#FF7A00] font-medium text-sm">
           {/* <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6l4 2" />
@@ -285,8 +301,10 @@ export default function Plans() {
           <img src={Toprated} alt="Top Rated" className="w-4 h-4"/>
           <span>TOP RATED</span>
         </div>
+         <span className="text-gray-400">|</span>
+    </>
       )}
-        <span className="text-gray-400">|</span>
+       
         <div className="flex items-center gap-1 text-[#0070F3] font-medium text-sm">
           {/* <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -310,11 +328,11 @@ export default function Plans() {
           ) : (
             <p className="text-gray-500 text-sm">No services available</p>
           )} */}
-            {location?.featureList?.length > 0 ? (
-          location.featureList.map((feature) => {
-            const matchedService = services.find(
+            {services.length > 0 ? (
+          services.map((feature) => {
+            const matchedService = servicesIcons.find(
               (service) =>
-                service.name.toLowerCase() === feature.label.toLowerCase()
+                service.name.toLowerCase() === feature.toLowerCase()
             );
 
             return (
@@ -324,10 +342,10 @@ export default function Plans() {
               >
                 <img
                   src={matchedService?.icon ||defaultIcon}
-                  alt={feature.label}
+                  alt={feature}
                   className="w-5 h-5"
                 />
-                <span>{feature.label}</span>
+                <span>{feature}</span>
               </div>
             );
           })
@@ -361,178 +379,123 @@ export default function Plans() {
 </div>
 {/* plans */}
 {enablePlansSection && (
-   <section className="py-9">
-<div className="flex justify-center mb-10">
-        <div className="flex items-center bg-gray-100 rounded-full p-1">
-          <button
-            onClick={() => setBillingCycle("monthly")}
-            className={`px-6 py-2 text-sm font-semibold rounded-full transition-all ${
-              billingCycle === "monthly"
-                ? "bg-orange-500 text-white shadow"
-                : "text-gray-600"
+  <section className="py-9">
+    {/* Toggle Button */}
+    <h2 className="text-3xl font-bold text-center mb-6">Plans & Pricing</h2>
+    <span className="text-center text-gray-600 mb-4 block">Select a service plan that fits your needs.</span>
+    <div className="flex justify-center mb-10">
+      <div className="flex items-center gap-3 bg-gray-100 rounded-full px-4 py-2">
+        <span
+          className={`text-sm font-semibold transition-colors ${
+            billingCycle === "monthly" ? "text-orange-600" : "text-gray-500"
+          }`}
+        >
+          Monthly
+        </span>
+
+        {/* Toggle Switch */}
+        <button
+          onClick={() =>
+            setBillingCycle(billingCycle === "monthly" ? "yearly" : "monthly")
+          }
+          className={`relative w-12 h-6 rounded-full transition-colors duration-300 ${
+            billingCycle === "yearly" ? "bg-orange-500" : "bg-gray-300"
+          }`}
+        >
+          <span
+            className={`absolute top-[3px] left-[3px] w-[18px] h-[18px] bg-white rounded-full shadow transition-transform duration-300 ${
+              billingCycle === "yearly" ? "translate-x-6" : "translate-x-0"
             }`}
-          >
-            Monthly
-          </button>
-          <button
-            onClick={() => setBillingCycle("yearly")}
-            className={`px-6 py-2 text-sm font-semibold rounded-full transition-all ${
-              billingCycle === "yearly"
-                ? "bg-orange-500 text-white shadow"
-                : "text-gray-600"
-            }`}
-          >
-            Yearly (Save 20%)
-          </button>
-        </div>
+          ></span>
+        </button>
+
+        <span
+          className={`text-sm font-semibold transition-colors ${
+            billingCycle === "yearly" ? "text-orange-600" : "text-gray-500"
+          }`}
+        >
+          Yearly (Save 20%)
+        </span>
       </div>
+    </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {/* {sortedVariants.map((variant) => {
-          const isSelected = selectedVariant?.id === variant.id;
-          const isPopular = variant.title === "Silver";
+    {/* Plan Cards */}
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {sortedVariants.map((variant) => {
+        const isPopular = variant.title === "Silver";
 
-          // Safe price parsing
-          const rawAmount = variant?.price?.amount ?? 0;
-          const parsed =
-            typeof rawAmount === "number"
-              ? rawAmount
-              : parseFloat(String(rawAmount).replace(/[^0-9.-]+/g, ""));
-          const monthlyPrice = Number.isFinite(parsed) ? parsed : 0;
+        // Safe price parsing
+        const rawAmount = variant?.price?.amount ?? 0;
+        const parsed =
+          typeof rawAmount === "number"
+            ? rawAmount
+            : parseFloat(String(rawAmount).replace(/[^0-9.-]+/g, ""));
+        const monthlyPrice = Number.isFinite(parsed) ? parsed : 0;
 
-          // Apply billing cycle logic
-          const displayPrice =
-            billingCycle === "Yearly"
-              ? (monthlyPrice * 12 * 0.8).toFixed(2)
-              : monthlyPrice.toFixed(2);
+        // Apply billing cycle logic
+        const displayPrice =
+          billingCycle === "yearly"
+            ? (monthlyPrice * 12 * 0.8).toFixed(2)
+            : monthlyPrice.toFixed(2);
 
-          const currency = variant?.price?.currencyCode ?? "$";
+        const currency = variant?.price?.currencyCode ?? "$";
 
-          return (
-            <div
-              key={variant.id}
-              onClick={() => setSelectedVariant(variant)}
-              className={`relative rounded-3xl border bg-white p-8 shadow-sm cursor-pointer transition-all duration-300 hover:shadow-lg ${
-                isSelected
-                  ? "border-orange-500 ring-2 ring-orange-200"
-                  : "border-gray-200"
-              }`}
-            >
-              {isPopular && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-orange-100 text-orange-600 text-sm font-semibold px-3 py-1 rounded-full flex items-center gap-1">
-                  🔥 Most Popular
-                </span>
-              )}
+        return (
+          
+          <div
+            key={variant.id}
+            className="relative rounded-3xl border bg-white p-8 shadow-sm transition-all duration-300 hover:shadow-lg border-gray-200"
+          >
+            {/* Most Popular Badge */}
+            {isPopular && (
+              <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-orange-100 text-orange-600 text-sm font-semibold px-3 py-1 rounded-full flex items-center gap-1">
+                🔥 Most Popular
+              </span>
+            )}
 
-              <h3 className="text-xl font-bold mt-2">{variant.title}</h3>
-              <p className="text-sm text-gray-500 mt-2">Starting from</p>
-              <p className="text-2xl font-bold mt-1">
-                {currency}
-                {displayPrice}
-                <span className="text-base font-normal text-gray-500">
-                  /{billingCycle.toLowerCase()}
-                </span>
-              </p>
+            {/* Title and Price */}
+            <h3 className="text-xl font-bold mt-2">{variant.title}</h3>
+            <p className="text-sm text-gray-500 mt-2">Starting from</p>
+            <p className="text-2xl font-bold mt-1">
+              {currency}
+              {displayPrice}
+              <span className="text-base font-normal text-gray-500">
+                /{billingCycle.toLowerCase()}
+              </span>
+            </p>
 
-              <ul className="mt-6 space-y-3 text-left">
-                {variant.selectedOptions.map((opt, i) => (
-                  <li key={i} className="flex items-center gap-3 text-gray-700">
-                    <span className="text-green-600">✔</span>
-                    <span>{opt.value}</span>
-                  </li>
-                ))}
-              </ul>
+            {/* Features */}
+            <ul className="mt-6 space-y-3 text-left">
+              {variant.selectedOptions.map((opt, i) => (
+                <li key={i} className="flex items-center gap-3 text-gray-700">
+                  <span className="text-green-600">✔</span>
+                  <span>{opt.value}</span>
+                </li>
+              ))}
+            </ul>
 
-              <div className="flex justify-center pt-6">
-                <ReplacePlanAddToCartButton
-                  selectedVariant={selectedVariant}
-                  replaceLineId={replaceLineId}
-                  locationProperties={locationProperties}
-                 // disabled={!selectedVariant || !selectedVariant.availableForSale}
-                  buttonClassName="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600"
-                  text={selectedVariant ? "Add to Cart" : "Select a Plan First"}
-                />
-              </div>
-
+            {/* Add to Cart Button */}
+            <div className="flex justify-center pt-6">
+              <ReplacePlanAddToCartButton
+                selectedVariant={variant}
+                replaceLineId={replaceLineId}
+                locationProperties={locationProperties}
+                buttonClassName="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600"
+                text="Add to Cart"
+              />
             </div>
-          );
-        })} */}
-       
-  {sortedVariants.map((variant) => {
-    const isPopular = variant.title === "Silver";
+          </div>
+        );
+      })}
+    </div>
+  </section>
+)}
 
-    // Safe price parsing
-    const rawAmount = variant?.price?.amount ?? 0;
-    const parsed =
-      typeof rawAmount === "number"
-        ? rawAmount
-        : parseFloat(String(rawAmount).replace(/[^0-9.-]+/g, ""));
-    const monthlyPrice = Number.isFinite(parsed) ? parsed : 0;
-
-    // Apply billing cycle logic
-    const displayPrice =
-      billingCycle === "yearly"
-        ? (monthlyPrice * 12 * 0.8).toFixed(2)
-        : monthlyPrice.toFixed(2);
-
-    const currency = variant?.price?.currencyCode ?? "$";
-
-    return (
-      <div
-        key={variant.id}
-        className="relative rounded-3xl border bg-white p-8 shadow-sm transition-all duration-300 hover:shadow-lg border-gray-200"
-      >
-        {/* Most Popular Badge */}
-        {isPopular && (
-          <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-orange-100 text-orange-600 text-sm font-semibold px-3 py-1 rounded-full flex items-center gap-1">
-            🔥 Most Popular
-          </span>
-        )}
-
-        {/* Title and Price */}
-        <h3 className="text-xl font-bold mt-2">{variant.title}</h3>
-        <p className="text-sm text-gray-500 mt-2">Starting from</p>
-        <p className="text-2xl font-bold mt-1">
-          {currency}
-          {displayPrice}
-          <span className="text-base font-normal text-gray-500">
-            /{billingCycle.toLowerCase()}
-          </span>
-        </p>
-
-        {/* Features */}
-        <ul className="mt-6 space-y-3 text-left">
-          {variant.selectedOptions.map((opt, i) => (
-            <li key={i} className="flex items-center gap-3 text-gray-700">
-              <span className="text-green-600">✔</span>
-              <span>{opt.value}</span>
-            </li>
-          ))}
-        </ul>
-
-        {/* Add to Cart Button (Always Visible) */}
-        <div className="flex justify-center pt-6">
-          <ReplacePlanAddToCartButton
-            selectedVariant={variant}
-            replaceLineId={replaceLineId}
-            locationProperties={locationProperties}
-            buttonClassName="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600"
-            text="Add to Cart"
-          />
-        </div>
-      </div>
-    );
-  })}
-
-
-      </div>
-      </section>
-      )}
 
           {/* Sanity Modules Grid */}
           {page?.modules && page.modules.length > 0 && (
             <div className="mb-0 mt-0 px-0 md:px-0">
-              <ModuleGrid items={page.modules} searchQuery={''} homeSearchResults={[]} />
+              <ModuleGrid items={page.modules} searchQuery={''} homeSearchResults={[]} highlights={highlights} />
             </div>
           )}
  

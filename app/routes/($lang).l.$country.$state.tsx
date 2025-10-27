@@ -129,7 +129,7 @@ console.log("decodedCountry, decodedState", decodedCountry, decodedState);
     };
 
     const dummyBusinessData = {
-      headline: "Advantages of a " + locations[0]?.city + " Business Address",
+      headline: "Advantages of a " + decodedState + " Business Address",
       features: [
         {
           _key: "1",
@@ -149,7 +149,7 @@ console.log("decodedCountry, decodedState", decodedCountry, decodedState);
           _key: "2",
           title: "Market Access",
           description:
-            locations[0]?.city + ", located in the southeastern region of Australia, provides businesses of any size domestic and international market access.",
+            decodedState + ", located in the southeastern region of Australia, provides businesses of any size domestic and international market access.",
           icon: {
             tooltipTitle: "Inventory",
             svg: '<svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none"><path d="M5.54352 5.46385C5.74977 5.0551 6.16227 4.8001 6.61977 4.8001H18.0535C18.5073 4.8001 18.9235 5.0551 19.126 5.46385L21.256 9.7276C21.3085 9.82885 21.3348 9.9451 21.3348 10.0576C21.3348 10.4663 21.001 10.8001 20.5923 10.8001H4.07727C3.66852 10.8001 3.33477 10.4663 3.33477 10.0576C3.33477 9.94135 3.36102 9.82885 3.41352 9.7276L5.54352 5.46385ZM2.13477 10.0576C2.13477 11.0813 2.92977 11.9213 3.93477 11.9926V18.6001C3.93477 19.5938 4.74102 20.4001 5.73477 20.4001H12.9348C13.9285 20.4001 14.7348 19.5938 14.7348 18.6001V12.0001H19.5348V19.8001C19.5348 20.1301 19.8048 20.4001 20.1348 20.4001C20.4648 20.4001 20.7348 20.1301 20.7348 19.8001V11.9963C21.7398 11.9251 22.5348 11.0851 22.5348 10.0613C22.5348 9.76135 22.4635 9.46135 22.3285 9.19135L20.1985 4.9276C19.7898 4.11385 18.961 3.6001 18.0498 3.6001H6.61977C5.71227 3.6001 4.87977 4.11385 4.47477 4.9276L2.34102 9.19135C2.20602 9.46135 2.13477 9.7576 2.13477 10.0613V10.0576ZM5.13477 15.6001V12.0001H13.5348V15.6001H5.13477ZM5.13477 16.8001H13.5348V18.6001C13.5348 18.9301 13.2648 19.2001 12.9348 19.2001H5.73477C5.40477 19.2001 5.13477 18.9301 5.13477 18.6001V16.8001Z" fill="white"/></svg>'
@@ -159,7 +159,7 @@ console.log("decodedCountry, decodedState", decodedCountry, decodedState);
           _key: "3",
           title: "Supportive Policies",
           description:
-            locations[0]?.city + " offers grants, subsidies, mentorship programs, and access to resources to support small businesses and startups.",
+            decodedState + " offers grants, subsidies, mentorship programs, and access to resources to support small businesses and startups.",
           icon: {
             tooltipTitle: "Dashboard Insights",
             svg: '<svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none"><path d="M6.66602 1.5H12.666V6C12.666 7.65469 14.0113 9 15.666 9H20.166V21C20.166 21.8297 19.4957 22.5 18.666 22.5H6.66602C5.83633 22.5 5.16602 21.8297 5.16602 21V3C5.16602 2.17031 5.83633 1.5 6.66602 1.5ZM14.166 2.12344L19.5426 7.5H15.666C14.8363 7.5 14.166 6.82969 14.166 6V2.12344ZM6.66602 0C5.01133 0 3.66602 1.34531 3.66602 3V21C3.66602 22.6547 5.01133 24 6.66602 24H18.666C20.3207 24 21.666 22.6547 21.666 21V8.74219C21.666 7.94531 21.352 7.18125 20.7895 6.61875L15.0426 0.876563C14.4801 0.314063 13.7207 0 12.9238 0H6.66602ZM8.91602 12C8.50352 12 8.16602 12.3375 8.16602 12.75C8.16602 13.1625 8.50352 13.5 8.91602 13.5H16.416C16.8285 13.5 17.166 13.1625 17.166 12.75C17.166 12.3375 16.8285 12 16.416 12H8.91602ZM8.91602 16.5C8.50352 16.5 8.16602 16.8375 8.16602 17.25C8.16602 17.6625 8.50352 18 8.91602 18H16.416C16.8285 18 17.166 17.6625 17.166 17.25C17.166 16.8375 16.8285 16.5 16.416 16.5H8.91602Z" fill="white"/></svg>'
@@ -231,7 +231,7 @@ export default function StatePage() {
    
     return (
       <>
-      <LocationsList locations={locations} isCityPage={true} country={decodedCountry} />
+      <LocationsList locations={locations} isCityPage={true} country={decodedCountry} decodedState={decodedState} />
 
       <section className="px-5 py-[40px] md:py-[60px] lg:py-[100px] bg-[#F6F6F6]">
         <div className="max-w-[1240px] mx-auto flex flex-col md:flex-row gap-[44px] lg:gap-[142px] items-center">
@@ -248,18 +248,18 @@ export default function StatePage() {
           {/* Text Section */}
           <div className="w-full md:w-[49.7%] space-y-4 order-1 md:order-1">
             <h2 className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px]">
-            Why Get a Mailing Address in<br/><span className='text-[#FF6600]'>{locations[0]?.city}</span> 
+            Why Get a Mailing Address in<br/><span className='text-[#FF6600]'>{decodedState}</span> 
             </h2>
 
             <div className="prose prose-lg how-started text-PrimaryBlack">
               <p>
-              {locations[0]?.city}, Australia’s business capital, is an attractive destination for entrepreneurs looking to expand their market reach. With a thriving economy, a wide range of industries, and a strategic location in Australia, this region presents businesses with many opportunities for growth.
+              {decodedState}, Australia’s business capital, is an attractive destination for entrepreneurs looking to expand their market reach. With a thriving economy, a wide range of industries, and a strategic location in Australia, this region presents businesses with many opportunities for growth.
                 <br />
                 <br />
-                By setting up a virtual mailbox address in {locations[0]?.city}, you get to call Australia’s top-performing region home. It is a prime spot for accessing markets in the Asia-Pacific region and is a top destination for investors.
+                By setting up a virtual mailbox address in {decodedState}, you get to call Australia’s top-performing region home. It is a prime spot for accessing markets in the Asia-Pacific region and is a top destination for investors.
                 <br />
                 <br />
-                With a Virtual Mailbox address in {locations[0]?.city}, your business can tap into business opportunities and world-class markets.
+                With a Virtual Mailbox address in {decodedState}, your business can tap into business opportunities and world-class markets.
               </p>
             </div>
           </div>
@@ -276,7 +276,7 @@ export default function StatePage() {
           </div>
 
           {/* Cards Grid */}
-          <div className="mt-14 gap-8 mx-auto grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6 auto-rows-min">
+          <div className="mt-14 gap-8 mx-auto grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-6 auto-rows-min">
             {dummyBusinessData?.features.map((item, index) => {
   
               return (
@@ -349,7 +349,7 @@ export default function StatePage() {
                 </svg>
               </div>
               <h3 className="font-[600] text-[18px] md:text-[24px] mb-4">
-                Select a {locations[0]?.city} Address
+                Select a {decodedState} Address
               </h3>
               <p className="font-[400]  text-[14px] md:text-[18px] leading-[27px]">
                 Select a real street address and subscription plan by browsing our
@@ -375,8 +375,7 @@ export default function StatePage() {
                 We Receive Your Mail
               </h3>
               <p className="font-[400] text-[14px] md:text-[18px] leading-[27px]">
-                Have your mail and packages delivered to your {locations[0]?.city}
-                address. We upload a photo of the mail items to the app.
+                Have your mail and packages delivered to your {decodedState} address. We upload a photo of the mail items to the app.
               </p>
             </div>
 
@@ -420,6 +419,8 @@ export default function StatePage() {
             </h2>
             <div className="hidden md:flex justify-end gap-5">
               <button
+                area-label="Previous Slide"
+                title='Previous Slide'
                 ref={prevRef}
                 className={`w-14 h-14 flex items-center justify-center rounded-full text-white ${
                   isBeginning ? "bg-[#D3D3D3]" : "bg-DarkOrange"
@@ -428,6 +429,8 @@ export default function StatePage() {
                 <ArrowLeftIcon />
               </button>
               <button
+              area-label="Next Slide"
+              title='Next Slide'
                 ref={nextRef}
                 className={`w-14 h-14 flex items-center justify-center rounded-full text-white ${
                   isEnd ? "bg-[#D3D3D3]" : "bg-DarkOrange"
@@ -616,8 +619,8 @@ export default function StatePage() {
             <h2 className="text-white font-Roboto font-[600] text-[28px] md:text-[56px] leading-[38px] md:leading-[61.6px] tracking-[-1.12px] md:mb-6 mb-4">
               Plans start at $9.99
             </h2>
-            <button className="bg-white text-[#041E2C] font-[400] text-[16px] leading-[16px] tracking-[0.08px] px-5 py-4 rounded-full hover:bg-gray-100 transition">
-              Get a {locations[0]?.city} Address
+            <button aria-label="Get a Address" className="bg-white text-[#041E2C] font-[400] text-[16px] leading-[16px] tracking-[0.08px] px-4 py-3 rounded-full hover:bg-gray-100 transition">
+              Get a {decodedState} Address
             </button>
           </div>
 
@@ -639,6 +642,7 @@ export default function StatePage() {
       {showButton && (
         <button
           onClick={scrollToTop}
+          aria-label="Scroll to top"
           className="fixed bottom-6 right-6 bg-[#FF6600] text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-2 transition-all hover:bg-[#e45a00] z-50"
         >
           <span className="text-[16px] leading-[16px]">
@@ -646,7 +650,7 @@ export default function StatePage() {
               <path d="M6.57672 0.976133C6.80922 0.743633 7.19172 0.743633 7.42422 0.976133L13.4242 6.97613C13.6567 7.20863 13.6567 7.59113 13.4242 7.82363C13.1917 8.05613 12.8092 8.05613 12.5767 7.82363L7.00047 2.24738L1.42422 7.82363C1.19172 8.05613 0.809219 8.05613 0.576719 7.82363C0.344219 7.59113 0.344219 7.20863 0.576719 6.97613L6.57672 0.976133Z" fill="white"/>
             </svg>
           </span>
-          <span>Get a {locations[0]?.city} Address</span>
+          <span>Get a {decodedState} Address</span>
         </button>
       )}
       </>
