@@ -63,6 +63,7 @@ import BusinessGrowth from '~/components/modules/BusinessGrowth';
 import BusinessSupport from '~/components/modules/BusinessSupport';
 import BusinessBanner from '~/components/modules/BusinessBanner';
 import WebinarsTopicsSection from '~/components/modules/WebinarsTopicsSection';
+import PlansWithoutBundles from '~/components/modules/PlansWithoutBundles';
 
 import SmartBusiness from '~/components/modules/SmartBusiness';
 
@@ -115,7 +116,7 @@ type Props = {
   highlights?: any[];
 };
 
-export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery, bundles, pageType = 'default', highlights}: Props) { // 争 Set default pageType
+export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery, bundles, pageType = 'default',highlights,productData}: Props) { // 争 Set default pageType
  
  console.log("highlights in module.tsx", highlights);
   // Helper boolean for conditional rendering
@@ -154,6 +155,8 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
   return <PdpCommonFeaturesSection data={module} />;
    case 'pdpwhyChooseAnytimePhoneSection':
   return <PdpWhyChooseAnytimePhone data={module} />;
+ case 'productplans':
+  return <PlansWithoutBundles product={productData} />;
 
 
 
