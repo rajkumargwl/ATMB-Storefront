@@ -120,10 +120,12 @@ type Props = {
   searchQuery?: string | null;
   bundles?: any[];
   pageType?: 'operator' | 'default' ; // 争 ADDED pageType PROP
+  highlights?: any[];
 };
 
-export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery, bundles, pageType = 'default'}: Props) { // 争 Set default pageType
+export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery, bundles, pageType = 'default', highlights}: Props) { // 争 Set default pageType
  
+ console.log("highlights in module.tsx", highlights);
   // Helper boolean for conditional rendering
   const isOperatorPage = pageType === 'operator';
 
@@ -146,7 +148,7 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
  case 'pdpdetailedFeaturesSection':
   return <PdpDetailedFeaturesSection {...module} />;
  case 'pdpmailCenterHighlightsSection':
-  return <PdpMailCenterHighlightsSection {...module} />;
+  return <PdpMailCenterHighlightsSection {...module} highlights={highlights} />;
    case 'pdpvirtualMailboxLocation':
   return <VirtualMailboxLocationCard {...module} />;
 

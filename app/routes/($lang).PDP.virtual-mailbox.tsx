@@ -22,7 +22,7 @@ import Premium from "~/components/icons/Crown.png";
 import defaultIcon from "~/components/icons/default.png";
  
 
-const services = [
+const servicesIcons = [
     { name: "Mail Forwarding", icon: MailForwarding },
     { name: "Document Scanning", icon: Scan },
     { name: "Local Pickup", icon: LocalPickup },
@@ -127,6 +127,22 @@ export default function Plans() {
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   console.log('Page data:', page);
   console.log('Location data:', location);
+  const highlights = Array.from(
+    new Set(
+      location.featureList
+        .filter((feature) => feature.class === "HIGHLIGHT")
+        .map((feature) => feature.label)
+    )
+  );
+
+  const services = Array.from(
+    new Set(
+      location.featureList
+        .filter((feature) => feature.class !== "HIGHLIGHT")
+        .map((feature) => feature.label)
+    )
+  );
+
  
   const variants = (product?.variants?.nodes ?? []) as ProductVariant[];
  
@@ -310,11 +326,11 @@ export default function Plans() {
           ) : (
             <p className="text-gray-500 text-sm">No services available</p>
           )} */}
-            {location?.featureList?.length > 0 ? (
-          location.featureList.map((feature) => {
-            const matchedService = services.find(
+            {services.length > 0 ? (
+          services.map((feature) => {
+            const matchedService = servicesIcons.find(
               (service) =>
-                service.name.toLowerCase() === feature.label.toLowerCase()
+                service.name.toLowerCase() === feature.toLowerCase()
             );
 
             return (
@@ -324,10 +340,10 @@ export default function Plans() {
               >
                 <img
                   src={matchedService?.icon ||defaultIcon}
-                  alt={feature.label}
+                  alt={feature}
                   className="w-5 h-5"
                 />
-                <span>{feature.label}</span>
+                <span>{feature}</span>
               </div>
             );
           })
@@ -532,7 +548,7 @@ export default function Plans() {
           {/* Sanity Modules Grid */}
           {page?.modules && page.modules.length > 0 && (
             <div className="mb-0 mt-0 px-0 md:px-0">
-              <ModuleGrid items={page.modules} searchQuery={''} homeSearchResults={[]} />
+              <ModuleGrid items={page.modules} searchQuery={''} homeSearchResults={[]} highlights={highlights} />
             </div>
           )}
  
