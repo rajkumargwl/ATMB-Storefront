@@ -441,6 +441,7 @@ export default function Plans() {
         const currency = variant?.price?.currencyCode ?? "$";
 
         return (
+          
           <div
             key={variant.id}
             className="relative rounded-3xl border bg-white p-8 shadow-sm transition-all duration-300 hover:shadow-lg border-gray-200"
