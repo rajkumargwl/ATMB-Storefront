@@ -5,9 +5,17 @@ import ReplacePlanAddToCartButton from '~/components/cart/ReplacePlanAddToCartBu
 
 type PlansWithoutBundlesProps = {
   product: Product;
+  planData?: {
+    billingCycle: 'monthly' | 'yearly';
+    sortedVariants: ProductVariant[];
+    replaceLineId: string | null;
+    locationProperties: { key: string; value: string }[];
+    location?: any;
+  };
 };
 
-export default function PlansWithoutBundles({product}: PlansWithoutBundlesProps) {
+export default function PlansWithoutBundles({product,planData}: PlansWithoutBundlesProps) {
+    
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
   const [replaceLineId, setReplaceLineId] = useState<string | null>(null);
 

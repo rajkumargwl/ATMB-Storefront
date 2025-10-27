@@ -35,7 +35,7 @@ export default function BusinessAcceleratorSection({ data }: BusinessAccelerator
           )}
  
           {data.description && (
-            <p className="font-Roboto text-LightGray font-medium leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px]">
+            <p className="font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px]">
               {data.description}
             </p>
           )}

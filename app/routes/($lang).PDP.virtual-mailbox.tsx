@@ -190,81 +190,10 @@ export default function Plans() {
                 </ol>  
             </nav>          
            
-            {/* <h2 className="text-2xl font-bold mt-2">{product?.title}</h2>
-            <p className="text-lg font-semibold">{location?.displayName}</p>
-            <p className="text-gray-600">{location?.addressLine1}</p>
-            <p className="text-gray-600">
-              Mailbox ID: <span className="font-bold">#{location.locationId}</span>
-            </p> */}
+           
           </div>
           </div>
- 
-          {/* Billing cycle toggle */}
-          {/* <div className="flex justify-center items-center gap-4 mb-8">
-            <span
-              onClick={() => setBillingCycle('monthly')}
-              className={`cursor-pointer px-4 py-2 rounded-full font-medium ${
-                billingCycle === 'monthly'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-200 text-gray-700'
-              }`}
-            >
-              Monthly
-            </span>
-            <span
-              onClick={() => setBillingCycle('yearly')}
-              className={`cursor-pointer px-4 py-2 rounded-full font-medium ${
-                billingCycle === 'yearly'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-200 text-gray-700'
-              }`}
-            >
-              Yearly
-            </span>
-          </div>
-  */}
-          {/* Plans Grid */}
-          {/* <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {sortedVariants.map((variant) => {
-              const isSelected = selectedVariant?.id === variant.id;
-              return (
-                <div
-                  key={variant.id}
-                  className={`rounded-2xl border p-6 shadow-sm relative bg-white cursor-pointer ${
-                    isSelected
-                      ? 'border-blue-500 ring-2 ring-blue-300'
-                      : 'border-gray-200'
-                  }`}
-                  onClick={() => setSelectedVariant(variant)}
-                >
-                  <h3 className="text-xl font-bold">{variant.title}</h3>
-                  <p className="text-2xl font-semibold mt-2">
-                    {variant.price.amount} {variant.price.currencyCode}
-                    <span className="text-base font-normal">
-                      /{billingCycle}
-                    </span>
-                  </p>
- 
-                  <ul className="mt-4 space-y-2">
-                    {variant.selectedOptions.map((opt, i) => (
-                      <li key={i} className="flex items-center gap-2">
-                        <span className="text-green-600">✔</span>
-                        <span>
-                          {opt.name}: {opt.value}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
- 
-                  {isSelected && (
-                    <span className="absolute top-2 right-2 text-blue-600 font-semibold">
-                      ✓ Selected
-                    </span>
-                  )}
-                </div>
-              );
-            })}
-          </div> */}
+  
  {/* Location Info Section */}
 <div className="max-w-[1240px] mx-auto mt-12 px-5 md:px-0">
   <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
@@ -334,10 +263,6 @@ export default function Plans() {
         ) : (
           <p className="text-gray-500 text-sm">No services available</p>
         )}
-        
-  
-
-
 
         </div>
       </div>
@@ -364,7 +289,7 @@ export default function Plans() {
    <section className="py-9">
 <div className="flex justify-center mb-10">
         <div className="flex items-center bg-gray-100 rounded-full p-1">
-          <button
+          {/* <button
             onClick={() => setBillingCycle("monthly")}
             className={`px-6 py-2 text-sm font-semibold rounded-full transition-all ${
               billingCycle === "monthly"
@@ -383,80 +308,11 @@ export default function Plans() {
             }`}
           >
             Yearly (Save 20%)
-          </button>
+          </button> */}
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {/* {sortedVariants.map((variant) => {
-          const isSelected = selectedVariant?.id === variant.id;
-          const isPopular = variant.title === "Silver";
-
-          // Safe price parsing
-          const rawAmount = variant?.price?.amount ?? 0;
-          const parsed =
-            typeof rawAmount === "number"
-              ? rawAmount
-              : parseFloat(String(rawAmount).replace(/[^0-9.-]+/g, ""));
-          const monthlyPrice = Number.isFinite(parsed) ? parsed : 0;
-
-          // Apply billing cycle logic
-          const displayPrice =
-            billingCycle === "Yearly"
-              ? (monthlyPrice * 12 * 0.8).toFixed(2)
-              : monthlyPrice.toFixed(2);
-
-          const currency = variant?.price?.currencyCode ?? "$";
-
-          return (
-            <div
-              key={variant.id}
-              onClick={() => setSelectedVariant(variant)}
-              className={`relative rounded-3xl border bg-white p-8 shadow-sm cursor-pointer transition-all duration-300 hover:shadow-lg ${
-                isSelected
-                  ? "border-orange-500 ring-2 ring-orange-200"
-                  : "border-gray-200"
-              }`}
-            >
-              {isPopular && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-orange-100 text-orange-600 text-sm font-semibold px-3 py-1 rounded-full flex items-center gap-1">
-                  🔥 Most Popular
-                </span>
-              )}
-
-              <h3 className="text-xl font-bold mt-2">{variant.title}</h3>
-              <p className="text-sm text-gray-500 mt-2">Starting from</p>
-              <p className="text-2xl font-bold mt-1">
-                {currency}
-                {displayPrice}
-                <span className="text-base font-normal text-gray-500">
-                  /{billingCycle.toLowerCase()}
-                </span>
-              </p>
-
-              <ul className="mt-6 space-y-3 text-left">
-                {variant.selectedOptions.map((opt, i) => (
-                  <li key={i} className="flex items-center gap-3 text-gray-700">
-                    <span className="text-green-600">✔</span>
-                    <span>{opt.value}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="flex justify-center pt-6">
-                <ReplacePlanAddToCartButton
-                  selectedVariant={selectedVariant}
-                  replaceLineId={replaceLineId}
-                  locationProperties={locationProperties}
-                 // disabled={!selectedVariant || !selectedVariant.availableForSale}
-                  buttonClassName="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600"
-                  text={selectedVariant ? "Add to Cart" : "Select a Plan First"}
-                />
-              </div>
-
-            </div>
-          );
-        })} */}
        
   {sortedVariants.map((variant) => {
     const isPopular = variant.title === "Silver";
@@ -490,28 +346,28 @@ export default function Plans() {
         )}
 
         {/* Title and Price */}
-        <h3 className="text-xl font-bold mt-2">{variant.title}</h3>
-        <p className="text-sm text-gray-500 mt-2">Starting from</p>
-        <p className="text-2xl font-bold mt-1">
+        {/* <h3 className="text-xl font-bold mt-2">{variant.title}</h3> */}
+        {/* <p className="text-sm text-gray-500 mt-2">Starting from</p> */}
+        {/* <p className="text-2xl font-bold mt-1">
           {currency}
           {displayPrice}
           <span className="text-base font-normal text-gray-500">
             /{billingCycle.toLowerCase()}
           </span>
-        </p>
+        </p> */}
 
         {/* Features */}
-        <ul className="mt-6 space-y-3 text-left">
+        {/* <ul className="mt-6 space-y-3 text-left">
           {variant.selectedOptions.map((opt, i) => (
             <li key={i} className="flex items-center gap-3 text-gray-700">
               <span className="text-green-600">✔</span>
               <span>{opt.value}</span>
             </li>
           ))}
-        </ul>
+        </ul> */}
 
         {/* Add to Cart Button (Always Visible) */}
-        <div className="flex justify-center pt-6">
+        {/* <div className="flex justify-center pt-6">
           <ReplacePlanAddToCartButton
             selectedVariant={variant}
             replaceLineId={replaceLineId}
@@ -519,7 +375,7 @@ export default function Plans() {
             buttonClassName="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600"
             text="Add to Cart"
           />
-        </div>
+        </div> */}
       </div>
     );
   })}
@@ -532,7 +388,7 @@ export default function Plans() {
           {/* Sanity Modules Grid */}
           {page?.modules && page.modules.length > 0 && (
             <div className="mb-0 mt-0 px-0 md:px-0">
-              <ModuleGrid items={page.modules} searchQuery={''} homeSearchResults={[]} />
+              <ModuleGrid items={page.modules} searchQuery={''} homeSearchResults={[]} productData={product}  />
             </div>
           )}
  
