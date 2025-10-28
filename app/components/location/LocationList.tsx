@@ -1,10 +1,10 @@
 import {json, type LoaderFunctionArgs, defer} from '@shopify/remix-oxygen';
 import {useLoaderData, useNavigate} from '@remix-run/react';
 import {useState, useEffect, useMemo, useRef} from 'react';
-import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
+import {AnalyticsPageType, Money, type SeoHandleFunction} from '@shopify/hydrogen';
 import {HEADER_QUERY} from '~/queries/sanity/header';
 import {FOOTER_QUERY} from '~/queries/sanity/footer';
-import {notFound} from '~/lib/utils';
+import {DEFAULT_LOCALE, notFound} from '~/lib/utils';
 import Map from '~/components/icons/Map';
 import CloseIconBlack from '~/components/icons/CloseIconBlack';
 import Location from "~/components/media/location.svg";
@@ -12,6 +12,7 @@ import Location1 from "~/components/media/location1.svg";
 import LeftArrowBlack from '~/components/icons/LeftArrowBlack';
 import SearchWhite from "~/components/media/Search.svg";
 import ArrowDown from "~/components/media/arrowdown.svg";
+import { useRootLoaderData } from '~/root';
 
 const services = [
     { name: "Mail Forwarding", icon: Location},
@@ -69,6 +70,8 @@ interface LocationsListProps {
 }
 
 export default function LocationsList({locations, initialQuery = '', isCityPage, country, decodedState}: LocationsListProps) {
+   const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
+    let currencyCode = selectedLocale?.currency || 'USD';
     const [minVal, setMinVal] = useState(25);
     const [maxVal, setMaxVal] = useState(75);
     const [showMore, setShowMore] = useState(false);
@@ -566,8 +569,8 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                   {/* Price Row */}
                   <div className="hidden md:flex flex-col gap-[2px]">
                     <p className="font-Roboto text-[#4B5563] font-normal text-[14px] leading-[21px] tracking-[0px]">Starting from</p>
-                    <p className="font-Roboto text-PrimaryBlack font-semibold text-[24px] leading-[31.2px] tracking-[-0.39px]">
-                      US${(loc.priceRange || 0.0).toFixed(2)}<span className='font-Roboto text-LightGray font-normal text-[18px] leading-[27px] tracking-[0px]'>/month</span>
+                    <p className="flex font-Roboto text-PrimaryBlack font-semibold text-[24px] leading-[31.2px] tracking-[-0.39px]">
+                    <Money data={{ amount: (loc.priceRange || 0.0).toFixed(2), currencyCode: currencyCode }}/><span className='font-Roboto text-LightGray font-normal text-[18px] leading-[27px] tracking-[0px]'>/month</span>
                     </p>
                   </div>                 
 
@@ -674,8 +677,8 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                 <div className='flex items-center justify-between md:hidden mt-6'>
                    <div className="flex  flex-col gap-[2px]">
                       <p className="font-Roboto text-[#4B5563] font-normal text-[14px] leading-[21px] tracking-[0px]">Starting from</p>
-                      <p className="font-Roboto text-PrimaryBlack font-semibold text-[24px] leading-[31.2px] tracking-[-0.39px]">
-                        US${(loc.priceRange || 0.0).toFixed(2)}<span className='font-Roboto text-LightGray font-normal text-[18px] leading-[27px] tracking-[0px]'>/month</span>
+                      <p className="flex font-Roboto text-PrimaryBlack font-semibold text-[24px] leading-[31.2px] tracking-[-0.39px]">
+                        <Money data={{ amount: (loc.priceRange || 0.0).toFixed(2), currencyCode: currencyCode }}/><span className='font-Roboto text-LightGray font-normal text-[18px] leading-[27px] tracking-[0px]'>/month</span>
                       </p>
                     </div>  
                      <button
