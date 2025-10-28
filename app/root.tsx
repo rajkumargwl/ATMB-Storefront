@@ -161,6 +161,8 @@ export async function loader({request, context, params}: LoaderFunctionArgs) {
       context.sanity.query({ query: FOOTER_QUERY, params: { language }, cache }),
     ]);
 
+
+
   // 🔹 Handle search param
   const url = new URL(request.url);
   const q = url.searchParams.get('q') || '';
