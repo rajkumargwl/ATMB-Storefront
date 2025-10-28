@@ -176,8 +176,7 @@ export default function PlansWithoutBundles({product,planData}: PlansWithoutBund
                 <div>
                 <h3 className="mb-5 md:mb-6 font-Roboto text-PrimaryBlack font-semibold leading-[28px] md:leading-[31.2px] text-[20px] md:text-[24px] tracking-[-0.3px] md:tracking-[-0.36px]">{variant.title}</h3>
                 <p className="mb-5 md:mb-6 font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[38.4px] text-[24px] md:text-[32px] tracking-[-0.36px] md:tracking-[-0.48px]">
-                  {/* ${displayPrice} */}
-                  <Money data={pricewithobj} />
+                  <Money data={{ amount: displayPrice, currencyCode: currencyCode }}/>
                   <span className="font-Roboto text-[#4B5563] font-normal text-[14px] leading-[21px] tracking-[0px]">
                     /{billingCycle}
                   </span>

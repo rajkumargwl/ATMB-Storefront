@@ -13,6 +13,7 @@ import {twMerge} from 'tailwind-merge';
 import {defaultButtonStyles} from '~/components/elements/Button';
 import SpinnerIcon from '~/components/icons/Spinner';
 import {usePageAnalytics} from '~/hooks/usePageAnalytics';
+import {DEFAULT_LOCALE, notFound, usePrefixPathWithLocale} from '~/lib/utils';
 
 type FormMode = 'default' | 'inline';
 
@@ -37,6 +38,8 @@ export default function AddToCartWithDraftOrderButton({
 }) {
     const hasSubmitted = useRef(false);
     const navigate = useNavigate();
+    const successUrl = usePrefixPathWithLocale("/payment-success");
+    const failUrl = usePrefixPathWithLocale("/payment-fail");
 
     return (
       <div className={mode == "inline" ? "[&>*]:inline" : ""}>
@@ -98,12 +101,13 @@ export default function AddToCartWithDraftOrderButton({
   
                     const draftData = await draftRes.json();
                     console.log("response:", draftData);
+
                     if (draftData?.data?.draftOrderCreate?.draftOrder?.id) {
                       // ✅ Redirect to payment-success page
-                      navigate("/payment-success");
+                      navigate(successUrl); 
                     } else {
                       console.error("No draft order returned:", draftData);
-                      navigate("/payment-fail");
+                      navigate(failUrl);
                     }
                   } catch (err) {
                     console.error("❌ Failed to create draft order:", err);
