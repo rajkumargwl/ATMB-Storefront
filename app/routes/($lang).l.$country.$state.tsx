@@ -11,6 +11,7 @@ import ArrowLeftIcon from "~/components/icons/ArrowLeftIcon";
 import CityImage from "~/components/media/city.svg";
 import KeyFactor from "~/components/media/key-factor.svg";
 import Testimonial from "~/components/icons/Testimonial";
+import {usePrefixPathWithLocale} from '~/lib/utils';
 
 // Loader
 export async function loader({context, params}: LoaderFunctionArgs) {

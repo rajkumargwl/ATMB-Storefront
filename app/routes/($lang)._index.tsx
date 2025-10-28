@@ -32,7 +32,10 @@ export const handle = { seo };
 
 export async function loader({ context, params, request }: LoaderFunctionArgs) {
   validateLocale({ context, params });
-  const language = params.lang || 'en';
+  let language = params.lang || 'en';
+  if(language !== 'en-es'){
+    language = 'en';
+  }
 
   const cache = context.storefront.CacheCustom({
     mode: 'public',

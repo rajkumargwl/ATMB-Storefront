@@ -5,6 +5,7 @@ import SearchIconBanner from '~/components/icons/SearchIconBanner';
 import ArrowRightCountries from "~/components/icons/ArrowRightCountries";
 import RightArrowWhite from '~/components/icons/RightArrowWhite';
 import { useEffect, useState } from 'react';
+import {usePrefixPathWithLocale} from '~/lib/utils';
 
 // Loader
 export async function loader({context}: LoaderFunctionArgs) {
@@ -84,6 +85,7 @@ export default function CountryLocationsPage() {
   const columnedLocations2 = Array.from({ length: columns }, (_, i) =>
     countries.slice(i * itemsPerCol2, (i + 1) * itemsPerCol2)
   );
+  const getPrefixedPath = usePrefixPathWithLocale;
 
   return (
     // <div className="flex flex-col min-h-screen bg-white">
@@ -221,18 +223,24 @@ export default function CountryLocationsPage() {
             })}
         </div> */}
         <div className="grid grid-cols-2 md:grid-cols-4 md:gap-x-6 md:gap-y-5 gap-x-4 gap-y-8">
-          {columnedLocations.map((col, colIndex) => (
+           {columnedLocations.map((col, colIndex) => (
             <div key={colIndex} className="flex flex-col gap-5">
-              {col.map((state, index) => (
-                <button
-                  key={index}
-                  type='button'
-                  className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-200"
-                  onClick={() =>
-                    navigate(`/l/${encodeURIComponent(state.country)}/${encodeURIComponent(state.name)}`)
-                  }
-                >
-                  <span className="group-hover:text-[#ff6600] w-min lg:w-auto text-left">{state.name}</span>
+              {col.map((state, index) => {
+                const prefixedPath = getPrefixedPath(
+                  `/l/${encodeURIComponent(state.country)}/${encodeURIComponent(state.name)}`
+                );
+    
+                return (
+                  <button
+                    key={index}
+                    type="button"
+                    className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-200"
+                    onClick={() => navigate(prefixedPath)}
+                  >
+                    <span className="group-hover:text-[#ff6600] w-min lg:w-auto text-left">
+                      {state.name}
+                    </span>
+    
                     {state && (
                       <>
                         <span className="text-[12px] bg-[#0000001a] font-[400] leading-[18px] text-[#091019] rounded-full w-6 h-6 items-center justify-center flex">
@@ -243,8 +251,9 @@ export default function CountryLocationsPage() {
                         </span>
                       </>
                     )}
-                </button>
-              ))}
+                  </button>
+                );
+              })}
             </div>
           ))}
         </div>
@@ -262,29 +271,38 @@ export default function CountryLocationsPage() {
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 md:gap-x-6 md:gap-y-5 gap-x-4 gap-y-8">
           {columnedLocations2.map((col, colIndex) => (
-            <div key={colIndex} className="flex flex-col gap-5">
-              {col.map((country, index) => (
-                  <button 
-                  key={index} 
-                  type='button'
-                  className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-200"
-                  onClick={() => navigate(`/l/country/${encodeURIComponent(country.name)}`)}
-                  >
-                    <span className="group-hover:text-[#ff6600] w-min lg:w-auto text-left">{country.name.trim()}</span>
-                    {country.count && (
-                      <>
-                        <span className="text-[12px] bg-[#0000001a] font-[400] leading-[18px] text-[#091019] rounded-full w-6 h-6 items-center justify-center flex">
-                          {country.count}
-                        </span>
-                        <span className="opacity-0 group-hover:opacity-100 translate-x-[-6px] group-hover:translate-x-[0] transition-all duration-300 bg-[#ff6600] rounded-full w-6 h-6 flex items-center justify-center">
-                          <ArrowRightCountries />
-                        </span>
-                      </>
-                    )}
-                  </button>
-              ))}
-            </div>
-          ))}
+                  <div key={colIndex} className="flex flex-col gap-5">
+                    {col.map((country, index) => {
+                      const url = usePrefixPathWithLocale(
+                        `/l/country/${encodeURIComponent(country.name)}`
+                      );
+          
+                      return (
+                        <button
+                          key={index}
+                          type="button"
+                          className="group flex items-center gap-2 text-[18px] font-[500] text-[#091019] cursor-pointer transition-all duration-200"
+                          onClick={() => navigate(url)}
+                        >
+                          <span className="group-hover:text-[#ff6600] w-min lg:w-auto text-left">
+                            {country.name.trim()}
+                          </span>
+          
+                          {country.count && (
+                            <>
+                              <span className="text-[12px] bg-[#0000001a] font-[400] leading-[18px] text-[#091019] rounded-full w-6 h-6 items-center justify-center flex">
+                                {country.count}
+                              </span>
+                              <span className="opacity-0 group-hover:opacity-100 translate-x-[-6px] group-hover:translate-x-[0] transition-all duration-300 bg-[#ff6600] rounded-full w-6 h-6 flex items-center justify-center">
+                                <ArrowRightCountries />
+                              </span>
+                            </>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                ))}
           </div>
         </div>
 

@@ -33,9 +33,14 @@ export const handle = { seo };
 // -----------------
 export async function loader({ context, params }: LoaderFunctionArgs) {
   validateLocale({ context, params });
+  let language = params.lang || 'en';
+  if(language !== 'en-es'){
+    language = 'en';
+  }
 
   const page = await context.sanity.query({
     query: CONTACT_US_PAGE_QUERY,
+    params: { language },
   });
  
 

@@ -3,11 +3,7 @@ import groq from "groq";
 
 // Main query to fetch header by specific language
 export const HEADER_QUERY = groq`
-*[
-
-  _type == "header" && (language == $language || !defined(language))
-
-] | order(_updatedAt desc) [0] {
+*[_type == "header" && (language == $language || !defined(language))] | order(_updatedAt desc) [0] {
     logo {
       "url": asset->url
     },
