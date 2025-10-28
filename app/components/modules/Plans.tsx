@@ -27,12 +27,7 @@ type PlanType = {
 
 type PricingData = {
   individualProductsTab: {
-    heading: string;
-    description: string;
-    plans: PlanType[];
-  };
-  bundlesTab: {
-    heading: string;
+    // heading: string;
     description: string;
     plans: PlanType[];
   };
@@ -64,8 +59,8 @@ type PricingModuleProps = {
     { 
       id: "bundles",
       tabName: "Bundles", 
-      heading: data.bundlesTab.heading, 
-      description: data.bundlesTab.description, 
+      // heading: data.bundlesTab.heading, 
+      // description: data.bundlesTab.description, 
       tabCards: data.bundlesTab.plans || [] 
     },
   ];
@@ -78,10 +73,10 @@ type PricingModuleProps = {
       <div className="max-w-[1240px] mx-auto items-center justify-center flex flex-col">
         {/* Heading */}
         <h2 className="max-w-[870px] mx-auto font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[26px] md:text-[36px] tracking-[-0.39px] md:tracking-[-0.54px] text-center">
-          {currentTab.heading}
+          {/* {currentTab.heading} */}
         </h2>
         <p className="mt-5 font-Roboto text-PrimaryBlack font-normal leading-[21px] md:leading-[27px] text-[14px] md:text-[18px] tracking-[0px] text-center">
-          {currentTab.description}
+          {/* {currentTab.description} */}
         </p>
 
         {/* Tabs + Toggle */}

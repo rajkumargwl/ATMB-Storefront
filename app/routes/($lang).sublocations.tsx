@@ -4,15 +4,16 @@ import LocationsList, {LocationAPI} from '~/components/location/LocationList';
 import {HEADER_QUERY} from '~/queries/sanity/header';
 import {FOOTER_QUERY} from '~/queries/sanity/footer';
 import {notFound} from '~/lib/utils';
-
+  import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
+  const seo: SeoHandleFunction = ({data}) => ({
+   title: data?.page?.seo?.title || 'Mailbox Locations | Anytime Mailbox',
+   description:
+     data?.page?.seo?.description ||
+     'Choose the most practical location for your virtual business address. Customers will easily find your business and you will make a good first impression.',
+ });
+ export const handle = { seo };
 export async function loader({context, request, params}: LoaderFunctionArgs) {
   const language = params.lang || 'en';
- 
-  // Validate supported languages
-  const supportedLanguages = ['en', 'es'];
-  if (!supportedLanguages.includes(language)) {
-    throw notFound();
-  }
 
   const cache = context.storefront.CacheCustom({mode: 'public', maxAge: 60, staleWhileRevalidate: 60});
 

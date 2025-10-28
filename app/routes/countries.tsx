@@ -17,7 +17,7 @@ import ModuleGrid from '~/components/modules/ModuleGrid';
 import { fetchGids, notFound, validateLocale } from '~/lib/utils';
 
 // 👇 import your FAQ Page query
-import { FAQ_PAGE } from '~/queries/sanity/fragments/pages/faqpage';
+import { FAQ_MAILBOX_RENTER_PAGE } from '~/queries/sanity/fragments/pages/faqmailboxrenter';
 
 // -----------------
 // SEO
@@ -38,7 +38,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
   validateLocale({ context, params });
 
   const page = await context.sanity.query({
-    query: FAQ_PAGE,
+    query: FAQ_MAILBOX_RENTER_PAGE,
   });
 
   if (!page) throw notFound();

@@ -86,7 +86,7 @@ const DownloadMailboxRenterApps: React.FC<DownloadMailboxRenterAppsProps> = ({
               >
                 <img
                   src={appStoreIcon.url}
-                  alt="Download on the App Store"
+                  alt="Mailbox Renter Apps-Download on the App Store"
                   className="w-full object-cover"
                 />
               </a>
@@ -100,7 +100,7 @@ const DownloadMailboxRenterApps: React.FC<DownloadMailboxRenterAppsProps> = ({
               >
                 <img
                   src={googlePlayIcon.url}
-                  alt="Get it on Google Play"
+                  alt=" Mailbox Renter Apps Download on the App Store Get it on Google Play"
                   className="w-full object-cover"
                 />
               </a>

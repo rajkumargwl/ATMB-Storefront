@@ -1,12 +1,12 @@
 interface RenterReferralHeroProps {
   data: any;
 }
-
+ 
 export function RenterReferralHero({ data }: RenterReferralHeroProps) {
   const { label, heading, highlightedText, description, image, buttonText, buttonLink } = data;
-
+ 
   console.log('Hero data received:', data); // Debug log
-
+ 
   const renderHeading = () => {
     if (!heading) return null;
     
@@ -15,33 +15,33 @@ export function RenterReferralHero({ data }: RenterReferralHeroProps) {
     let processedHeading = heading;
     highlightedText.forEach((word: string) => {
       processedHeading = processedHeading.replace(
-        word, 
+        word,
         `<span class="text-primary">${word}</span>`
       );
     });
     
     return <div dangerouslySetInnerHTML={{ __html: processedHeading }} />;
   };
-
+ 
   return (
-    <section className="py-16 bg-white">
-      <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6">
+    <section className="px-5 py-[40px] md:py-[54px] bg-white">
+      <div className="max-w-[1240px] mx-auto">
+        <div className="flex flex-col md:flex-row gap-[44px] md:gap-[62px] lg:gap-[126px] items-center">
+          <div className="w-full md:w-[45.15%]">
             {label && (
-              <span className="text-sm font-semibold text-gray-600 uppercase tracking-wide">
+              <span className="font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">
                 {label}
               </span>
             )}
             
             {heading && (
-              <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+              <h1 className="mt-4 md:mt-6 font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[61.6px] text-[24px] md:text-[56px] tracking-[-0.36px] md:tracking-[-1.12px]">
                 {renderHeading()}
               </h1>
             )}
             
             {description && (
-              <p className="text-lg text-gray-600 leading-relaxed">
+              <p className="mt-4 font-Roboto text-PrimaryBlack font-normal md:font-medium leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px]">
                 {description}
               </p>
             )}
@@ -49,19 +49,19 @@ export function RenterReferralHero({ data }: RenterReferralHeroProps) {
             {buttonText && (
               <a
                 href={buttonLink || '#'}
-                className="inline-flex items-center px-6 py-3 bg-primary text-white  bg-orange-600 font-semibold rounded-lg hover:bg-primary-dark transition-colors"
+                className="mt-6 flex items-center justify-center w-full md:w-[259px] h-[52px] md:h-[52px] rounded-full bg-DarkOrange px-4 py-3 text-white  font-Roboto font-medium text-[16px] md:text-[16px] leading-[16px] tracking-[0.08px] "
               >
                 {buttonText}
               </a>
             )}
           </div>
-
+ 
           {image?.asset?.url && (
-            <div className="relative">
+            <div className="w-full md:w-[54.85%] relative">
               <img
                 src={image.asset.url}
                 alt={heading || 'Renter Referral Hero'}
-                className="rounded-lg shadow-lg w-full h-auto"
+                className="rounded-[20px] w-full max-h-[400px] object-cover"
               />
             </div>
           )}

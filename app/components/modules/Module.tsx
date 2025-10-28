@@ -37,9 +37,7 @@ import ContactUsSection from '~/components/modules/ContactUsSection';
 import AffiliateProgramSection from '~/components/modules/AffiliateProgramSection';
 import WhyJoinSection from '~/components/modules/WhyJoinSection';
 import StepsSection from '~/components/modules/StepsSection';
-import { RenterReferralHero } from '~/components/modules/renter-referralhero';
 import { RenterReferralWork } from '~/components/modules/renter-referralwork';
-import { RenterReferralNoCatch } from '~/components/modules/renter-referralno-catch';
 import { RenterReferralEditor } from '~/components/modules/renter-referraleditor';
 import SolutionHero from '~/components/modules/SolutionHero';
 import SolutionVirtualMailbox from '~/components/modules/SolutionVirtualMailbox';
@@ -65,6 +63,7 @@ import BusinessGrowth from '~/components/modules/BusinessGrowth';
 import BusinessSupport from '~/components/modules/BusinessSupport';
 import BusinessBanner from '~/components/modules/BusinessBanner';
 import WebinarsTopicsSection from '~/components/modules/WebinarsTopicsSection';
+import PlansWithoutBundles from '~/components/modules/PlansWithoutBundles';
 
 import SmartBusiness from '~/components/modules/SmartBusiness';
 
@@ -82,13 +81,7 @@ import { OperatorYourCompetitors } from './operatoryourcompetitors';
 
 import NoOfficeSection from '~/components/modules/NoOfficeSection';
 import  AnytimeFeaturesModule from '~/components/modules/AnytimeFeaturesModule';
-import  PDPIntroSection from '~/components/modules/PDPIntroSection';
-import PDPDetailedFeatureSection from '~/components/modules/PDPDetailedFeatureSection';
-import PDPHighlightsSection from '~/components/modules/PDPHighlightsSection';
-import PDPWhyChooseSection from '~/components/modules/PDPWhyChooseSection';
-import PDPHowItWorks from '~/components/modules/PDPHowItWorksSection';
-import PDPTestimonials from '~/components/modules/PDPTestimonialsSection';
-import PDPCommonFeaturesSection from '~/components/modules/PDPCommonFeaturesSection';
+// import PDPCommonFeaturesSection from '~/components/modules/PDPCommonFeaturesSection';
 
  import DownloadMailboxRenterApps from './DownloadMailboxRenterApps';
  import SmallBusinessChallanges from './SmallBusinessChallanges';
@@ -110,21 +103,22 @@ import PdpAnytimePhoneSection from './PdpAnytimePhoneSection';
 import PdpCommonFeaturesSection from './PdpCommonFeaturesSection';
 import PDPWhyChooseAnytimePhone from './PdpWhyChooseAnytimePhone';
 import PdpWhyChooseAnytimePhone from './PdpWhyChooseAnytimePhone';
+import { InviteFriend } from './InviteFriend';
+import { RefferalBanner } from './RefferalBanner';
+import { RefferalStep } from './RefferalStep';
 
 type Props = {
   module: SanityModule | ProductWithNodes;
   homeSearchResults?: any;
   searchQuery?: string | null;
   bundles?: any[];
-  pageType?: 'operator' | 'default'; // 争 ADDED pageType PROP
+  pageType?: 'operator' | 'default' ; // 争 ADDED pageType PROP
+  highlights?: any[];
 };
 
-export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery, bundles, pageType = 'default'}: Props) { // 争 Set default pageType
-  console.log("🚀 Module component rendered with type:", module?._type);
-
-  console.log("check bundles in module", bundles);
-  console.log("pdp page module", module);
-
+export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery, bundles, pageType = 'default',highlights,productData}: Props) { // 争 Set default pageType
+ 
+ console.log("highlights in module.tsx", highlights);
   // Helper boolean for conditional rendering
   const isOperatorPage = pageType === 'operator';
 
@@ -147,20 +141,22 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
  case 'pdpdetailedFeaturesSection':
   return <PdpDetailedFeaturesSection {...module} />;
  case 'pdpmailCenterHighlightsSection':
-  return <PdpMailCenterHighlightsSection {...module} />;
+  return <PdpMailCenterHighlightsSection {...module} highlights={highlights} />;
    case 'pdpvirtualMailboxLocation':
   return <VirtualMailboxLocationCard {...module} />;
 
    
    case 'pdpFeatureGridSection':
   return <PdpFeatureGridSection data={module} />;
-   case 'pdpanytimePhoneSection':
+   case 'pdpanytimePhonebannerSection':
   return <PdpAnytimePhoneSection {...module} />;
 
     case 'pdpCommonFeaturesSection':
   return <PdpCommonFeaturesSection data={module} />;
    case 'pdpwhyChooseAnytimePhoneSection':
   return <PdpWhyChooseAnytimePhone data={module} />;
+ case 'productplans':
+  return <PlansWithoutBundles product={productData} />;
 
 
 
@@ -226,8 +222,6 @@ case 'smartBusinessSection':
         </>
       );
  
- 
-    // Operator specific modules using standard type names but conditional rendering
     
     // affilateProgramSection -> OperatorGrowYour / AffiliateProgramSection
    case 'affiliateProgramSection':
@@ -266,13 +260,7 @@ case 'smartBusinessSection':
     case 'testimonial':
       return  <Testimonial data={module} />;
  
-    // The modules below are assumed to ONLY exist on the Operator Signup page,
-    // but we add the isOperatorPage check just in case.
- 
-    // New Operator-only type (formerly: operatorSignupDebug)
- 
- 
-     // The duplicate case for 'operatorSignupVideo' was here and has been REMOVED.
+  
  
     case 'operatorYourCompetitors':
       return <OperatorYourCompetitors module={module} />;
@@ -284,13 +272,7 @@ case 'smartBusinessSection':
         : <JoinTeamSection {...module} />;
  
  
-     // 櫨 END OPERATOR SIGNUP MODULES
-
-
-
-
-
-    // Add this case to your switch statement
+  
    case 'acceleratorPageModule':
   return (
     <>
@@ -351,8 +333,6 @@ case 'smartBusinessSection':
     case 'builtForHowYouWorkToday':
       return <BuiltForYou data={module} />;
  
-    // NOTE: 'howitworks3steps' is handled above for operator conditional rendering.
-    // The previous duplicate case is removed.
     
     case 'howitworksfaq':
       return <HowItWorksFaq data={module} />;
@@ -369,25 +349,20 @@ case 'smartBusinessSection':
         </>
       );
 
-    // Renter specific modules
-    case 'aboutIntroSection':
-      // Check if this is within a renter referral program context
-      // You can check the parent module or use the _key to distinguish
-      if (module._key === '8d29bbc6753d' || module._key === '2dab207f50c3') {
-        // For the first aboutIntroSection (hero)
-        if (module._key === '8d29bbc6753d') {
-          return <RenterReferralHero data={module} />;
-        }
-        // For the second aboutIntroSection (no-catch)
-        if (module._key === '2dab207f50c3') {
-          return <RenterReferralNoCatch data={module} />;
-        }
-      }
-      // Fallback to regular AboutIntroSection for other contexts
-      return <AboutIntroSection {...module} />;
+   case 'inviteAFriendSection':
+  return <InviteFriend data={module} />
 
-    // NOTE: 'whyBusinessChooseUs' is handled above for operator/renter conditional rendering.
-    // The previous duplicate case is removed.
+     case 'referralStep':
+  return <RefferalStep data={module} />;
+
+
+     case 'renterEditor':
+      return <RenterReferralEditor data={module}/>
+
+    case 'renterReferralBannerModule':
+  return <RefferalBanner data={module} />
+
+    
     case 'pdpPageModule':
       return (
         <>
@@ -397,26 +372,12 @@ case 'smartBusinessSection':
           ))}
         </>
       );
-    case 'PDPIntroSection':
-      return <PDPIntroSection {...module} />;
-    case 'PDPDetailedFeature':
-      return <PDPDetailedFeatureSection {...module} />;  
-    case 'PDPHighlights':
-      return <PDPHighlightsSection {...module} />;  
-    case 'PDPWhyChooseAnytimePhone':
-      return <PDPWhyChooseSection {...module} />;  
-    case 'PDPHowItWorks':
-      return <PDPHowItWorks {...module} />;  
-    case 'PDPTestimonials':
-      return <PDPTestimonials {...module} />;  
-    case 'PDPCommonFeatures':
-      return <PDPCommonFeaturesSection {...module} />;    
-    case 'renterEditor':
-      return <RenterReferralEditor data={module} />;
+   
+    // case 'PDPCommonFeatures':
+    //   return <PDPCommonFeaturesSection {...module} />;    
+    
 
-    // -----------------------
-    // About Us nested sections
-    // -----------------------
+   
     case 'aboutUsModule':
       return (
         <>
@@ -450,8 +411,8 @@ case 'smartBusinessSection':
     case 'coreValuesSection':
       return <CoreValuesSection {...module} />;
     
-    // 'joinTeamSection' is handled above for operator conditional rendering.
-
+    case 'aboutIntroSection':
+     return <AboutIntroSection {...module} />;
     case 'aboutHowItStartedSection':
       return <AboutHowItStartedSection {...module} />;
 
@@ -476,12 +437,7 @@ case 'smartBusinessSection':
         </>
       );
 
-    // NOTE: 'affiliateProgramSection' is handled above for operator conditional rendering.
-    // The previous duplicate case is removed.
-
-    // NOTE: 'whyJoinSection' is handled above for operator conditional rendering.
-    // The previous duplicate case is removed.
-
+   
     case 'stepsSection':
       return <StepsSection {...module} />;
 
@@ -611,7 +567,7 @@ case 'solutionMailboxBenefitFaqModule':
     case 'marketPlaceCategoriesSection':
       return <MarketplaceCategories data={module} />;  
 
-    // 櫨 DEFAULT CASE FOR DEBUGGING
+
     default:
       console.warn(`No component found for module type: ${module._type}`);
      

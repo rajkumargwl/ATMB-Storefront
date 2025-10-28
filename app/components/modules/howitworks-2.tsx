@@ -1,4 +1,3 @@
-
 import { Link } from '@remix-run/react';
  
 interface HowItWorks2Props {
@@ -23,7 +22,7 @@ interface HowItWorks2Props {
  
 export function HowItWorks2({ data }: HowItWorks2Props) {
   return (
-    <section className="bg-PrimaryBlack py-[40px] md:py-[60px] lg:py-[100px] px-5 relative z-[2] overflow-hidden">
+    <section className="bg-PrimaryBlack py-[40px] md:py-[60px] lg:py-[100px] px-5 relative z-[0] overflow-hidden">
       <div className="absolute hidden md:flex z-[1] top-[-13px] right-[-20px] lg:right-[-23px]">
         <svg xmlns="http://www.w3.org/2000/svg" width="507" height="486" viewBox="0 0 507 486" fill="none">
             <g filter="url(#filter0_f_1664_59555)">
@@ -112,4 +111,3 @@ export function HowItWorks2({ data }: HowItWorks2Props) {
     </section>
   );
 }
- 

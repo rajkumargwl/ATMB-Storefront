@@ -1,4 +1,3 @@
-
 import {useNavigate, useLoaderData} from '@remix-run/react';
 import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {notFound} from '~/lib/utils';
@@ -12,7 +11,35 @@ import {useCart} from '@shopify/hydrogen-react';
 import { PRODUCT_PAGE_QUERY } from '~/queries/sanity/product';
 import { SanityProductPage } from '~/lib/sanity';
 import ModuleGrid from '~/components/modules/ModuleGrid'; // Make sure this is imported
+import { Link } from 'react-router-dom';
+import Recycling from "~/components/icons/Recycle.png";
+import OnlineStorage from "~/components/icons/Storage.png";
+import MailForwarding from "~/components/icons/send.png";
+import LocalPickup from "~/components/icons/Frame.png";
+import Scan from "~/components/icons/scan.png";
+import Toprated from "~/components/icons/Badge.png";
+import Premium from "~/components/icons/Crown.png";
+import defaultIcon from "~/components/icons/default.png";
+ 
 
+const services = [
+    { name: "Mail Forwarding", icon: MailForwarding },
+    { name: "Document Scanning", icon: Scan },
+    { name: "Local Pickup", icon: LocalPickup },
+    { name: "Recycling", icon: Recycling },
+    { name: "Online Storage", icon: OnlineStorage },
+    { name: "Top Rated", icon: Toprated },
+    { name: "Premium Address", icon: Premium },
+  ];
+  import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
+import LocationInfo from '~/components/modules/LocationInfo';
+  const seo: SeoHandleFunction = ({data}) => ({
+   title: data?.page?.seo?.title || 'Vitual Mailbox',
+   description:
+     data?.page?.seo?.description ||
+     'A custom storefront powered by Hydrogen and Sanity',
+ });
+ export const handle = { seo };
 // Location query from Sanity
 const LOCATION_QUERY = /* groq */ `
   *[_type == "location" && locationId == $id][0]{
@@ -39,24 +66,24 @@ const LOCATION_QUERY = /* groq */ `
     options
   }
 `;
-
+ 
 export async function loader({context, params, request}: LoaderFunctionArgs) {
   const language = params.lang || 'en';
-
+ 
   // Validate supported languages
   const supportedLanguages = ['en', 'es'];
   if (!supportedLanguages.includes(language)) {
     throw notFound();
   }
-
+ 
   const cache = context.storefront.CacheCustom({
     mode: 'public',
     maxAge: 60,
     staleWhileRevalidate: 60,
   });
-
+ 
   const handle = params.handle ?? 'virtual-mailbox';
-
+ 
   // Fetch Shopify product
   const {product} = await context.storefront.query<{product: Product}>(PRODUCT_QUERY, {
     variables: {
@@ -65,7 +92,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     },
   });
   if (!product) throw notFound();
-
+ 
   // Fetch Sanity location dynamically
   const locationId = new URL(request.url).searchParams.get('locationId') ?? '101';
   const location = await context.sanity.query({
@@ -74,7 +101,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     cache,
   });
   if (!location) throw notFound();
-
+ 
   // Fetch PDP modules from Sanity
   const [page] = await Promise.all([
     context.sanity.query<SanityProductPage>({
@@ -90,7 +117,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     product,
   });
 }
-
+ 
 export default function Plans() {
   // const {lines} = useCart();
   // console.log('Cart lines in Plans page:', lines);
@@ -99,18 +126,20 @@ export default function Plans() {
   const {location, product, page} = useLoaderData<typeof loader>();
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
-
+  console.log('Page data:', page);
+  console.log('Location data:', location);
+ 
   const variants = (product?.variants?.nodes ?? []) as ProductVariant[];
-
+ 
   // Filter by billing cycle from metafields
   const filteredVariants = variants.filter((variant) => {
     const planTypeField = variant.metafields?.find((m) => m.key === 'plan_type');
     return planTypeField?.value?.toLowerCase() === billingCycle;
   });
-
+ 
   // Sort by Shopify's built-in `position`
   const sortedVariants = filteredVariants.sort((a, b) => a.position - b.position);
-
+ 
   const productAnalytics: ShopifyAnalyticsProduct | null = selectedVariant
     ? {
         productGid: product.id,
@@ -122,118 +151,38 @@ export default function Plans() {
         quantity: 1,
       }
     : null;
-
+ 
   const locationProperties = Object.entries(location).map(([key, value]) => ({
     key,
     value: String(value), // Shopify requires string values
   }));
-
+  const isTopRated = location?.ratingList?.some(
+    (r: any) => r.type === 'TOPRATED'
+  );
+  const enablePlansSection = page?.modules?.some(
+    (mod) => mod._type === "productplans" && mod.enablePlansSection === true
+  );
+ 
   useEffect(() => {
     const storedLineId = sessionStorage.getItem('replaceLineId');
     if (storedLineId) setReplaceLineId(storedLineId);
     console.log('Replace line ID from sessionStorage:', storedLineId);
   }, []);
-
+ 
   return (
     <>
       <div className="flex flex-col min-h-screen">
-        <main className="flex-1 p-8">
-          {/* Breadcrumb + Title */}
-          <div className="mb-8">
-            <p className="text-sm text-gray-500">Virtual Mailbox &gt; Locations &gt; Plans</p>
-            <h2 className="text-2xl font-bold mt-2">{product?.title}</h2>
-            <p className="text-lg font-semibold">{location?.displayName}</p>
-            <p className="text-gray-600">{location?.addressLine1}</p>
-            <p className="text-gray-600">
-              Mailbox ID: <span className="font-bold">#{location.locationId}</span>
-            </p>
-          </div>
-
-          {/* Billing cycle toggle */}
-          <div className="flex justify-center items-center gap-4 mb-8">
-            <span
-              onClick={() => setBillingCycle('monthly')}
-              className={`cursor-pointer px-4 py-2 rounded-full font-medium ${
-                billingCycle === 'monthly'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-200 text-gray-700'
-              }`}
-            >
-              Monthly
-            </span>
-            <span
-              onClick={() => setBillingCycle('yearly')}
-              className={`cursor-pointer px-4 py-2 rounded-full font-medium ${
-                billingCycle === 'yearly'
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-200 text-gray-700'
-              }`}
-            >
-              Yearly
-            </span>
-          </div>
-
-          {/* Plans Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {sortedVariants.map((variant) => {
-              const isSelected = selectedVariant?.id === variant.id;
-              return (
-                <div
-                  key={variant.id}
-                  className={`rounded-2xl border p-6 shadow-sm relative bg-white cursor-pointer ${
-                    isSelected
-                      ? 'border-blue-500 ring-2 ring-blue-300'
-                      : 'border-gray-200'
-                  }`}
-                  onClick={() => setSelectedVariant(variant)}
-                >
-                  <h3 className="text-xl font-bold">{variant.title}</h3>
-                  <p className="text-2xl font-semibold mt-2">
-                    {variant.price.amount} {variant.price.currencyCode}
-                    <span className="text-base font-normal">
-                      /{billingCycle}
-                    </span>
-                  </p>
-
-                  <ul className="mt-4 space-y-2">
-                    {variant.selectedOptions.map((opt, i) => (
-                      <li key={i} className="flex items-center gap-2">
-                        <span className="text-green-600">✔</span>
-                        <span>
-                          {opt.name}: {opt.value}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  {isSelected && (
-                    <span className="absolute top-2 right-2 text-blue-600 font-semibold">
-                      ✓ Selected
-                    </span>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-
+        <main className="flex-1">
+         
+<LocationInfo location={location} services={services} />
           {/* Sanity Modules Grid */}
           {page?.modules && page.modules.length > 0 && (
-            <div className="mb-8 mt-8 px-0 md:px-0">
-              <ModuleGrid items={page.modules} searchQuery={''} homeSearchResults={[]} />
+            <div className="mb-0 mt-0 px-0 md:px-0">
+              <ModuleGrid items={page.modules} searchQuery={''} homeSearchResults={[]} productData={product}  />
             </div>
           )}
-
-          {/* Add to Cart */}
-          <div className="flex justify-center pt-6">
-            <ReplacePlanAddToCartButton
-              selectedVariant={selectedVariant}
-              replaceLineId={replaceLineId}
-              locationProperties={locationProperties}
-              disabled={!selectedVariant || !selectedVariant.availableForSale}
-              buttonClassName="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600"
-              text={selectedVariant ? 'Add to Cart' : 'Select a Plan First'}
-            />
-          </div>
+ 
+          
         </main>
       </div>
     </>

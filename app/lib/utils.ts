@@ -48,13 +48,14 @@ export function getLocaleFromRequest(request: Request): I18nLocale {
       };
 }
 
-export function usePrefixPathWithLocale(path: string) {
+export function usePrefixPathWithLocale(path?: string | null) {
   const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
 
-  return `${selectedLocale.pathPrefix}${
-    path.startsWith('/') ? path : '/' + path
-  }`;
+  if (!path) return selectedLocale.pathPrefix || '/'; // fallback if path is null
+
+  return `${selectedLocale.pathPrefix}${path.startsWith('/') ? path : '/' + path}`;
 }
+
 
 export function validateLocale({
   params,

@@ -13,14 +13,14 @@ import { Suspense } from 'react';
 
 import ModuleGrid from '~/components/modules/ModuleGrid';
 import { fetchGids, notFound, validateLocale } from '~/lib/utils';
-// 👇 RENTER_PAGE_QUERY अब SLUG से fetch करेगी
+
 import { RENTER_PAGE_QUERY } from '~/queries/sanity/fragments/pages/renterPage'; 
 
 // -----------------
 // SEO and Handle
 // -----------------
 const seo: SeoHandleFunction = ({ data }) => ({
-  title: data?.page?.seo?.title || 'Renter Referral Program',
+  title: data?.page?.seo?.title || 'Renter Referral Program | Anytime Mailbox',
   description: data?.page?.seo?.description || 'Refer friends and earn rewards.',
 });
 export const handle = { seo };
@@ -34,7 +34,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
   console.log('Fetching renter referral page by SLUG (Clean Attempt)...');
 
   try {
-    // RENTER_PAGE_QUERY में अब Hardcoded slug है, और यह published document देखेगी।
+  
     const pageResults = await context.sanity.query({
       query: RENTER_PAGE_QUERY,
     });
@@ -47,10 +47,10 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
       throw notFound();
     }
     
-    console.log('Page successfully fetched by slug.' ,pageResults);
+  
     
     const gids = fetchGids({ page, context });
-
+  
     return defer({
       page,
       gids,

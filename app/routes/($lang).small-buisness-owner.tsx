@@ -1,5 +1,3 @@
-// app/routes/business-accelerator.tsx
-
 import { Await, useLoaderData } from '@remix-run/react';
 import {
   AnalyticsPageType,
@@ -16,19 +14,19 @@ import { Suspense } from 'react';
 import ModuleGrid from '~/components/modules/ModuleGrid';
 import { fetchGids, notFound, validateLocale } from '~/lib/utils';
 
-import { BUSINESS_ACCELERATOR_PAGE_QUERY } from '~/queries/sanity/fragments/pages/businessAcceleratorPageQuery';
+import { SMALL_BUSINESS_OWNER_PAGE_QUERY } from '~/queries/sanity/fragments/pages/smallBusinessOwnerPage';
 
 // -----------------
 // SEO
 // -----------------
 const seo: SeoHandleFunction = ({ data }) => ({
   title:
-    data?.page?.seo?.title || 'Business Accelerator - Sanity x Hydrogen',
+    data?.page?.seo?.title ||
+    'Small Business Owner - Anytime Mailbox',
   description:
     data?.page?.seo?.description ||
-    'Explore our Business Accelerator program and resources.',
+    'Run your business anywhere without the hassle — explore features built for small business owners.',
 });
-
 export const handle = { seo };
 
 // -----------------
@@ -36,14 +34,18 @@ export const handle = { seo };
 // -----------------
 export async function loader({ context, params }: LoaderFunctionArgs) {
   validateLocale({ context, params });
-   
-  const page = await context.sanity.query({
-    query: BUSINESS_ACCELERATOR_PAGE_QUERY,
 
+  // ✅ Fetch Sanity data for "Small Business Owner" page
+  const page = await context.sanity.query({
+    query: SMALL_BUSINESS_OWNER_PAGE_QUERY,
   });
 
   if (!page) throw notFound();
 
+  // Optional: Access specific module type
+  const smallBusinessOwnerModule = page?.modules?.find(
+    (mod: any) => mod._type === 'smallBusinessOwnerSection'
+  );
 
   const gids = fetchGids({ page, context });
 
@@ -57,16 +59,16 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
 // -----------------
 // Component
 // -----------------
-export default function BusinessAccelerator() {
+export default function SmallBusinessOwnerPage() {
   const { page, gids } = useLoaderData<typeof loader>();
 
   return (
-    <SanityPreview data={page} query={BUSINESS_ACCELERATOR_PAGE_QUERY}>
+    <SanityPreview data={page} query={SMALL_BUSINESS_OWNER_PAGE_QUERY}>
       {(page) => (
         <Suspense>
           <Await resolve={gids}>
             {page?.modules && page.modules.length > 0 && (
-             <div className={clsx('mb-0 mt-0 px-0', 'md:px-0')}>
+              <div className={clsx('mb-0 mt-0 px-0', 'md:px-0')}>
                 <ModuleGrid items={page.modules} />
               </div>
             )}

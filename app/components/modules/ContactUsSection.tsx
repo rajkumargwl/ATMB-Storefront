@@ -67,7 +67,7 @@ export default function ContactUsSection({ data }: ContactUsProps) {
         )}
 
         <div className="max-w-[1120px] mx-auto flex flex-col lg:flex-row gap-10">
-          {/* LEFT: Form */}
+          
           <div className="w-full lg:w-[59.8%] rounded-[12px] p-6 bg-white border border-LightWhite" role="form" aria-labelledby="form-title">
             {data.formTitle && (
               <h2 id="form-title" className="font-Roboto text-PrimaryBlack font-semibold leading-[28px] md:leading-[31.2px] text-[20px] md:text-[24px] tracking-[-0.3px] md:tracking-[-0.36px]">
@@ -81,7 +81,7 @@ export default function ContactUsSection({ data }: ContactUsProps) {
             )}
 
             <form className="space-y-5" onSubmit={handleSubmit}>
-              {/* Company Name */}
+             
               <div className="relative">
                 <label htmlFor="company" className="absolute left-[12px] top-[6px] font-Roboto text-LightGray font-normal leading-[18px] text-[12px]">
                   Company Name
@@ -90,7 +90,7 @@ export default function ContactUsSection({ data }: ContactUsProps) {
                   className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px] font-Roboto text-PrimaryBlack text-[16px]" />
               </div>
 
-              {/* First & Last Name */}
+              
               <div className="flex flex-col md:flex-row gap-5 md:gap-4">
                 <div className="relative w-full">
                   <label htmlFor="firstname" className="absolute left-[12px] top-[6px] font-Roboto text-LightGray text-[12px]">First Name</label>
@@ -102,7 +102,7 @@ export default function ContactUsSection({ data }: ContactUsProps) {
                 </div>
               </div>
 
-              {/* Email & Phone */}
+              
               <div className="flex flex-col md:flex-row gap-5 md:gap-4">
                 <div className="relative w-full">
                   <label htmlFor="email" className="absolute left-[12px] top-[6px] font-Roboto text-LightGray text-[12px]">Email</label>
@@ -114,7 +114,7 @@ export default function ContactUsSection({ data }: ContactUsProps) {
                 </div>
               </div>
 
-              {/* Other Fields */}
+              
               <div className="relative">
                 <label htmlFor="what_best_describes_you_" className="absolute left-[12px] top-[6px] font-Roboto text-LightGray text-[12px]">Which best describes you?</label>
                 <input type="text" id="what_best_describes_you_" name="what_best_describes_you_" placeholder="Small business owner" required className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px] font-Roboto text-PrimaryBlack text-[16px]" />
@@ -128,19 +128,18 @@ export default function ContactUsSection({ data }: ContactUsProps) {
                 <textarea rows={4} id="message" name="message" required placeholder="Looking for a reliable mailbox service" className="block w-full rounded-[8px] border border-LightWhite bg-white h-[126px] pl-[12px] pt-[24px] pb-[10px] font-Roboto text-PrimaryBlack text-[16px]"></textarea>
               </div>
 
-              {/* Captcha / Image */}
+              
               <div className="relative">
                 <img src={Contact} alt="captcha" className="rounded-[20px] w-full max-w-[368px] h-auto object-cover" />
               </div>
 
-              {/* Submit */}
+              
               <div className="relative pt-3 flex items-center justify-center">
                 <button type="submit" className="flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto py-[12px] px-4 rounded-full w-full md:w-[271px] h-[52px]">Submit</button>
               </div>
             </form>
           </div>
 
-          {/* RIGHT: Support + Quick Links */}
           <aside className="w-full lg:w-[40.2%]" aria-labelledby="support-heading quick-links-heading">
             {/* Support Section */}
             {data.supportSection && (

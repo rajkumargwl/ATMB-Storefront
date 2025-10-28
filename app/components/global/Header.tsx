@@ -12,6 +12,9 @@ import CloseIconBlack from '~/components/icons/CloseIconBlack';
 import LeftChevron from '~/components/icons/LeftChevron';
 import {CountrySelector} from '~/components/global/CountrySelector';
 import LanguageSwitcher from "./LanguageSwitcher";
+import LanguageCurrencyMenu from '~/components/global/LanguageCurrencyMenu';
+import {usePrefixPathWithLocale} from '~/lib/utils';
+import GlobeIcon from '~/components/media/Globe.svg';
 
 type HeaderProps = {
   data: {
@@ -132,7 +135,7 @@ useEffect(() => {
           {/* Logo */}
           <div className="flex items-center">
             {logo?.url && (
-              <Link to="/">
+              <Link to={usePrefixPathWithLocale('/')} >
                 <img
                   src={logo.url}
                   alt="Anytime Mailbox"
@@ -149,7 +152,8 @@ useEffect(() => {
             {menu?.map((item, idx) => (
               <div key={idx} className="relative group p-2">
                  <Link
-                  to={item.label === "Solutions"
+                  to={
+                    usePrefixPathWithLocale(item.label === "Solutions"
         ? "/solutionsvm"
         : item.label === "Locations"
         ? "/sublocations"
@@ -159,7 +163,7 @@ useEffect(() => {
           ? "/about-us"
           : item.label === "Contact Us"
           ? "/contact"
-        : item.url ?? "#"}
+        : item.url ?? "#")}
                   className="text-PrimaryBlack hover:text-PrimaryBlack font-normal flex items-center gap-[6px] text-[14px] md:text-[14px] xl:text-[16px] leading-[24px] tracking-[0px]"
                 >
                   {item.label} 
@@ -170,22 +174,27 @@ useEffect(() => {
 
 
                 {/* Dropdown submenu */}
-                {item.hasSubmenu && item.subMenu && (
-                  <div className="absolute z-[2] left-0 mt-2 bg-white border border-LightWhite shadow-md rounded-[6px] hidden group-hover:block min-w-[100px]">
-                    <ul className="py-2">
-                      {item.subMenu.map((sub, i) => (
-                        <li key={i}>
-                          <Link
-                            to={sub.url ?? "#"}
-                            className="block px-4 py-[6px] text-PrimaryBlack hover:text-PrimaryBlack font-normal text-[14px] md:text-[14px] xl:text-[16px] leading-[24px] tracking-[0px]"
-                          >
-                            {sub.label}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+                {item?.hasSubmenu && item?.subMenu && (
+                    <div className="absolute z-[2] left-0 mt-2 bg-white border border-LightWhite shadow-md rounded-[6px] hidden group-hover:block min-w-[100px]">
+                      <ul className="py-2">
+                        {item?.subMenu.map((sub, i) => {
+                          const localizedUrl = usePrefixPathWithLocale(sub?.url) ?? "#";
+
+                          return (
+                            <li key={i}>
+                              <Link
+                                to={localizedUrl}
+                                className="block px-4 py-[6px] text-PrimaryBlack hover:text-PrimaryBlack font-normal text-[14px] md:text-[14px] xl:text-[16px] leading-[24px] tracking-[0px]"
+                              >
+                                {sub?.label}
+                              </Link>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  )}
+
               </div>
             ))}
           </nav>
@@ -208,7 +217,7 @@ useEffect(() => {
           {/* Cart */}
           {icon2?.url && (
              <Link
-               to="/cart">
+               to={usePrefixPathWithLocale('/cart')}>
               <img
                 src={icon2.url}
                 alt="Cart"
@@ -217,8 +226,9 @@ useEffect(() => {
               />
             </Link>
           )}
-           {icon3?.url && (
-             <Link
+           {/* {icon3?.url && ( */}
+            <>
+            {/* <Link
                to="#">
               <img
                 src={icon3.url}
@@ -226,14 +236,16 @@ useEffect(() => {
                 title="Language"
                 className="h-6 w-6 object-contain hidden md:inline-block"
               />
-            </Link>
-          )}
+            </Link> */}
+            <LanguageCurrencyMenu  iconUrl={GlobeIcon} />
+            </>
+          {/* )} */}
 
           {/* Login / Get Started (Desktop only) */}
           <div className="hidden lg:flex items-center space-x-4">
             {isLoggedIn ? (
                <Link
-               to="/account"
+               to={usePrefixPathWithLocale('/account')}
                className="text-base font-medium text-PrimaryBlack hover:underline cursor-pointer"
              >
                Welcome, {customer?.firstName || "User"}
@@ -269,7 +281,7 @@ useEffect(() => {
             )}
             {!isLoggedIn && getStartedButton && (
               <Link
-                to="create-account"
+                to={usePrefixPathWithLocale('create-account')}
                 className="rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-4 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2 transition-all hover:scale-[1.02] hover:bg-[#DD5827]"
               >
                 {getStartedButton.label} 

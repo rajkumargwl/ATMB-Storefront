@@ -13,9 +13,8 @@ import { Suspense } from 'react';
 
 import ModuleGrid from '~/components/modules/ModuleGrid';
 import { fetchGids, notFound, validateLocale } from '~/lib/utils';
+import { FAQ_OPERATOR_PAGE } from '~/queries/sanity/fragments/pages/faqoperator';
 
-// 👇 import your FAQ Page query
-import { FAQ_PAGE } from '~/queries/sanity/fragments/pages/faqpage';
 
 // -----------------
 // SEO
@@ -35,7 +34,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
   validateLocale({ context, params });
 
   const page = await context.sanity.query({
-    query: FAQ_PAGE,
+    query: FAQ_OPERATOR_PAGE,
   });
 
   if (!page) throw notFound();
@@ -56,7 +55,7 @@ export default function FAQ() {
   const { page, gids } = useLoaderData<typeof loader>();
 
   return (
-    <SanityPreview data={page} query={FAQ_PAGE}>
+    <SanityPreview data={page} query={FAQ_OPERATOR_PAGE}>
       {(page) => (
         <Suspense>
           <Await resolve={gids}>
