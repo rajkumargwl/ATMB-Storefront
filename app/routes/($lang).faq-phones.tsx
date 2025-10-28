@@ -10,22 +10,17 @@ import {
 import clsx from 'clsx';
 import { SanityPreview } from 'hydrogen-sanity';
 import { Suspense } from 'react';
-import RightArrowWhite from '~/components/icons/RightArrowWhite';
-import SearchIconBanner from '~/components/icons/SearchIconBanner';
-import ArrowRightCountries from "~/components/icons/ArrowRightCountries";
+
 import ModuleGrid from '~/components/modules/ModuleGrid';
 import { fetchGids, notFound, validateLocale } from '~/lib/utils';
 
-// 👇 import your FAQ Page query
-import { FAQ_MAILBOX_RENTER_PAGE } from '~/queries/sanity/fragments/pages/faqmailboxrenter';
+import { FAQ_PHONES_PAGE } from '~/queries/sanity/fragments/pages/faqphones';
 
 // -----------------
 // SEO
 // -----------------
-//-------------------
 const seo: SeoHandleFunction = ({ data }) => ({
-//   title: data?.page?.seo?.title || 'Countries',
-title: 'Countries',
+  title: data?.page?.seo?.title || 'FAQ - Anytime Mailbox',
   description:
     data?.page?.seo?.description ||
     'Find answers to common questions about Anytime Mailbox services.',
@@ -39,7 +34,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
   validateLocale({ context, params });
 
   const page = await context.sanity.query({
-    query: FAQ_MAILBOX_RENTER_PAGE,
+    query: FAQ_PHONES_PAGE,
   });
 
   if (!page) throw notFound();
@@ -60,9 +55,18 @@ export default function FAQ() {
   const { page, gids } = useLoaderData<typeof loader>();
 
   return (
-    <>
-
-
-    </>
+    <SanityPreview data={page} query={FAQ_PHONES_PAGE}>
+      {(page) => (
+        <Suspense>
+          <Await resolve={gids}>
+            {page?.modules && page.modules.length > 0 && (
+              <div className={clsx('')}>
+                <ModuleGrid items={page.modules} />
+              </div>
+            )}
+          </Await>
+        </Suspense>
+      )}
+    </SanityPreview>
   );
 }

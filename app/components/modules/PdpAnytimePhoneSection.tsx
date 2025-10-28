@@ -76,14 +76,20 @@ const PdpAnytimePhoneSection: React.FC<Props> = ({
           <nav className="flex items-center flex-row gap-[7px]" aria-label="Breadcrumb">
               <ol className="flex items-center flex-row gap-[7px]">
                 <li><Link to={`/`}><span className="font-Roboto text-LightGray font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px]">Home</span> </Link></li>
-                <li className="flex items-center flex-row gap-[7px]">
+                
+                {hasImage ? ( <li className="flex items-center flex-row gap-[7px]">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                     <path d="M10.6813 7.71732C10.8362 7.87232 10.8362 8.12732 10.6813 8.28232L6.68125 12.2823C6.52625 12.4373 6.27125 12.4373 6.11625 12.2823C5.96125 12.1273 5.96125 11.8723 6.11625 11.7173L9.83375 7.99982L6.11625 4.28232C5.96125 4.12732 5.96125 3.87232 6.11625 3.71732C6.27125 3.56232 6.52625 3.56232 6.68125 3.71732L10.6813 7.71732Z" fill="#091019"/>
-                  </svg>
-                    <Link to={`#`} aria-current="page"><span className="font-Roboto text-PrimaryBlack font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px]">Anytime Phone</span> </Link></li>
+                  </svg>                  
+                    <Link to={`#`} aria-current="page"><span className="font-Roboto text-PrimaryBlack font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px]">Anytime Phone</span> </Link></li>) : (<li className="flex items-center flex-row gap-[7px]">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M10.6813 7.71732C10.8362 7.87232 10.8362 8.12732 10.6813 8.28232L6.68125 12.2823C6.52625 12.4373 6.27125 12.4373 6.11625 12.2823C5.96125 12.1273 5.96125 11.8723 6.11625 11.7173L9.83375 7.99982L6.11625 4.28232C5.96125 4.12732 5.96125 3.87232 6.11625 3.71732C6.27125 3.56232 6.52625 3.56232 6.68125 3.71732L10.6813 7.71732Z" fill="#091019"/>
+                  </svg>                  
+                    <Link to={`#`} aria-current="page"><span className="font-Roboto text-PrimaryBlack font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px]">Business Accelerator</span> </Link></li>) }
               </ol>  
           </nav>
-          <div className="hidden md:flex items-center justify-end gap-2">
+          {!hasImage ? (
+                <div className="hidden md:flex items-center justify-end gap-2">
             <span className="font-Roboto text-PrimaryBlack font-normal leading-[21px] md:leading-[21px] text-[14px] md:text-[14px] tracking-[0px]">Monthly</span>
             <span className="bg-[#BFBFBF] rounded-[16px] w-10 h-[22px] relative">
               <span className="absolute left-[2px] top-[2px] w-[18px] h-[18px] bg-white rounded-[16px]"></span>
@@ -92,8 +98,9 @@ const PdpAnytimePhoneSection: React.FC<Props> = ({
             <span className="font-Roboto text-white font-normal leading-[18px] md:leading-[18px] text-[12px] md:text-[12px] tracking-[0px] px-2 py-1 rounded-full bg-[#537D1B]">20% Off</span>
  
           </div>
+          ) : null}
       </div>
-      <div className="relative z-[2] max-w-[1240px] mx-auto flex flex-col md:flex-row gap-[24px] md:gap-[40px] ">
+      <div className="relative z-[2] max-w-[1240px] mx-auto flex flex-col md:flex-row gap-[44px] md:gap-[40px] ">
         
         {/* LEFT: Text Content */}
         <div className="w-full md:w-[60.14%] flex flex-col">
@@ -109,7 +116,7 @@ const PdpAnytimePhoneSection: React.FC<Props> = ({
  
           {/* Features list */}
           {features?.length > 0 && (
-            <ul className="flex flex-col md:flex-row flex-wrap gap-4 md:gap-10 mb-6 md:mb-8">
+            <ul className="flex flex-col md:flex-row flex-wrap gap-4 md:gap-9 mb-6 md:mb-8">
               {features.map((feature, index) => (
                 <li key={index} className="flex items-center gap-2 after:content-[''] after:w-[1px] after:h-[21px] after:bg-LightWhite after:absolute after:top-[2px] after:right-[-20px] last:after:hidden relative">
                   {feature.icon?.url && (
@@ -160,7 +167,13 @@ const PdpAnytimePhoneSection: React.FC<Props> = ({
               </footer>
             </blockquote>
           )}
-            <div className="flex md:hidden items-center justify-center gap-2 mt-11">
+            
+        </div>
+ 
+        {/* RIGHT: Main Image or Shopify Product Card */}
+        <div className="w-full md:w-[39.86%]">
+          {!hasImage ? (
+            <div className="flex md:hidden items-center justify-center gap-2 mb-6">
             <span className="font-Roboto text-PrimaryBlack font-normal leading-[21px] md:leading-[21px] text-[14px] md:text-[14px] tracking-[0px]">Monthly</span>
             <span className="bg-[#BFBFBF] rounded-[16px] w-10 h-[22px] relative">
               <span className="absolute left-[2px] top-[2px] w-[18px] h-[18px] bg-white rounded-[16px]"></span>
@@ -169,10 +182,7 @@ const PdpAnytimePhoneSection: React.FC<Props> = ({
             <span className="font-Roboto text-white font-normal leading-[18px] md:leading-[18px] text-[12px] md:text-[12px] tracking-[0px] px-2 py-1 rounded-full bg-[#537D1B]">20% Off</span>
  
           </div>
-        </div>
- 
-        {/* RIGHT: Main Image or Shopify Product Card */}
-        <div className="w-full md:w-[39.86%] ">
+          ) : null}
           {hasImage ? (
             <img
               src={mainImage.url}

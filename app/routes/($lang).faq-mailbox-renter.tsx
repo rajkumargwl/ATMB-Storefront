@@ -15,7 +15,7 @@ import ModuleGrid from '~/components/modules/ModuleGrid';
 import { fetchGids, notFound, validateLocale } from '~/lib/utils';
 
 // 👇 import your FAQ Page query
-import { FAQ_PAGE } from '~/queries/sanity/fragments/pages/faqpage';
+import { FAQ_MAILBOX_RENTER_PAGE } from '~/queries/sanity/fragments/pages/faqmailboxrenter';
 
 // -----------------
 // SEO
@@ -33,14 +33,9 @@ export const handle = { seo };
 // -----------------
 export async function loader({ context, params }: LoaderFunctionArgs) {
   validateLocale({ context, params });
-  let language = params.lang || 'en';
-  if(language !== 'en-es'){
-    language = 'en';
-  }
 
   const page = await context.sanity.query({
-    query: FAQ_PAGE,
-    params: { language },
+    query: FAQ_MAILBOX_RENTER_PAGE,
   });
 
   if (!page) throw notFound();
@@ -61,7 +56,7 @@ export default function FAQ() {
   const { page, gids } = useLoaderData<typeof loader>();
 
   return (
-    <SanityPreview data={page} query={FAQ_PAGE}>
+    <SanityPreview data={page} query={FAQ_MAILBOX_RENTER_PAGE}>
       {(page) => (
         <Suspense>
           <Await resolve={gids}>

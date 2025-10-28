@@ -44,7 +44,7 @@ export default function SmallBusinessOwnerSection({
             {primaryCta?.label && (
               <a
                 href={primaryCta.url || '#'}
-                className="flex items-center justify-center w-full md:w-[192px] bg-DarkOrange text-white font-Roboto font-normal leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-[16px] py-[12px] rounded-[100px]"
+                className="flex items-center justify-center w-full md:w-[192px] bg-DarkOrange text-white font-Roboto font-normal leading-[16px] text-[14px] md:text-[16px] tracking-[0.08px] h-[52px] px-[12px] md:px-[16px] py-[12px] rounded-[100px]"
               >
                 {primaryCta.label}
               </a>
@@ -52,7 +52,7 @@ export default function SmallBusinessOwnerSection({
             {secondaryCta?.label && (
               <a
                 href={secondaryCta.url || '#'}
-                className="flex items-center justify-center w-full md:w-[192px] bg-white text-PrimaryBlack font-Roboto font-normal leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-[15px] md:px-[16px] py-[12px] rounded-[100px] border border-PrimaryBlack"
+                className="flex items-center justify-center w-full md:w-[192px] bg-white text-PrimaryBlack font-Roboto font-normal leading-[16px] text-[14px] md:text-[16px] tracking-[0.08px] h-[52px] px-[12px] md:px-[15px] md:px-[16px] py-[12px] rounded-[100px] border border-PrimaryBlack"
               >
                 {secondaryCta.label}
               </a>
