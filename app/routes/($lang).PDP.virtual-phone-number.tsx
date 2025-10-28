@@ -36,10 +36,10 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     staleWhileRevalidate: 60,
   });
  
-
+ 
  
   //if (!page) throw notFound();
-
+ 
   const handle = params.handle ?? 'virtual-phone-number';
     const [page] = await Promise.all([
       context.sanity.query<SanityProductPage>({
@@ -71,7 +71,7 @@ export default function Plans() {
   const {page, product} = useLoaderData<typeof loader>();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
-
+ 
   const variants = (product?.variants?.nodes ?? []) as ProductVariant[];
   const filteredVariants = variants.filter((variant) => {
     const planTypeField = variant.metafields?.find((m) => m.key === 'plan_type');
@@ -119,7 +119,7 @@ export default function Plans() {
     Yearly <span className="text-green-600 text-sm font-semibold">20% Off</span>
   </span>
 </div>
-
+ 
 {/* Dynamic Plan Cards */}
 {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
   {product?.variants?.nodes?.map((variant: ProductVariant, index: number) => {
@@ -127,11 +127,11 @@ export default function Plans() {
     const yearlyPrice = (basePrice * 12 * 0.8).toFixed(2);
     const displayPrice =
       billingCycle === 'monthly' ? basePrice.toFixed(2) : yearlyPrice;
-
+ 
     // Example logic for “Most Popular” badge
     const isMostPopular =
       variant.title?.toLowerCase().includes('50') || index === 1;
-
+ 
     const features = [
       variant.title.toLowerCase().includes('unlimited')
         ? 'No live answering minutes'
@@ -139,7 +139,7 @@ export default function Plans() {
       'Appointment scheduling',
       'Appointment scheduling App',
     ];
-
+ 
     return (
       <div
         key={variant.id}
@@ -161,13 +161,13 @@ export default function Plans() {
             /{billingCycle}
           </span>
         </p>
-
+ 
         <ul className="space-y-2 text-gray-700 flex-1">
           {features.map((f) => (
             <li key={f}>✓ {f}</li>
           ))}
         </ul>
-
+ 
       
          <ReplacePlanAddToCartButton
                     selectedVariant={variant}
@@ -179,11 +179,11 @@ export default function Plans() {
       </div>
     );
   })}
-</div> */} 
+</div> */}
     
          {/* Sanity Modules Grid */}
                  {page?.modules && page.modules.length > 0 && (
-                   <div className="mb-8 mt-8 px-0 md:px-0">
+                   <div className="mb-0 mt-0 px-0 md:px-0">
                      <ModuleGrid items={page.modules} productData={product} />
                      
                    </div>
