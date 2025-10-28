@@ -55,7 +55,7 @@ export default function LocationInfo({ location, services }: LocationInfoProps) 
           </div>
  
           {/* Features */}
-          <div className="flex flex-col md:flex-row flex-wrap rounded-[12px] bg-[#F6F6F6] px-6 py-5 gap-4">
+          <div className="flex flex-col  flex-wrap rounded-[12px] bg-[#F6F6F6] px-6 py-5 gap-4">
             <h3 className="font-Roboto text-LightGray font-medium leading-[21px] md:leading-[21px] text-[14px] md:text-[14px] tracking-[0px]">Services</h3>
             <div className="flex flex-col md:flex-row md:items-center gap-x-6 gap-y-4 flex-wrap">
               {location?.featureList?.length > 0 ? (
