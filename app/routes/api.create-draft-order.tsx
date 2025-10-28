@@ -3,7 +3,8 @@ import type { ActionFunction } from "@remix-run/node";
 export const action: ActionFunction = async ({ request, context }) => {
   const body = await request.json();
   const { lines, customerId } = body;
-
+  // console.log("Received lines:", lines);
+  
   const query = `
     mutation draftOrderCreate($input: DraftOrderInput!) {
       draftOrderCreate(input: $input) {
@@ -21,10 +22,16 @@ export const action: ActionFunction = async ({ request, context }) => {
   `;
 
   // Convert incoming lines into Shopify draft order lineItems
+  // const lineItems = lines.map((line: any) => ({
+  //   variantId: line?.node?.merchandise?.id,
+  //   quantity: line?.node?.quantity,
+  // }));
   const lineItems = lines.map((line: any) => ({
-    variantId: line?.node?.merchandise?.id,
-    quantity: line?.node?.quantity,
+    variantId: line?.variantId,
+    quantity: line?.quantity,
   }));
+
+  // console.log("lineItemssss", lineItems);
 
   const variables = {
     input: {

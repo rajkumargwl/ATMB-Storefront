@@ -270,8 +270,20 @@ function CheckoutForm() {
       console.log("Backend response:", data);
 
       if (data.success) {
-        //alert("Payment method saved!");
-        window.location.href = "/order-confirmation"; 
+        const { defaultPaymentMethodId, customerId } = data; 
+      
+        const resDetails = await fetch("/api/save-payment-details", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            customerEmail: customer.email,
+            paymentIntentId:defaultPaymentMethodId,
+            paymentCustomerId:customerId,
+          }),
+        });
+     
+       // alert("Payment successful and details saved!");
+        window.location.href = "/order-confirmation";
       } else {
         setError(data.error || "Failed to save payment method");
       }

@@ -27,8 +27,8 @@ export default function AddToCartWithDraftOrderButton({
   ...props
 }: {
   children?: React.ReactNode;
-  //lines: CartLineInput[];
-  lines: (CartLineInput & { properties?: Record<string, any> })[]; // ✅ allow properties
+  lines: CartLineInput[];
+  // lines: (CartLineInput & { properties?: Record<string, any> })[]; // ✅ allow properties
   analytics?: unknown;
   mode?: FormMode;
   buttonClassName?: string;
@@ -36,6 +36,7 @@ export default function AddToCartWithDraftOrderButton({
   [key: string]: any;
 }) {
     const hasSubmitted = useRef(false);
+    const navigate = useNavigate();
 
     return (
       <div className={mode == "inline" ? "[&>*]:inline" : ""}>
@@ -62,17 +63,48 @@ export default function AddToCartWithDraftOrderButton({
                 // ✅ Call Draft Order API
                 (async () => {
                   try {
+                    const cartId = fetcher.data.cart.id;
+
+                    // You can use your own Remix API route to get full cart data
+                    const cartRes = await fetch(`/api/cart/${btoa(cartId)}`);
+                    const fullCart = await cartRes.json();
+                    console.log("fullCartttt", fullCart);
+  
+                    // if (!fullCart?.lines?.length) {
+                    //   console.error("Cart is empty:", fullCart);
+                    //   navigate("/payment-fail");
+                    //   return;
+                    // }
+
+                    // const draftRes = await fetch("/api/create-draft-order", {
+                    //   method: "POST",
+                    //   headers: { "Content-Type": "application/json" },
+                    //   body: JSON.stringify({
+                    //     lines,
+                    //     customerId,
+                    //   }),
+                    // });
                     const draftRes = await fetch("/api/create-draft-order", {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
                       body: JSON.stringify({
-                        lines,
+                        lines: fullCart?.lines?.edges?.map((l: any) => ({
+                          variantId: l?.node?.merchandise.id,
+                          quantity: l?.node?.quantity,
+                        })),
                         customerId,
                       }),
                     });
   
                     const draftData = await draftRes.json();
-                    console.log("✅ Draft order created:", draftData);
+                    console.log("response:", draftData);
+                    if (draftData?.data?.draftOrderCreate?.draftOrder?.id) {
+                      // ✅ Redirect to payment-success page
+                      navigate("/payment-success");
+                    } else {
+                      console.error("No draft order returned:", draftData);
+                      navigate("/payment-fail");
+                    }
                   } catch (err) {
                     console.error("❌ Failed to create draft order:", err);
                   }
