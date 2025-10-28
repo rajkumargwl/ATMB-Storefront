@@ -22,6 +22,7 @@ import { FAQ_MAILBOX_RENTER_PAGE } from '~/queries/sanity/fragments/pages/faqmai
 // -----------------
 // SEO
 // -----------------
+//-------------------
 const seo: SeoHandleFunction = ({ data }) => ({
 //   title: data?.page?.seo?.title || 'Countries',
 title: 'Countries',
