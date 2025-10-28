@@ -11,12 +11,12 @@ type Props = {
   homeSearchResults: any[];  
   searchQuery: string;   
 };
-
+ 
 export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props) {
   if (!hero) return null;
   const [qresults, setQresults] = useState(homeSearchResults || []);
   const [searchquery, setSearchquery] = useState("");
-
+ 
   const navigate = useNavigate();
   const location = useLocation();
   const [skipSearchQSync, setSkipSearchQSync] = useState(false);
@@ -25,25 +25,25 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
     setSearchquery(searchQuery || "");
     setQresults(homeSearchResults || []);
   }, [searchQuery, homeSearchResults]);
-
+ 
   // Sync search input to URL
   useEffect(() => {
     if (skipSearchQSync) return;
-
+ 
     const params = new URLSearchParams(location.search);
-
+ 
     if (!searchquery.trim()) {
      // params.delete("p");
       navigate(`?${params.toString()}`, { replace: true });
       setQresults([]);
       return;
     }
-
+ 
     const timeout = setTimeout(() => {
       params.set("p", searchquery);
       navigate(`?${params.toString()}`, { replace: true });
     }, 500);
-
+ 
     return () => clearTimeout(timeout);
   }, [searchquery, navigate, location.search, skipSearchQSync]);
   
@@ -51,7 +51,7 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
     setSkipSearchQSync(true);
     setSearchquery("");
     setQresults([]);
-
+ 
     if (item.type === "product") {
       navigate(`/products/${item.handle}`);
     } else if (item.type === "location") {
@@ -63,41 +63,41 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const newQuery = params.get("p") || "";
-
+ 
     setSearchquery(newQuery);
     setQresults(homeSearchResults || []);
   }, [location.search, homeSearchResults]);
-
+ 
   return (
-    <section className="bg-white pt-[40px] md:pt-[69px] pb-[40px] md:pb-[79px] px-5">
+    <section className="bg-white pt-[40px] md:pt-[69px] pb-[40px] md:pb-[79px] px-5 overflow-hidden">
       <div className="max-w-[1240px] mx-auto">
-        <div className="flex flex-col lg:flex-row gap-[43px]">
+        <div className="flex flex-col md:flex-row gap-[43px] items-start">
           {/* Left Content */}
-          <div className="w-full lg:w-[55.8%] relative">
-            <div className="absolute top-[0px] xl:top-[35px] right-[-10px] hidden md:flex ">
+          <div className="w-full md:w-[55.8%] relative">
+            <div className="absolute top-[25px] xl:top-[35px] right-[-10px] hidden md:flex ">
               <AmLogo />
             </div>
-
+ 
             {hero.smallheading && (
               <p className="font-Roboto text-PrimaryBlack font-medium leading-[21px] md:leading-[27px] text-[14px] md:text-[18px] italic">
                 <span className="text-DarkOrange">//</span>{' '}
                 {hero.smallheading.replace('//', '').trim()}
               </p>
             )}
-
+ 
             <h1 className="mt-4 md:mt-6 md:max-w-[523px] font-Roboto text-PrimaryBlack font-semibold leading-[43.2px] md:leading-[70.4px] text-[36px] md:text-[64px] tracking-[-0.54px] md:tracking-[-1.28px]">
               {hero.title?.split(hero.highlightedWord || '')[0]}{' '}
               <span className="text-DarkOrange">{hero.highlightedWord}</span>{' '}
               <br />
               {hero.title?.split(hero.highlightedWord || '')[1]}
             </h1>
-
+ 
             {hero.subtitle && (
               <p className="mt-4 md:mt-5 md:max-w-[526px] font-Roboto text-PrimaryBlack font-normal md:font-medium leading-[21px] md:leading-[27px] text-[14px] md:text-[18px] tracking-[0px]">
                 {hero.subtitle}
               </p>
             )}
-
+ 
 <SearchBox
   placeholder={hero.searchPlaceholder || "Address and zip"}
   buttonText={hero.searchButtonText}
@@ -130,7 +130,7 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
                 </p>
               )}
             </div>
-
+ 
             {/* Features */}
             <div className="flex flex-col md:flex-row flex-wrap gap-x-5 gap-y-[18px] md:gap-y-4 pt-[56px] lg:pt-[130px] text-sm text-gray-700">
               {hero.features?.map((feature, i) => (
@@ -157,9 +157,9 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
               ))}
             </div>
           </div>
-
+ 
           {/* Right Images (separate divs for image 1 and 2) */}
-          <div className="w-full lg:w-[44.2%] hidden md:flex gap-4 justify-center">
+          <div className="w-full md:w-[44.2%] hidden md:flex gap-4 justify-center">
             <div className="md:flex gap-4 justify-center">
               {/* Image 1 */}
               {hero.rightImage1?.image?.asset?.url && (
@@ -169,7 +169,7 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
                     alt="right image 1"
                     className="w-full h-[603px] object-cover rounded-[124px_124px_124px_0]"
                   />
-                  <div className="flex items-center gap-2 absolute bottom-[85px] lg:bottom-[132px] left-[-85px] max-w-[242px] p-4 rounded-[12px] border border-[#DCDCDC] bg-[rgba(255,255,255,0.70)] backdrop-blur-[12px]">
+                  <div className="flex items-center gap-2 absolute bottom-[85px] lg:bottom-[75px] left-[-40px] lg:left-[-85px] max-w-[242px] p-4 rounded-[12px] border border-[#DCDCDC] bg-[rgba(255,255,255,0.70)] backdrop-blur-[12px]">
                     {hero.rightImage1.icon?.asset?.url && (
                       <img
                         src={hero.rightImage1.icon.asset.url}
@@ -183,16 +183,18 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
                   </div>
                 </div>
               )}
-
+ 
               {/* Image 2 */}
               {hero.rightImage2?.image?.asset?.url && (
                 <div className="relative">
+                 
                   <img
                     src={hero.rightImage2.image.asset.url}
                     alt="right image 2"
                     className="w-full h-[603px] object-cover rounded-[0_124px_124px_124px]"
                   />
-                  <div className="flex items-center gap-2 absolute bottom-[210px] lg:bottom-[255px] right-[-20px] xl:right-[-42px] max-w-[242px] p-4 rounded-[12px] border border-[#DCDCDC] bg-[rgba(255,255,255,0.70)] backdrop-blur-[12px]">
+                  
+                  <div className="flex items-center gap-2 absolute bottom-[210px] lg:bottom-[205px] right-[-20px] xl:right-[-52px] max-w-[242px] p-4 rounded-[12px] border border-[#DCDCDC] bg-[rgba(255,255,255,0.70)] backdrop-blur-[12px]">
                     {hero.rightImage2.icon?.asset?.url && (
                       <img
                         src={hero.rightImage2.icon.asset.url}
@@ -213,7 +215,7 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
     </section>
   );
 }
-
+ 
 /** Small image placeholder tile */
 function Tile() {
   return (

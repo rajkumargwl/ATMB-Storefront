@@ -51,7 +51,7 @@ export const footerType = defineType({
     // Services Column
     defineField({
       name: "servicesColumn",
-      title: "Services Column",
+      title: "Shop By Use Case",
       type: "object",
       fields: [
         {name: "title", title: "Title", type: "string"},
@@ -75,7 +75,7 @@ export const footerType = defineType({
     // Popular Locations Column
     defineField({
       name: "locationsColumn",
-      title: "Popular Locations Column",
+      title: "Solutions",
       type: "object",
       fields: [
         {name: "title", title: "Title", type: "string"},
@@ -89,13 +89,54 @@ export const footerType = defineType({
               fields: [
                 {name: "label", title: "Label", type: "string"},
                 {name: "link", title: "Link", type: "string"},
-                {
-                  name: "highlight",
-                  title: "Highlight",
-                  type: "boolean",
-                  description: "Highlight certain location (e.g. New York, NY)",
-                },
-              ],
+                
+              ]
+            },
+          ],
+        },
+      ],
+    }),
+    defineField({
+      name: "MailboxRenters",
+      title: "Mailbox Renters",
+      type: "object",
+      fields: [
+        {name: "title", title: "Title", type: "string"},
+        {
+          name: "links",
+          title: "Links",
+          type: "array",
+          of: [
+            {
+              type: "object",
+              fields: [
+                {name: "label", title: "Label", type: "string"},
+                {name: "link", title: "Link", type: "string"},
+                
+              ]
+            },
+          ],
+        },
+      ],
+    }),
+     defineField({
+      name: "MailCenterOperator",
+      title: "Mail Center Operator",
+      type: "object",
+      fields: [
+        {name: "title", title: "Title", type: "string"},
+        {
+          name: "links",
+          title: "Links",
+          type: "array",
+          of: [
+            {
+              type: "object",
+              fields: [
+                {name: "label", title: "Label", type: "string"},
+                {name: "link", title: "Link", type: "string"},
+                
+              ]
             },
           ],
         },

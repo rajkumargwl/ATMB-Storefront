@@ -139,7 +139,7 @@ export default function PlansWithoutBundles({product,planData}: PlansWithoutBund
             return (
               <div
                 key={variant.id}
-                className={`relative rounded-[24px] p-6 md:p-8 flex flex-col ${
+                className={`relative rounded-[24px] p-6 md:p-8 flex flex-col justify-between ${
                   isMostPopular
                     ? 'border border-LightWhite  bg-white'
                     : 'border border-LightWhite  bg-white'
@@ -163,7 +163,7 @@ export default function PlansWithoutBundles({product,planData}: PlansWithoutBund
                       Most Popular
                   </span>
                 )}
- 
+                <div>
                 <h3 className="mb-5 md:mb-6 font-Roboto text-PrimaryBlack font-semibold leading-[28px] md:leading-[31.2px] text-[20px] md:text-[24px] tracking-[-0.3px] md:tracking-[-0.36px]">{variant.title}</h3>
                 <p className="mb-5 md:mb-6 font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[38.4px] text-[24px] md:text-[32px] tracking-[-0.36px] md:tracking-[-0.48px]">
                   ${displayPrice}
@@ -179,6 +179,7 @@ export default function PlansWithoutBundles({product,planData}: PlansWithoutBund
                        {f}</li>
                   ))}
                 </ul>
+                </div>
  
                 <ReplacePlanAddToCartButton
                   selectedVariant={variant}
