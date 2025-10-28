@@ -7,9 +7,10 @@ import defaultIcon from "~/components/icons/default.png";
 type LocationInfoProps = {
   location: any;
   services: { name: string; icon: string }[];
+  servicesIcons: { name: string; icon: string }[];
 };
 
-export default function LocationInfo({ location, services }: LocationInfoProps) {
+export default function LocationInfo({ location, services, servicesIcons }: LocationInfoProps) {
   const isTopRated = location?.ratingList?.some(
     (r: any) => r.type === "TOPRATED"
   );
@@ -25,12 +26,15 @@ export default function LocationInfo({ location, services }: LocationInfoProps) 
 
           <div className="flex items-center gap-3 mb-4">
             {isTopRated && (
+              <>
               <div className="flex items-center gap-1 text-[#FF7A00] font-medium text-sm">
-                <img src={Toprated} alt="Top Rated" className="w-4 h-4" />
+                <img src={Toprated} alt="Top Rated" className="w-4 h-4"/>
                 <span>TOP RATED</span>
               </div>
+               <span className="text-gray-400">|</span>
+          </>
             )}
-            <span className="text-gray-400">|</span>
+           
             <div className="flex items-center gap-1 text-[#0070F3] font-medium text-sm">
               <img src={Premium} alt="Premium Address" className="w-4 h-4" />
               <span>PREMIUM ADDRESS</span>
@@ -41,7 +45,7 @@ export default function LocationInfo({ location, services }: LocationInfoProps) 
           <div className="bg-[#F8F8F8] border border-[#EAEAEA] rounded-[12px] p-6">
             <h3 className="text-gray-700 font-semibold mb-3">Services</h3>
             <div className="flex flex-wrap gap-x-6 gap-y-3">
-              {location?.featureList?.length > 0 ? (
+              {/* {location?.featureList?.length > 0 ? (
                 location.featureList.map((feature: any) => {
                   const matchedService = services.find(
                     (service) =>
@@ -64,7 +68,31 @@ export default function LocationInfo({ location, services }: LocationInfoProps) 
                 })
               ) : (
                 <p className="text-gray-500 text-sm">No services available</p>
-              )}
+              )} */}
+              {services.length > 0 ? (
+          services.map((feature) => {
+            const matchedService = servicesIcons.find(
+              (service) =>
+                service.name.toLowerCase() === feature.toLowerCase()
+            );
+
+            return (
+              <div
+                key={feature._key}
+                className="flex items-center gap-2 text-[16px] text-gray-800"
+              >
+                <img
+                  src={matchedService?.icon ||defaultIcon}
+                  alt={feature}
+                  className="w-5 h-5"
+                />
+                <span>{feature}</span>
+              </div>
+            );
+          })
+        ) : (
+          <p className="text-gray-500 text-sm">No services available</p>
+        )}
             </div>
           </div>
         </div>
