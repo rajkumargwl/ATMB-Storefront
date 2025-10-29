@@ -34,6 +34,7 @@ import AddToCartWithDraftOrderButton from '~/components/product/buttons/AddToCar
 
 export const loader: LoaderFunction = async ({ context, params }) => {
   const { env } = context;
+  console.log("env data test", env.BILLING_ANYTIME_BASE_URL);
   const cart = await context.cart.get();
   
   const customerAccessToken = await context.session.get('customerAccessToken');
@@ -76,6 +77,13 @@ export const loader: LoaderFunction = async ({ context, params }) => {
   return new Response(
     JSON.stringify({
       stripePublishableKey: env.VITE_STRIPE_PUBLISHABLE_KEY,
+      billingConfig: {
+        baseUrl: env.BILLING_ANYTIME_BASE_URL,
+        subscriptionKey: env.BILLING_ANYTIME_SUBSCRIPTION_KEY,
+        clientId: env.BILLING_ANYTIME_CLIENT_ID,
+        clientSecret: env.BILLING_ANYTIME_CLIENT_SECRET,
+        scope: env.BILLING_ANYTIME_SCOPE,
+      },
       bundleProducts: [virtualMailbox.product, virtualPhone.product],
       essentialsProducts: AllProducts ?? [],
       BusinessAcc,
@@ -89,7 +97,7 @@ export const loader: LoaderFunction = async ({ context, params }) => {
 
 export default function CheckoutPage() {
   const rootData = useRootLoaderData();
-  const { bundleProducts, essentialsProducts, cart, BusinessAcc, LiveReceptionist} = useLoaderData<typeof loader>();
+  const { bundleProducts, essentialsProducts, cart, BusinessAcc, LiveReceptionist,billingConfig} = useLoaderData<typeof loader>();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
   const navigate = useNavigate();
 
@@ -175,6 +183,7 @@ export default function CheckoutPage() {
                     }
                   : undefined
               }
+              billingConfig={billingConfig} 
               buttonClassName="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold transition"
               text="Add Virtual Phone"
             /> 
@@ -216,6 +225,7 @@ export default function CheckoutPage() {
                     }
                   : undefined
               }
+              billingConfig={billingConfig} 
               buttonClassName="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold transition"
               text="Add Business Accelerator"
             /> 
@@ -224,7 +234,7 @@ export default function CheckoutPage() {
 
       {/* No Thanks Button */}
       <button className="mt-8 border border-gray-400 text-gray-700 hover:bg-gray-100 py-2 px-6 rounded-full transition" onClick={() => {
-        navigate('/payment-success');
+        navigate('/checkout', {state: {cartData}});
       }}>
         No Thanks, Continue
       </button>

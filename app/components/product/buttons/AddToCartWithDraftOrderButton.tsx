@@ -17,24 +17,50 @@ import {usePageAnalytics} from '~/hooks/usePageAnalytics';
 type FormMode = 'default' | 'inline';
 
 
-export default function AddToCartWithDraftOrderButton({
-  children = 'Add to cart',
-  lines,
-  analytics,
-  mode = 'default',
-  buttonClassName,
-  customerId,
-  ...props
-}: {
-  children?: React.ReactNode;
-  lines: CartLineInput[];
-  // lines: (CartLineInput & { properties?: Record<string, any> })[]; // ✅ allow properties
-  analytics?: unknown;
-  mode?: FormMode;
-  buttonClassName?: string;
-  customerId: string | null;
-  [key: string]: any;
-}) {
+// export default function AddToCartWithDraftOrderButton({
+//   children = 'Add to cart',
+//   lines,
+//   analytics,
+//   mode = 'default',
+//   buttonClassName,
+//   customerId,
+//   ...props
+// }: {
+//   children?: React.ReactNode;
+//   lines: CartLineInput[];
+//   // lines: (CartLineInput & { properties?: Record<string, any> })[]; 
+//   analytics?: unknown;
+//   mode?: FormMode;
+//   buttonClassName?: string;
+//   customerId: string | null;
+//   [key: string]: any;
+// }) {
+  export default function AddToCartWithDraftOrderButton({
+    children = 'Add to cart',
+    lines,
+    analytics,
+    mode = 'default',
+    buttonClassName,
+    customerId,
+    billingConfig,
+    ...props
+  }: {
+    children?: React.ReactNode;
+    lines: CartLineInput[];
+    analytics?: unknown;
+    mode?: 'default' | 'inline';
+    buttonClassName?: string;
+    customerId: string | null;
+    billingConfig?: {
+      baseUrl: string;
+      subscriptionKey: string;
+      clientId: string;
+      clientSecret: string;
+      scope: string;
+    };
+    [key: string]: any;
+  }) {
+  
     const hasSubmitted = useRef(false);
     const navigate = useNavigate();
 
@@ -99,8 +125,132 @@ export default function AddToCartWithDraftOrderButton({
                     const draftData = await draftRes.json();
                     console.log("response:", draftData);
                     if (draftData?.data?.draftOrderCreate?.draftOrder?.id) {
-                      // ✅ Redirect to payment-success page
-                      navigate("/payment-success");
+                      console.log("Inside draft order success block",billingConfig?.subscriptionKey);
+
+                      let accessToken = "";
+
+                      try {
+                        console.log("Requesting Anytime Billing token...");
+                        const tokenResponse = await fetch("https://development.anytimeapi.com/billing/auth/token", {
+                          method: "POST",
+                          headers: {
+                            "Api-Version": "v1",
+                            "Api-Environment": "dev",
+                            "Content-Type": "application/json",
+                            "Cache-Control": "no-cache",
+                            "Ocp-Apim-Subscription-Key": billingConfig?.subscriptionKey,
+                          },
+                          body: JSON.stringify({
+                            clientId: billingConfig?.clientId,
+                            clientSecret: billingConfig?.clientSecret,
+                            scope: billingConfig?.scope,
+                            grantType: "client_credentials",
+                          }),
+                        });
+                      
+                        console.log("Token API status:", tokenResponse.status);
+                        const tokenData = await tokenResponse.json();
+                        console.log("Token data received:", tokenData);
+                      
+                        accessToken = tokenData?.data?.accessToken;
+
+                      } catch (error) {
+                        console.error("Error in token request:", error);
+                      }
+                      
+                      console.log("accessToken", accessToken);
+                      
+                  //Call Anytime Billing Purchase API
+              
+                  const billingPayload = {
+                    locationId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                    locationUnitId: "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+                    customerId: "c3d4e5f6-a7b8-9012-cdef-123456789012",
+                    bundle: null,
+                    subscription: {
+                      providerId: "d4e5f6a7-b8c9-0123-def1-234567890123",
+                      label: "Monthly Premium Subscription",
+                      culture: "en-US",
+                      currency: "USD",
+                      items: [
+                        {
+                          productId: "e5f6a7b8-c9d0-1234-ef12-345678901234",
+                          providerId: "d4e5f6a7-b8c9-0123-def1-234567890123",
+                          isChargeProrated: false,
+                          label: "Premium License - Monthly",
+                          price: 99.99,
+                          quantity: 5,
+                          subtotal: 499.95,
+                          total: 449.95,
+                          totalAdjustment: 50.0,
+                          recurrenceInterval: "month",
+                          adjustments: [
+                            {
+                              label: "10% Volume Discount",
+                              adjustAmount: 50.0,
+                              adjustPercent: 10.0,
+                              adjustSubtotal: 50.0,
+                            },
+                          ],
+                          attribution: [
+                            {
+                              organizationId: "f6a7b8c9-d0e1-2345-f123-456789012345",
+                              quantityMin: 0.0,
+                              quantityMax: 5.0,
+                              quantityUnit: "licenses",
+                              splitAmount: 449.95,
+                              splitPercent: 100.0,
+                              splitSubtotal: 449.95,
+                              label: "Organization ABC",
+                              type: "organization",
+                              status: "active",
+                              providerKey: "org_abc123",
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    customer: {
+                      defaultCulture: "en-US",
+                      defaultCurrency: "USD",
+                      exemptTax: false,
+                      status: "active",
+                      type: "business",
+                    },
+                    payment: {
+                      paymentMethodId: "pm_1234567890abcdef",
+                      customerPaymentKey: "cus_ABC123XYZ789",
+                      metadata: {
+                        source: "web_portal",
+                        campaign: "spring_2024_promotion",
+                        sales_rep: "john.doe@company.com",
+                      },
+                    },
+                  };
+                  console.log("Sending billing request...");
+                  const billingResponse = await fetch("https://development.anytimeapi.com/billing/purchase", {
+                    method: "POST",
+                    headers: {
+                      "Api-Version": "v1",
+                      "Api-Environment": "dev",
+                      "Ocp-Apim-Subscription-Key": billingConfig?.subscriptionKey,
+                      "Authorization": `Bearer ${accessToken}`,
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(billingPayload),
+                  });
+              
+                  const billingResult = await billingResponse.json();
+                  console.log("Billing purchase result:", billingResult);
+              
+                  if (!billingResponse.ok) {
+                    console.error("Billing purchase failed:", billingResult);
+                    navigate("/payment-fail");
+                    return;
+                  }
+              
+                  console.log("Billing purchase successful");
+                  navigate("/payment-success");
                     } else {
                       console.error("No draft order returned:", draftData);
                       navigate("/payment-fail");
