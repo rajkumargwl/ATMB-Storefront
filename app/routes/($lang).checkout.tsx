@@ -288,6 +288,7 @@ function CheckoutForm() {
         });
      
        // alert("Payment successful and details saved!");
+       localStorage.setItem("checkoutCart", JSON.stringify(cart));
        const redirectTo = getPrefixedPath('/order-confirmation');
        navigate(redirectTo);
       } else {

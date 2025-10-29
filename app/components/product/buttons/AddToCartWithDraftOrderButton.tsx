@@ -17,25 +17,6 @@ import {DEFAULT_LOCALE, notFound, usePrefixPathWithLocale} from '~/lib/utils';
 
 type FormMode = 'default' | 'inline';
 
-
-// export default function AddToCartWithDraftOrderButton({
-//   children = 'Add to cart',
-//   lines,
-//   analytics,
-//   mode = 'default',
-//   buttonClassName,
-//   customerId,
-//   ...props
-// }: {
-//   children?: React.ReactNode;
-//   lines: CartLineInput[];
-//   // lines: (CartLineInput & { properties?: Record<string, any> })[]; 
-//   analytics?: unknown;
-//   mode?: FormMode;
-//   buttonClassName?: string;
-//   customerId: string | null;
-//   [key: string]: any;
-// }) {
   export default function AddToCartWithDraftOrderButton({
     children = 'Add to cart',
     lines,
@@ -99,32 +80,47 @@ type FormMode = 'default' | 'inline';
                     const fullCart = await cartRes.json();
                     console.log("fullCartttt", fullCart);
   
-                    // if (!fullCart?.lines?.length) {
-                    //   console.error("Cart is empty:", fullCart);
-                    //   navigate("/payment-fail");
-                    //   return;
-                    // }
-
-                    // const draftRes = await fetch("/api/create-draft-order", {
-                    //   method: "POST",
-                    //   headers: { "Content-Type": "application/json" },
-                    //   body: JSON.stringify({
-                    //     lines,
-                    //     customerId,
-                    //   }),
-                    // });
+                    const edges = fullCart?.lines?.edges;
+                    if (!edges || !Array.isArray(edges)) {
+                      console.warn("⚠️ No valid cart lines found in fullCart:", fullCart);
+                      navigate("/payment-fail");
+                      return;
+                    }
+        
+                    // Extract cart lines
+                    const cartLines = edges.map((l: any) => ({
+                      variantId: l.node?.merchandise?.id,
+                      quantity: l.node?.quantity ?? 1,
+                    }));
+        
+                    // Merge with localStorage
+                    const storedCart = JSON.parse(localStorage.getItem("checkoutCart") || "[]");
+                    const mergedCart = [...storedCart, ...cartLines];
+        
+                    // Deduplicate by variantId
+                    const uniqueCart = Object.values(
+                      mergedCart.reduce((acc: any, item: any) => {
+                        if (acc[item.variantId]) {
+                          acc[item.variantId].quantity += item.quantity;
+                        } else {
+                          acc[item.variantId] = { ...item };
+                        }
+                        return acc;
+                      }, {})
+                    );
+        
+                    localStorage.setItem("checkoutCart", JSON.stringify(uniqueCart));
+                    console.log("Full Merged Cart:", uniqueCart);
+        
+                    // Create Draft Order
                     const draftRes = await fetch("/api/create-draft-order", {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
                       body: JSON.stringify({
-                        lines: fullCart?.lines?.edges?.map((l: any) => ({
-                          variantId: l?.node?.merchandise.id,
-                          quantity: l?.node?.quantity,
-                        })),
+                        lines: uniqueCart,
                         customerId,
                       }),
                     });
-  
                     const draftData = await draftRes.json();
                     console.log("response:", draftData);
 
@@ -151,9 +147,8 @@ type FormMode = 'default' | 'inline';
                             grantType: "client_credentials",
                           }),
                         });
-                      
-                        console.log("Token API status:", tokenResponse.status);
                         const tokenData = await tokenResponse.json();
+
                         console.log("Token data received:", tokenData);
                       
                         accessToken = tokenData?.data?.accessToken;
@@ -161,8 +156,6 @@ type FormMode = 'default' | 'inline';
                       } catch (error) {
                         console.error("Error in token request:", error);
                       }
-                      
-                      console.log("accessToken", accessToken);
                       
                   //Call Anytime Billing Purchase API
               

@@ -31,6 +31,7 @@ import {type ShopifyAnalyticsProduct} from '@shopify/hydrogen';
 import {DEFAULT_LOCALE, notFound, usePrefixPathWithLocale} from '~/lib/utils';
 import Button from "~/components/elements/Button";
 import AddToCartWithDraftOrderButton from '~/components/product/buttons/AddToCartWithDraftOrderButton';
+import { type CartType } from '~/types'; // Add this import
 
 export const loader: LoaderFunction = async ({ context, params }) => {
   const { env } = context;
@@ -102,8 +103,18 @@ export default function CheckoutPage() {
   const rootData = useRootLoaderData();
   const { bundleProducts, essentialsProducts, cart, BusinessAcc, LiveReceptionist,billingConfig} = useLoaderData<typeof loader>();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
+  const [cartData, setCartData] = useState(null);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("checkoutCart");
+    if (stored) {
+      setCartData(JSON.parse(stored));
+      localStorage.removeItem("checkoutCart"); 
+    }
+  }, []);
+  
   const LiveReceptionistProductAnalytics: ShopifyAnalyticsProduct | null = selectedVariant
       ? {
           productGid: LiveReceptionist?.product?.id,
