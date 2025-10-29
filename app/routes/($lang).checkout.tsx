@@ -9,7 +9,7 @@ import {
   CardCvcElement
 } from "@stripe/react-stripe-js";
 
-import {Await, useLoaderData} from '@remix-run/react';
+import {Await, useLoaderData, useNavigate} from '@remix-run/react';
 import {Suspense} from 'react';
 import {useRootLoaderData} from '~/root'; 
 
@@ -37,8 +37,6 @@ import {notFound} from '~/lib/utils';
 import Button from "~/components/elements/Button";
 
 export const loader: LoaderFunction = async ({ context, params }) => {
-    const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
-      let currencyCode = selectedLocale?.currency || 'USD';
   const { env } = context;
   
   const customerAccessToken = await context.session.get('customerAccessToken');
@@ -111,6 +109,7 @@ function CheckoutForm() {
   let currencyCode = selectedLocale?.currency || 'USD';
   const stripe = useStripe();
   const elements = useElements();
+   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -120,6 +119,7 @@ function CheckoutForm() {
   const cart = rootData?.cart?._data;
   const lines = cart?.lines?.edges;
   const { bundleProducts, essentialsProducts,customer} = useLoaderData<typeof loader>();
+ const getPrefixedPath = usePrefixPathWithLocale2(); 
   
   // Fetch priceId from backend on mount
   useEffect(() => {
@@ -288,11 +288,13 @@ function CheckoutForm() {
         });
      
        // alert("Payment successful and details saved!");
-        window.location.href = usePrefixPathWithLocale("/order-confirmation");
+       const redirectTo = getPrefixedPath('/order-confirmation');
+       navigate(redirectTo);
       } else {
         setError(data.error || "Failed to save payment method");
       }
     } catch (err) {
+      console.error("Error during payment method saving:", err);
       setError("Something went wrong, please try again.");
     } finally {
       setLoading(false);
@@ -326,7 +328,6 @@ function CheckoutForm() {
     'postalCode',
     'country',
   ];
-  console.log(cart, "cartttt");
   
 
   return (
@@ -705,4 +706,13 @@ export default function CheckoutPage() {
       <CheckoutForm />
     </Elements>
   );
+}
+
+export function usePrefixPathWithLocale2() {
+  const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
+
+  return (path?: string | null) => {
+    if (!path) return selectedLocale.pathPrefix || '/';
+    return `${selectedLocale.pathPrefix}${path.startsWith('/') ? path : '/' + path}`;
+  };
 }

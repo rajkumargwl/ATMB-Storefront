@@ -13,6 +13,8 @@ import {twMerge} from 'tailwind-merge';
 import {defaultButtonStyles} from '~/components/elements/Button';
 import SpinnerIcon from '~/components/icons/Spinner';
 import {usePageAnalytics} from '~/hooks/usePageAnalytics';
+import { DEFAULT_LOCALE, usePrefixPathWithLocale } from '~/lib/utils';
+import { useRootLoaderData } from '~/root';
 
 type FormMode = 'default' | 'inline';
 
@@ -134,7 +136,6 @@ function AddToCartAnalytics({
   const formData = fetcher.formData;
   const pageAnalytics = usePageAnalytics({hasUserConsent: true});
   const navigate = useNavigate();
-
   useEffect(() => {
     if (formData) {
       const cartData: Record<string, unknown> = {};
@@ -163,7 +164,8 @@ function AddToCartAnalytics({
           eventName: AnalyticsEventName.ADD_TO_CART,
           payload: addToCartPayload,
         });
-        navigate('/cart');
+        let redirectTo = usePrefixPathWithLocale('/cart');
+        navigate(redirectTo);
       }
     }
   }, [fetcherData, formData, pageAnalytics]);
