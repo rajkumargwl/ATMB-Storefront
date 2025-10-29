@@ -161,6 +161,8 @@ export async function loader({request, context, params}: LoaderFunctionArgs) {
       context.sanity.query({ query: FOOTER_QUERY, params: { language }, cache }),
     ]);
 
+
+
   // 🔹 Handle search param
   const url = new URL(request.url);
   const q = url.searchParams.get('q') || '';
@@ -261,7 +263,10 @@ export default function App() {
   useAnalytics(hasUserConsent);
   const location = useLocation();
   const hideHeaderFooterRoutes = ["/payment-success", "/payment-fail", "/order-confirmation"];
-  const hideHeaderFooter = hideHeaderFooterRoutes.includes(location.pathname);
+  // const hideHeaderFooter = hideHeaderFooterRoutes.includes(location.pathname);
+  const hideHeaderFooter = hideHeaderFooterRoutes.some((route) =>
+    location.pathname.endsWith(route)
+  );
  
   return (
     <html lang={locale.language}>

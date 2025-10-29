@@ -2,6 +2,9 @@
 import {useState, useEffect} from 'react';
 import type {Product, ProductVariant} from '@shopify/hydrogen/storefront-api-types';
 import ReplacePlanAddToCartButton from '~/components/cart/ReplacePlanAddToCartButton';
+import { useRootLoaderData } from '~/root';
+import { DEFAULT_LOCALE } from '~/lib/utils';
+import { Money } from '@shopify/hydrogen';
  
 type PlansWithoutBundlesProps = {
   product: Product;
@@ -15,6 +18,8 @@ type PlansWithoutBundlesProps = {
 };
  
 export default function PlansWithoutBundles({product,planData}: PlansWithoutBundlesProps) {
+  const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
+  let currencyCode = selectedLocale?.currency || 'USD';
     
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
   const [replaceLineId, setReplaceLineId] = useState<string | null>(null);
@@ -135,11 +140,16 @@ export default function PlansWithoutBundles({product,planData}: PlansWithoutBund
               'Appointment scheduling',
               'Appointment scheduling App',
             ];
+
+            let pricewithobj = {
+              amount: displayPrice,
+              currencyCode: currencyCode,
+            };
  
             return (
               <div
                 key={variant.id}
-                className={`relative rounded-[24px] p-6 md:p-8 flex flex-col ${
+                className={`relative rounded-[24px] p-6 md:p-8 flex flex-col justify-between ${
                   isMostPopular
                     ? 'border border-LightWhite  bg-white'
                     : 'border border-LightWhite  bg-white'
@@ -163,10 +173,10 @@ export default function PlansWithoutBundles({product,planData}: PlansWithoutBund
                       Most Popular
                   </span>
                 )}
- 
+                <div>
                 <h3 className="mb-5 md:mb-6 font-Roboto text-PrimaryBlack font-semibold leading-[28px] md:leading-[31.2px] text-[20px] md:text-[24px] tracking-[-0.3px] md:tracking-[-0.36px]">{variant.title}</h3>
                 <p className="mb-5 md:mb-6 font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[38.4px] text-[24px] md:text-[32px] tracking-[-0.36px] md:tracking-[-0.48px]">
-                  ${displayPrice}
+                  <Money data={{ amount: displayPrice, currencyCode: currencyCode }}/>
                   <span className="font-Roboto text-[#4B5563] font-normal text-[14px] leading-[21px] tracking-[0px]">
                     /{billingCycle}
                   </span>
@@ -179,6 +189,7 @@ export default function PlansWithoutBundles({product,planData}: PlansWithoutBund
                        {f}</li>
                   ))}
                 </ul>
+                </div>
  
                 <ReplacePlanAddToCartButton
                   selectedVariant={variant}
