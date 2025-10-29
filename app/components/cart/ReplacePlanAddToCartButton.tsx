@@ -1,6 +1,7 @@
 // app/components/ReplacePlanAddToCartButton.tsx
 import {CartForm} from '@shopify/hydrogen';
 import type {ProductVariant} from '@shopify/hydrogen/storefront-api-types';
+import { usePrefixPathWithLocale } from '~/lib/utils';
 
 interface Props {
   selectedVariant: ProductVariant | null;
@@ -26,7 +27,7 @@ export default function ReplacePlanAddToCartButton({
     console.log('ReplacePlanAddToCartButton - replaceLineId:', replaceLineId);
     return (
         <CartForm
-        route={`/cart`}
+        route={usePrefixPathWithLocale('/cart')}
         action="REPLACE_LINE"
         inputs={{
           lineIds: replaceLineId ? [replaceLineId] : [],
@@ -37,7 +38,7 @@ export default function ReplacePlanAddToCartButton({
               attributes: locationProperties,
             },
           ],
-          redirectTo: '/cart',
+          redirectTo: usePrefixPathWithLocale('/cart'),
         }}
       >
         <button type="submit" disabled={disabled} className={buttonClassName}>
@@ -50,7 +51,7 @@ export default function ReplacePlanAddToCartButton({
   // Normal add-to-cart
   return (
     <CartForm
-    route={`/cart`}
+    route={usePrefixPathWithLocale('/cart')}
       action={CartForm.ACTIONS.LinesAdd}
       inputs={{
         lines: [
@@ -60,7 +61,7 @@ export default function ReplacePlanAddToCartButton({
             attributes: locationProperties,
           },
         ],
-        redirectTo: '/cart',
+        redirectTo: usePrefixPathWithLocale('/cart'),
       }}
     >
       <button
