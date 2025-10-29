@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import Toprated from "~/components/icons/Badge.png";
@@ -10,7 +9,7 @@ type LocationInfoProps = {
   services: { name: string; icon: string }[];
   servicesIcons: { name: string; icon: string }[];
 };
-
+ 
 export default function LocationInfo({ location, services, servicesIcons }: LocationInfoProps) {
   const isTopRated = location?.ratingList?.some(
     (r: any) => r.type === "TOPRATED"
@@ -44,24 +43,24 @@ export default function LocationInfo({ location, services, servicesIcons }: Loca
           <div className="flex flex-wrap gap-4 mt-3 mb-4 md:mb-6">
             {isTopRated && (
               <>
-              <div className="flex items-center gap-1 text-[#FF7A00] font-medium text-sm">
+              <div className="flex items-center gap-2">
                 <img src={Toprated} alt="Top Rated" className="w-4 h-4"/>
-                <span>TOP RATED</span>
+                <span className="uppercase font-Roboto text-LightGray font-medium leading-[12px] md:leading-[12px] text-[12px] md:text-[12px] tracking-[0.36px]">TOP RATED</span>
               </div>
-               <span className="text-gray-400">|</span>
+               <span className="w-[1px] h-[13px] text-LightWhite">|</span>
           </>
             )}
            
-            <div className="flex items-center gap-1 text-[#0070F3] font-medium text-sm">
+            <div className="flex items-center gap-2">
               <img src={Premium} alt="Premium Address" className="w-4 h-4" />
               <span className="uppercase font-Roboto text-LightGray font-medium leading-[12px] md:leading-[12px] text-[12px] md:text-[12px] tracking-[0.36px]">PREMIUM ADDRESS</span>
             </div>
           </div>
  
           {/* Features */}
-          <div className="bg-[#F8F8F8] border border-[#EAEAEA] rounded-[12px] p-6">
-            <h3 className="text-gray-700 font-semibold mb-3">Services</h3>
-            <div className="flex flex-wrap gap-x-6 gap-y-3">
+          <div className="flex flex-col flex-wrap rounded-[12px] bg-[#F6F6F6] px-6 py-5 gap-4">
+            <h3 className="font-Roboto text-LightGray font-medium leading-[21px] md:leading-[21px] text-[14px] md:text-[14px] tracking-[0px]">Services</h3>
+            <div className="flex flex-col md:flex-row md:items-center gap-x-6 gap-y-4 flex-wrap">
               {/* {location?.featureList?.length > 0 ? (
                 location.featureList.map((feature: any) => {
                   const matchedService = services.find(
@@ -92,23 +91,23 @@ export default function LocationInfo({ location, services, servicesIcons }: Loca
               (service) =>
                 service.name.toLowerCase() === feature.toLowerCase()
             );
-
+ 
             return (
               <div
                 key={feature._key}
-                className="flex items-center gap-2 text-[16px] text-gray-800"
+                className="flex items-center gap-2"
               >
                 <img
                   src={matchedService?.icon ||defaultIcon}
                   alt={feature}
-                  className="w-5 h-5"
+                  className="w-[18px] h-[18px]"
                 />
-                <span>{feature}</span>
+                <span className="font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">{feature}</span>
               </div>
             );
           })
         ) : (
-          <p className="text-gray-500 text-sm">No services available</p>
+          <p className="font-Roboto text-LightGray font-medium leading-[21px] md:leading-[21px] text-[14px] md:text-[14px] tracking-[0px]">No services available</p>
         )}
             </div>
           </div>
@@ -136,5 +135,4 @@ export default function LocationInfo({ location, services, servicesIcons }: Loca
     </div>
   );
 }
- 
  

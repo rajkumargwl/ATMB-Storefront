@@ -7,7 +7,7 @@ const https = require('https')
 require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 
 const client = createClient({
-  projectId: process.env.SANITY_PROJECT_ID || 'yourProjectId',
+  projectId: process.env.SANITY_PROJECT_ID || '15agngtk',
   dataset: 'production',
   token: process.env.SANITY_API_TOKEN || '',
   useCdn: false,
