@@ -1,6 +1,6 @@
 import {useNavigate, useLoaderData} from '@remix-run/react';
 import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {notFound} from '~/lib/utils';
+import {notFound, validateLocale} from '~/lib/utils';
 import {PRODUCT_QUERY} from '~/queries/shopify/product';
 import type {Product, ProductVariant} from '@shopify/hydrogen/storefront-api-types';
 import {type ShopifyAnalyticsProduct} from '@shopify/hydrogen';
@@ -22,15 +22,15 @@ import Premium from "~/components/icons/Crown.png";
 import defaultIcon from "~/components/icons/default.png";
  
 
-const services = [
-    { name: "Mail Forwarding", icon: MailForwarding },
-    { name: "Document Scanning", icon: Scan },
-    { name: "Local Pickup", icon: LocalPickup },
-    { name: "Recycling", icon: Recycling },
-    { name: "Online Storage", icon: OnlineStorage },
-    { name: "Top Rated", icon: Toprated },
-    { name: "Premium Address", icon: Premium },
-  ];
+const servicesIcons = [
+  { name: "Mail Forwarding", icon: MailForwarding },
+  { name: "Document Scanning", icon: Scan },
+  { name: "Local Pickup", icon: LocalPickup },
+  { name: "Recycling", icon: Recycling },
+  { name: "Online Storage", icon: OnlineStorage },
+  { name: "Top Rated", icon: Toprated },
+  { name: "Premium Address", icon: Premium },
+];
   import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
 import LocationInfo from '~/components/modules/LocationInfo';
   const seo: SeoHandleFunction = ({data}) => ({
@@ -68,13 +68,11 @@ const LOCATION_QUERY = /* groq */ `
 `;
  
 export async function loader({context, params, request}: LoaderFunctionArgs) {
-  const language = params.lang || 'en';
- 
-  // Validate supported languages
-  const supportedLanguages = ['en', 'es'];
-  if (!supportedLanguages.includes(language)) {
-    throw notFound();
-  }
+  validateLocale({ context, params });
+   let language = params.lang || 'en';
+   if(language !== 'en-es'){
+     language = 'en';
+   }
  
   const cache = context.storefront.CacheCustom({
     mode: 'public',
@@ -128,7 +126,22 @@ export default function Plans() {
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   console.log('Page data:', page);
   console.log('Location data:', location);
- 
+  const highlights = Array.from(
+    new Set(
+      location.featureList
+        .filter((feature) => feature.class === "HIGHLIGHT")
+        .map((feature) => feature.label)
+    )
+  );
+
+  const services = Array.from(
+    new Set(
+      location.featureList
+        .filter((feature) => feature.class !== "HIGHLIGHT")
+        .map((feature) => feature.label)
+    )
+  );
+
   const variants = (product?.variants?.nodes ?? []) as ProductVariant[];
  
   // Filter by billing cycle from metafields
@@ -174,11 +187,11 @@ export default function Plans() {
       <div className="flex flex-col min-h-screen">
         <main className="flex-1">
          
-<LocationInfo location={location} services={services} />
+<LocationInfo location={location} services={services} servicesIcons={servicesIcons}/>
           {/* Sanity Modules Grid */}
           {page?.modules && page.modules.length > 0 && (
             <div className="mb-0 mt-0 px-0 md:px-0">
-              <ModuleGrid items={page.modules} searchQuery={''} homeSearchResults={[]} productData={product}  />
+              <ModuleGrid items={page.modules} searchQuery={''} homeSearchResults={[]} productData={product} highlights={highlights}  />
             </div>
           )}
  

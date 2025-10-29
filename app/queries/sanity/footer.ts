@@ -6,6 +6,7 @@ export const FOOTER_QUERY = `*[_type == "footer" && (language == $language || !d
     }
   },
   description,
+
   companyColumn {
     title,
     links[] {
@@ -13,6 +14,7 @@ export const FOOTER_QUERY = `*[_type == "footer" && (language == $language || !d
       link
     }
   },
+
   servicesColumn {
     title,
     links[] {
@@ -20,14 +22,46 @@ export const FOOTER_QUERY = `*[_type == "footer" && (language == $language || !d
       link
     }
   },
+
   locationsColumn {
     title,
     links[] {
       label,
-      link,
-      highlight
+      link
     }
   },
+
+  MailboxRenters {
+    title,
+    links[] {
+      label,
+      link
+    }
+  },
+
+  MailCenterOperator {
+    title,
+    links[] {
+      label,
+      link
+    }
+  },
+
+  contactColumn {
+    title,
+    address,
+    links[] {
+      icon {
+        asset->{
+          url
+        }
+      },
+      tooltipTitle,
+      label,
+      link
+    }
+  },
+
   appButtons[] {
     icon {
       asset->{
@@ -35,8 +69,9 @@ export const FOOTER_QUERY = `*[_type == "footer" && (language == $language || !d
       }
     },
     link,
-    tooltipTitle // ADD THIS
+    tooltipTitle
   },
+
   socialLinks[] {
     icon {
       asset->{
@@ -44,22 +79,9 @@ export const FOOTER_QUERY = `*[_type == "footer" && (language == $language || !d
       }
     },
     link,
-    tooltipTitle // ADD THIS
+    tooltipTitle
   },
-  contactColumn{
-    title,
-    address,
-    links[]{
-      icon{
-        asset->{
-          url
-        }
-      }, 
-      label, 
-      link,
-      tooltipTitle // ADD THIS
-    }
-  },
+
   bottomLinks[] {
     label,
     link

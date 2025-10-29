@@ -1,5 +1,7 @@
 import {Money, CartForm} from '@shopify/hydrogen';
 import {useNavigate} from '@remix-run/react';
+import { useRootLoaderData } from '~/root';
+import { DEFAULT_LOCALE } from '~/lib/utils';
 
 export default function CartEssentialsSection({
   essentialsProducts,
@@ -11,6 +13,8 @@ export default function CartEssentialsSection({
   onAddToCart: (newLine: any) => void;
 }) {
   const navigate = useNavigate();
+  const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
+  let currencyCode = selectedLocale?.currency || 'USD';
 
   // Filter out already-added products safely
   const availableEssentials = essentialsProducts.filter(
@@ -27,7 +31,6 @@ export default function CartEssentialsSection({
   const firstVariant = firstEssential.variants.nodes[0];
 
   const isVirtualMailbox = firstEssential.handle === 'virtual-mailbox';
-
   return (
      <div className='w-full lg:w-[50%]'>
       <div className='flex flex-col gap-2 mb-[24px] md:mb-[40px]'>
@@ -48,7 +51,7 @@ export default function CartEssentialsSection({
 
         <div className="flex flex-col items-end">
           <p className="flex items-end font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[31.2px] text-[24px] md:text-[24px] tracking-[-0.3px] md:tracking-[-0.36px]">
-                      <Money data={firstVariant.price} />
+                      <Money data={{ amount: firstVariant.price.amount, currencyCode: currencyCode }}/>
                       <span className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">/month</span>
           </p>
 

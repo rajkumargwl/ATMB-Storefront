@@ -15,6 +15,7 @@ import {useRootLoaderData} from '~/root';
 
 import { useEffect,useState } from "react";
 import type { LoaderFunction } from "@remix-run/node";
+import {DEFAULT_LOCALE, usePrefixPathWithLocale} from '~/lib/utils';
 
 import {
   redirect,
@@ -36,6 +37,8 @@ import {notFound} from '~/lib/utils';
 import Button from "~/components/elements/Button";
 
 export const loader: LoaderFunction = async ({ context, params }) => {
+    const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
+      let currencyCode = selectedLocale?.currency || 'USD';
   const { env } = context;
   
   const customerAccessToken = await context.session.get('customerAccessToken');
@@ -104,6 +107,8 @@ export const loader: LoaderFunction = async ({ context, params }) => {
   );
 };
 function CheckoutForm() {
+  const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
+  let currencyCode = selectedLocale?.currency || 'USD';
   const stripe = useStripe();
   const elements = useElements();
 
@@ -283,7 +288,7 @@ function CheckoutForm() {
         });
      
        // alert("Payment successful and details saved!");
-        window.location.href = "/order-confirmation";
+        window.location.href = usePrefixPathWithLocale("/order-confirmation");
       } else {
         setError(data.error || "Failed to save payment method");
       }
@@ -509,9 +514,22 @@ function CheckoutForm() {
                                 <button
                                   type="submit"
                                   disabled={!stripe || loading}
-                                  className="mt-5 bg-[#FF6600] h-[52px] hover:bg-[#e55a00] px-4 text-white font-medium text-[16px] py-3 rounded-full transition-all w-full"
+                                  className="flex items-center justify-center mt-5 bg-[#FF6600] h-[52px] hover:bg-[#e55a00] px-4 text-white font-medium text-[16px] py-3 rounded-full transition-all w-full"
                                 >
-                                  {loading ? "Processing..." : "Make Payment" + (cart?.cost?.subtotalAmount?.amount ? ` - $${cart.cost.subtotalAmount.amount}` : '')}
+                                  {loading ? (
+                                    "Processing..."
+                                  ) : (
+                                    <>
+                                      Make Payment
+                                      {cart?.cost?.subtotalAmount && (
+                                        <>
+                                          {"  -  "}
+                                          <Money data={{ amount: cart?.cost?.subtotalAmount?.amount, currencyCode: currencyCode }}/>
+                                        </>
+                                      )}
+                                    </>
+                                  )}
+
                                 </button>
                               </form>
 
