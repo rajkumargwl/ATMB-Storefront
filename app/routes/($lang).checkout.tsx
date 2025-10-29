@@ -117,6 +117,18 @@ function CheckoutForm() {
   const [priceId, setPriceId] = useState<string | null>(null);
   const rootData = useRootLoaderData();
   const cart = rootData?.cart?._data;
+  
+useEffect(() => {
+  if (cart) {
+    try {
+      localStorage.setItem("checkoutCart", JSON.stringify(cart));
+      console.log("Cart updated in localStorage");
+    } catch (error) {
+      console.error("Failed to update cart in localStorage:", error);
+    }
+  }
+}, [cart]);
+
   const lines = cart?.lines?.edges;
   const { bundleProducts, essentialsProducts,customer} = useLoaderData<typeof loader>();
  const getPrefixedPath = usePrefixPathWithLocale2(); 
