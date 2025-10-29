@@ -31,9 +31,11 @@ import {type ShopifyAnalyticsProduct} from '@shopify/hydrogen';
 import {DEFAULT_LOCALE, notFound, usePrefixPathWithLocale} from '~/lib/utils';
 import Button from "~/components/elements/Button";
 import AddToCartWithDraftOrderButton from '~/components/product/buttons/AddToCartWithDraftOrderButton';
+import { type CartType } from '~/types'; // Add this import
 
 export const loader: LoaderFunction = async ({ context, params }) => {
   const { env } = context;
+  console.log("env data test", env.BILLING_ANYTIME_BASE_URL);
   const cart = await context.cart.get();
   
   const customerAccessToken = await context.session.get('customerAccessToken');
@@ -76,6 +78,13 @@ export const loader: LoaderFunction = async ({ context, params }) => {
   return new Response(
     JSON.stringify({
       stripePublishableKey: env.VITE_STRIPE_PUBLISHABLE_KEY,
+      billingConfig: {
+        baseUrl: env.BILLING_ANYTIME_BASE_URL,
+        subscriptionKey: env.BILLING_ANYTIME_SUBSCRIPTION_KEY,
+        clientId: env.BILLING_ANYTIME_CLIENT_ID,
+        clientSecret: env.BILLING_ANYTIME_CLIENT_SECRET,
+        scope: env.BILLING_ANYTIME_SCOPE,
+      },
       bundleProducts: [virtualMailbox.product, virtualPhone.product],
       essentialsProducts: AllProducts ?? [],
       BusinessAcc,
@@ -92,10 +101,20 @@ export default function CheckoutPage() {
   let currencyCode = selectedLocale?.currency || 'USD';
   console.log('Selected Locale in Checkout Page:', selectedLocale);
   const rootData = useRootLoaderData();
-  const { bundleProducts, essentialsProducts, cart, BusinessAcc, LiveReceptionist} = useLoaderData<typeof loader>();
+  const { bundleProducts, essentialsProducts, cart, BusinessAcc, LiveReceptionist,billingConfig} = useLoaderData<typeof loader>();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
+  const [cartData, setCartData] = useState(null);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("checkoutCart");
+    if (stored) {
+      setCartData(JSON.parse(stored));
+      //localStorage.removeItem("checkoutCart"); 
+    }
+  }, []);
+  
   const LiveReceptionistProductAnalytics: ShopifyAnalyticsProduct | null = selectedVariant
       ? {
           productGid: LiveReceptionist?.product?.id,
@@ -181,6 +200,7 @@ export default function CheckoutPage() {
                     }
                   : undefined
               }
+              billingConfig={billingConfig} 
               buttonClassName="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold transition"
               text="Add Virtual Phone"
             /> 
@@ -222,6 +242,7 @@ export default function CheckoutPage() {
                     }
                   : undefined
               }
+              billingConfig={billingConfig} 
               buttonClassName="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold transition"
               text="Add Business Accelerator"
             /> 
@@ -229,11 +250,125 @@ export default function CheckoutPage() {
       </div>
 
       {/* No Thanks Button */}
-      <button className="mt-8 border border-gray-400 text-gray-700 hover:bg-gray-100 py-2 px-6 rounded-full transition" onClick={() => {
-        navigate(paymentSuccessUrl);
+      {/* <button className="mt-8 border border-gray-400 text-gray-700 hover:bg-gray-100 py-2 px-6 rounded-full transition" onClick={() => {
+        navigate('/checkout', {state: {cartData}});
       }}>
         No Thanks, Continue
-      </button>
+      </button> */}
+      {/* No Thanks Button with Billing + Draft Order */}
+          <button
+      className="mt-8 border border-gray-400 text-gray-700 hover:bg-gray-100 py-2 px-6 rounded-full transition"
+      onClick={async () => {
+        try {
+          const stored = localStorage.getItem("checkoutCart");
+          const cartData = stored ? JSON.parse(stored) : [];
+
+          if (cartData.length === 0) {
+            navigate("/payment-fail");
+            return;
+          }
+
+          //Fix: Map to expected shape
+          const formattedLines = cartData.map((item: any) => ({
+            merchandiseId: item.variantId,
+            quantity: item.quantity,
+          }));
+
+          // Create Draft Order
+          const draftRes = await fetch("/api/create-draft-order", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ lines: formattedLines }),
+          });
+
+          const draftData = await draftRes.json();
+          if (!draftData?.data?.draftOrderCreate?.draftOrder?.id) {
+            console.error("Draft order creation failed:", draftData);
+            navigate("/payment-fail");
+            return;
+          }
+
+          // Get Billing Token
+          const tokenResponse = await fetch(`${billingConfig?.baseUrl}/auth/token`, {
+            method: "POST",
+            headers: {
+              "Api-Version": "v1",
+              "Api-Environment": "dev",
+              "Content-Type": "application/json",
+              "Cache-Control": "no-cache",
+              "Ocp-Apim-Subscription-Key": billingConfig?.subscriptionKey,
+            },
+            body: JSON.stringify({
+              clientId: billingConfig?.clientId,
+              clientSecret: billingConfig?.clientSecret,
+              scope: billingConfig?.scope,
+              grantType: "client_credentials",
+            }),
+          });
+
+          const tokenData = await tokenResponse.json();
+          const accessToken = tokenData?.data?.accessToken;
+          if (!accessToken) {
+            console.error("Billing token missing:", tokenData);
+            navigate("/payment-fail");
+            return;
+          }
+
+          // Call Billing Purchase API
+          const billingPayload = {
+            locationId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+            customerId: "c3d4e5f6-a7b8-9012-cdef-123456789012",
+            subscription: {
+              providerId: "d4e5f6a7-b8c9-0123-def1-234567890123",
+              label: "Monthly Premium Subscription",
+              currency: "USD",
+              items: cartData.map((item: any) => ({
+                productId: item.variantId,
+                label: "Custom Product",
+                price: 99.99,
+                quantity: item.quantity,
+                recurrenceInterval: "month",
+              })),
+            },
+            payment: {
+              paymentMethodId: "pm_1234567890abcdef",
+              customerPaymentKey: "cus_ABC123XYZ789",
+              metadata: { source: "web_portal" },
+            },
+          };
+
+          const billingResponse = await fetch(`${billingConfig?.baseUrl}/purchase`, {
+            method: "POST",
+            headers: {
+              "Api-Version": "v1",
+              "Api-Environment": "dev",
+              "Ocp-Apim-Subscription-Key": billingConfig?.subscriptionKey,
+              "Authorization": `Bearer ${accessToken}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(billingPayload),
+          });
+
+          const billingResult = await billingResponse.json();
+          if (!billingResponse.ok) {
+            console.error("Billing failed:", billingResult);
+            navigate("/payment-fail");
+            return;
+          }
+
+          // Cleanup and Redirect
+          localStorage.removeItem("checkoutCart");
+          navigate("/payment-success");
+        } catch (error) {
+          console.error("No Thanks button flow error:", error);
+          navigate("/payment-fail");
+        }
+      }}
+    >
+      No Thanks, Continue
+    </button>
+
+
     </div>
     </>
   );

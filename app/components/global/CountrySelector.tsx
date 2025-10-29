@@ -54,25 +54,34 @@ export function CountrySelector({align = 'center', onChange}: Props) {
             cartFormInput: JSON.stringify({
               action: CartForm.ACTIONS.BuyerIdentityUpdate,
               inputs: {
-                buyerIdentity: {
-                  countryCode: newLocale.country,
-                },
+                buyerIdentity: { countryCode: newLocale.country },
               },
             }),
-            redirectTo: countryUrlPath,
           },
           { method: 'post', action: '/cart?index' },
         );
+        
+        // Wait for fetcher to finish, then navigate manually
+        setPendingLocale(newLocale);
       }
     };
   
     // ✅ Close dropdown after fetcher is done
-    useEffect(() => {
-      if (pendingLocale && fetcher.state === 'idle') {
-        setPendingLocale(null);
-        if (onChange) onChange();
-      }
-    }, [fetcher.state, pendingLocale, onChange]);
+     useEffect(() => {
+       if (pendingLocale && fetcher.state === 'idle') {
+         const newLocalePrefix = `${pendingLocale.language}-${pendingLocale.country}`;
+         const countryUrlPath = getCountryUrlPath({
+           countryLocale: pendingLocale,
+           defaultLocalePrefix,
+           pathWithoutLocale,
+         });
+         
+         setPendingLocale(null);
+     
+         // 👇 navigate properly so Remix reloads all data
+         window.location.href = countryUrlPath;
+       }
+     }, [fetcher.state, pendingLocale]);
   
     const isLoading = fetcher.state !== 'idle';
 

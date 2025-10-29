@@ -15,7 +15,7 @@ import LanguageSwitcher from "./LanguageSwitcher";
 import LanguageCurrencyMenu from '~/components/global/LanguageCurrencyMenu';
 import {usePrefixPathWithLocale} from '~/lib/utils';
 import GlobeIcon from '~/components/media/Globe.svg';
- 
+
 type HeaderProps = {
   data: {
     logo?: { url: string };
@@ -42,17 +42,17 @@ type HeaderProps = {
     email: string;
   } | null;               // 👈 new
 };
- 
- 
+
+
 export default function Header({ data, searchResults, searchQuery, isLoggedIn, customer, currentLanguage }: HeaderProps) {
   if (!data) return null;
- 
+
   const { logo, menu, icon1, icon2,icon3, loginButton, getStartedButton } = data;
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
    const [results, setResults] = useState(searchResults || []);
   const [query, setQuery] = useState("");
- 
+
   const navigate = useNavigate();
   const location = useLocation();
   const [skipSearchSync, setSkipSearchSync] = useState(false);
@@ -60,25 +60,25 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
     setQuery(searchQuery || "");
     setResults(searchResults || []);
   }, [searchQuery, searchResults]);
- 
+
   // Sync search input to URL
   // useEffect(() => {
   //   if (skipSearchSync) return;
- 
+
   //   const params = new URLSearchParams(location.search);
- 
+
   //   // if (!query.trim()) {
   //   //   params.delete("q");
   //   //   navigate(`?${params.toString()}`, { replace: true });
   //   //   setResults([]);
   //   //   return;
   //   // }
- 
+
   //   // const timeout = setTimeout(() => {
   //   //   params.set("q", query);
   //   //   navigate(`?${params.toString()}`, { replace: true });
   //   // }, 500);
- 
+
   //   //return () => clearTimeout(timeout);
   // }, [query, navigate, location.search, skipSearchSync]);
     const handleResultClick = (item: any) => {
@@ -86,7 +86,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
     setQuery("");
     setResults([]);
     setIsSearchOpen(false);
- 
+
     if (item.type === "product") {
       navigate(`/products/${item.handle}`);
     } else if (item.type === "location") {
@@ -98,28 +98,28 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
   useEffect(() => {
   const params = new URLSearchParams(location.search);
   const newQuery = params.get("q") || "";
- 
+
   setQuery(newQuery);
   setResults(searchResults || []); // new results from loader
 }, [location.search, searchResults]);
- 
+
 useEffect(() => {
   function handleMessage(event: MessageEvent) {
     // Only accept from your domain
     if (event.origin !== "https://shopifystage.anytimehq.co") return;
- 
+
     if (event.data?.token) {
       console.log("Received token:", event.data.token);
- 
+
       // Redirect parent window with token in URL
       window.location.href = `/account/login?token=${event.data.token}`;
     }
   }
- 
+
   window.addEventListener("message", handleMessage);
   return () => window.removeEventListener("message", handleMessage);
 }, []);
- 
+
 useEffect(() => {
   if (isMobileMenuOpen) {
     document.body.classList.add("no-scroll");
@@ -127,7 +127,7 @@ useEffect(() => {
     document.body.classList.remove("no-scroll");
   }
 }, [isMobileMenuOpen]);
- 
+
   return (
     <header className=" relative z-[99] w-full bg-white px-5 border-b border-LightWhite lg:border-none">
       <div className="max-w-[1240px] mx-auto flex items-center justify-between py-5">
@@ -145,8 +145,8 @@ useEffect(() => {
               </Link>
             )}
           </div>
- 
- 
+
+
           {/* Menu (Desktop only) */}
           <nav className={`hidden lg:flex ${currentLanguage === 'en-es' ? '' : 'space-x-2 xl:space-x-3' }`}>
             {menu?.map((item, idx) => (
@@ -166,20 +166,20 @@ useEffect(() => {
         : item.url ?? "#")}
                   className={`text-PrimaryBlack hover:text-PrimaryBlack font-normal flex items-center gap-[6px] text-[14px] md:text-[14px] ${currentLanguage === 'en-es' ? 'xl:text-[15px]' : 'xl:text-[16px]' } leading-[24px] tracking-[0px]`}
                 >
-                  {item.label}
+                  {item.label} 
                   {item.hasSubmenu && (
                  <span className="group-hover:transform group-hover:rotate-180 transition-all duration-500 ease-in-out"> <ArrowDownIcon /></span>
                   )}
-                </Link>
- 
- 
+                </Link> 
+
+
                 {/* Dropdown submenu */}
                 {item?.hasSubmenu && item?.subMenu && (
                     <div className="absolute z-[2] left-0 mt-2 bg-white border border-LightWhite shadow-md rounded-[6px] hidden group-hover:block min-w-[100px]">
                       <ul className="py-2">
                         {item?.subMenu.map((sub, i) => {
                           const localizedUrl = usePrefixPathWithLocale(sub?.url) ?? "#";
- 
+
                           return (
                             <li key={i}>
                               <Link
@@ -194,12 +194,12 @@ useEffect(() => {
                       </ul>
                     </div>
                   )}
- 
+
               </div>
             ))}
           </nav>
         </div>
- 
+
         {/* Right section */}
         <div className="flex items-center space-x-6 lg:space-x-4 xl:space-x-7">
           {/* Search */}
@@ -213,7 +213,7 @@ useEffect(() => {
               />
             </button>
           )}
- 
+
           {/* Cart */}
           {icon2?.url && (
              <Link
@@ -240,7 +240,8 @@ useEffect(() => {
             <LanguageCurrencyMenu  iconUrl={GlobeIcon} />
             </>
           {/* )} */}
-           {/* Login / Get Started (Desktop only) */}
+
+          {/* Login / Get Started (Desktop only) */}
           <div className="hidden lg:flex items-center space-x-4">
             {isLoggedIn ? (
                <Link
@@ -261,7 +262,7 @@ useEffect(() => {
                 className="w-fit rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[11px] md:py-[15px]"
                 onClick={() => {
                   setIsMobileMenuOpen(false);
-                  const ssoUrl = "https://store.xecurify.com/moas/broker/login/shopify/0dv7ud-pz.myshopify.com/account?idpname=custom_openidconnect_Okf%22;
+                  const ssoUrl = "https://store.xecurify.com/moas/broker/login/shopify/0dv7ud-pz.myshopify.com/account?idpname=custom_openidconnect_Okf";
                   // const ssoUrl = "http://localhost:3000/auth/callback?token=a0de2720bf15cbb431ba1441bebf4ea5"; // TODO: replace with your SSO URL
                   const width = 800;
                   const height = 600;
@@ -283,13 +284,13 @@ useEffect(() => {
                 to={usePrefixPathWithLocale('create-account')}
                 className="rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-4 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2 transition-all hover:scale-[1.02] hover:bg-[#DD5827]"
               >
-                {getStartedButton.label}
+                {getStartedButton.label} 
               </Link>
             )}
           </div>
            {/* <LanguageSwitcher currentLanguage="en" /> */}
           {/* <CountrySelector align="left" /> */}
- 
+
           {/* Mobile menu button */}
           <button
             className="lg:hidden"
@@ -299,7 +300,7 @@ useEffect(() => {
           </button>
         </div>
       </div>
- 
+
       {/* Mobile menu (Side Drawer) */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-50">
@@ -308,7 +309,7 @@ useEffect(() => {
             className="absolute inset-0 bg-black/50"
             onClick={() => setIsMobileMenuOpen(false)}
           />
- 
+
           {/* Side Drawer */}
           <div className="absolute right-0 top-0 h-full w-4/5 max-w-sm bg-white shadow-lg flex flex-col p-6">
             {/* Close Icon */}
@@ -318,7 +319,7 @@ useEffect(() => {
             >
               <CloseIcon className="h-6 w-6 text-gray-700" />
             </button>
- 
+
             {/* Navigation */}
             <nav className="flex flex-col space-y-4 overflow-auto">
               {menu?.map((item, idx) => (
@@ -331,7 +332,7 @@ useEffect(() => {
                   {item.label}
                 </Link>
               ))}
- 
+
               {loginButton && (
                 <Link
                   to={loginButton.link ?? "#"}
@@ -341,21 +342,21 @@ useEffect(() => {
                   {loginButton.label}
                 </Link>
               )}
- 
+
               {getStartedButton && (
                 <Link
                   to="create-account"
                   className="w-fit rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-3 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2 transition-all hover:scale-[1.02] hover:bg-[#DD5827]"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  {getStartedButton.label}
+                  {getStartedButton.label} 
                 </Link>
               )}
             </nav>
           </div>
         </div>
       )}
- 
+
      {/* Search Popup Modal */}
 {/* Search Popup Modal */}
 {isSearchOpen && (
@@ -372,7 +373,7 @@ useEffect(() => {
             className="h-13 w-auto"
           />
         </div> */}
- 
+
         {/* Search Input */}
         <button className="flex md:hidden absolute left-[-40px]">
             <LeftChevron />
@@ -384,27 +385,27 @@ useEffect(() => {
           <button className="flex md:hidden">
             <SearchIcon />
           </button>
- 
+
           <input
             type="text"
             value={query}
             onChange={(e) => {
               const newValue = e.target.value;
               setQuery(newValue);
- 
+
               const params = new URLSearchParams(location.search);
               if (newValue.trim()) {
                 params.set("q", newValue);
               } else {
                 params.delete("q");
               }
- 
+
               navigate(`?${params.toString()}`, { replace: true });
             }}
             placeholder="Enter location, product, or keyword"
             className="w-full md:py-[11px] font-Roboto text-PrimaryBlack font-normal leading-[24px] text-[16px] tracking-[0px] placeholder:text-PrimaryBlack rounded-xl focus:outline-none placeholder:font-Roboto placeholder:font-normal placeholder:leading-[24px] placeholder:text-[16px] placeholder:tracking-[0px]"
           />
- 
+
           {/* Close Icon inside input */}
           {/* {query && (
             <button
@@ -421,7 +422,7 @@ useEffect(() => {
             </button>
           )} */}
         </div>
- 
+
         {/* Right Buttons */}
         <div className="flex items-center space-x-[10px] w-auto justify-center mt-[0px]">
           
@@ -444,11 +445,11 @@ useEffect(() => {
             to={getStartedButton?.link ?? "/account/register"}
             className="hidden md:flex rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-4 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2 transition-all hover:scale-[1.02] hover:bg-[#DD5827]"
           >
-            {getStartedButton?.label || "Get Started"}
+            {getStartedButton?.label || "Get Started"} 
           </Link>
         </div>
       </div>
- 
+
       {/* Results List */}
       {query && (
         <div className="md:pt-2">
@@ -486,8 +487,7 @@ useEffect(() => {
     </div>
   </div>
 )}
- 
+
     </header>
   );
 }
- 
