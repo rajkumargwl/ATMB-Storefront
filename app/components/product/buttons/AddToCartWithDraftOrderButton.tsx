@@ -239,7 +239,8 @@ function AddToCartAnalytics({
           eventName: AnalyticsEventName.ADD_TO_CART,
           payload: addToCartPayload,
         });
-        navigate('/cart');
+        let redirectTo = usePrefixPathWithLocale('/cart');
+        navigate(redirectTo);
       }
     }
   }, [fetcherData, formData, pageAnalytics]);

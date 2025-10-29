@@ -23,6 +23,7 @@ import {Link} from '~/components/Link';
 import {useCartFetchers} from '~/hooks/useCartFetchers';
 import {useRootLoaderData} from '~/root';
 import ChangePlanButton from './ChangePlanButton';
+import { usePrefixPathWithLocale } from '~/lib/utils';
 export function CartLineItems({
   linesObj,
 }: {
@@ -295,7 +296,7 @@ function UpdateCartButton({
 }) {
   return (
     <CartForm
-      route="/cart"
+      route={usePrefixPathWithLocale('/cart')}
       action={CartForm.ACTIONS.LinesUpdate}
       inputs={{lines}}
     >
@@ -307,7 +308,7 @@ function UpdateCartButton({
 function ItemRemoveButton({lineIds}: {lineIds: CartLine['id'][]}) {
   return (
     <CartForm
-      route="/cart"
+      route={usePrefixPathWithLocale('/cart')}
       action={CartForm.ACTIONS.LinesRemove}
       inputs={{lineIds}}
     >
