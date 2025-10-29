@@ -72,7 +72,7 @@ type FormMode = 'default' | 'inline';
           action={CartForm.ACTIONS.LinesAdd}
         >
           {(fetcher) => {
-            // 👇 Run side-effect when AddToCart completes
+            // Run side-effect when AddToCart completes
             useEffect(() => {
               if (fetcher.state === "submitting") {
                 hasSubmitted.current = true;
@@ -86,7 +86,7 @@ type FormMode = 'default' | 'inline';
               ) {
                 hasSubmitted.current = false;
   
-                // ✅ Call Draft Order API
+                // Call Draft Order API
                 (async () => {
                   try {
                     const cartId = fetcher.data.cart.id;
@@ -256,7 +256,7 @@ type FormMode = 'default' | 'inline';
                       navigate("/payment-fail");
                     }
                   } catch (err) {
-                    console.error("❌ Failed to create draft order:", err);
+                    console.error("Failed to create draft order:", err);
                   }
                 })();
               }
