@@ -7,14 +7,10 @@ export default defineType({
   type: 'document',
   icon: PinIcon,
   fields: [
+    // ---------- Basic Info ----------
     defineField({
       name: 'locationId',
       title: 'Location ID',
-      type: 'string',
-    }),
-    defineField({
-      name: 'parentLocationId',
-      title: 'Parent Location ID',
       type: 'string',
     }),
     defineField({
@@ -73,6 +69,24 @@ export default defineType({
       type: 'string',
     }),
 
+    // ---------- Plan Availability ----------
+    defineField({
+      name: 'planList',
+      title: 'Available Plans',
+      description: 'Select which plans are available at this location',
+      type: 'array',
+      of: [{ type: 'string' }],
+      options: {
+        list: [
+          { title: 'Bronze', value: 'BRONZE' },
+          { title: 'Silver', value: 'SILVER' },
+          { title: 'Gold', value: 'GOLD' },
+          { title: 'Unlimited', value: 'UNLIMITED' },
+        ],
+        layout: 'tags', // Displays as tags or checkboxes in Studio
+      },
+    }),
+
     // ---------- Feature List ----------
     defineField({
       name: 'featureList',
@@ -81,15 +95,41 @@ export default defineType({
       of: [
         {
           type: 'object',
+          title: 'Feature Item',
           fields: [
-            { name: 'category', type: 'string' },
-            { name: 'class', type: 'string' },
-            { name: 'description', type: 'string' },
-            { name: 'feature_id', type: 'string' },
-            { name: 'label', type: 'string' },
-            { name: 'status', type: 'string' },
-            { name: 'type', type: 'string' },
-            { name: 'sort_order', type: 'number' },
+            defineField({
+              name: 'feature',
+              title: 'Feature Details',
+              type: 'object',
+              fields: [
+                { name: 'feature_id', title: 'Feature ID', type: 'string' },
+                { name: 'label', title: 'Label', type: 'string' },
+                { name: 'description', title: 'Description', type: 'string' },
+                { name: 'category', title: 'Category', type: 'string' },
+                { name: 'class', title: 'Class', type: 'string' },
+                { name: 'status', title: 'Status', type: 'string' },
+                { name: 'type', title: 'Feature Type', type: 'string' },
+              ],
+            }),
+            { name: 'sort_order', title: 'Sort Order', type: 'number' },
+            { name: 'status', title: 'Status', type: 'string' },
+            {
+              name: 'type',
+              title: 'Plan Type',
+              description: 'Select one or more plans this feature applies to',
+              type: 'array',
+              of: [{ type: 'string' }],
+              options: {
+                list: [
+                  { title: 'Bronze', value: 'BRONZE' },
+                  { title: 'Silver', value: 'SILVER' },
+                  { title: 'Gold', value: 'GOLD' },
+                  { title: 'Unlimited', value: 'UNLIMITED' },
+                  { title: 'Site', value: 'SITE' },
+                ],
+                layout: 'checkbox', // ✅ multiple selection allowed
+              },
+            },
           ],
         },
       ],
@@ -103,32 +143,13 @@ export default defineType({
       of: [
         {
           type: 'object',
+          title: 'Rating Item',
           fields: [
             { name: 'rating_id', title: 'Rating ID', type: 'string' },
-            { name: 'sort_order', title: 'Sort Order', type: 'number' },
-            { name: 'status', title: 'Status', type: 'string' },
-            { name: 'type', title: 'Type', type: 'string' },
             { name: 'value', title: 'Value', type: 'number' },
-          ],
-        },
-      ],
-    }),
-
-    // ---------- Attribution List ----------
-    defineField({
-      name: 'attributionList',
-      title: 'Attribution List',
-      type: 'array',
-      of: [
-        {
-          type: 'object',
-          fields: [
-            { name: 'attribution_id', title: 'Attribution ID', type: 'string' },
-            { name: 'name', title: 'Name', type: 'string' },
             { name: 'sort_order', title: 'Sort Order', type: 'number' },
             { name: 'status', title: 'Status', type: 'string' },
             { name: 'type', title: 'Type', type: 'string' },
-            { name: 'value', title: 'Value', type: 'string' },
           ],
         },
       ],
@@ -142,13 +163,37 @@ export default defineType({
       of: [
         {
           type: 'object',
+          title: 'Attribute Item',
           fields: [
             { name: 'attribute_id', title: 'Attribute ID', type: 'string' },
             { name: 'name', title: 'Name', type: 'string' },
+            { name: 'value', title: 'Value', type: 'string' },
             { name: 'sort_order', title: 'Sort Order', type: 'number' },
             { name: 'status', title: 'Status', type: 'string' },
             { name: 'type', title: 'Type', type: 'string' },
-            { name: 'value', title: 'Value', type: 'string' },
+          ],
+        },
+      ],
+    }),
+
+    // ---------- Calendar List ----------
+    defineField({
+      name: 'calendarList',
+      title: 'Calendar List',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          title: 'Calendar Item',
+          fields: [
+            { name: 'calendar_id', title: 'Calendar ID', type: 'string' },
+            { name: 'calendar_item_id', title: 'Calendar Item ID', type: 'string' },
+            { name: 'day_of_the_week', title: 'Day of the Week', type: 'number' },
+            { name: 'item_date', title: 'Item Date', type: 'datetime' },
+            { name: 'label', title: 'Label', type: 'string' },
+            { name: 'time_begin', title: 'Start Time', type: 'string' },
+            { name: 'time_end', title: 'End Time', type: 'string' },
+            { name: 'type', title: 'Type', type: 'string' },
           ],
         },
       ],
@@ -158,39 +203,6 @@ export default defineType({
       name: 'createdAt',
       title: 'Created At',
       type: 'datetime',
-    }),
-    defineField({
-      name: 'planTier',
-      title: 'Plan Tier',
-      type: 'string',
-      options: {
-        list: [
-          {title: 'Basic', value: 'basic'},
-          {title: 'Premium', value: 'premium'},
-        ],
-        layout: 'radio',
-      },
-    }),
-    defineField({
-      name: 'priceRange',
-      title: 'Price Range',
-      type: 'number',
-    }),
-    defineField({
-      name: 'options',
-      title: 'Options',
-      type: 'array',
-      of: [{type: 'string'}],
-      options: {
-        list: [
-          {title: 'Easy ingress', value: 'easyIngress'},
-          {title: '24/7 Access', value: 'access247'},
-          {title: 'Mail forwarding', value: 'mailForwarding'},
-          {title: 'Mail Scanning', value: 'mailScanning'},
-          {title: 'Parking', value: 'parking'},
-          {title: 'ADA Accessibility', value: 'adaAccessibility'},
-        ],
-      },
     }),
   ],
 

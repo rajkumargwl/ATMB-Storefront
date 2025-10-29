@@ -70,7 +70,7 @@ const BusinessTrustedSection: React.FC<Props> = ({
           {/* Ratings */}
           <div className="flex flex-wrap gap-[16px] md:gap-[26px] items-center justify-between">
             {ratings.map((rating, idx) => (
-              <div key={idx} className="flex items-center gap-3 bg-white text-PrimaryBlack px-3 py-2 rounded-[12px]">
+              <div key={idx} className="flex items-center gap-3 bg-white text-PrimaryBlack px-2 md:px-3 py-2 rounded-[12px]">
                 <img
                   src={rating.icon.url}
                   alt={`Rating ${rating.ratingnum} ${rating.ratingText}`}

@@ -4,7 +4,7 @@ import { defineField, defineType } from 'sanity'
 export const renterReferralBannerModule =  defineType({
   name: 'renterReferralBannerModule',
   title: 'Renter Referral Banner Module',
-  type: 'document',
+  type: 'object',
  
   fields: [
     defineField({
