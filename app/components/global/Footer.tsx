@@ -133,7 +133,7 @@ export default function Footer({ data }: FooterProps) {
                       {item?.icon?.asset?.url && (
                         <img
                           src={item.icon.asset.url}
-                          alt={item.label}
+                          alt={item.tooltipTitle}
                           className="w-[24px]"
                           title={item.tooltipTitle}
                         />

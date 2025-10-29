@@ -55,7 +55,7 @@ export default function SolutionHero({ data }: Props) {
             ))}
           </h1>
  
-          <p className="max-w-[526px] mb-[36px] md:mb-[64px] font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px]">
+          <p className="max-w-[526px] mb-[20px] md:mb-[40px] font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px]">
             {data?.description}
           </p>
  
@@ -128,4 +128,3 @@ export default function SolutionHero({ data }: Props) {
     </section>
   );
 }
- 

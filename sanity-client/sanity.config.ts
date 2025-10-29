@@ -24,7 +24,7 @@ const dataset = savedDataset || 'development'
 
 export default defineConfig({
   name: 'default',
-  title: 'Shopify - 0dv7ud-pz',
+  title: 'ATMB HQ',
   projectId: '15agngtk',
   dataset,
   plugins: [  

@@ -34,7 +34,7 @@ export default function SolutionVirtualMailbox({data}: Props) {
         </div>
  
         {/* Right side - Text */}
-        <div className="w-full md:w-[43.75%] flex flex-col relative gap-4 order-1 md:order-2">
+        <div className="business-desc w-full md:w-[43.75%] flex flex-col relative gap-4 order-1 md:order-2">
           {data.title && (
             <h2 className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px]">
               {data.title}
@@ -42,13 +42,12 @@ export default function SolutionVirtualMailbox({data}: Props) {
           )}
  
          {Array.isArray(data.description) &&
- data.description[0]?._type === "block" && (
-  <PortableText value={data.description} />
-)}
-
+            data.description[0]?._type === "block" && (
+              <PortableText value={data.description} />
+          )}
+ 
         </div>
       </div>
     </section>
   );
 }
- 
