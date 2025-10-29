@@ -4,7 +4,7 @@ import {useState, useEffect, useMemo, useRef} from 'react';
 import {AnalyticsPageType, Money, type SeoHandleFunction} from '@shopify/hydrogen';
 import {HEADER_QUERY} from '~/queries/sanity/header';
 import {FOOTER_QUERY} from '~/queries/sanity/footer';
-import {DEFAULT_LOCALE, notFound} from '~/lib/utils';
+import {DEFAULT_LOCALE, notFound, usePrefixPathWithLocale} from '~/lib/utils';
 import Map from '~/components/icons/Map';
 import CloseIconBlack from '~/components/icons/CloseIconBlack';
 import Location from "~/components/media/location.svg";
@@ -368,6 +368,8 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
   }));
   const [showMap, setShowMap] = useState(false);
 
+
+  const getPrefixedPath = usePrefixPathWithLocale2(); 
  
 
   return (
@@ -659,14 +661,16 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                   // Build query string with locationId
                   const queryParams = new URLSearchParams();
                   queryParams.set("locationId", loc._id);
+                  const bundlePDP = getPrefixedPath(`/PDP/bundle-product?${queryParams.toString()}`);
+                  const virtualPDP = getPrefixedPath(`/PDP/virtual-mailbox?${queryParams.toString()}`);
 
                   if (variantId) {
                     // If variantId exists, add it and redirect to bundle-product
                     queryParams.set("variantId", variantId);
-                    navigate(`/PDP/bundle-product?${queryParams.toString()}`);
+                    navigate(bundlePDP);
                   } else {
                     // Otherwise, redirect to virtual-mailbox only with locationId
-                    navigate(`/PDP/virtual-mailbox?${queryParams.toString()}`);
+                    navigate(virtualPDP);
                   }
                 }}
                 className="hidden md:flex rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-[16px] py-[12px] transition-all"
@@ -1256,4 +1260,13 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
       {/* <Footer data={footer} /> */}
     </>
   );
+}
+
+export function usePrefixPathWithLocale2() {
+  const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
+
+  return (path?: string | null) => {
+    if (!path) return selectedLocale.pathPrefix || '/';
+    return `${selectedLocale.pathPrefix}${path.startsWith('/') ? path : '/' + path}`;
+  };
 }
