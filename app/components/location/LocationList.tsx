@@ -592,7 +592,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                     </div>
                   ))}
                   {loc.featureList && loc.featureList.length > 3 && (
-                    <span className="">
+                    <span className="flex items-center px-[9px] py-1 px-[9px] bg-[#F6F6F6] rounded-full border font-Roboto font-medium text-[12px] leading-[18px] tracking-[0px] text-PrimaryBlack border-[#DCDCDC]">
                       +{loc.featureList.length - 3}
                     </span>
                   )}

@@ -3,7 +3,7 @@ import {useLoaderData} from '@remix-run/react';
 import LocationsList, {LocationAPI} from '~/components/location/LocationList';
 import {HEADER_QUERY} from '~/queries/sanity/header';
 import {FOOTER_QUERY} from '~/queries/sanity/footer';
-import {notFound} from '~/lib/utils';
+import {notFound, validateLocale} from '~/lib/utils';
   import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
   const seo: SeoHandleFunction = ({data}) => ({
    title: data?.page?.seo?.title || 'Mailbox Locations | Anytime Mailbox',
@@ -13,7 +13,11 @@ import {notFound} from '~/lib/utils';
  });
  export const handle = { seo };
 export async function loader({context, request, params}: LoaderFunctionArgs) {
-  const language = params.lang || 'en';
+  validateLocale({ context, params });
+   let language = params.lang || 'en';
+   if(language !== 'en-es'){
+     language = 'en';
+   }
 
   const cache = context.storefront.CacheCustom({mode: 'public', maxAge: 60, staleWhileRevalidate: 60});
 

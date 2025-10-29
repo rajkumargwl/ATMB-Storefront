@@ -296,14 +296,14 @@ export default function App() {
           {!hideHeaderFooter && (
             <Header data={header} searchQuery={q} searchResults={searchResults} isLoggedIn={isLoggedIn} customer={customer} currentLanguage={language} />
           )}
-          <CartProvider>
+          {/* <CartProvider> */}
           <Layout key={`${locale.language}-${locale.country}`}>
            
             <Outlet />
           
             
           </Layout>
-          </CartProvider>
+          {/* </CartProvider> */}
           {/* 🔹 Global Footer */}
           {!hideHeaderFooter && (
           <Footer data={footer} />
