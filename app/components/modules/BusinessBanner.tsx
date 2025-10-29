@@ -16,8 +16,8 @@ const BusinessBanner: React.FC<BusinessBannerProps> = ({ title, cta, image }) =>
   return (
     <section className="bg-DarkOrange relative flex flex-col  items-center justify-between text-white md:px-5  overflow-hidden rounded-2xl">
       {/* Left Content */}
-      <div className="relative z-[3] max-w-[1240px] mx-auto w-full flex flex-col md:flex-row gap-6">
-      <div className="relative z-[4] w-full md:w-[67.3%] pb-[0] py-[40px] md:py-[60px] lg:py-[80px] flex flex-col justify-center px-5 md:px-[0]">
+      <div className="relative z-[3] max-w-[1240px] mx-auto w-full flex flex-col md:flex-row gap-6 md:gap-[46px]">
+      <div className="relative z-[4] w-full md:w-[66.8%] pb-[0] py-[40px] md:py-[60px] lg:py-[80px] flex flex-col justify-center px-5 md:px-[0]">
         <h2 className="mb-[32px] max-w-[772px] font-Roboto text-white font-semibold leading-[38.4px] md:leading-[61.6px] text-[32px] md:text-[56px] tracking-[-0.48px] md:tracking-[-1.12px]">{title}</h2>
         {cta?.label && (
           <a
@@ -30,7 +30,7 @@ const BusinessBanner: React.FC<BusinessBannerProps> = ({ title, cta, image }) =>
       </div>
  
       {/* Right Image */}
-      <div className="w-full md:w-[32.7%] relative z-[4]">
+      <div className="w-full md:w-[33.2%] relative z-[4]">
         <img
           src={image.url}
           alt={title}

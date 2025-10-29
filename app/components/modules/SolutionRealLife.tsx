@@ -53,7 +53,7 @@ const SolutionRealLife: React.FC<{ data: SolutionRealLifeProps }> = ({ data }) =
             <div className="absolute z-[1]  bottom-[0px] right-[-55px] md:right-[-37.5px]">
               <img src={RealLifeImg} alt="real_life-img-bg" className="w-[421px] h-[271px]" />
           </div>
-          <div className="absolute z-[4] w-full h-[75px]  bottom-[-2px] left-[0px] bg-[linear-gradient(187deg,rgba(9,16,25,0)_6.26%,#091019_95.69%)]">
+          <div className="opacity-25 absolute z-[4] w-full h-[75px]  bottom-[-2px] left-[0px] bg-[linear-gradient(187deg,rgba(9,16,25,0)_6.26%,#091019_95.69%)]">
              
           </div>
           </div>
