@@ -1,6 +1,6 @@
 import {useNavigate, useLoaderData} from '@remix-run/react';
 import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
-import {notFound} from '~/lib/utils';
+import {notFound, validateLocale} from '~/lib/utils';
 import {PRODUCT_QUERY} from '~/queries/shopify/product';
 import type {Product, ProductVariant} from '@shopify/hydrogen/storefront-api-types';
 import {type ShopifyAnalyticsProduct} from '@shopify/hydrogen';
@@ -22,16 +22,17 @@ import Premium from "~/components/icons/Crown.png";
 import defaultIcon from "~/components/icons/default.png";
  
 
-const services = [
-    { name: "Mail Forwarding", icon: MailForwarding },
-    { name: "Document Scanning", icon: Scan },
-    { name: "Local Pickup", icon: LocalPickup },
-    { name: "Recycling", icon: Recycling },
-    { name: "Online Storage", icon: OnlineStorage },
-    { name: "Top Rated", icon: Toprated },
-    { name: "Premium Address", icon: Premium },
-  ];
+const servicesIcons = [
+  { name: "Mail Forwarding", icon: MailForwarding },
+  { name: "Document Scanning", icon: Scan },
+  { name: "Local Pickup", icon: LocalPickup },
+  { name: "Recycling", icon: Recycling },
+  { name: "Online Storage", icon: OnlineStorage },
+  { name: "Top Rated", icon: Toprated },
+  { name: "Premium Address", icon: Premium },
+];
   import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
+import LocationInfo from '~/components/modules/LocationInfo';
   const seo: SeoHandleFunction = ({data}) => ({
    title: data?.page?.seo?.title || 'Vitual Mailbox',
    description:
@@ -67,13 +68,11 @@ const LOCATION_QUERY = /* groq */ `
 `;
  
 export async function loader({context, params, request}: LoaderFunctionArgs) {
-  const language = params.lang || 'en';
- 
-  // Validate supported languages
-  const supportedLanguages = ['en', 'es'];
-  if (!supportedLanguages.includes(language)) {
-    throw notFound();
-  }
+  validateLocale({ context, params });
+   let language = params.lang || 'en';
+   if(language !== 'en-es'){
+     language = 'en';
+   }
  
   const cache = context.storefront.CacheCustom({
     mode: 'public',
@@ -127,7 +126,22 @@ export default function Plans() {
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
   console.log('Page data:', page);
   console.log('Location data:', location);
- 
+  const highlights = Array.from(
+    new Set(
+      location.featureList
+        .filter((feature) => feature.class === "HIGHLIGHT")
+        .map((feature) => feature.label)
+    )
+  );
+
+  const services = Array.from(
+    new Set(
+      location.featureList
+        .filter((feature) => feature.class !== "HIGHLIGHT")
+        .map((feature) => feature.label)
+    )
+  );
+
   const variants = (product?.variants?.nodes ?? []) as ProductVariant[];
  
   // Filter by billing cycle from metafields
@@ -172,223 +186,12 @@ export default function Plans() {
     <>
       <div className="flex flex-col min-h-screen">
         <main className="flex-1">
-          {/* Breadcrumb + Title */}
-          <div className="px-5 pt-[24px] md:pt-[32px]">
-          <div className="max-w-[1240px] mx-auto ">
-             <nav className="flex items-center flex-row gap-[7px] mb-6" aria-label="Breadcrumb">
-                <ol className="flex items-center flex-row gap-[7px]">
-                  <li><Link to={`#`}><span className="font-Roboto text-LightGray font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px]">Virtual Mailbox</span> </Link></li>
-                  <li className='flex items-center flex-row gap-[7px]'> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                      <path d="M10.6813 7.71732C10.8362 7.87232 10.8362 8.12732 10.6813 8.28232L6.68125 12.2823C6.52625 12.4373 6.27125 12.4373 6.11625 12.2823C5.96125 12.1273 5.96125 11.8723 6.11625 11.7173L9.83375 7.99982L6.11625 4.28232C5.96125 4.12732 5.96125 3.87232 6.11625 3.71732C6.27125 3.56232 6.52625 3.56232 6.68125 3.71732L10.6813 7.71732Z" fill="#091019"/>
-                    </svg>
-                    <Link to={`#`}><span className="font-Roboto text-LightGray font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px]">Locations</span> </Link></li>
-                  <li className="flex items-center flex-row gap-[7px]">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                      <path d="M10.6813 7.71732C10.8362 7.87232 10.8362 8.12732 10.6813 8.28232L6.68125 12.2823C6.52625 12.4373 6.27125 12.4373 6.11625 12.2823C5.96125 12.1273 5.96125 11.8723 6.11625 11.7173L9.83375 7.99982L6.11625 4.28232C5.96125 4.12732 5.96125 3.87232 6.11625 3.71732C6.27125 3.56232 6.52625 3.56232 6.68125 3.71732L10.6813 7.71732Z" fill="#091019"/>
-                    </svg>
-                      <Link to={`#`} aria-current="page"><span className="font-Roboto text-PrimaryBlack font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px]">{location?.displayName} </span> </Link></li>
-                </ol>  
-            </nav>          
-           
-           
-          </div>
-          </div>
-  
- {/* Location Info Section */}
-<div className="max-w-[1240px] mx-auto mt-12 px-5 md:px-0">
-  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-    
-    {/* Left: Location Title and Features */}
-    <div>
-      <h2 className="text-[28px] font-bold text-PrimaryBlack mb-2">
-        {location?.displayName} 
-      </h2>
-
-      <div className="flex items-center gap-3 mb-4">
-      {isTopRated && (
-
-        <div className="flex items-center gap-1 text-[#FF7A00] font-medium text-sm">
-          {/* <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6l4 2" />
-          </svg> */}
-          <img src={Toprated} alt="Top Rated" className="w-4 h-4"/>
-          <span>TOP RATED</span>
-        </div>
-      )}
-        <span className="text-gray-400">|</span>
-        <div className="flex items-center gap-1 text-[#0070F3] font-medium text-sm">
-          {/* <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-          </svg> */}
-          <img src={Premium} alt="Premium Address" className="w-4 h-4"/>
-          <span>PREMIUM ADDRESS</span>
-        </div>
-      </div>
-
-      {/* Features */}
-      <div className="bg-[#F8F8F8] border border-[#EAEAEA] rounded-[12px] p-6">
-        <h3 className="text-gray-700 font-semibold mb-3">Services</h3>
-        <div className="flex flex-wrap gap-x-6 gap-y-3">
-          {/* {location?.featureList?.length > 0 ? (
-            location.featureList.map((feature) => (
-              <div key={feature._key} className="flex items-center gap-2 text-[16px] text-gray-800">
-                <span className="text-[#FF7A00]">📦</span>
-                <span>{feature.label}</span>
-              </div>
-            ))
-          ) : (
-            <p className="text-gray-500 text-sm">No services available</p>
-          )} */}
-            {location?.featureList?.length > 0 ? (
-          location.featureList.map((feature) => {
-            const matchedService = services.find(
-              (service) =>
-                service.name.toLowerCase() === feature.label.toLowerCase()
-            );
-
-            return (
-              <div
-                key={feature._key}
-                className="flex items-center gap-2 text-[16px] text-gray-800"
-              >
-                <img
-                  src={matchedService?.icon ||defaultIcon}
-                  alt={feature.label}
-                  className="w-5 h-5"
-                />
-                <span>{feature.label}</span>
-              </div>
-            );
-          })
-        ) : (
-          <p className="text-gray-500 text-sm">No services available</p>
-        )}
-
-        </div>
-      </div>
-    </div>
-
-    {/* Right: Address Preview */}
-    <div className="border border-dashed border-gray-400 rounded-[12px] p-6">
-      <h3 className="text-gray-600 font-medium mb-4">Your Real Street Address Preview</h3>
-      <p className="text-PrimaryBlack font-semibold">Your Name</p>
-      <p className="text-PrimaryBlack font-semibold mb-2">Your Company Name</p>
-      <p>{location?.addressLine1}</p>
-      <p>
-        Ste #<span className="font-semibold">MAILBOX</span>
-      </p>
-      <p>
-        {location?.city}, {location?.state} {location?.postalCode}
-      </p>
-      <p>{location?.country}</p>
-    </div>
-  </div>
-</div>
-{/* plans */}
-{enablePlansSection && (
-   <section className="py-9">
-<div className="flex justify-center mb-10">
-        <div className="flex items-center bg-gray-100 rounded-full p-1">
-          {/* <button
-            onClick={() => setBillingCycle("monthly")}
-            className={`px-6 py-2 text-sm font-semibold rounded-full transition-all ${
-              billingCycle === "monthly"
-                ? "bg-orange-500 text-white shadow"
-                : "text-gray-600"
-            }`}
-          >
-            Monthly
-          </button>
-          <button
-            onClick={() => setBillingCycle("yearly")}
-            className={`px-6 py-2 text-sm font-semibold rounded-full transition-all ${
-              billingCycle === "yearly"
-                ? "bg-orange-500 text-white shadow"
-                : "text-gray-600"
-            }`}
-          >
-            Yearly (Save 20%)
-          </button> */}
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-       
-  {sortedVariants.map((variant) => {
-    const isPopular = variant.title === "Silver";
-
-    // Safe price parsing
-    const rawAmount = variant?.price?.amount ?? 0;
-    const parsed =
-      typeof rawAmount === "number"
-        ? rawAmount
-        : parseFloat(String(rawAmount).replace(/[^0-9.-]+/g, ""));
-    const monthlyPrice = Number.isFinite(parsed) ? parsed : 0;
-
-    // Apply billing cycle logic
-    const displayPrice =
-      billingCycle === "yearly"
-        ? (monthlyPrice * 12 * 0.8).toFixed(2)
-        : monthlyPrice.toFixed(2);
-
-    const currency = variant?.price?.currencyCode ?? "$";
-
-    return (
-      <div
-        key={variant.id}
-        className="relative rounded-3xl border bg-white p-8 shadow-sm transition-all duration-300 hover:shadow-lg border-gray-200"
-      >
-        {/* Most Popular Badge */}
-        {isPopular && (
-          <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-orange-100 text-orange-600 text-sm font-semibold px-3 py-1 rounded-full flex items-center gap-1">
-            🔥 Most Popular
-          </span>
-        )}
-
-        {/* Title and Price */}
-        {/* <h3 className="text-xl font-bold mt-2">{variant.title}</h3> */}
-        {/* <p className="text-sm text-gray-500 mt-2">Starting from</p> */}
-        {/* <p className="text-2xl font-bold mt-1">
-          {currency}
-          {displayPrice}
-          <span className="text-base font-normal text-gray-500">
-            /{billingCycle.toLowerCase()}
-          </span>
-        </p> */}
-
-        {/* Features */}
-        {/* <ul className="mt-6 space-y-3 text-left">
-          {variant.selectedOptions.map((opt, i) => (
-            <li key={i} className="flex items-center gap-3 text-gray-700">
-              <span className="text-green-600">✔</span>
-              <span>{opt.value}</span>
-            </li>
-          ))}
-        </ul> */}
-
-        {/* Add to Cart Button (Always Visible) */}
-        {/* <div className="flex justify-center pt-6">
-          <ReplacePlanAddToCartButton
-            selectedVariant={variant}
-            replaceLineId={replaceLineId}
-            locationProperties={locationProperties}
-            buttonClassName="bg-orange-500 text-white px-6 py-3 rounded-xl font-bold hover:bg-orange-600"
-            text="Add to Cart"
-          />
-        </div> */}
-      </div>
-    );
-  })}
-
-
-      </div>
-      </section>
-      )}
-
+         
+<LocationInfo location={location} services={services} servicesIcons={servicesIcons}/>
           {/* Sanity Modules Grid */}
           {page?.modules && page.modules.length > 0 && (
             <div className="mb-0 mt-0 px-0 md:px-0">
-              <ModuleGrid items={page.modules} searchQuery={''} homeSearchResults={[]} productData={product}  />
+              <ModuleGrid items={page.modules} searchQuery={''} homeSearchResults={[]} productData={product} highlights={highlights}  />
             </div>
           )}
  

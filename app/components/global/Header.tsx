@@ -148,7 +148,7 @@ useEffect(() => {
 
 
           {/* Menu (Desktop only) */}
-          <nav className="hidden lg:flex space-x-2 xl:space-x-3">
+          <nav className={`hidden lg:flex ${currentLanguage === 'en-es' ? '' : 'space-x-2 xl:space-x-3' }`}>
             {menu?.map((item, idx) => (
               <div key={idx} className="relative group p-2">
                  <Link
@@ -164,11 +164,11 @@ useEffect(() => {
           : item.label === "Contact Us"
           ? "/contact"
         : item.url ?? "#")}
-                  className="text-PrimaryBlack hover:text-PrimaryBlack font-normal flex items-center gap-[6px] text-[14px] md:text-[14px] xl:text-[16px] leading-[24px] tracking-[0px]"
+                  className={`text-PrimaryBlack hover:text-PrimaryBlack font-normal flex items-center gap-[6px] text-[14px] md:text-[14px] ${currentLanguage === 'en-es' ? 'xl:text-[15px]' : 'xl:text-[16px]' } leading-[24px] tracking-[0px]`}
                 >
                   {item.label} 
                   {item.hasSubmenu && (
-                  <ArrowDownIcon />
+                 <span className="group-hover:transform group-hover:rotate-180 transition-all duration-500 ease-in-out"> <ArrowDownIcon /></span>
                   )}
                 </Link> 
 

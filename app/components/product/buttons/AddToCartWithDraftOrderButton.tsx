@@ -13,6 +13,7 @@ import {twMerge} from 'tailwind-merge';
 import {defaultButtonStyles} from '~/components/elements/Button';
 import SpinnerIcon from '~/components/icons/Spinner';
 import {usePageAnalytics} from '~/hooks/usePageAnalytics';
+import {DEFAULT_LOCALE, notFound, usePrefixPathWithLocale} from '~/lib/utils';
 
 type FormMode = 'default' | 'inline';
 
@@ -63,6 +64,8 @@ type FormMode = 'default' | 'inline';
   
     const hasSubmitted = useRef(false);
     const navigate = useNavigate();
+    const successUrl = usePrefixPathWithLocale("/payment-success");
+    const failUrl = usePrefixPathWithLocale("/payment-fail");
 
     return (
       <div className={mode == "inline" ? "[&>*]:inline" : ""}>
@@ -124,6 +127,7 @@ type FormMode = 'default' | 'inline';
   
                     const draftData = await draftRes.json();
                     console.log("response:", draftData);
+
                     if (draftData?.data?.draftOrderCreate?.draftOrder?.id) {
                       console.log("Inside draft order success block",billingConfig?.subscriptionKey);
 
@@ -253,7 +257,7 @@ type FormMode = 'default' | 'inline';
                   navigate("/payment-success");
                     } else {
                       console.error("No draft order returned:", draftData);
-                      navigate("/payment-fail");
+                      navigate(failUrl);
                     }
                   } catch (err) {
                     console.error("Failed to create draft order:", err);
@@ -385,7 +389,8 @@ function AddToCartAnalytics({
           eventName: AnalyticsEventName.ADD_TO_CART,
           payload: addToCartPayload,
         });
-        navigate('/cart');
+        let redirectTo = usePrefixPathWithLocale('/cart');
+        navigate(redirectTo);
       }
     }
   }, [fetcherData, formData, pageAnalytics]);

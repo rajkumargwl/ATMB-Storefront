@@ -1,11 +1,16 @@
-import { CartForm } from '@shopify/hydrogen';
+import { CartForm, Money } from '@shopify/hydrogen';
+import { DEFAULT_LOCALE } from '~/lib/utils';
+import { useRootLoaderData } from '~/root';
 
 export default function CartBundleSection({ bundleProducts }: { bundleProducts: any[] }) {
   if (!bundleProducts || bundleProducts.length === 0) return null;
 
+  const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
+  let currencyCode = selectedLocale?.currency || 'USD';
   const bundle = bundleProducts[0]; // show only the first bundle
 
   const displayPrice = bundle.billing === 'monthly' ? bundle.price : bundle.yearlyPrice;
+  
   const displayCompare =
     bundle.billing === 'monthly' ? bundle.compareAtPrice : bundle.yearlyCompareAtPrice;
 
@@ -48,9 +53,9 @@ export default function CartBundleSection({ bundleProducts }: { bundleProducts: 
           <div className="flex flex-col items-end">
             <div className="flex items-baseline gap-2">
               {displayCompare && (
-                <span className="text-[#9CA3AF] line-through text-[14px]">${displayCompare}</span>
+                <span className="text-[#9CA3AF] line-through text-[14px]"> <Money data={{ amount: displayCompare, currencyCode: currencyCode }}/></span>
               )}
-              <span className="text-[#171717] text-[20px] font-semibold">${displayPrice}</span>
+              <span className="text-[#171717] text-[20px] font-semibold"><Money data={{ amount: displayPrice, currencyCode: currencyCode }}/></span>
               <span className="text-[#9CA3AF] text-[14px]">
                 /{bundle.billing === 'monthly' ? 'month' : 'year'}
               </span>
@@ -71,7 +76,8 @@ export default function CartBundleSection({ bundleProducts }: { bundleProducts: 
                     {item.productTitle}
                   </span>
                   {item.price && (
-                    <span className="text-[#9CA3AF] text-[13px]">${item.price}/m</span>
+                    <span className="flex text-[#9CA3AF] text-[13px]">  
+                    <Money data={{ amount: item.price, currencyCode: currencyCode }}/>/m</span>
                   )}
                 </div>
 

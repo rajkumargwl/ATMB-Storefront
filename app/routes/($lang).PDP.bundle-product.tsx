@@ -5,7 +5,7 @@ import Header from '~/components/global/Header';
 import Footer from '~/components/global/Footer';
 import { HEADER_QUERY } from '~/queries/sanity/header';
 import { FOOTER_QUERY } from '~/queries/sanity/footer';
-import { notFound } from '~/lib/utils';
+import { notFound, usePrefixPathWithLocale } from '~/lib/utils';
 import { VARIANT_WITH_PRODUCT_QUERY } from '~/queries/shopify/product';
 import type { Product, ProductVariant } from '@shopify/hydrogen/storefront-api-types';
 import { useCart } from '@shopify/hydrogen-react';
@@ -199,7 +199,7 @@ export default function BundleDetails() {
       });
     
       // Manually redirect to cart
-      window.location.href = '/cart';
+      window.location.href = usePrefixPathWithLocale('/cart');
     };
     
     
@@ -269,7 +269,7 @@ export default function BundleDetails() {
                       ],
                     },
                   ],
-                  redirectTo: '/cart', // redirect after adding
+                  redirectTo: usePrefixPathWithLocale('/cart') // redirect after adding
                 }}
               >
                 <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">

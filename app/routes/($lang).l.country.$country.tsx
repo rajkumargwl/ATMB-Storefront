@@ -3,6 +3,8 @@ import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {useEffect, useRef, useState} from 'react';
 import ArrowRightCountries from '~/components/icons/ArrowRightCountries';
 import LeftArrowBlack from '~/components/icons/LeftArrowBlack';
+import { DEFAULT_LOCALE } from '~/lib/utils';
+import { useRootLoaderData } from '~/root';
 
 // 🔹 Loader
 export async function loader({context, params}: LoaderFunctionArgs) {
@@ -196,10 +198,13 @@ export default function CountryPage() {
   const navigate = useNavigate();
   const [showMap, setShowMap] = useState(false);
 
+  const getPrefixedPath = usePrefixPathWithLocale2();
+
   function handleLocationClick(loc: any) {
     const countrySlug = encodeURIComponent(loc.country);
     const stateSlug = encodeURIComponent(loc.state || '');
-    navigate(`/l/${countrySlug}/${stateSlug}`);
+    const url = getPrefixedPath(`/l/${countrySlug}/${stateSlug}`);
+    navigate(url);
   }
 
   return (
@@ -312,3 +317,13 @@ export default function CountryPage() {
     </div>
   );
 }
+
+export function usePrefixPathWithLocale2() {
+  const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
+
+  return (path?: string | null) => {
+    if (!path) return selectedLocale.pathPrefix || '/';
+    return `${selectedLocale.pathPrefix}${path.startsWith('/') ? path : '/' + path}`;
+  };
+}
+

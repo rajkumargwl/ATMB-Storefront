@@ -28,7 +28,7 @@ import SpinnerIcon from "~/components/icons/Spinner";
 import {PRODUCT_QUERY, ALL_PRODUCTS_QUERY} from '~/queries/shopify/product';
 import type {Product, ProductVariant} from '@shopify/hydrogen/storefront-api-types';
 import {type ShopifyAnalyticsProduct} from '@shopify/hydrogen';
-import {notFound} from '~/lib/utils';
+import {DEFAULT_LOCALE, notFound, usePrefixPathWithLocale} from '~/lib/utils';
 import Button from "~/components/elements/Button";
 import AddToCartWithDraftOrderButton from '~/components/product/buttons/AddToCartWithDraftOrderButton';
 
@@ -96,6 +96,9 @@ export const loader: LoaderFunction = async ({ context, params }) => {
 
 
 export default function CheckoutPage() {
+  const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
+  let currencyCode = selectedLocale?.currency || 'USD';
+  console.log('Selected Locale in Checkout Page:', selectedLocale);
   const rootData = useRootLoaderData();
   const { bundleProducts, essentialsProducts, cart, BusinessAcc, LiveReceptionist,billingConfig} = useLoaderData<typeof loader>();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
@@ -123,6 +126,9 @@ export default function CheckoutPage() {
       quantity: 1,
     }
   : null;
+
+  const prefixPathWithLocale = usePrefixPathWithLocale;
+  const paymentSuccessUrl = prefixPathWithLocale("/payment-success");
 
   return (
     <>
@@ -152,7 +158,7 @@ export default function CheckoutPage() {
           <h2 className="text-lg font-semibold text-gray-800 mb-2">
             {LiveReceptionist?.product?.title}
           </h2>
-          <p className="text-2xl font-bold text-gray-900 mb-4">${LiveReceptionist?.product?.variants?.nodes[0]?.price?.amount}<span className="text-base font-medium">/month</span></p>
+          <p className="flex text-2xl font-bold text-gray-900 mb-4"><Money data={{ amount: LiveReceptionist?.product?.variants?.nodes[0]?.price?.amount, currencyCode: currencyCode }}/><span className="text-base font-medium">/month</span></p>
 
           <ul className="space-y-2 text-gray-700 mb-6">
             <li className="flex items-center gap-2">
@@ -194,7 +200,7 @@ export default function CheckoutPage() {
           <h2 className="text-lg font-semibold text-gray-800 mb-2">
           {BusinessAcc?.product?.title}
           </h2>
-          <p className="text-2xl font-bold text-gray-900 mb-4">${BusinessAcc?.product?.variants?.nodes[0]?.price?.amount}<span className="text-base font-medium">/month</span></p>
+          <p className="flex text-2xl font-bold text-gray-900 mb-4"><Money data={{ amount: BusinessAcc?.product?.variants?.nodes[0]?.price?.amount, currencyCode: currencyCode }}/><span className="text-base font-medium">/month</span></p>
 
           <ul className="space-y-2 text-gray-700 mb-6">
             <li className="flex items-center gap-2">
