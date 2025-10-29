@@ -168,7 +168,7 @@ useEffect(() => {
                 >
                   {item.label} 
                   {item.hasSubmenu && (
-                  <ArrowDownIcon />
+                 <span className="group-hover:transform group-hover:rotate-180 transition-all duration-500 ease-in-out"> <ArrowDownIcon /></span>
                   )}
                 </Link> 
 
