@@ -33,9 +33,14 @@ export const handle = { seo };
 // -----------------
 export async function loader({ context, params }: LoaderFunctionArgs) {
   validateLocale({ context, params });
+  let language = params.lang || 'en';
+  if(language !== 'en-es'){
+    language = 'en';
+  }
 
   const page = await context.sanity.query({
     query: SOLUTIONS_PAGE_QUERY, // ✅ use Solutions query
+    params: { language  }
   });
    
     const relatedPosts = await context.sanity.query<WPPost[]>({

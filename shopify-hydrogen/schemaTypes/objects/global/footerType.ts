@@ -6,6 +6,18 @@ export const footerType = defineType({
   type: "document",
   fields: [
     defineField({
+      name: 'language',
+      title: 'Language',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'English', value: 'en'},
+          {title: 'Spanish', value: 'en-es'},
+        ],
+      },
+      hidden: true,
+    }),
+    defineField({
       name: "title",
       title: "Footer Title",
       type: "string",

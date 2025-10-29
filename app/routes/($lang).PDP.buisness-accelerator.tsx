@@ -1,7 +1,7 @@
 import {useLoaderData} from '@remix-run/react';
 import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
  
-import {notFound} from '~/lib/utils';
+import {notFound, validateLocale} from '~/lib/utils';
 import {PRODUCT_QUERY} from '~/queries/shopify/product';
 import type {Product, ProductVariant} from '@shopify/hydrogen/storefront-api-types';
 import {type ShopifyAnalyticsProduct} from '@shopify/hydrogen';
@@ -23,13 +23,11 @@ const seo: SeoHandleFunction = ({data}) => ({
 export const handle = { seo };
 // Loader
 export async function loader({context, params}: LoaderFunctionArgs) {
-  const language = params.lang || 'en';
- 
-  // Validate supported languages
-  const supportedLanguages = ['en', 'es'];
-  if (!supportedLanguages.includes(language)) {
-    throw notFound();
-  }
+  validateLocale({ context, params });
+   let language = params.lang || 'en';
+   if(language !== 'en-es'){
+     language = 'en';
+   }
   
   const cache = context.storefront.CacheCustom({
     mode: 'public',
