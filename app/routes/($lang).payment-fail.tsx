@@ -29,6 +29,7 @@ import {PRODUCT_QUERY, ALL_PRODUCTS_QUERY} from '~/queries/shopify/product';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 import {notFound} from '~/lib/utils';
 import Button from "~/components/elements/Button";
+import {useNavigate} from '@remix-run/react';
 
 export const loader: LoaderFunction = async ({ context, params }) => {
   const { env } = context;
@@ -82,6 +83,8 @@ export default function CheckoutPage() {
   const rootData = useRootLoaderData();
   const { bundleProducts, essentialsProducts, cart} = useLoaderData<typeof loader>();
   console.log('cartsss', cart);
+  const navigate = useNavigate();
+
   return (
     <>
     <div className=" top-6 border-b border-[#DCDCDC] w-full mx-auto flex items-center justify-center py-4 px-6 md:px-12 lg:px-24 bg-white">
@@ -137,10 +140,10 @@ export default function CheckoutPage() {
 
       {/* Continue Button */}
      <div className="flex gap-9">
-        <button className="px-10 py-3 border border-gray-400 rounded-full text-gray-800 font-medium hover:bg-gray-100 transition">
+        <button className="px-10 py-3 border border-gray-400 rounded-full text-gray-800 font-medium hover:bg-gray-100 transition" onClick={() => navigate("/checkout")}>
             Go Back to Checkout
         </button>
-        <button className="bg-[#FF6600] px-10 py-3 rounded-full text-[#ffffff] font-medium hover:bg-gray-100 transition">
+        <button className="bg-[#FF6600] px-10 py-3 rounded-full text-[#ffffff] font-medium hover:bg-gray-100 transition" onClick={() => navigate("/order-confirmation")}>
             Try Again
         </button>
      </div>

@@ -131,7 +131,7 @@ type FormMode = 'default' | 'inline';
 
                       try {
                         console.log("Requesting Anytime Billing token...");
-                        const tokenResponse = await fetch("https://development.anytimeapi.com/billing/auth/token", {
+                        const tokenResponse = await fetch(`${billingConfig?.baseUrl}/auth/token`, {
                           method: "POST",
                           headers: {
                             "Api-Version": "v1",
@@ -224,8 +224,8 @@ type FormMode = 'default' | 'inline';
                       },
                     },
                   };
-                  console.log("Sending billing request...");
-                  const billingResponse = await fetch("https://development.anytimeapi.com/billing/purchase", {
+                  
+                  const billingResponse = await fetch(`${billingConfig?.baseUrl}/purchase`, {
                     method: "POST",
                     headers: {
                       "Api-Version": "v1",
@@ -251,8 +251,6 @@ type FormMode = 'default' | 'inline';
                    // localStorage.removeItem("checkoutCart");
                     console.log("Local storage cart cleared successfully");
                   //  await fetch("/api/clear-cart", { method: "POST" });
-
-                    console.log("Shopify cart cleared");
                   } catch (err) {
                     console.error("Failed to clear local storage cart:", err);
                   }
