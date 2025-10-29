@@ -1049,91 +1049,119 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
             </div>
 
             {/* Price Range */}
-            <div>
-              <label className="block font-Roboto text-PrimaryBlack font-normal text-[14px] leading-[21px] tracking-[0px]" aria-label='price-range-label' aria-labelledby='price-range-label'>
-                Price Range / Month
-              </label>
+          {/* Price Range */}
+<div>
+  <label
+    className="block font-Roboto text-PrimaryBlack font-normal text-[14px] leading-[21px]"
+    aria-label="price-range-label"
+    aria-labelledby="price-range-label"
+  >
+    Price Range / Month
+  </label>
 
-              <div className="relative w-full h-3 mt-3 mb-3">
-                {/* Slider Track */}
-                <div className="bg-LightWhite absolute top-1/2 w-full h-[6px] bg-PrmaryBlack rounded-[10px] -translate-y-1/2"></div>
+  {/* Constants */}
+  {/** Define these constants or place them at the top of the component **/}
+  {/* const MIN_PRICE = 0; const MAX_PRICE = 10000; */}
 
-                {/* Active Range */}
-                <div
-                className="absolute top-1/2 h-[6px] bg-[#0B111A] rounded -translate-y-1/2"
-                  style={{
-                    left: `${tempMinVal}%`,
-                    right: `${100 - tempMaxVal}%`,
-                  }}
-                ></div>
+  <div className="relative w-full h-3 mt-3 mb-3">
+    {/* Slider Track */}
+    <div className="bg-LightWhite absolute top-1/2 w-full h-[6px] rounded-[10px] -translate-y-1/2"></div>
 
-                {/* Left Thumb */}
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={tempMinVal}
-                  onChange={(e) =>
-                    setTempMinVal(Math.min(Number(e.target.value), tempMaxVal - 1))
-                  }
-                  aria-label='Minimum Price Slider'
-                  aria-labelledby='price-range-label'
-                  className="absolute top-[-5px] w-full appearance-none bg-transparent pointer-events-none"
-                />
-                {/* Right Thumb */}
-                <input
-                  type="range"
-                  min="0"
-                  max="100"
-                  value={tempMaxVal}
-                  onChange={(e) =>
-                    setTempMaxVal(Math.max(Number(e.target.value), tempMinVal + 1))
-                  }
-                  aria-label='Maximum Price Slider'
-                  aria-labelledby='price-range-label'
-                  className="absolute top-[-5px] w-full appearance-none bg-transparent pointer-events-none"
-                />
-                <style jsx>{`
-                  input[type="range"]::-webkit-slider-thumb {
-                    pointer-events: auto;
-                    -webkit-appearance: none;
-                    height: 20px;
-                    width: 20px;
-                    border-radius: 50%;
-                    background: white;
-                    border: 3px solid #091019;
-                    cursor: pointer;
-                    position: relative;
-                  }
-                  input[type="range"]::-moz-range-thumb {
-                    pointer-events: auto;
-                    height: 20px;
-                    width: 20px;
-                    border-radius: 50%;
-                    background: white;
-                    border: 3px solid #091019;
-                    cursor: pointer;
-                  }
-                `}</style>
-              </div>
+    {/* Active Range */}
+    <div
+      className="absolute top-1/2 h-[6px] bg-[#0B111A] rounded -translate-y-1/2"
+      style={{
+        left: `${tempMinVal}%`,
+        right: `${100 - tempMaxVal}%`,
+      }}
+    ></div>
 
-              <div className="flex items-center justify-between gap-2 mt-3">
-                <input
-                  type="number"
-                  value={tempMinPrice}
-                  onChange={(e) => setTempMinPrice(Number(e.target.value))}
-                  aria-label='Minimum Price'
-                  className="border border-LightWhite w-20 px-3 py-2 rounded-[8px] font-Roboto text-PrimaryBlack font-normal text-[16px] leading-[24px] tracking-[0px]"
-                />
-                <input
-                  type="number"
-                  value={tempMaxPrice}
-                  area-label='Maximum Price'
-                  onChange={(e) => setTempMaxPrice(Number(e.target.value))}
-                  className="border border-LightWhite w-20 px-3 py-2 rounded-[8px] font-Roboto text-PrimaryBlack font-normal text-[16px] leading-[24px] tracking-[0px]"
-                />
-              </div>
-            </div>
+    {/* Left Thumb */}
+    <input
+      type="range"
+      min="0"
+      max="100"
+      value={tempMinVal}
+      onChange={(e) => {
+        const newVal = Math.min(Number(e.target.value), tempMaxVal - 1);
+        setTempMinVal(newVal);
+        const newPrice = Math.round((newVal / 100) * (MAX_PRICE - MIN_PRICE) + MIN_PRICE);
+        setTempMinPrice(newPrice);
+      }}
+      aria-label="Minimum Price Slider"
+      className="absolute top-[-5px] w-full appearance-none bg-transparent pointer-events-none"
+    />
+
+    {/* Right Thumb */}
+    <input
+      type="range"
+      min="0"
+      max="100"
+      value={tempMaxVal}
+      onChange={(e) => {
+        const newVal = Math.max(Number(e.target.value), tempMinVal + 1);
+        setTempMaxVal(newVal);
+        const newPrice = Math.round((newVal / 100) * (MAX_PRICE - MIN_PRICE) + MIN_PRICE);
+        setTempMaxPrice(newPrice);
+      }}
+      aria-label="Maximum Price Slider"
+      className="absolute top-[-5px] w-full appearance-none bg-transparent pointer-events-none"
+    />
+
+    <style jsx>{`
+      input[type="range"]::-webkit-slider-thumb {
+        pointer-events: auto;
+        -webkit-appearance: none;
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        background: white;
+        border: 3px solid #091019;
+        cursor: pointer;
+        position: relative;
+      }
+      input[type="range"]::-moz-range-thumb {
+        pointer-events: auto;
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        background: white;
+        border: 3px solid #091019;
+        cursor: pointer;
+      }
+    `}</style>
+  </div>
+
+  {/* Numeric inputs */}
+  <div className="flex items-center justify-between gap-2 mt-3">
+    <input
+      type="number"
+      value={tempMinPrice}
+      onChange={(e) => {
+        const val = Math.max(MIN_PRICE, Number(e.target.value));
+        setTempMinPrice(val);
+        const valPercent = ((val - MIN_PRICE) / (MAX_PRICE - MIN_PRICE)) * 100;
+        setTempMinVal(Math.min(valPercent, tempMaxVal - 1));
+      }}
+      aria-label="Minimum Price"
+      className="border border-LightWhite w-20 px-3 py-2 rounded-[8px] font-Roboto text-PrimaryBlack font-normal text-[16px]"
+    />
+
+    <input
+      type="number"
+      value={tempMaxPrice}
+      onChange={(e) => {
+        const val = Math.min(MAX_PRICE, Number(e.target.value));
+        setTempMaxPrice(val);
+        const valPercent = ((val - MIN_PRICE) / (MAX_PRICE - MIN_PRICE)) * 100;
+        setTempMaxVal(Math.max(valPercent, tempMinVal + 1));
+      }}
+      aria-label="Maximum Price"
+      className="border border-LightWhite w-20 px-3 py-2 rounded-[8px] font-Roboto text-PrimaryBlack font-normal text-[16px]"
+    />
+  </div>
+</div>
+
 
             {/* Features */}
             <div className="grid grid-cols-2 gap-2">
