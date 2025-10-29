@@ -17,25 +17,32 @@ import {DEFAULT_LOCALE, notFound, usePrefixPathWithLocale} from '~/lib/utils';
 
 type FormMode = 'default' | 'inline';
 
-
-export default function AddToCartWithDraftOrderButton({
-  children = 'Add to cart',
-  lines,
-  analytics,
-  mode = 'default',
-  buttonClassName,
-  customerId,
-  ...props
-}: {
-  children?: React.ReactNode;
-  lines: CartLineInput[];
-  // lines: (CartLineInput & { properties?: Record<string, any> })[]; // ✅ allow properties
-  analytics?: unknown;
-  mode?: FormMode;
-  buttonClassName?: string;
-  customerId: string | null;
-  [key: string]: any;
-}) {
+  export default function AddToCartWithDraftOrderButton({
+    children = 'Add to cart',
+    lines,
+    analytics,
+    mode = 'default',
+    buttonClassName,
+    customerId,
+    billingConfig,
+    ...props
+  }: {
+    children?: React.ReactNode;
+    lines: CartLineInput[];
+    analytics?: unknown;
+    mode?: 'default' | 'inline';
+    buttonClassName?: string;
+    customerId: string | null;
+    billingConfig?: {
+      baseUrl: string;
+      subscriptionKey: string;
+      clientId: string;
+      clientSecret: string;
+      scope: string;
+    };
+    [key: string]: any;
+  }) {
+  
     const hasSubmitted = useRef(false);
     const navigate = useNavigate();
     const successUrl = usePrefixPathWithLocale("/payment-success");
@@ -49,7 +56,7 @@ export default function AddToCartWithDraftOrderButton({
           action={CartForm.ACTIONS.LinesAdd}
         >
           {(fetcher) => {
-            // 👇 Run side-effect when AddToCart completes
+            // Run side-effect when AddToCart completes
             useEffect(() => {
               if (fetcher.state === "submitting") {
                 hasSubmitted.current = true;
@@ -63,7 +70,7 @@ export default function AddToCartWithDraftOrderButton({
               ) {
                 hasSubmitted.current = false;
   
-                // ✅ Call Draft Order API
+                // Call Draft Order API
                 (async () => {
                   try {
                     const cartId = fetcher.data.cart.id;
@@ -73,44 +80,180 @@ export default function AddToCartWithDraftOrderButton({
                     const fullCart = await cartRes.json();
                     console.log("fullCartttt", fullCart);
   
-                    // if (!fullCart?.lines?.length) {
-                    //   console.error("Cart is empty:", fullCart);
-                    //   navigate("/payment-fail");
-                    //   return;
-                    // }
-
-                    // const draftRes = await fetch("/api/create-draft-order", {
-                    //   method: "POST",
-                    //   headers: { "Content-Type": "application/json" },
-                    //   body: JSON.stringify({
-                    //     lines,
-                    //     customerId,
-                    //   }),
-                    // });
+                    const edges = fullCart?.lines?.edges;
+                    if (!edges || !Array.isArray(edges)) {
+                      console.warn("⚠️ No valid cart lines found in fullCart:", fullCart);
+                      navigate("/payment-fail");
+                      return;
+                    }
+        
+                    // Extract cart lines
+                    const cartLines = edges.map((l: any) => ({
+                      variantId: l.node?.merchandise?.id,
+                      quantity: l.node?.quantity ?? 1,
+                    }));
+        
+                    // Merge with localStorage
+                    const storedCart = JSON.parse(localStorage.getItem("checkoutCart") || "[]");
+                    const mergedCart = [...storedCart, ...cartLines];
+        
+                    // Deduplicate by variantId
+                    const uniqueCart = Object.values(
+                      mergedCart.reduce((acc: any, item: any) => {
+                        if (acc[item.variantId]) {
+                          acc[item.variantId].quantity += item.quantity;
+                        } else {
+                          acc[item.variantId] = { ...item };
+                        }
+                        return acc;
+                      }, {})
+                    );
+        
+                    localStorage.setItem("checkoutCart", JSON.stringify(uniqueCart));
+                    console.log("Full Merged Cart:", uniqueCart);
+        
+                    // Create Draft Order
                     const draftRes = await fetch("/api/create-draft-order", {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
                       body: JSON.stringify({
-                        lines: fullCart?.lines?.edges?.map((l: any) => ({
-                          variantId: l?.node?.merchandise.id,
-                          quantity: l?.node?.quantity,
-                        })),
+                        lines: uniqueCart,
                         customerId,
                       }),
                     });
-  
                     const draftData = await draftRes.json();
                     console.log("response:", draftData);
 
                     if (draftData?.data?.draftOrderCreate?.draftOrder?.id) {
-                      // ✅ Redirect to payment-success page
-                      navigate(successUrl); 
+                      console.log("Inside draft order success block",billingConfig?.subscriptionKey);
+
+                      let accessToken = "";
+
+                      try {
+                        console.log("Requesting Anytime Billing token...");
+                        const tokenResponse = await fetch("https://development.anytimeapi.com/billing/auth/token", {
+                          method: "POST",
+                          headers: {
+                            "Api-Version": "v1",
+                            "Api-Environment": "dev",
+                            "Content-Type": "application/json",
+                            "Cache-Control": "no-cache",
+                            "Ocp-Apim-Subscription-Key": billingConfig?.subscriptionKey,
+                          },
+                          body: JSON.stringify({
+                            clientId: billingConfig?.clientId,
+                            clientSecret: billingConfig?.clientSecret,
+                            scope: billingConfig?.scope,
+                            grantType: "client_credentials",
+                          }),
+                        });
+                        const tokenData = await tokenResponse.json();
+
+                        console.log("Token data received:", tokenData);
+                      
+                        accessToken = tokenData?.data?.accessToken;
+
+                      } catch (error) {
+                        console.error("Error in token request:", error);
+                      }
+                      
+                  //Call Anytime Billing Purchase API
+              
+                  const billingPayload = {
+                    locationId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                    locationUnitId: "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+                    customerId: "c3d4e5f6-a7b8-9012-cdef-123456789012",
+                    bundle: null,
+                    subscription: {
+                      providerId: "d4e5f6a7-b8c9-0123-def1-234567890123",
+                      label: "Monthly Premium Subscription",
+                      culture: "en-US",
+                      currency: "USD",
+                      items: [
+                        {
+                          productId: "e5f6a7b8-c9d0-1234-ef12-345678901234",
+                          providerId: "d4e5f6a7-b8c9-0123-def1-234567890123",
+                          isChargeProrated: false,
+                          label: "Premium License - Monthly",
+                          price: 99.99,
+                          quantity: 5,
+                          subtotal: 499.95,
+                          total: 449.95,
+                          totalAdjustment: 50.0,
+                          recurrenceInterval: "month",
+                          adjustments: [
+                            {
+                              label: "10% Volume Discount",
+                              adjustAmount: 50.0,
+                              adjustPercent: 10.0,
+                              adjustSubtotal: 50.0,
+                            },
+                          ],
+                          attribution: [
+                            {
+                              organizationId: "f6a7b8c9-d0e1-2345-f123-456789012345",
+                              quantityMin: 0.0,
+                              quantityMax: 5.0,
+                              quantityUnit: "licenses",
+                              splitAmount: 449.95,
+                              splitPercent: 100.0,
+                              splitSubtotal: 449.95,
+                              label: "Organization ABC",
+                              type: "organization",
+                              status: "active",
+                              providerKey: "org_abc123",
+                            },
+                          ],
+                        },
+                      ],
+                    },
+                    customer: {
+                      defaultCulture: "en-US",
+                      defaultCurrency: "USD",
+                      exemptTax: false,
+                      status: "active",
+                      type: "business",
+                    },
+                    payment: {
+                      paymentMethodId: "pm_1234567890abcdef",
+                      customerPaymentKey: "cus_ABC123XYZ789",
+                      metadata: {
+                        source: "web_portal",
+                        campaign: "spring_2024_promotion",
+                        sales_rep: "john.doe@company.com",
+                      },
+                    },
+                  };
+                  console.log("Sending billing request...");
+                  const billingResponse = await fetch("https://development.anytimeapi.com/billing/purchase", {
+                    method: "POST",
+                    headers: {
+                      "Api-Version": "v1",
+                      "Api-Environment": "dev",
+                      "Ocp-Apim-Subscription-Key": billingConfig?.subscriptionKey,
+                      "Authorization": `Bearer ${accessToken}`,
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(billingPayload),
+                  });
+              
+                  const billingResult = await billingResponse.json();
+                  console.log("Billing purchase result:", billingResult);
+              
+                  if (!billingResponse.ok) {
+                    console.error("Billing purchase failed:", billingResult);
+                    navigate("/payment-fail");
+                    return;
+                  }
+              
+                  console.log("Billing purchase successful");
+                  navigate("/payment-success");
                     } else {
                       console.error("No draft order returned:", draftData);
                       navigate(failUrl);
                     }
                   } catch (err) {
-                    console.error("❌ Failed to create draft order:", err);
+                    console.error("Failed to create draft order:", err);
                   }
                 })();
               }

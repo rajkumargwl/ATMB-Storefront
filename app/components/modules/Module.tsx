@@ -531,11 +531,11 @@ case 'solutionMailboxBenefitFaqModule':
     case 'homeSection4':
       return <Locations data={module} />;
     
-    //  case 'plans':
-    //    return <Plans data={module} bundles={bundles}/>;
+     case 'plans':
+       return <Plans data={module} bundles={bundles}/>;
     
-    //  case 'bundles':
-    //  return <Bundles data={module} />;
+     case 'bundles':
+     return <Bundles data={module} />;
     
     // 'testimonial' is handled above for operator conditional rendering.
 
