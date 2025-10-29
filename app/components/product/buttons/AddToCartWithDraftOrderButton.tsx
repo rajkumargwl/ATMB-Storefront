@@ -247,6 +247,15 @@ type FormMode = 'default' | 'inline';
                   }
               
                   console.log("Billing purchase successful");
+                  try {
+                   // localStorage.removeItem("checkoutCart");
+                    console.log("Local storage cart cleared successfully");
+                  //  await fetch("/api/clear-cart", { method: "POST" });
+
+                    console.log("Shopify cart cleared");
+                  } catch (err) {
+                    console.error("Failed to clear local storage cart:", err);
+                  }
                   navigate("/payment-success");
                     } else {
                       console.error("No draft order returned:", draftData);
@@ -288,6 +297,7 @@ type FormMode = 'default' | 'inline';
       </div>
     );
 }
+
 
 
 export function AddToCartLink({
