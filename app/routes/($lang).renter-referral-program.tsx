@@ -31,7 +31,7 @@ export const handle = { seo };
 export async function loader({ context, params }: LoaderFunctionArgs) {
   validateLocale({ context, params });
 
-  console.log('Fetching renter referral page by SLUG (Clean Attempt)...');
+
 
   try {
   
@@ -43,11 +43,11 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
     const page = pageResults?.[0];
 
     if (!page) {
-      console.log('Page not found via slug query. Please ensure page is published in Sanity.');
+ 
       throw notFound();
     }
     
-    console.log('Page successfully fetched by slug.' ,pageResults);
+
     
     const gids = fetchGids({ page, context });
 
@@ -57,7 +57,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
       analytics: { pageType: AnalyticsPageType.page },
     });
   } catch (error) {
-    console.log('Query error:', error);
+
     throw notFound();
   }
 }
