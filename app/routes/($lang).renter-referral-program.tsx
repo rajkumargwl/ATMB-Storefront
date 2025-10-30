@@ -30,6 +30,10 @@ export const handle = { seo };
 // -----------------
 export async function loader({ context, params }: LoaderFunctionArgs) {
   validateLocale({ context, params });
+  let language = params.lang || 'en';
+  if(language !== 'en-es'){
+    language = 'en';
+  }
 
   console.log('Fetching renter referral page by SLUG (Clean Attempt)...');
 
@@ -37,6 +41,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
   
     const pageResults = await context.sanity.query({
       query: RENTER_PAGE_QUERY,
+      params: { language  }
     });
     
     // Extract the single page object

@@ -19,9 +19,15 @@ export const handle = { seo };
 // --- Loader ---
 export async function loader({ context, params }: LoaderFunctionArgs) {
   validateLocale({ context, params });
+  let language = params.lang || 'en';
+  if(language !== 'en-es'){
+    language = 'en';
+  }
+
  
   const page = await context.sanity.query({
     query: USPS_FORM_1583_PAGE_QUERY,
+    params: { language  }
   });
  
  

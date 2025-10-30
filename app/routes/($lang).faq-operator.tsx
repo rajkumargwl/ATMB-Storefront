@@ -39,6 +39,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
 
   const page = await context.sanity.query({
     query: FAQ_OPERATOR_PAGE,
+    params: { language  }
   });
 
   if (!page) throw notFound();

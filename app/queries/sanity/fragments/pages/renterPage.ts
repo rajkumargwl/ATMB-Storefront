@@ -4,7 +4,7 @@ import { RENTER_REFERRAL_FRAGMENT } from '../modules/renter';
 import { MODULES } from '../modules';
 
 export const RENTER_PAGE_QUERY = groq`
-  *[_type == "page" && slug == "renter-referral-program"] {
+  *[_type == "page" && slug == "renter-referral-program" && (language == $language || !defined(language))] {
     _id,
     title,
     slug,
