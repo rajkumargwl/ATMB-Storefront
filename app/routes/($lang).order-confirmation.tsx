@@ -35,7 +35,7 @@ import { type CartType } from '~/types'; // Add this import
 
 export const loader: LoaderFunction = async ({ context, params }) => {
   const { env } = context;
-  console.log("env data test", env.BILLING_ANYTIME_BASE_URL);
+
   const cart = await context.cart.get();
   
   const customerAccessToken = await context.session.get('customerAccessToken');
@@ -99,7 +99,7 @@ export const loader: LoaderFunction = async ({ context, params }) => {
 export default function CheckoutPage() {
   const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
   let currencyCode = selectedLocale?.currency || 'USD';
-  console.log('Selected Locale in Checkout Page:', selectedLocale);
+ 
   const rootData = useRootLoaderData();
   const { bundleProducts, essentialsProducts, cart, BusinessAcc, LiveReceptionist,billingConfig} = useLoaderData<typeof loader>();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
@@ -379,6 +379,7 @@ export default function CheckoutPage() {
             return;
           }
           localStorage.removeItem("checkoutCart");
+          //await fetch("/api/clear-cart", { method: "POST" });
           navigate("/payment-success");
         } catch (error) {
           console.error("NoThanksButton flow error:", error);
