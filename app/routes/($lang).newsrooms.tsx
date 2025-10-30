@@ -3,9 +3,27 @@ import { useLoaderData, Link } from "@remix-run/react";
 import { Image } from "@shopify/hydrogen";
 import { useState } from "react";
 import { PortableText } from "@portabletext/react";
-import {usePrefixPathWithLocale} from '~/lib/utils';
+import {useRootLoaderData} from '~/root';
+import { DEFAULT_LOCALE } from "~/lib/utils";
+// import { useRootLoaderData } from "@remix-run/react";
+// export const DEFAULT_LOCALE: I18nLocale = Object.freeze({
+//   ...countries.default,
+//   pathPrefix: '',
+// });
+
+export function usePrefixPathWithLocale() {
+  const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
+
+  // Return a function that safely prefixes any path
+  return (path?: string | null) => {
+    if (!path) return selectedLocale.pathPrefix || "/";
+    return `${selectedLocale.pathPrefix}${path.startsWith("/") ? path : "/" + path}`;
+  };
+}
+
 
   import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
+
   const seo: SeoHandleFunction = ({data}) => ({
    title: data?.page?.seo?.title || 'Newsroom | Anytime Mailbox',
    description:
@@ -50,7 +68,8 @@ export async function loader({ context }: LoaderFunctionArgs) {
 export default function Newsroom() {
   const { allCards } = useLoaderData<typeof loader>();
   const [visibleCount, setVisibleCount] = useState(6);
- 
+   const prefixPathWithLocale = usePrefixPathWithLocale();
+
   // Group all cards by year
   const groupedByYear: Record<string, any[]> = {};
   allCards.forEach((card) => {
@@ -125,7 +144,8 @@ export default function Newsroom() {
                   
                   {cards.map((card, idx) => (
                     <Link
-                            to={usePrefixPathWithLocale(card.externalLink)}
+                             key={idx}
+                             to={prefixPathWithLocale(card.externalLink)} 
                             className="flex md:min-h-[358px]"
                           >
                     <article
@@ -183,10 +203,15 @@ export default function Newsroom() {
                           </div>
                         )}
  
-                        <Link
+                        {/* <Link
                           to={usePrefixPathWithLocale(card.externalLink)}
                           className="hidden inline-block text-blue-600 font-medium hover:text-blue-700 transition-colors"
-                        >
+                        > */}
+                         <Link
+      key={idx}
+      to={prefixPathWithLocale(card.externalLink)}  // ✅ function call, not hook call
+      className="hidden inline-block text-blue-600 font-medium hover:text-blue-700 transition-colors"
+    >
                           Read More →
                         </Link>
                       </div>
