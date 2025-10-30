@@ -114,9 +114,11 @@ type Props = {
   bundles?: any[];
   pageType?: 'operator' | 'default' ; // 争 ADDED pageType PROP
   highlights?: any[];
+  productData?:any[];
+  location?:any[];
 };
 
-export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery, bundles, pageType = 'default',highlights,productData}: Props) { // 争 Set default pageType
+export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery, bundles, pageType = 'default',highlights,productData, location}: Props) { // 争 Set default pageType
  
  console.log("highlights in module.tsx", highlights);
   // Helper boolean for conditional rendering
@@ -156,7 +158,7 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
    case 'pdpwhyChooseAnytimePhoneSection':
   return <PdpWhyChooseAnytimePhone data={module} />;
  case 'productplans':
-  return <PlansWithoutBundles product={productData} />;
+  return <PlansWithoutBundles product={productData} location={location} />;
 
 
 

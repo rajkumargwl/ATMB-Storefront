@@ -42,7 +42,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
 
   });
 
-  if (!page) throw notFound();
+  //if (!page) throw notFound();
 
 
   const gids = fetchGids({ page, context });

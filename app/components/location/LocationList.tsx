@@ -113,7 +113,11 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
       useState(selectedFeatures);
     const [tempMinVal, setTempMinVal] = useState(minVal);
     const [tempMaxVal, setTempMaxVal] = useState(maxVal);
-
+    const PRICE_MIN = 0;
+    const PRICE_MAX = 1000;
+    const valueToPrice = (val) => Math.round((val / 100) * PRICE_MAX);
+    const priceToValue = (price) => Math.round((price / PRICE_MAX) * 100);
+        
     useEffect(() => {
       if (typeof document === "undefined") return; // ⛔️ skip on server
     
@@ -592,7 +596,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                     </div>
                   ))}
                   {loc.featureList && loc.featureList.length > 3 && (
-                    <span className="flex items-center px-[9px] py-1 px-[9px] bg-[#F6F6F6] rounded-full border font-Roboto font-medium text-[12px] leading-[18px] tracking-[0px] text-PrimaryBlack border-[#DCDCDC]">
+                    <span className="">
                       +{loc.featureList.length - 3}
                     </span>
                   )}
@@ -1052,16 +1056,12 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
           {/* Price Range */}
 <div>
   <label
-    className="block font-Roboto text-PrimaryBlack font-normal text-[14px] leading-[21px]"
+    className="block font-Roboto text-PrimaryBlack font-normal text-[14px] leading-[21px] tracking-[0px]"
     aria-label="price-range-label"
     aria-labelledby="price-range-label"
   >
     Price Range / Month
   </label>
-
-  {/* Constants */}
-  {/** Define these constants or place them at the top of the component **/}
-  {/* const MIN_PRICE = 0; const MAX_PRICE = 10000; */}
 
   <div className="relative w-full h-3 mt-3 mb-3">
     {/* Slider Track */}
@@ -1085,8 +1085,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
       onChange={(e) => {
         const newVal = Math.min(Number(e.target.value), tempMaxVal - 1);
         setTempMinVal(newVal);
-        const newPrice = Math.round((newVal / 100) * (MAX_PRICE - MIN_PRICE) + MIN_PRICE);
-        setTempMinPrice(newPrice);
+        setTempMinPrice(valueToPrice(newVal)); // Sync numeric input
       }}
       aria-label="Minimum Price Slider"
       className="absolute top-[-5px] w-full appearance-none bg-transparent pointer-events-none"
@@ -1101,8 +1100,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
       onChange={(e) => {
         const newVal = Math.max(Number(e.target.value), tempMinVal + 1);
         setTempMaxVal(newVal);
-        const newPrice = Math.round((newVal / 100) * (MAX_PRICE - MIN_PRICE) + MIN_PRICE);
-        setTempMaxPrice(newPrice);
+        setTempMaxPrice(valueToPrice(newVal)); // Sync numeric input
       }}
       aria-label="Maximum Price Slider"
       className="absolute top-[-5px] w-full appearance-none bg-transparent pointer-events-none"
@@ -1118,46 +1116,37 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
         background: white;
         border: 3px solid #091019;
         cursor: pointer;
-        position: relative;
-      }
-      input[type="range"]::-moz-range-thumb {
-        pointer-events: auto;
-        height: 20px;
-        width: 20px;
-        border-radius: 50%;
-        background: white;
-        border: 3px solid #091019;
-        cursor: pointer;
       }
     `}</style>
   </div>
 
-  {/* Numeric inputs */}
+  {/* Number Boxes */}
   <div className="flex items-center justify-between gap-2 mt-3">
     <input
       type="number"
       value={tempMinPrice}
+      min={PRICE_MIN}
+      max={tempMaxPrice - 1}
       onChange={(e) => {
-        const val = Math.max(MIN_PRICE, Number(e.target.value));
-        setTempMinPrice(val);
-        const valPercent = ((val - MIN_PRICE) / (MAX_PRICE - MIN_PRICE)) * 100;
-        setTempMinVal(Math.min(valPercent, tempMaxVal - 1));
+        const newPrice = Number(e.target.value);
+        setTempMinPrice(newPrice);
+        setTempMinVal(priceToValue(newPrice)); // Sync slider
       }}
       aria-label="Minimum Price"
-      className="border border-LightWhite w-20 px-3 py-2 rounded-[8px] font-Roboto text-PrimaryBlack font-normal text-[16px]"
+      className="border border-LightWhite w-20 px-3 py-2 rounded-[8px] font-Roboto text-PrimaryBlack font-normal text-[16px] leading-[24px] tracking-[0px]"
     />
-
     <input
       type="number"
       value={tempMaxPrice}
+      min={tempMinPrice + 1}
+      max={PRICE_MAX}
       onChange={(e) => {
-        const val = Math.min(MAX_PRICE, Number(e.target.value));
-        setTempMaxPrice(val);
-        const valPercent = ((val - MIN_PRICE) / (MAX_PRICE - MIN_PRICE)) * 100;
-        setTempMaxVal(Math.max(valPercent, tempMinVal + 1));
+        const newPrice = Number(e.target.value);
+        setTempMaxPrice(newPrice);
+        setTempMaxVal(priceToValue(newPrice)); // Sync slider
       }}
       aria-label="Maximum Price"
-      className="border border-LightWhite w-20 px-3 py-2 rounded-[8px] font-Roboto text-PrimaryBlack font-normal text-[16px]"
+      className="border border-LightWhite w-20 px-3 py-2 rounded-[8px] font-Roboto text-PrimaryBlack font-normal text-[16px] leading-[24px] tracking-[0px]"
     />
   </div>
 </div>
@@ -1212,7 +1201,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                 onClick={() => {
                   setTempPlanTier("");
                   setTempMinPrice(0);
-                  setTempMaxPrice(100);
+                  setTempMaxPrice(1000);
                   setTempSelectedFeatures([]);
                   setTempMinVal(0);
                   setTempMaxVal(100);
@@ -1220,7 +1209,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                   // Also reset main filters
                   setPlanTier("");
                   setMinPrice(0);
-                  setMaxPrice(100);
+                  setMaxPrice(1000);
                   setSelectedFeatures([]);
                 }}
                 title='Reset Filters'

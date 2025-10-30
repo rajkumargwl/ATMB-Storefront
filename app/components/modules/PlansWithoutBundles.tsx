@@ -17,7 +17,7 @@ type PlansWithoutBundlesProps = {
   };
 };
  
-export default function PlansWithoutBundles({product,planData}: PlansWithoutBundlesProps) {
+export default function PlansWithoutBundles({product,planData,location}: PlansWithoutBundlesProps) {
   const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
   let currencyCode = selectedLocale?.currency || 'USD';
     
@@ -194,7 +194,7 @@ export default function PlansWithoutBundles({product,planData}: PlansWithoutBund
                 <ReplacePlanAddToCartButton
                   selectedVariant={variant}
                   replaceLineId={replaceLineId}
-                  locationProperties={[]}
+                  locationProperties={location}
                   buttonClassName={`w-full h-[44px] md:h-[52px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-white md:text-PrimaryBlack border border-DarkOrange md:border-[#091019] px-4 py-[12px] bg-DarkOrange md:bg-white transition-all duration-300 hover:bg-DarkOrange hover:text-white hover:border-DarkOrange ${
                     isMostPopular
                       ? 'w-full h-[44px] md:h-[52px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-white md:text-PrimaryBlack border border-DarkOrange md:border-[#091019] px-4 py-[12px] bg-DarkOrange md:bg-white hover:bg-DarkOrange hover:text-white hover:border-DarkOrange'
