@@ -55,18 +55,7 @@ export function usePrefixPathWithLocale(path?: string | null) {
 
   return `${selectedLocale.pathPrefix}${path.startsWith('/') ? path : '/' + path}`;
 }
-// ~/lib/utils.ts
 
-
-// export function usePrefixPathWithLocale() {
-//   const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
-
-//   // Return a function that safely prefixes any path
-//   return (path?: string | null) => {
-//     if (!path) return selectedLocale.pathPrefix || "/";
-//     return `${selectedLocale.pathPrefix}${path.startsWith("/") ? path : "/" + path}`;
-//   };
-// }
 
 
 export function validateLocale({
