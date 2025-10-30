@@ -256,21 +256,32 @@ export default function CheckoutPage() {
         No Thanks, Continue
       </button> */}
       {/* No Thanks Button with Billing + Draft Order */}
-          <button
-      className="mt-8 border border-gray-400 text-gray-700 hover:bg-gray-100 py-2 px-6 rounded-full transition"
-      onClick={async () => {
+              <button
+        className="mt-8 border border-gray-400 text-gray-700 hover:bg-gray-100 py-2 px-6 rounded-full transition"
+        onClick={async () => {
         try {
-          const stored = localStorage.getItem("checkoutCart");
-          const cartData = stored ? JSON.parse(stored) : [];
+        const stored = localStorage.getItem("checkoutCart");
+        const parsed = stored ? JSON.parse(stored) : null;
+          // Extract cart data safely
+          const cartData =
+            parsed?.lines?.edges?.map((edge: any) => ({
+              variantId: edge?.node?.merchandise?.id,
+              quantity: edge?.node?.quantity,
+            })) || [];
 
-          if (cartData.length === 0) {
+          console.log("Extracted cartData:", cartData);
+
+          if (!Array.isArray(cartData) || cartData.length === 0) {
+            console.warn("No valid items found in checkoutCart");
             navigate("/payment-fail");
             return;
           }
 
-          //Fix: Map to expected shape
+         
+          const customerId = parsed?.buyerIdentity?.customer?.id || null;
+
           const formattedLines = cartData.map((item: any) => ({
-            merchandiseId: item.variantId,
+            variantId: item.variantId,
             quantity: item.quantity,
           }));
 
@@ -278,17 +289,25 @@ export default function CheckoutPage() {
           const draftRes = await fetch("/api/create-draft-order", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ lines: formattedLines }),
+            body: JSON.stringify({
+              lines: formattedLines,
+              customerId, // include if available
+            }),
           });
 
           const draftData = await draftRes.json();
-          if (!draftData?.data?.draftOrderCreate?.draftOrder?.id) {
+          console.log("Draft order response:", draftData);
+
+          const draftOrderId =
+            draftData?.data?.draftOrderCreate?.draftOrder?.id || null;
+
+          if (!draftOrderId) {
             console.error("Draft order creation failed:", draftData);
             navigate("/payment-fail");
             return;
           }
 
-          // Get Billing Token
+          //  Get Billing Token
           const tokenResponse = await fetch(`${billingConfig?.baseUrl}/auth/token`, {
             method: "POST",
             headers: {
@@ -308,13 +327,14 @@ export default function CheckoutPage() {
 
           const tokenData = await tokenResponse.json();
           const accessToken = tokenData?.data?.accessToken;
+
           if (!accessToken) {
             console.error("Billing token missing:", tokenData);
             navigate("/payment-fail");
             return;
           }
 
-          // Call Billing Purchase API
+          //  Billing Payload
           const billingPayload = {
             locationId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
             customerId: "c3d4e5f6-a7b8-9012-cdef-123456789012",
@@ -337,38 +357,37 @@ export default function CheckoutPage() {
             },
           };
 
+          //  Call Billing API
           const billingResponse = await fetch(`${billingConfig?.baseUrl}/purchase`, {
             method: "POST",
             headers: {
               "Api-Version": "v1",
               "Api-Environment": "dev",
               "Ocp-Apim-Subscription-Key": billingConfig?.subscriptionKey,
-              "Authorization": `Bearer ${accessToken}`,
+              Authorization: `Bearer ${accessToken}`,
               "Content-Type": "application/json",
             },
             body: JSON.stringify(billingPayload),
           });
 
           const billingResult = await billingResponse.json();
+          console.log("Billing result:", billingResult);
+
           if (!billingResponse.ok) {
             console.error("Billing failed:", billingResult);
             navigate("/payment-fail");
             return;
           }
-
-          // Cleanup and Redirect
           localStorage.removeItem("checkoutCart");
           navigate("/payment-success");
         } catch (error) {
-          console.error("No Thanks button flow error:", error);
+          console.error("NoThanksButton flow error:", error);
           navigate("/payment-fail");
         }
-      }}
-    >
-      No Thanks, Continue
-    </button>
 
-
+        }}
+        >
+        No Thanks, Continue </button>
     </div>
     </>
   );
