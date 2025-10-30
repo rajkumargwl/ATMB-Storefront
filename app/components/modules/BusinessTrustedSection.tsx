@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import spanBg from "~/components/media/span-bg.svg";
 import star1 from "~/components/media/Star1.svg";
 import star2 from "~/components/media/Star2.svg";
@@ -42,6 +42,33 @@ const BusinessTrustedSection: React.FC<Props> = ({
   testimonialVideo,
   provenResults,
 }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeVideo, setActiveVideo] = useState<string | null>(null);
+  const openVideo = (url: string) => {
+    if (!url) return;
+  
+    let embedUrl = url;
+  
+    // Convert YouTube watch link to embed link
+    if (url.includes("youtube.com/watch")) {
+      const videoId = url.split("v=")[1].split("&")[0];
+      embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+    }
+  
+    // Handle youtu.be short links
+    if (url.includes("youtu.be")) {
+      const videoId = url.split("youtu.be/")[1];
+      embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+    }
+  
+    setActiveVideo(embedUrl);
+    setIsOpen(true);
+  };
+  
+  const closeVideo = () => {
+    setActiveVideo(null);
+    setIsOpen(false);
+  };
   return (
     <section className="bg-white px-5 py-[40px] md:py-[60px] lg:py-[100px]">
      
@@ -135,6 +162,7 @@ const BusinessTrustedSection: React.FC<Props> = ({
                 />
                 {/* Play Button */}
                 <button
+                  onClick={() => openVideo("https://youtu.be/TJArEqaZgnA")}
                   aria-label="Play testimonial video"
                   className="absolute inset-0 flex items-center justify-center bg-black/20 hover:bg-black/30 transition rounded-xl"
                 >
@@ -187,6 +215,29 @@ const BusinessTrustedSection: React.FC<Props> = ({
           </div>
         </div>
       </div>
+
+
+       {/* Video Popup */}
+       {isOpen && activeVideo && (
+        <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+          <div className="relative w-[90%] md:w-[70%] lg:w-[60%]">
+            <button
+              onClick={closeVideo}
+              className="absolute top-[-20px] right-[-10px] text-white text-2xl"
+            >
+              ✕
+            </button>
+            <iframe
+              src={activeVideo}
+              title="Video Player"
+              className="w-full h-[400px] md:h-[500px] rounded-lg"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture;"
+              allowFullScreen
+            ></iframe>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
