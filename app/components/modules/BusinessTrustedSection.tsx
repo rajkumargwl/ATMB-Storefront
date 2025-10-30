@@ -162,7 +162,8 @@ const BusinessTrustedSection: React.FC<Props> = ({
                 />
                 {/* Play Button */}
                 <button
-                  onClick={() => openVideo("https://youtu.be/TJArEqaZgnA")}
+                  // onClick={() => openVideo("https://youtu.be/TJArEqaZgnA")}
+                 onClick={() => testimonialVideo.videoUrl && openVideo(testimonialVideo.videoUrl)}
                   aria-label="Play testimonial video"
                   className="absolute inset-0 flex items-center justify-center bg-black/20 hover:bg-black/30 transition rounded-xl"
                 >
