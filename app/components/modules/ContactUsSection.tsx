@@ -26,6 +26,10 @@ type ContactUsProps = {
 
 export default function ContactUsSection({ data }: ContactUsProps) {
   if (!data) return null;
+  // const HUBSPOT_PORTAL_ID = '244116084';
+  // const HUBSPOT_FORM_ID = '3fb77e45-e6b4-4275-ad2f-4ef212666d0d';
+  const HUBSPOT_PORTAL_ID = '47460136'; //client's HubSpot Portal ID
+  const HUBSPOT_FORM_ID = '24cefeaf-82b5-412a-976a-c348ec39d319'; //client's HubSpot Form ID
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -34,20 +38,58 @@ export default function ContactUsSection({ data }: ContactUsProps) {
     const payload = Object.fromEntries(formData.entries()); // convert to JSON
   
     try {
-      const response = await fetch("/api/freshdesk-contact", {
+      const freshdeskResponse = await fetch("/api/freshdesk-contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
   
-      const result = await response.json();
-  
-      if (result.success) {
-        alert("Thank you! Your form has been submitted.");
-        e.currentTarget?.reset(); 
-      } else {
-        alert(`Error submitting form: ${result.error}`);
+      const freshdeskResult = await freshdeskResponse.json();
+
+      if (!freshdeskResult.success) {
+        alert(`Error submitting Freshdesk form: ${freshdeskResult.error}`);
+        return;
       }
+
+      const hubspotData = {
+        fields: [
+          { name: "company", value: formData.get("company") },
+          { name: "firstname", value: formData.get("firstname") },
+          { name: "lastname", value: formData.get("lastname") },
+          { name: "email", value: formData.get("email") },
+          { name: "phone", value: formData.get("phone") },
+          { name: "onboarding_how_heard", value: formData.get("how_did_you_hear_about_us_") },
+          { name: "onboarding_description", value: formData.get("message") },
+          { name: "jobtitle", value: formData.get("what_best_describes_you_") },
+        ],
+      };
+
+      const hubspotResponse = await fetch(
+        `https://api.hsforms.com/submissions/v3/integration/submit/${HUBSPOT_PORTAL_ID}/${HUBSPOT_FORM_ID}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(hubspotData),
+        }
+      );
+
+      if (hubspotResponse.status !== 200) {
+        const errorText = await hubspotResponse.text();
+        console.error("HubSpot submission error:", errorText);
+        alert(`Error submitting HubSpot form: ${errorText}`);
+        return;
+      }
+
+      // --- Success message (only if both succeed) ---
+      alert("Thank you! Your form has been submitted.");
+      e.currentTarget?.reset(); 
+  
+      // if (result.success) {
+      //   alert("Thank you! Your form has been submitted.");
+      //   e.currentTarget?.reset(); 
+      // } else {
+      //   alert(`Error submitting form: ${result.error}`);
+      // }
     } catch (error: any) {
       console.error("Form submission error:", error);
       alert(`Error submitting form: ${error.message}`);

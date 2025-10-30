@@ -4,7 +4,7 @@ import { USPS_FORM_1583 } from '../modules/uspsform1583';
 import { SEO } from '../seo';
  
 export const USPS_FORM_1583_PAGE_QUERY = groq`
-  *[_type == "page" && slug=='usps-form-1583']{
+  *[_type == "page" && slug=='usps-form-1583' && (language == $language || !defined(language))]{
     _id,
     _type,
     title,

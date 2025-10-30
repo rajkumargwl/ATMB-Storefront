@@ -62,8 +62,6 @@ return (
        alt="Anytime Mailbox Logo"
        className="w-[101px]"
      /> </div>
-
-```
   <div className="flex flex-col items-center justify-center bg-white px-4">
     {/* Success Icon */}
     <div className="mt-20 md:mt-24 mb-6">
@@ -180,14 +178,23 @@ return (
     )}
 
     {/* Continue Button */}
-    <button
-      onClick={() => navigate("/")}
+        <button
+      onClick={async () => {
+        try {
+        
+          await fetch("/api/clear-cart", { method: "POST" });
+          localStorage.removeItem("checkoutCart");
+          navigate("/");
+        } catch (error) {
+          console.error("Error clearing cart:", error);
+        }
+      }}
       className="px-10 py-3 border border-gray-400 rounded-full text-gray-800 font-medium hover:bg-gray-100 transition"
     >
       Continue
     </button>
+
   </div>
 </>
-
 );
 }
