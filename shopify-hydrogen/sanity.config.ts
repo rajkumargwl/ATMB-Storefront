@@ -25,7 +25,7 @@ const dataset = savedDataset || 'development'
 export default defineConfig({
   name: 'default',
   title: 'Shopify - 0dv7ud-pz',
-  projectId: 'm5xb8z9y',
+  projectId: '15agngtk',
   dataset,
   plugins: [  
     structureTool({structure}),

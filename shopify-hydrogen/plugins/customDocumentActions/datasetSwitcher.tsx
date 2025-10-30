@@ -70,7 +70,7 @@ export const datasetSwitcherPlugin = definePlugin<{datasets: string[]}>(
               window.location.reload()
             } else {
                 window.location.replace(
-                    "https://www.sanity.io/@oh9ECGb2L/studio/b62lbenvxo5s3cjpq61uz6gh/default/structure"
+                    "https://www.sanity.io/@oO3YoQvHp/studio/b62lbenvxo5s3cjpq61uz6gh/default/structure"
                   )
               
             }
@@ -82,7 +82,7 @@ export const datasetSwitcherPlugin = definePlugin<{datasets: string[]}>(
               window.location.reload()
             } else {
                 window.location.replace(
-                    "https://www.sanity.io/@oh9ECGb2L/studio/b62lbenvxo5s3cjpq61uz6gh/default/structure"
+                    "https://www.sanity.io/@oO3YoQvHp/studio/b62lbenvxo5s3cjpq61uz6gh/default/structure"
                   )
             }
           }, 300)

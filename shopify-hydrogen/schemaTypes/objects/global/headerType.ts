@@ -16,6 +16,18 @@ export const header = defineType({
       type: "image",
       options: { hotspot: true },
     }),
+    defineField({
+      name: 'language',
+      title: 'Language',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'English', value: 'en'},
+          {title: 'Spanish', value: 'en-es'},
+        ],
+      },
+      hidden: true,
+    }),
  
     // ✅ Menu with optional submenus
     defineField({

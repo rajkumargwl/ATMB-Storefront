@@ -34,10 +34,15 @@ export const handle = { seo };
 // -----------------
 export async function loader({ context, params }: LoaderFunctionArgs) {
   validateLocale({ context, params });
+  let language = params.lang || 'en';
+  if(language !== 'en-es'){
+    language = 'en';
+  }
 
   // Fetch the Anytime Mobile App page data
   const page = await context.sanity.query({
     query: ANYTIME_MOBILE_APP_PAGE_QUERY,
+    params: { language  }
   });
 
  

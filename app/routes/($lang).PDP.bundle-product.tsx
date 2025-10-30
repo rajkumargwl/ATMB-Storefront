@@ -5,7 +5,7 @@ import Header from '~/components/global/Header';
 import Footer from '~/components/global/Footer';
 import { HEADER_QUERY } from '~/queries/sanity/header';
 import { FOOTER_QUERY } from '~/queries/sanity/footer';
-import { notFound, usePrefixPathWithLocale } from '~/lib/utils';
+import { notFound, usePrefixPathWithLocale, validateLocale } from '~/lib/utils';
 import { VARIANT_WITH_PRODUCT_QUERY } from '~/queries/shopify/product';
 import type { Product, ProductVariant } from '@shopify/hydrogen/storefront-api-types';
 import { useCart } from '@shopify/hydrogen-react';
@@ -37,13 +37,11 @@ const LOCATION_QUERY = /* groq */ `
 `;
 
 export async function loader({ context, request, params }: LoaderFunctionArgs) {
-  const language = params.lang || 'en';
- 
-  // Validate supported languages
-  const supportedLanguages = ['en', 'es'];
-  if (!supportedLanguages.includes(language)) {
-    throw notFound();
-  }
+   validateLocale({ context, params });
+    let language = params.lang || 'en';
+    if(language !== 'en-es'){
+      language = 'en';
+    }
   const cache = context.storefront.CacheCustom({ mode: 'public', maxAge: 60, staleWhileRevalidate: 60 });
 
   const [header, footer] = await Promise.all([
