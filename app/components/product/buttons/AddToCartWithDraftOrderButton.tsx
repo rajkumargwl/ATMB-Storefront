@@ -74,8 +74,6 @@ type FormMode = 'default' | 'inline';
                 (async () => {
                   try {
                     const cartId = fetcher.data.cart.id;
-
-                    // You can use your own Remix API route to get full cart data
                     const cartRes = await fetch(`/api/cart/${btoa(cartId)}`);
                     const fullCart = await cartRes.json();
                     console.log("fullCartttt", fullCart);
@@ -92,11 +90,25 @@ type FormMode = 'default' | 'inline';
                       variantId: l.node?.merchandise?.id,
                       quantity: l.node?.quantity ?? 1,
                     }));
-        
-                    // Merge with localStorage
-                    const storedCart = JSON.parse(localStorage.getItem("checkoutCart") || "[]");
+                    
+                    let storedCart: any[] = [];
+                    try {
+                      const raw = localStorage.getItem("checkoutCart");
+                      const parsed = raw ? JSON.parse(raw) : [];
+                      if (Array.isArray(parsed)) {
+                        storedCart = parsed;
+                      } else {
+                        console.warn("checkoutCart is not an array, resetting it:", parsed);
+                        storedCart = [];
+                      }
+                    } catch (err) {
+                      console.error("Failed to parse checkoutCart:", err);
+                      storedCart = [];
+                    }
+
+                    // Merge with new cart lines
                     const mergedCart = [...storedCart, ...cartLines];
-        
+
                     // Deduplicate by variantId
                     const uniqueCart = Object.values(
                       mergedCart.reduce((acc: any, item: any) => {
@@ -110,7 +122,6 @@ type FormMode = 'default' | 'inline';
                     );
         
                     localStorage.setItem("checkoutCart", JSON.stringify(uniqueCart));
-                    console.log("Full Merged Cart:", uniqueCart);
         
                     // Create Draft Order
                     const draftRes = await fetch("/api/create-draft-order", {
@@ -125,12 +136,11 @@ type FormMode = 'default' | 'inline';
                     console.log("response:", draftData);
 
                     if (draftData?.data?.draftOrderCreate?.draftOrder?.id) {
-                      console.log("Inside draft order success block",billingConfig?.subscriptionKey);
-
+                      
                       let accessToken = "";
 
                       try {
-                        console.log("Requesting Anytime Billing token...");
+                       
                         const tokenResponse = await fetch(`${billingConfig?.baseUrl}/auth/token`, {
                           method: "POST",
                           headers: {
@@ -148,9 +158,6 @@ type FormMode = 'default' | 'inline';
                           }),
                         });
                         const tokenData = await tokenResponse.json();
-
-                        console.log("Token data received:", tokenData);
-                      
                         accessToken = tokenData?.data?.accessToken;
 
                       } catch (error) {
@@ -245,12 +252,10 @@ type FormMode = 'default' | 'inline';
                     navigate("/payment-fail");
                     return;
                   }
-              
                   console.log("Billing purchase successful");
                   try {
-                   // localStorage.removeItem("checkoutCart");
-                    console.log("Local storage cart cleared successfully");
-                  //  await fetch("/api/clear-cart", { method: "POST" });
+                    localStorage.removeItem("checkoutCart");
+                    //await fetch("/api/clear-cart", { method: "POST" });
                   } catch (err) {
                     console.error("Failed to clear local storage cart:", err);
                   }
