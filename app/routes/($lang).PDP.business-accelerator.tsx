@@ -161,7 +161,7 @@ export default function Plans() {
           {/* Sanity Modules Grid */}
                     {page?.modules && page.modules.length > 0 && (
                       <div className="mb-0 mt-0 px-0 md:px-0">
-                        <ModuleGrid items={page.modules} searchQuery={''} homeSearchResults={[]} />
+                        <ModuleGrid items={page.modules} searchQuery={''} homeSearchResults={[]}  />
                       </div>
                     )}
       

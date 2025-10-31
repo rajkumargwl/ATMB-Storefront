@@ -420,7 +420,7 @@ export default function StatePage() {
             </h2>
             <div className="hidden md:flex justify-end gap-5">
               <button
-                area-label="Previous Slide"
+                aria-label="Previous Slide"
                 title='Previous Slide'
                 ref={prevRef}
                 className={`w-14 h-14 flex items-center justify-center rounded-full text-white ${
@@ -430,7 +430,7 @@ export default function StatePage() {
                 <ArrowLeftIcon />
               </button>
               <button
-              area-label="Next Slide"
+              aria-label="Next Slide"
               title='Next Slide'
                 ref={nextRef}
                 className={`w-14 h-14 flex items-center justify-center rounded-full text-white ${
