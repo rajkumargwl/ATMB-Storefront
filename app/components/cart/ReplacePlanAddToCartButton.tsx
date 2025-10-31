@@ -2,7 +2,8 @@
 import {CartForm} from '@shopify/hydrogen';
 import type {ProductVariant} from '@shopify/hydrogen/storefront-api-types';
 import { usePrefixPathWithLocale } from '~/lib/utils';
-
+import RightArrowWhite from '~/components/icons/RightArrowWhite';
+ 
 interface Props {
   selectedVariant: ProductVariant | null;
   replaceLineId?: string | null;
@@ -11,7 +12,7 @@ interface Props {
   buttonClassName?: string;
   text?: string;
 }
-
+ 
 export default function ReplacePlanAddToCartButton({
   selectedVariant,
   replaceLineId,
@@ -21,7 +22,7 @@ export default function ReplacePlanAddToCartButton({
   text,
 }: Props) {
   if (!selectedVariant) return null;
-
+ 
   // If replacing, first remove the old one
   if (replaceLineId) {
    // console.log('ReplacePlanAddToCartButton - replaceLineId:', replaceLineId);
@@ -52,7 +53,7 @@ export default function ReplacePlanAddToCartButton({
       </CartForm>
     );
   }
-
+ 
   // Normal add-to-cart
   return (
     <CartForm
@@ -76,9 +77,11 @@ export default function ReplacePlanAddToCartButton({
       <button
         type="submit"
         disabled={disabled}
-        className={buttonClassName}
-      >
-        {text || 'Add to Cart'}
+        className={buttonClassName}>
+        <span className="relative flex items-center">{text || 'Add to Cart'} <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
+              <RightArrowWhite />
+            </span></span>      
+        
       </button>
     </CartForm>
   );

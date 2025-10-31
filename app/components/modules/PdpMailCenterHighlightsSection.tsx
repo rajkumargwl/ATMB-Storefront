@@ -85,7 +85,7 @@ const PdpMailCenterHighlightsSection: React.FC<Props> = ({
       {/* Right Section */}
       <div className="w-full md:w-[68.5%] flex flex-col">
         <h3 className="font-Roboto text-white font-medium leading-[28px] md:leading-[28px] text-[20px] md:text-[20px] tracking-[0px] mb-4">
-          {highlightsTitle || "Key Highlights"}
+          {highlightsTitle || "Location Key Highlights"}
         </h3>
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4  gap-y-4 md:gap-y-6 gap-x-2 md:gap-x-6">
           {highlights?.map((item, index) => (

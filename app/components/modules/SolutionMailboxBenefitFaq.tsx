@@ -1,16 +1,16 @@
 import React from "react";
 import { PortableText } from "@portabletext/react"; // ✅ Add this import
-
+ 
 interface Benefit {
   icon: { url: string };
   text: string;
 }
-
+ 
 interface Faq {
   question: string;
   answer: any; // ✅ array of blocks
 }
-
+ 
 interface SolutionMailboxBenefitFaqProps {
   data: {
     title: string;
@@ -20,7 +20,7 @@ interface SolutionMailboxBenefitFaqProps {
     rightImage: { url: string };
   };
 }
-
+ 
 const SolutionMailboxBenefitFaq: React.FC<SolutionMailboxBenefitFaqProps> = ({ data }) => {
   return (
     <section className="bg-PrimaryBlack text-white py-[40px] md:py-[60px] lg:py-[100px] px-5">
@@ -34,7 +34,7 @@ const SolutionMailboxBenefitFaq: React.FC<SolutionMailboxBenefitFaqProps> = ({ d
             {data.subtitle}
           </p>
         </div>
-
+ 
         {/* Main Grid */}
         <div className="flex flex-col md:flex-row gap-8 items-stretch items-center max-w-[1192px] mx-auto">
           {/* Benefits */}
@@ -57,7 +57,7 @@ const SolutionMailboxBenefitFaq: React.FC<SolutionMailboxBenefitFaqProps> = ({ d
               </div>
             ))}
           </div>
-
+ 
           {/* Right Image */}
           <div className="w-full md:w-[32.43%] flex justify-center">
             <div className="flex items-end w-full h-full bg-DarkOrange rounded-[20px] px-6 pb-6 pt-[74px] flex justify-center">
@@ -69,7 +69,7 @@ const SolutionMailboxBenefitFaq: React.FC<SolutionMailboxBenefitFaqProps> = ({ d
             </div>
           </div>
         </div>
-
+ 
         {/* FAQs */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-[64px]">
           {data.faqs.map((faq, index) => (
@@ -81,7 +81,7 @@ const SolutionMailboxBenefitFaq: React.FC<SolutionMailboxBenefitFaqProps> = ({ d
                 {faq.question}
               </h3>
               {/* ✅ PortableText rendering (instead of <p>) */}
-              <div className="font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">
+              <div className="faq-answer font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">
                 <PortableText value={faq.answer} />
               </div>
             </div>
@@ -91,5 +91,5 @@ const SolutionMailboxBenefitFaq: React.FC<SolutionMailboxBenefitFaqProps> = ({ d
     </section>
   );
 };
-
+ 
 export default SolutionMailboxBenefitFaq;

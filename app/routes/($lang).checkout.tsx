@@ -398,6 +398,9 @@ useEffect(() => {
                           <div className='flex flex-row items-center justify-start mb-6 md:mb-10 gap-3 border-b border-[#DCDCDC] pb-5'>
                               <Button
                                 onClick={() => window.history.back()}
+                                title="Back to cart"
+                                type="button"
+                                aria-label="Back to cart"
                                 className="bg-[#ffffff] p-6 w-[32px] md:w-[36px] h-[32px] md:h-[36px] border border-LightWhite rounded-full flex items-center justify-center p-0"
                               >
                                 <svg
@@ -424,107 +427,106 @@ useEffect(() => {
                           </div>
                         </div>
                       
-                      <div className='max-w-[1240px] mx-auto gap-[24px] md:gap-[24px] flex flex-col lg:flex-row'>
-                        <div className='w-full lg:w-[65.35%]'>                
-                          <div role="row" className="flex flex-col p-6 border border-[#DCDCDC] rounded-[12px]">
-                            <h3 className="font-[400] md:font-[600] text-[#091019] md:text-[24px] md:leading-[31.2px] tracking-[-0.48px] text-[20px] leading-[28px]">Payment Details</h3>
-                            <p className="text-[#4D4E4F] font-[400] text-[14px] leading-[21px] mt-1">
-                              Your transaction and card details are fully secure with our encrypted payment system.
-                            </p>
-                       
-                                <form onSubmit={handleSubmit} className="mt-[20px]">
+                        <div className="max-w-[1240px] mx-auto gap-[24px] md:gap-[24px] flex flex-col lg:flex-row">
+                          <div className="w-full lg:w-[65.35%]">                
+                            {/* Removed incorrect role="row" since this isn't part of a grid/table */}
+                            <div className="flex flex-col p-6 border border-[#DCDCDC] rounded-[12px]">
+                              <h3 className="font-[400] md:font-[600] text-[#091019] md:text-[24px] md:leading-[31.2px] tracking-[-0.48px] text-[20px] leading-[28px]">
+                                Payment Details
+                              </h3>
+                              <p className="text-[#4D4E4F] font-[400] text-[14px] leading-[21px] mt-1">
+                                Your transaction and card details are fully secure with our encrypted payment system.
+                              </p>
+                              
+                              <form onSubmit={handleSubmit} className="mt-[20px]">
                                 {error && <p className="text-red-500">{error}</p>}
-
-                                {/* Email optional */}
-                                {/* <div className="relative">
-                                  <input
-                                    type="email"
-                                    placeholder=" "
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
-                                    className="peer w-full border rounded px-4 pt-5 pb-2 text-[16px] leading-6"
-                                  />
-                                  <label className="absolute left-4 top-1 text-gray-500 text-[12px] transition-all peer-placeholder-shown:top-5 peer-placeholder-shown:text-gray-400 peer-placeholder-shown:text-[16px]">
-                                    Email (optional)
-                                  </label>
-                                </div> */}
 
                                 {/* Card Number */}
                                 <div className="relative">
                                   <CardNumberElement
                                     options={{
-                                      style: { base: { fontSize: "16px", color: "#091019" }, invalid: { color: "#FF6600" } }, placeholder: '1212 1212 1212 1212'
+                                      style: { base: { fontSize: "16px", color: "#091019" }, invalid: { color: "#FF6600" } },
+                                      placeholder: '1212 1212 1212 1212'
                                     }}
                                     className="peer font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
                                   />
-                                  <label className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150">
+                                  <label
+                                    aria-label="Card Number"
+                                    className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150"
+                                  >
                                     Card Number
                                   </label>
                                 </div>
 
                                 {/* Expiry & CVC */}
-                                <div className="grid grid-cols-2 gap-4 mt-[20px]">
-                                  <div className="relative">
+                                <div className="grid grid-cols-2 gap-4 mt-[20px]" role="row">
+                                  <div className="relative" role="cell">
                                     <CardExpiryElement
                                       options={{
-                                        style: { base: { fontSize: "16px", color: "#091019" }, invalid: { color: "#FF6600" } }, placeholder: '12/2028'
+                                        style: { base: { fontSize: "16px", color: "#091019" }, invalid: { color: "#FF6600" } },
+                                        placeholder: '12/2028'
                                       }}
                                       className="peer font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
                                     />
-                                    <label className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150">
+                                    <label aria-label="Expiry Date" className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150">
                                       Expiry Date
                                     </label>
                                   </div>
-                                  <div className="relative">
+                                  <div className="relative" role="cell">
                                     <CardCvcElement
                                       options={{
-                                        style: { base: { fontSize: "16px", color: "#091019" }, invalid: { color: "#FF6600" } }, placeholder: '126'
+                                        style: { base: { fontSize: "16px", color: "#091019" }, invalid: { color: "#FF6600" } },
+                                        placeholder: '126'
                                       }}
                                       className="peer font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
                                     />
-                                    <label className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150">
+                                    <label aria-label="CVV" className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150">
                                       CVV
                                     </label>
                                   </div>
                                 </div>
 
                                 {/* Zip & Cardholder */}
-                                <div className="grid grid-cols-2 gap-4 mt-[20px]">
-                                  <div className="relative">
+                                <div className="grid grid-cols-2 gap-4 mt-[20px]" role="row">
+                                  <div className="relative" role="cell">
                                     <input
                                       type="text"
+                                      aria-label="Zip Code"
                                       placeholder="11018"
                                       className="peer font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#b3b3b3] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
                                     />
-                                    <label className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#4D4E4F] transition-all duration-150">
+                                    <label aria-label="Zip Code" className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#4D4E4F] transition-all duration-150">
                                       Zip Code
                                     </label>
                                   </div>
-                                  <div className="relative">
+                                  <div className="relative" role="cell">
                                     <input
                                       type="text"
+                                      aria-label="Card Holder Name"
                                       placeholder="John Doe"
                                       className="peer font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#b3b3b3] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
                                     />
-                                    <label className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#4D4E4F] transition-all duration-150">
+                                    <label aria-label="Card Holder Name" className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#4D4E4F] transition-all duration-150">
                                       Card Holder Name
                                     </label>
                                   </div>
                                 </div>
-                               {/* Terms & Payment Button */}
-                               <div className="flex items-center gap-3 mt-[20px]">
-                                <input type="checkbox" id="agree" className="w-4 h-4 accent-[#FF6600]" />
-                                <label htmlFor="agree" className="text-[14px] text-[#4D4E4F] font-[400] leading-[21px]">
-                                  I agree to the{' '}
-                                  <a href="#" className="text-[#FF6600] underline">
-                                    terms & conditions
-                                  </a>{' '}
-                                  and{' '}
-                                  <a href="#" className="text-[#FF6600] underline">
-                                    privacy policy
-                                  </a>
-                                </label>
-                              </div>
+
+                                {/* Terms & Payment Button */}
+                                <div className="flex items-center gap-3 mt-[20px]">
+                                  <input type="checkbox" id="agree" className="w-4 h-4 accent-[#FF6600]" />
+                                  <label htmlFor="agree" aria-label="Agree" className="text-[14px] text-[#4D4E4F] font-[400] leading-[21px]">
+                                    I agree to the{' '}
+                                    <a href="#" className="text-[#FF6600] underline">
+                                      terms & conditions
+                                    </a>{' '}
+                                    and{' '}
+                                    <a href="#" className="text-[#FF6600] underline">
+                                      privacy policy
+                                    </a>
+                                  </label>
+                                </div>
+
                                 <button
                                   type="submit"
                                   disabled={!stripe || loading}
@@ -538,23 +540,21 @@ useEffect(() => {
                                       {cart?.cost?.subtotalAmount && (
                                         <>
                                           {"  -  "}
-                                          <Money data={{ amount: cart?.cost?.subtotalAmount?.amount, currencyCode: currencyCode }}/>
+                                          <Money data={{ amount: cart?.cost?.subtotalAmount?.amount, currencyCode: currencyCode }} />
                                         </>
                                       )}
                                     </>
                                   )}
-
                                 </button>
                               </form>
+                            </div>
+                          </div>
 
-
-                          
+                          <div className="w-full lg:w-[34.65%] md:sticky md:top-[80px] space-y-6">
+                            <CartSummary cart={cart} cost={cart.cost} />
                           </div>
                         </div>
-                        <div className="w-full lg:w-[34.65%] md:sticky md:top-[80px] space-y-6">
-                          <CartSummary cart={cart} cost={cart.cost} />
-                        </div>
-                      </div>
+
           
                       </div>
                       

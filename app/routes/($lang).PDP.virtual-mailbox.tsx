@@ -133,13 +133,24 @@ export default function Plans() {
     )
   );
 
+
   const services = Array.from(
     new Set(
       location.featureList
-        .filter((feature) => feature.class !== "HIGHLIGHT")
+        .filter((feature) => feature.class === "Mail")
         .map((feature) => feature.label)
     )
   );
+  // this below code is as per the New Schema of Locations 
+//   const services = Array.from(
+//   new Set(
+//     (location.featureList || [])
+//       .filter((item) => item.feature?.class === "Mail")
+//       .map((item) => item.feature?.label)
+//       .filter(Boolean) // remove undefined/null
+//   )
+// );
+console.log('services:', services);
 
   const variants = (product?.variants?.nodes ?? []) as ProductVariant[];
  

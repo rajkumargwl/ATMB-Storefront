@@ -1,4 +1,5 @@
 import {type FetcherWithComponents, useFetcher, useNavigate} from '@remix-run/react';
+ 
 import {
   AnalyticsEventName,
   CartForm,
@@ -9,16 +10,17 @@ import {
 import type {CartLineInput} from '@shopify/hydrogen/storefront-api-types';
 import {useEffect} from 'react';
 import {twMerge} from 'tailwind-merge';
-
+ 
 import {defaultButtonStyles} from '~/components/elements/Button';
 import SpinnerIcon from '~/components/icons/Spinner';
 import {usePageAnalytics} from '~/hooks/usePageAnalytics';
 import { DEFAULT_LOCALE, usePrefixPathWithLocale } from '~/lib/utils';
 import { useRootLoaderData } from '~/root';
-
-
+import RightArrowWhite from '~/components/icons/RightArrowWhite';
+ 
+ 
 type FormMode = 'default' | 'inline';
-
+ 
 export default function AddToCartButton({
   children = 'Add to cart',
   lines,
@@ -66,6 +68,9 @@ export default function AddToCartButton({
               ) : (
                 children
               )}
+                   <span className="relative flex items-center"> <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
+                            <RightArrowWhite />
+                          </span></span>    
             </button>
           </AddToCartAnalytics>
         )}
@@ -73,7 +78,7 @@ export default function AddToCartButton({
     </div>
   );
 }
-
+ 
 export function AddToCartLink({
   children = 'Add to cart',
   lines,
@@ -92,7 +97,7 @@ export function AddToCartLink({
   [key: string]: any;
 }) {
   const fetcher = useFetcher();
-
+ 
   const onClick = () =>
     fetcher.submit(
       {
@@ -106,7 +111,7 @@ export function AddToCartLink({
       },
       {method: 'post', action: '/cart?index'},
     );
-
+ 
   return (
     <AddToCartAnalytics fetcher={fetcher}>
       <button
@@ -125,7 +130,7 @@ export function AddToCartLink({
     </AddToCartAnalytics>
   );
 }
-
+ 
 function AddToCartAnalytics({
   fetcher,
   children,
@@ -141,7 +146,7 @@ function AddToCartAnalytics({
     if (formData) {
       const cartData: Record<string, unknown> = {};
       const cartInputs = CartForm.getFormInput(formData);
-
+ 
       try {
         if (cartInputs.inputs.analytics) {
           const dataInForm: unknown = JSON.parse(
@@ -152,7 +157,7 @@ function AddToCartAnalytics({
       } catch {
         // do nothing
       }
-
+ 
       if (Object.keys(cartData).length && fetcherData?.cart) {
         const addToCartPayload: ShopifyAddToCartPayload = {
           ...getClientBrowserParameters(),
@@ -160,7 +165,7 @@ function AddToCartAnalytics({
           ...cartData,
           cartId: fetcherData.cart.id,
         };
-
+ 
         sendShopifyAnalytics({
           eventName: AnalyticsEventName.ADD_TO_CART,
           payload: addToCartPayload,

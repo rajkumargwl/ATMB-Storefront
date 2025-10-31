@@ -92,9 +92,9 @@ const PdpAnytimePhoneSection: React.FC<Props> = ({
           {!hasImage ? (
                 <div className="hidden md:flex items-center justify-end gap-2">
             <span className="font-Roboto text-PrimaryBlack font-normal leading-[21px] md:leading-[21px] text-[14px] md:text-[14px] tracking-[0px]">Monthly</span>
-            <span className="bg-[#BFBFBF] rounded-[16px] w-10 h-[22px] relative">
+            <button className="bg-[#BFBFBF] rounded-[16px] w-10 h-[22px] relative">
               <span className="absolute left-[2px] top-[2px] w-[18px] h-[18px] bg-white rounded-[16px]"></span>
-            </span>
+            </button>
             <span className="font-Roboto text-PrimaryBlack font-normal leading-[21px] md:leading-[21px] text-[14px] md:text-[14px] tracking-[0px]">Yearly</span>
             <span className="font-Roboto text-white font-normal leading-[18px] md:leading-[18px] text-[12px] md:text-[12px] tracking-[0px] px-2 py-1 rounded-full bg-[#537D1B]">20% Off</span>
  
@@ -176,9 +176,9 @@ const PdpAnytimePhoneSection: React.FC<Props> = ({
           {!hasImage ? (
             <div className="flex md:hidden items-center justify-center gap-2 mb-6">
             <span className="font-Roboto text-PrimaryBlack font-normal leading-[21px] md:leading-[21px] text-[14px] md:text-[14px] tracking-[0px]">Monthly</span>
-            <span className="bg-[#BFBFBF] rounded-[16px] w-10 h-[22px] relative">
+            <button className="bg-[#BFBFBF] rounded-[16px] w-10 h-[22px] relative">
               <span className="absolute left-[2px] top-[2px] w-[18px] h-[18px] bg-white rounded-[16px]"></span>
-            </span>
+            </button>
             <span className="font-Roboto text-PrimaryBlack font-normal leading-[21px] md:leading-[21px] text-[14px] md:text-[14px] tracking-[0px]">Yearly</span>
             <span className="font-Roboto text-white font-normal leading-[18px] md:leading-[18px] text-[12px] md:text-[12px] tracking-[0px] px-2 py-1 rounded-full bg-[#537D1B]">20% Off</span>
  
@@ -238,7 +238,7 @@ const PdpAnytimePhoneSection: React.FC<Props> = ({
                   products: [productData.productAnalytics],
                   totalValue: parseFloat(productData.productAnalytics.price),
                 }}
-                buttonClassName="flex items-center justify-center w-full h-[44px] md:h-[52px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-white md:text-PrimaryBlack border border-DarkOrange md:border-[#091019] px-4 py-[12px] bg-DarkOrange md:bg-white hover:opacity-100"
+                buttonClassName="flex items-center justify-center w-full h-[44px] md:h-[52px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-white md:text-PrimaryBlack border border-DarkOrange md:border-[#091019] px-4 py-[12px] bg-DarkOrange md:bg-white hover:opacity-100 group relative overflow-hidden transition-all hover:bg-DarkOrange hover:text-white hover:border-DarkOrange"
                 text="Add to Cart"
               /> */}
               <ReplacePlanAddToCartButton
@@ -246,7 +246,7 @@ const PdpAnytimePhoneSection: React.FC<Props> = ({
   replaceLineId={null} // or pass actual lineId if replacing
   locationProperties={[]} // or pass dynamic key/value attributes if needed
   disabled={!productData.defaultVariant.availableForSale}
-  buttonClassName="flex items-center justify-center w-full h-[44px] md:h-[52px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-white md:text-PrimaryBlack border border-DarkOrange md:border-[#091019] px-4 py-[12px] bg-DarkOrange md:bg-white hover:opacity-100"
+  buttonClassName="flex items-center justify-center w-full h-[44px] md:h-[52px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-white md:text-PrimaryBlack border border-DarkOrange md:border-[#091019] px-4 py-[12px] bg-DarkOrange md:bg-white hover:opacity-100 group relative overflow-hidden transition-all hover:bg-DarkOrange hover:text-white hover:border-DarkOrange"
   text="Add to Cart"
 />
             </div>

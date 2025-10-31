@@ -202,7 +202,7 @@ export function BuiltForYou({ data }: BuiltForYouProps) {
                     </div>
                   )}
                   {data.tabs[activeTab].sideText && (
-                    <div className="max-w-[577px] font-Roboto font-normal leading-[21px] md:leading-[24px] text-[14px] md:text-[16px] tracking-[0px] text-PrimaryBlack">
+                    <div className="include-heading max-w-[577px] font-Roboto font-normal leading-[21px] md:leading-[24px] text-[14px] md:text-[16px] tracking-[0px] text-PrimaryBlack">
                       <PortableText value={data.tabs[activeTab].sideText} />
                     </div>
                   )}

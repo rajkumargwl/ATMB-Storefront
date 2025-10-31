@@ -86,7 +86,7 @@ export default function Footer({ data }: FooterProps) {
           </div>
  
           {/* Right Columns */}
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-6 lg:gap-[48px] lg:col-span-3 w-full xl:min-w-[812px] xl:-ml-5">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-6 lg:gap-[48px] xl:gap-[64px] lg:col-span-3 w-full xl:min-w-[836px] xl:ml-[-50px]">
             {/* Company */}
             {data.companyColumn && (
               <FooterColumn title={data.companyColumn.title} links={data.companyColumn.links} />
@@ -110,7 +110,7 @@ export default function Footer({ data }: FooterProps) {
               />
             )}
             </div>
-            <div className='flex flex-col gap-[26px]'>
+            <div className='flex flex-col gap-[26px] xl:min-w-[168px]'>
             {/* Mail Center Operator */}
             {data.MailCenterOperator && (
               <FooterColumn
@@ -238,4 +238,3 @@ function FooterColumn({
     </div>
   );
 }
- 
