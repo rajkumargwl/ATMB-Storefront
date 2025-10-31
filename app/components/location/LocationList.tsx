@@ -113,7 +113,11 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
       useState(selectedFeatures);
     const [tempMinVal, setTempMinVal] = useState(minVal);
     const [tempMaxVal, setTempMaxVal] = useState(maxVal);
-
+    const PRICE_MIN = 0;
+    const PRICE_MAX = 1000;
+    const valueToPrice = (val) => Math.round((val / 100) * PRICE_MAX);
+    const priceToValue = (price) => Math.round((price / PRICE_MAX) * 100);
+        
     useEffect(() => {
       if (typeof document === "undefined") return; // ⛔️ skip on server
     
@@ -412,11 +416,11 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
               
 
               <div className="flex flex-col w-full relative">
-                <div className={`flex items-center gap-[10px] w-full rounded-full border border-LightWhite py-[4px] md:py-[3px] pl-3 md:pl-4 ${isCityPage ? 'pr-[4px] md:pr-[16px]' : 'pr-[4px] md:pr-[3px]'} shadow-[0_6px_24px_0_rgba(0,0,0,0.05)] md:shadow-none bg-white`}>
+                <div className={`flex items-center gap-[10px] w-full rounded-full border border-LightWhite py-[4px] md:py-[3px] pl-3 md:pl-4 ${isCityPage ? 'pr-[4px] md:pr-[3px]' : 'pr-[4px] md:pr-[3px]'} shadow-[0_6px_24px_0_rgba(0,0,0,0.05)] md:shadow-none bg-white`}>
                   <input
                     type="text"
                     value={searchCity}
-                    area-label="Search City"
+                    aria-label="Search City"
                     onChange={(e) => {
                       setSearchCity(e.target.value);
                       setShowSuggestions(true); // show suggestions when typing
@@ -438,7 +442,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                     </button>
                   )}
                   <button
-                    className={`flex items-center justify-center min-w-[32px] md:min-w-[48px] w-[32px] md:w-12 h-[32px] md:h-12 bg-DarkOrange rounded-full ${isCityPage ? 'hidden' : ''}`}
+                    className={`flex items-center justify-center min-w-[32px] md:min-w-[48px] w-[32px] md:w-12 h-[32px] md:h-12 bg-DarkOrange rounded-full`}
                     onClick={() => setSelectedCity(searchCity)}
                   >
                     <img
@@ -447,7 +451,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                       className="w-[16px] md:w-[21px] h-[16px] md:h-[21px] object-contain"
                     />
                   </button>
-                  {!searchCity && ( <button
+                  {/* {!searchCity && ( <button
                     className={`flex items-center justify-center min-w-[24px] md:min-w-[24px] w-[24px] md:w-[24px] h-[24px] md:h-[24px] rounded-full ${isCityPage ? '' : 'hidden'}`}
                     onClick={() => setSelectedCity(searchCity)}
                   >
@@ -457,7 +461,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                       className="w-[16px] md:w-[13px] object-contain"
                     />
                   </button>
-                  )}
+                  )} */}
                 </div>
 
                 {showSuggestions &&
@@ -495,10 +499,10 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
             </div>
 
             <div className="flex items-center gap-[10px] px-[9px] md:px-4 py-[9px] md:py-3 border border-LightWhite rounded-full">
-              <button onClick={() => setShowFilters(true)} area-label="Filters" area-labelledby="Filters">
+              <button onClick={() => setShowFilters(true)} aria-label="Filters">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" className="w-5 h-5 md:w-6 md:h-6"> <path d="M21.25 11.9999H8.895M4.534 11.9999H2.75M4.534 11.9999C4.534 11.4217 4.76368 10.8672 5.17251 10.4584C5.58134 10.0496 6.13583 9.81989 6.714 9.81989C7.29217 9.81989 7.84666 10.0496 8.25549 10.4584C8.66432 10.8672 8.894 11.4217 8.894 11.9999C8.894 12.5781 8.66432 13.1326 8.25549 13.5414C7.84666 13.9502 7.29217 14.1799 6.714 14.1799C6.13583 14.1799 5.58134 13.9502 5.17251 13.5414C4.76368 13.1326 4.534 12.5781 4.534 11.9999ZM21.25 18.6069H15.502M15.502 18.6069C15.502 19.1852 15.2718 19.7403 14.8628 20.1492C14.4539 20.5582 13.8993 20.7879 13.321 20.7879C12.7428 20.7879 12.1883 20.5572 11.7795 20.1484C11.3707 19.7396 11.141 19.1851 11.141 18.6069M15.502 18.6069C15.502 18.0286 15.2718 17.4745 14.8628 17.0655C14.4539 16.6566 13.8993 16.4269 13.321 16.4269C12.7428 16.4269 12.1883 16.6566 11.7795 17.0654C11.3707 17.4742 11.141 18.0287 11.141 18.6069M11.141 18.6069H2.75M21.25 5.39289H18.145M13.784 5.39289H2.75M13.784 5.39289C13.784 4.81472 14.0137 4.26023 14.4225 3.8514C14.8313 3.44257 15.3858 3.21289 15.964 3.21289C16.2503 3.21289 16.5338 3.26928 16.7983 3.37883C17.0627 3.48839 17.3031 3.64897 17.5055 3.8514C17.7079 4.05383 17.8685 4.29415 17.9781 4.55864C18.0876 4.82313 18.144 5.10661 18.144 5.39289C18.144 5.67917 18.0876 5.96265 17.9781 6.22714C17.8685 6.49163 17.7079 6.73195 17.5055 6.93438C17.3031 7.13681 17.0627 7.29739 16.7983 7.40695C16.5338 7.5165 16.2503 7.57289 15.964 7.57289C15.3858 7.57289 14.8313 7.34321 14.4225 6.93438C14.0137 6.52555 13.784 5.97106 13.784 5.39289Z" stroke="#091019" stroke-width="1.5" stroke-miterlimit="10" stroke-linecap="round"/> </svg>
               </button>
-              <span className="hidden md:flex font-Roboto text-PrimaryBlack font-normal text-[16px] leading-[24px] tracking-[0px]">
+              <span className="hidden md:flex font-Roboto text-PrimaryBlack font-normal text-[16px] leading-[24px] tracking-[0px]" title='Filters'>
                 Filters
               </span>
             </div>
@@ -592,7 +596,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                     </div>
                   ))}
                   {loc.featureList && loc.featureList.length > 3 && (
-                    <span className="flex items-center px-[9px] py-1 px-[9px] bg-[#F6F6F6] rounded-full border font-Roboto font-medium text-[12px] leading-[18px] tracking-[0px] text-PrimaryBlack border-[#DCDCDC]">
+                    <span className="">
                       +{loc.featureList.length - 3}
                     </span>
                   )}
@@ -739,7 +743,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                   <input
                     type="text"
                     value={searchCity}
-                    area-label="Search City"
+                    aria-label="Search City"
                     onChange={(e) => {
                       setSearchCity(e.target.value);
                       setShowSuggestions(true); // show suggestions when typing
@@ -1004,7 +1008,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
     <div className="bg-white p-6 rounded-[12px] border border-LightWhite max-w-[467px] w-full">
      <div className="flex items-center justify-between  mb-6">
       <h2 className="font-Roboto text-PrimaryBlack font-semibold text-[24px] leading-[31.2px] tracking-[-0.36px]">Filters</h2>
-        <button onClick={() => setShowFilters(false)} title='Close' area-label='Close'>
+        <button onClick={() => setShowFilters(false)} title='Close' aria-label='Close'>
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="25" viewBox="0 0 24 25" fill="none">
             <path d="M19.0227 6.32363C19.2552 6.09113 19.2552 5.70863 19.0227 5.47613C18.7902 5.24363 18.4077 5.24363 18.1752 5.47613L11.9989 11.6524L5.82266 5.47613C5.59016 5.24363 5.20766 5.24363 4.97516 5.47613C4.74266 5.70863 4.74266 6.09113 4.97516 6.32363L11.1514 12.4999L4.97516 18.6761C4.74266 18.9086 4.74266 19.2911 4.97516 19.5236C5.20766 19.7561 5.59016 19.7561 5.82266 19.5236L11.9989 13.3474L18.1752 19.5236C18.4077 19.7561 18.7902 19.7561 19.0227 19.5236C19.2552 19.2911 19.2552 18.9086 19.0227 18.6761L12.8464 12.4999L19.0227 6.32363Z" fill="#091019"/>
           </svg>
@@ -1021,7 +1025,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                 <select
                   value={tempPlanTier}
                   onChange={(e) => setTempPlanTier(e.target.value)}
-                  area-label="All Tiers"
+                  aria-label="All Tiers"
                   className="relative z-[2] border border-LightWhite bg-transparent px-3 py-[18.5px] rounded-[8px] w-full font-Roboto text-PrimaryBlack font-normal text-[14px] leading-[21px] tracking-[0px] appearance-none"
                 >
                   <option value="">All Tiers</option>
@@ -1052,16 +1056,12 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
           {/* Price Range */}
 <div>
   <label
-    className="block font-Roboto text-PrimaryBlack font-normal text-[14px] leading-[21px]"
+    className="block font-Roboto text-PrimaryBlack font-normal text-[14px] leading-[21px] tracking-[0px]"
     aria-label="price-range-label"
     aria-labelledby="price-range-label"
   >
     Price Range / Month
   </label>
-
-  {/* Constants */}
-  {/** Define these constants or place them at the top of the component **/}
-  {/* const MIN_PRICE = 0; const MAX_PRICE = 10000; */}
 
   <div className="relative w-full h-3 mt-3 mb-3">
     {/* Slider Track */}
@@ -1085,8 +1085,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
       onChange={(e) => {
         const newVal = Math.min(Number(e.target.value), tempMaxVal - 1);
         setTempMinVal(newVal);
-        const newPrice = Math.round((newVal / 100) * (MAX_PRICE - MIN_PRICE) + MIN_PRICE);
-        setTempMinPrice(newPrice);
+        setTempMinPrice(valueToPrice(newVal)); // Sync numeric input
       }}
       aria-label="Minimum Price Slider"
       className="absolute top-[-5px] w-full appearance-none bg-transparent pointer-events-none"
@@ -1101,8 +1100,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
       onChange={(e) => {
         const newVal = Math.max(Number(e.target.value), tempMinVal + 1);
         setTempMaxVal(newVal);
-        const newPrice = Math.round((newVal / 100) * (MAX_PRICE - MIN_PRICE) + MIN_PRICE);
-        setTempMaxPrice(newPrice);
+        setTempMaxPrice(valueToPrice(newVal)); // Sync numeric input
       }}
       aria-label="Maximum Price Slider"
       className="absolute top-[-5px] w-full appearance-none bg-transparent pointer-events-none"
@@ -1118,46 +1116,37 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
         background: white;
         border: 3px solid #091019;
         cursor: pointer;
-        position: relative;
-      }
-      input[type="range"]::-moz-range-thumb {
-        pointer-events: auto;
-        height: 20px;
-        width: 20px;
-        border-radius: 50%;
-        background: white;
-        border: 3px solid #091019;
-        cursor: pointer;
       }
     `}</style>
   </div>
 
-  {/* Numeric inputs */}
+  {/* Number Boxes */}
   <div className="flex items-center justify-between gap-2 mt-3">
     <input
       type="number"
       value={tempMinPrice}
+      min={PRICE_MIN}
+      max={tempMaxPrice - 1}
       onChange={(e) => {
-        const val = Math.max(MIN_PRICE, Number(e.target.value));
-        setTempMinPrice(val);
-        const valPercent = ((val - MIN_PRICE) / (MAX_PRICE - MIN_PRICE)) * 100;
-        setTempMinVal(Math.min(valPercent, tempMaxVal - 1));
+        const newPrice = Number(e.target.value);
+        setTempMinPrice(newPrice);
+        setTempMinVal(priceToValue(newPrice)); // Sync slider
       }}
       aria-label="Minimum Price"
-      className="border border-LightWhite w-20 px-3 py-2 rounded-[8px] font-Roboto text-PrimaryBlack font-normal text-[16px]"
+      className="border border-LightWhite w-20 px-3 py-2 rounded-[8px] font-Roboto text-PrimaryBlack font-normal text-[16px] leading-[24px] tracking-[0px]"
     />
-
     <input
       type="number"
       value={tempMaxPrice}
+      min={tempMinPrice + 1}
+      max={PRICE_MAX}
       onChange={(e) => {
-        const val = Math.min(MAX_PRICE, Number(e.target.value));
-        setTempMaxPrice(val);
-        const valPercent = ((val - MIN_PRICE) / (MAX_PRICE - MIN_PRICE)) * 100;
-        setTempMaxVal(Math.max(valPercent, tempMinVal + 1));
+        const newPrice = Number(e.target.value);
+        setTempMaxPrice(newPrice);
+        setTempMaxVal(priceToValue(newPrice)); // Sync slider
       }}
       aria-label="Maximum Price"
-      className="border border-LightWhite w-20 px-3 py-2 rounded-[8px] font-Roboto text-PrimaryBlack font-normal text-[16px]"
+      className="border border-LightWhite w-20 px-3 py-2 rounded-[8px] font-Roboto text-PrimaryBlack font-normal text-[16px] leading-[24px] tracking-[0px]"
     />
   </div>
 </div>
@@ -1212,7 +1201,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                 onClick={() => {
                   setTempPlanTier("");
                   setTempMinPrice(0);
-                  setTempMaxPrice(100);
+                  setTempMaxPrice(1000);
                   setTempSelectedFeatures([]);
                   setTempMinVal(0);
                   setTempMaxVal(100);
@@ -1220,11 +1209,11 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                   // Also reset main filters
                   setPlanTier("");
                   setMinPrice(0);
-                  setMaxPrice(100);
+                  setMaxPrice(1000);
                   setSelectedFeatures([]);
                 }}
                 title='Reset Filters'
-                area-label='Reset Filters'
+                aria-label='Reset Filters'
                 className="w-1/2 rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-5 py-[13px] transition-all hover:scale-[1.02] hover:bg-[#F3F3F3]"
               >
                 Reset
@@ -1241,7 +1230,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                   setShowFilters(false);
                 }}
                 title='Apply Filters'
-                area-label='Apply Filters'
+                aria-label='Apply Filters'
                 className="flex items-center justify-center w-1/2 rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-[13px] font-normal leading-[16px] tracking-[0.08px] text-base gap-2 transition-all hover:scale-[1.02] hover:bg-[#DD5827]"
               >
                 Apply Filters

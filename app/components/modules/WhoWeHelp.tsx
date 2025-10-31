@@ -2,6 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import type { SanityWhoWeHelp } from "~/lib/sanity";
 import CheckArrow from "~/components/icons/CheckArrow";
 import WhiteChevron from "~/components/icons/WhiteChevron";
+import WhiteChevron2 from "~/components/icons/WhiteChevron2";
 import BlackChevron from "~/components/icons/BlackChevron";
 import BlackwhiteChevron from "~/components/icons/BlackwhiteChevron";
 import RightArrowWhite from '~/components/icons/RightArrowWhite';
@@ -113,7 +114,7 @@ export default function HomeHero({ data }: Props) {
             tabIndex={canScrollLeft ? 0 : -1} // Prevent focus when disabled
           >
             <span className="sr-only">(scroll left)</span>
-            <BlackChevron />
+              {canScrollLeft ? <WhiteChevron2 /> : <BlackChevron />}
           </button>
  
           <div

@@ -175,9 +175,9 @@ useEffect(() => {
 
                 {/* Dropdown submenu */}
                 {item?.hasSubmenu && item?.subMenu && (
-                    <div className="absolute z-[2] left-0 mt-2 bg-white border border-LightWhite shadow-md rounded-[6px] hidden group-hover:block min-w-[100px]">
-                      <ul className="py-2">
-                        {item?.subMenu.map((sub, i) => {
+                    <div className="absolute z-[2] left-0 pt-[15px] hidden group-hover:block min-w-[100px]">
+                      <div className="min-w-[812px] p-6 rounded-[20px] border border-[#cccccc] bg-white shadow-[0_4px_14px_0_rgba(0,0,0,0.05)] grid md:grid-cols-2">
+                        {/* {item?.subMenu.map((sub, i) => {
                           const localizedUrl = usePrefixPathWithLocale(sub?.url) ?? "#";
 
                           return (
@@ -190,8 +190,40 @@ useEffect(() => {
                               </Link>
                             </li>
                           );
-                        })}
-                      </ul>
+                        })} */}
+                        <div className="pr-8 border-r border-LightWhite">
+                          <p className="mb-5 font-Roboto text-PrimaryBlack font-medium leading-[28px] md:leading-[28px] text-[20px] md:text-[20px] tracking-[0px]">Top US States</p>
+                          <ul className="flex flex-col gap-4">
+                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">California</Link></li>
+                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Florida</Link></li>
+                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Texas</Link></li>
+                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Georgia</Link></li>
+                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">New York</Link></li>
+                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">North Carolina</Link></li>
+                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Wyoming</Link></li>
+                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Delaware</Link></li>
+                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Illinois</Link></li>
+                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Colorado</Link></li>
+                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">See All Locations</Link></li>
+                          </ul>
+                        </div>
+                        <div className="pl-8">
+                          <p className="mb-5 font-Roboto text-PrimaryBlack font-medium leading-[28px] md:leading-[28px] text-[20px] md:text-[20px] tracking-[0px]">Top Countries</p>
+                          <ul className="flex flex-col gap-4">
+                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">United States</Link></li>
+                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Canada</Link></li>
+                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">United Kingdom</Link></li>
+                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Australia </Link></li>
+                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Hong Kong </Link></li>
+                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">China</Link></li>
+                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Ireland </Link></li>
+                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Taiwan</Link></li>
+                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Indonesia </Link></li>
+                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Singapore </Link></li>                                                                                                                                          
+                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">See All Locations</Link></li>
+                          </ul>
+                        </div>
+                      </div>
                     </div>
                   )}
 
@@ -345,7 +377,7 @@ useEffect(() => {
 
               {getStartedButton && (
                 <Link
-                  to="create-account"
+                  to={usePrefixPathWithLocale('create-account')}
                   className="w-fit rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-3 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2 transition-all hover:scale-[1.02] hover:bg-[#DD5827]"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
@@ -442,7 +474,7 @@ useEffect(() => {
             {loginButton?.label || "Login"}
           </Link> */}
           <Link
-            to={getStartedButton?.link ?? "/account/register"}
+            to={usePrefixPathWithLocale('create-account')}
             className="hidden md:flex rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-4 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2 transition-all hover:scale-[1.02] hover:bg-[#DD5827]"
           >
             {getStartedButton?.label || "Get Started"} 
