@@ -167,9 +167,9 @@ type FormMode = 'default' | 'inline';
                   //Call Anytime Billing Purchase API
               
                   const billingPayload = {
-                    locationId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+                    locationId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890", //D
                     locationUnitId: "b2c3d4e5-f6a7-8901-bcde-f12345678901",
-                    customerId: "c3d4e5f6-a7b8-9012-cdef-123456789012",
+                    customerId: "c3d4e5f6-a7b8-9012-cdef-123456789012", //set user_id in metafields
                     bundle: null,
                     subscription: {
                       providerId: "d4e5f6a7-b8c9-0123-def1-234567890123",

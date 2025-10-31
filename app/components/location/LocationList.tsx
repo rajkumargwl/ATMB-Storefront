@@ -659,19 +659,23 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                 </button> */}
                 <button
                 onClick={() => {
+                  alert("Redirecting to product page...");
                   const currentUrlParams = new URLSearchParams(window.location.search);
                   const variantId = currentUrlParams.get("variantId");
 
                   // Build query string with locationId
                   const queryParams = new URLSearchParams();
                   queryParams.set("locationId", loc._id);
+                  queryParams.set("variantId", variantId);
                   const bundlePDP = getPrefixedPath(`/PDP/bundle-product?${queryParams.toString()}`);
                   const virtualPDP = getPrefixedPath(`/PDP/virtual-mailbox?${queryParams.toString()}`);
 
                   if (variantId) {
+                    alert(bundlePDP);
                     // If variantId exists, add it and redirect to bundle-product
-                    queryParams.set("variantId", variantId);
+                   
                     navigate(bundlePDP);
+                    alert("after bundle pdp"+bundlePDP);
                   } else {
                     // Otherwise, redirect to virtual-mailbox only with locationId
                     navigate(virtualPDP);
