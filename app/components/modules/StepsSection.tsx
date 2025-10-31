@@ -1,4 +1,5 @@
 import React from "react";
+import RightArrowWhite from '~/components/icons/RightArrowWhite';
  
 type Step = {
   icon?: {
@@ -111,9 +112,12 @@ export default function StepsSection({
         {ctaText && (
           <a
             href={ctaUrl ?? "#"}
-            className="flex items-center justify-center w-[249px] mx-auto md:w-[296px] h-[44px] md:h-[52px] rounded-full bg-DarkOrange px-4 py-3 text-white  font-Roboto font-normal text-[16px] md:text-[16px] leading-[16px] tracking-[0.08px] "
+            className="group relative flex items-center justify-center w-[249px] mx-auto md:w-[296px] h-[44px] md:h-[52px] rounded-full bg-DarkOrange px-4 py-3 text-white  font-Roboto font-normal text-[16px] md:text-[16px] leading-[16px] tracking-[0.08px] overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]"
           >
-            {ctaText}
+            
+                <span className="relative flex items-center">{ctaText} <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
+              <RightArrowWhite />
+            </span></span>
           </a>
         )}
       </div>
