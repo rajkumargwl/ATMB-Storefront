@@ -463,19 +463,19 @@ export default function Register() {
                                       </label>
                   
                                       {/* Desktop: inside input */}
-                                      <span className="hidden md:block absolute right-4 top-1/2 -translate-y-1/2 text-[#FF6600] text-[14px] cursor-pointer">
+                                      {/* <span className="hidden md:block absolute right-4 top-1/2 -translate-y-1/2 text-[#FF6600] text-[14px] cursor-pointer">
                                         Send Verification Code
-                                      </span>
+                                      </span> */}
                                     </div>
                   
                                     {/* Mobile: below input */}
-                                    <span className="block md:hidden text-center text-[#FF6600] text-[14px] cursor-pointer">
+                                    {/* <span className="block md:hidden text-center text-[#FF6600] text-[14px] cursor-pointer">
                                       Send Verification Code
-                                    </span>
+                                    </span> */}
                                   </div>
                   
                                   {/* Verification Code Inputs */}
-                                  <div className="mt-5 flex flex-col relative">
+                                  {/* <div className="mt-5 flex flex-col relative">
                                     <label
                                       htmlFor="VerificationCode"
                                       aria-label='Enter Verification Code'
@@ -517,7 +517,7 @@ export default function Register() {
                                         />
                                       ))}
                                     </div>
-                                  </div>
+                                  </div> */}
                   
                                   {/* Buttons */}
                                   <button
