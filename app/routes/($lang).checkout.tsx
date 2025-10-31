@@ -122,7 +122,7 @@ useEffect(() => {
   if (cart) {
     try {
       localStorage.setItem("checkoutCart", JSON.stringify(cart));
-      console.log("Cart updated in localStorage");
+      console.log("Cart updated in localStorage",JSON.stringify(cart));
     } catch (error) {
       console.error("Failed to update cart in localStorage:", error);
     }

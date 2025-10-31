@@ -659,7 +659,6 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                 </button> */}
                 <button
                 onClick={() => {
-                  alert("Redirecting to product page...");
                   const currentUrlParams = new URLSearchParams(window.location.search);
                   const variantId = currentUrlParams.get("variantId");
 
@@ -671,11 +670,8 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                   const virtualPDP = getPrefixedPath(`/PDP/virtual-mailbox?${queryParams.toString()}`);
 
                   if (variantId) {
-                    alert(bundlePDP);
                     // If variantId exists, add it and redirect to bundle-product
-                   
                     navigate(bundlePDP);
-                    alert("after bundle pdp"+bundlePDP);
                   } else {
                     // Otherwise, redirect to virtual-mailbox only with locationId
                     navigate(virtualPDP);

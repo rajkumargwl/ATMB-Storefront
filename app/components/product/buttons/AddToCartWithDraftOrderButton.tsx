@@ -25,6 +25,7 @@ type FormMode = 'default' | 'inline';
     buttonClassName,
     customerId,
     billingConfig,
+    cart,
     ...props
   }: {
     children?: React.ReactNode;
@@ -33,6 +34,7 @@ type FormMode = 'default' | 'inline';
     mode?: 'default' | 'inline';
     buttonClassName?: string;
     customerId: string | null;
+    cart?: any;
     billingConfig?: {
       baseUrl: string;
       subscriptionKey: string;
@@ -76,71 +78,37 @@ type FormMode = 'default' | 'inline';
                     const cartId = fetcher.data.cart.id;
                     const cartRes = await fetch(`/api/cart/${btoa(cartId)}`);
                     const fullCart = await cartRes.json();
-                    console.log("fullCartttt", fullCart);
-  
-                    const edges = fullCart?.lines?.edges;
+                    
+                   // const edges = fullCart?.lines?.edges;
+                    const edges = cart?.lines?.edges;
                     if (!edges || !Array.isArray(edges)) {
-                      console.warn("⚠️ No valid cart lines found in fullCart:", fullCart);
+                      console.warn("No valid cart lines found in fullCart:", fullCart);
                       navigate("/payment-fail");
                       return;
                     }
-        
+                    
                     // Extract cart lines
                     const cartLines = edges.map((l: any) => ({
                       variantId: l.node?.merchandise?.id,
                       quantity: l.node?.quantity ?? 1,
                     }));
                     
-                    let storedCart: any[] = [];
-                    try {
-                      const raw = localStorage.getItem("checkoutCart");
-                      const parsed = raw ? JSON.parse(raw) : [];
-                      if (Array.isArray(parsed)) {
-                        storedCart = parsed;
-                      } else {
-                        console.warn("checkoutCart is not an array, resetting it:", parsed);
-                        storedCart = [];
-                      }
-                    } catch (err) {
-                      console.error("Failed to parse checkoutCart:", err);
-                      storedCart = [];
-                    }
-
-                    // Merge with new cart lines
-                    const mergedCart = [...storedCart, ...cartLines];
-
-                    // Deduplicate by variantId
-                    const uniqueCart = Object.values(
-                      mergedCart.reduce((acc: any, item: any) => {
-                        if (acc[item.variantId]) {
-                          acc[item.variantId].quantity += item.quantity;
-                        } else {
-                          acc[item.variantId] = { ...item };
-                        }
-                        return acc;
-                      }, {})
-                    );
-        
-                    localStorage.setItem("checkoutCart", JSON.stringify(uniqueCart));
-        
                     // Create Draft Order
                     const draftRes = await fetch("/api/create-draft-order", {
                       method: "POST",
                       headers: { "Content-Type": "application/json" },
                       body: JSON.stringify({
-                        lines: uniqueCart,
+                        lines: cartLines,
                         customerId,
                       }),
                     });
                     const draftData = await draftRes.json();
-                    console.log("response:", draftData);
-
+              
                     if (draftData?.data?.draftOrderCreate?.draftOrder?.id) {
                       
                       let accessToken = "";
 
                       try {
-                       
                         const tokenResponse = await fetch(`${billingConfig?.baseUrl}/auth/token`, {
                           method: "POST",
                           headers: {
@@ -168,17 +136,17 @@ type FormMode = 'default' | 'inline';
               
                   const billingPayload = {
                     locationId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890", //D
-                    locationUnitId: "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+                    locationUnitId: "b2c3d4e5-f6a7-8901-bcde-f12345678901",//static
                     customerId: "c3d4e5f6-a7b8-9012-cdef-123456789012", //set user_id in metafields
                     bundle: null,
                     subscription: {
-                      providerId: "d4e5f6a7-b8c9-0123-def1-234567890123",
-                      label: "Monthly Premium Subscription",
-                      culture: "en-US",
-                      currency: "USD",
+                      providerId: "d4e5f6a7-b8c9-0123-def1-234567890123",//s
+                      label: "Monthly Premium Subscription",//d
+                      culture: "en-US",//static
+                      currency: "USD",//static
                       items: [
                         {
-                          productId: "e5f6a7b8-c9d0-1234-ef12-345678901234",
+                          productId: "e5f6a7b8-c9d0-1234-ef12-345678901234",//metafields
                           providerId: "d4e5f6a7-b8c9-0123-def1-234567890123",
                           isChargeProrated: false,
                           label: "Premium License - Monthly",
