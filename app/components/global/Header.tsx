@@ -204,7 +204,7 @@ useEffect(() => {
                             <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Delaware</Link></li>
                             <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Illinois</Link></li>
                             <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Colorado</Link></li>
-                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">See All Locations</Link></li>
+                            <li><Link to="/country-location" className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">See All Locations</Link></li>
                           </ul>
                         </div>
                         <div className="pl-8">
@@ -220,7 +220,7 @@ useEffect(() => {
                             <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Taiwan</Link></li>
                             <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Indonesia </Link></li>
                             <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Singapore </Link></li>                                                                                                                                          
-                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">See All Locations</Link></li>
+                            <li><Link  to="/country-location" className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">See All Locations</Link></li>
                           </ul>
                         </div>
                       </div>
