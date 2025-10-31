@@ -17,7 +17,7 @@ type PlansWithoutBundlesProps = {
   };
 };
  
-export default function PlansWithoutBundles({product,planData}: PlansWithoutBundlesProps) {
+export default function PlansWithoutBundles({product,planData,location}: PlansWithoutBundlesProps) {
   const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
   let currencyCode = selectedLocale?.currency || 'USD';
     
@@ -140,7 +140,7 @@ export default function PlansWithoutBundles({product,planData}: PlansWithoutBund
               'Appointment scheduling',
               'Appointment scheduling App',
             ];
-
+ 
             let pricewithobj = {
               amount: displayPrice,
               currencyCode: currencyCode,
@@ -175,7 +175,8 @@ export default function PlansWithoutBundles({product,planData}: PlansWithoutBund
                 )}
                 <div>
                 <h3 className="mb-5 md:mb-6 font-Roboto text-PrimaryBlack font-semibold leading-[28px] md:leading-[31.2px] text-[20px] md:text-[24px] tracking-[-0.3px] md:tracking-[-0.36px]">{variant.title}</h3>
-                <p className="mb-5 md:mb-6 font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[38.4px] text-[24px] md:text-[32px] tracking-[-0.36px] md:tracking-[-0.48px]">
+                <p className="mb-1 font-Roboto text-[#4B5563] font-normal text-[14px] leading-[21px] tracking-[0px]">Starting from </p>
+                <p className="flex flex-row items-end mb-5 md:mb-6 font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[38.4px] text-[24px] md:text-[32px] tracking-[-0.36px] md:tracking-[-0.48px]">
                   <Money data={{ amount: displayPrice, currencyCode: currencyCode }}/>
                   <span className="font-Roboto text-[#4B5563] font-normal text-[14px] leading-[21px] tracking-[0px]">
                     /{billingCycle}
@@ -184,18 +185,17 @@ export default function PlansWithoutBundles({product,planData}: PlansWithoutBund
  
                 <ul className="flex flex-col gap-4 mb-8 md:mb-10 pt-5 md:pt-6 border-t border-LightWhite">
                   {features.map((f) => (
-                    <li key={f} className='flex items-center gap-3 font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]'>
+                    <li key={f} className='flex items-start gap-3 font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]'>
                       <span className="flex items-center justify-center w-[24px] h-[24px] min-w-[24px]"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none"><path d="M16.5544 0.110975C16.8206 0.305975 16.8806 0.680975 16.6856 0.950975L6.18563 15.351C6.08063 15.4935 5.92313 15.5835 5.74688 15.5947C5.57063 15.606 5.40188 15.546 5.27438 15.4222L0.174375 10.3222C-0.058125 10.0897 -0.058125 9.70722 0.174375 9.47472C0.406875 9.24222 0.789375 9.24222 1.02188 9.47472L5.62688 14.0797L15.7144 0.245975C15.9094 -0.0202754 16.2844 -0.0802754 16.5544 0.114725V0.110975Z" fill="#091019"></path></svg></span>
                        {f}</li>
                   ))}
                 </ul>
                 </div>
- 
                 <ReplacePlanAddToCartButton
                   selectedVariant={variant}
                   replaceLineId={replaceLineId}
-                  locationProperties={[]}
-                  buttonClassName={`w-full h-[44px] md:h-[52px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-white md:text-PrimaryBlack border border-DarkOrange md:border-[#091019] px-4 py-[12px] bg-DarkOrange md:bg-white transition-all duration-300 hover:bg-DarkOrange hover:text-white hover:border-DarkOrange ${
+                  locationProperties={location}
+                  buttonClassName={`w-full h-[44px] md:h-[52px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-white md:text-PrimaryBlack border border-DarkOrange md:border-[#091019] px-4 py-[12px] bg-DarkOrange md:bg-white transition-all duration-300 hover:bg-DarkOrange hover:text-white hover:border-DarkOrange group relative overflow-hidden transition-all  flex items-center justify-center ${
                     isMostPopular
                       ? 'w-full h-[44px] md:h-[52px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-white md:text-PrimaryBlack border border-DarkOrange md:border-[#091019] px-4 py-[12px] bg-DarkOrange md:bg-white hover:bg-DarkOrange hover:text-white hover:border-DarkOrange'
                       : 'w-full h-[44px] md:h-[52px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-white md:text-PrimaryBlack border border-DarkOrange md:border-[#091019] px-4 py-[12px] bg-DarkOrange md:bg-white hover:bg-DarkOrange hover:text-white hover:border-DarkOrange'

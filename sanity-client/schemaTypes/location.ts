@@ -126,6 +126,7 @@ export default defineType({
                   { title: 'Gold', value: 'GOLD' },
                   { title: 'Unlimited', value: 'UNLIMITED' },
                   { title: 'Site', value: 'SITE' },
+                  { title: 'Mailbox', value: 'Mailbox' },
                 ],
                 layout: 'checkbox', // ✅ multiple selection allowed
               },

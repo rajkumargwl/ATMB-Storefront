@@ -535,6 +535,9 @@ body.no-scroll {
 .news-detail-sidebar p:first-child strong {
   font-weight: 600;
 }
+.faq-answer strong {
+  font-weight: 500;
+}
 .business-desc p {
     font-size: 16px;
     font-weight: 400;
