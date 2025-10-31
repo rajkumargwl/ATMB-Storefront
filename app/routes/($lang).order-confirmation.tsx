@@ -111,7 +111,7 @@ export default function CheckoutPage() {
     const stored = localStorage.getItem("checkoutCart");
     if (stored) {
       setCartData(JSON.parse(stored));
-      //localStorage.removeItem("checkoutCart"); 
+      localStorage.removeItem("checkoutCart"); 
     }
   }, []);
   
@@ -203,6 +203,7 @@ export default function CheckoutPage() {
               billingConfig={billingConfig} 
               buttonClassName="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold transition"
               text="Add Virtual Phone"
+              cart={cart}
             /> 
         </div>
 
@@ -245,6 +246,7 @@ export default function CheckoutPage() {
               billingConfig={billingConfig} 
               buttonClassName="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold transition"
               text="Add Business Accelerator"
+              cart={cart}
             /> 
         </div>
       </div>

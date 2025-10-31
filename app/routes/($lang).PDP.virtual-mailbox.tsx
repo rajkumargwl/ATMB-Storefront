@@ -124,8 +124,7 @@ export default function Plans() {
   const {location, product, page} = useLoaderData<typeof loader>();
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
-  console.log('Page data:', page);
-  console.log('Location data:', location);
+
   const highlights = Array.from(
     new Set(
       location.featureList
@@ -134,23 +133,24 @@ export default function Plans() {
     )
   );
 
-  // const services = Array.from(
-  //   new Set(
-  //     location.featureList
-  //       .filter((feature) => feature.class !== "HIGHLIGHT")
-  //       .map((feature) => feature.label)
-  //   )
-  // );
-  // this below code is as per the New Schema of Locations 
-  const services = Array.from(
-  new Set(
-    (location.featureList || [])
-      .filter((item) => item.feature?.class !== "HIGHLIGHT")
-      .map((item) => item.feature?.label)
-      .filter(Boolean) // remove undefined/null
-  )
-);
 
+  const services = Array.from(
+    new Set(
+      location.featureList
+        .filter((feature) => feature.class === "Mail")
+        .map((feature) => feature.label)
+    )
+  );
+  // this below code is as per the New Schema of Locations 
+//   const services = Array.from(
+//   new Set(
+//     (location.featureList || [])
+//       .filter((item) => item.feature?.class === "Mail")
+//       .map((item) => item.feature?.label)
+//       .filter(Boolean) // remove undefined/null
+//   )
+// );
+console.log('services:', services);
 
   const variants = (product?.variants?.nodes ?? []) as ProductVariant[];
  
@@ -189,7 +189,7 @@ export default function Plans() {
   useEffect(() => {
     const storedLineId = sessionStorage.getItem('replaceLineId');
     if (storedLineId) setReplaceLineId(storedLineId);
-    console.log('Replace line ID from sessionStorage:', storedLineId);
+    //console.log('Replace line ID from sessionStorage:', storedLineId);
   }, []);
  
   return (
