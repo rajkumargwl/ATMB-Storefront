@@ -81,6 +81,7 @@ export default async function handleRequest(
       'ws://127.0.0.1:*',
       'ws://*.tryhydrogen.dev:*',
       'https://maps.googleapis.com',
+      'https://api.hsforms.com'
     ],
   });
 
