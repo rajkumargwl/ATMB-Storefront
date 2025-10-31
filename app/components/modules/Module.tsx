@@ -120,7 +120,7 @@ type Props = {
 
 export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery, bundles, pageType = 'default',highlights,productData, location}: Props) { // 争 Set default pageType
  
- console.log("highlights in module.tsx", highlights);
+
   // Helper boolean for conditional rendering
   const isOperatorPage = pageType === 'operator';
 

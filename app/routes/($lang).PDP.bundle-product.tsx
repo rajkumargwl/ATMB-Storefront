@@ -91,7 +91,7 @@ export default function BundleDetails() {
     selectedVariant: ProductVariant;
   }>();
   
-  const { addLineItems } = useCart();
+  //const { addLineItems } = useCart();
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
   const locationProperties = Object.entries(location).map(([key, value]) => ({
     key,

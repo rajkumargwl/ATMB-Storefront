@@ -22,11 +22,11 @@ export const action: ActionFunction = async ({ request, context }) => {
   }
 
   try {
-    // ✅ Create a subscription for recurring price
+    // Create a subscription for recurring price
     const subscription = await stripe.subscriptions.create({
       customer: customerId,
       items: [{ price: priceId }],
-      payment_behavior: "default_incomplete", // or "error_if_incomplete"
+      payment_behavior: "default_incomplete", 
       expand: ["latest_invoice.payment_intent"],
     });
 
