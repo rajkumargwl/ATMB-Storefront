@@ -53,8 +53,8 @@ tabCards: data.individualProductsTab.plans || [],
 {
 id: "bundles",
 tabName: "Bundles",
-heading: "Bundles",
-description: "Choose from our curated Shopify bundles.",
+heading: "Simple, Transparent Pricing Plans",
+description: "Choose Choose the plan that fits your needs — from basic mailbox services to feature-packed plans. our curated Shopify bundles.",
 tabCards: [], // no Sanity bundles
 },
 ];
