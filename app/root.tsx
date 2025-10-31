@@ -262,7 +262,7 @@ export default function App() {
 
   useAnalytics(hasUserConsent);
   const location = useLocation();
-  const hideHeaderFooterRoutes = ["/payment-success", "/payment-fail", "/order-confirmation"];
+  const hideHeaderFooterRoutes = ["/payment-success", "/payment-fail", "/order-confirmation", "/create-account"];
   // const hideHeaderFooter = hideHeaderFooterRoutes.includes(location.pathname);
   const hideHeaderFooter = hideHeaderFooterRoutes.some((route) =>
     location.pathname.endsWith(route)
