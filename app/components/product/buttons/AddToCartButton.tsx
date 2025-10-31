@@ -16,6 +16,7 @@ import {usePageAnalytics} from '~/hooks/usePageAnalytics';
 import { DEFAULT_LOCALE, usePrefixPathWithLocale } from '~/lib/utils';
 import { useRootLoaderData } from '~/root';
 
+
 type FormMode = 'default' | 'inline';
 
 export default function AddToCartButton({

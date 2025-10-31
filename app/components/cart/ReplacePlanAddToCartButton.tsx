@@ -24,7 +24,8 @@ export default function ReplacePlanAddToCartButton({
 
   // If replacing, first remove the old one
   if (replaceLineId) {
-    console.log('ReplacePlanAddToCartButton - replaceLineId:', replaceLineId);
+   // console.log('ReplacePlanAddToCartButton - replaceLineId:', replaceLineId);
+   console.log('Location Properties:', locationProperties);
     return (
         <CartForm
         route={usePrefixPathWithLocale('/cart')}
@@ -35,7 +36,11 @@ export default function ReplacePlanAddToCartButton({
             {
               merchandiseId: selectedVariant.id,
               quantity: 1,
-              attributes: locationProperties,
+             // attributes: locationProperties,
+             attributes: Object.entries(locationProperties).map(([key, value]) => ({
+              key,
+              value: String(value ?? ''),
+            })),
             },
           ],
           redirectTo: usePrefixPathWithLocale('/cart'),
@@ -58,7 +63,11 @@ export default function ReplacePlanAddToCartButton({
           {
             merchandiseId: selectedVariant.id,
             quantity: 1,
-            attributes: locationProperties,
+           // attributes: locationProperties,
+           attributes: Object.entries(locationProperties).map(([key, value]) => ({
+            key,
+            value: String(value ?? ''),
+          })),
           },
         ],
         redirectTo: usePrefixPathWithLocale('/cart'),
