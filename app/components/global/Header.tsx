@@ -20,10 +20,21 @@ type HeaderProps = {
   data: {
     logo?: { url: string };
     menu: {
-      hasSubmenu: boolean;
       label: string;
       url?: string | null;
-      subMenu?: { label: string; url?: string | null }[] | null;
+      hasSubmenu: boolean;
+      submenuType?: 'regular' | 'mega' | null;
+      subMenu?: {
+        label: string;
+        url?: string | null;
+      }[] | null;
+      megaMenu?: {
+        title: string;
+        links: {
+          label: string;
+          url?: string | null;
+        }[];
+      }[] | null;
     }[];
     icon1?: { url: string };
     icon2?: { url: string };
@@ -174,7 +185,7 @@ useEffect(() => {
 
 
                 {/* Dropdown submenu */}
-                {item?.hasSubmenu && item?.subMenu && (
+                {item?.hasSubmenu && item?.submenuType === "mega" && item?.megaMenu?.length > 0 && (
                     <div className="absolute z-[2] left-0 pt-[15px] hidden group-hover:block min-w-[100px]">
                       <div className="min-w-[812px] p-6 rounded-[20px] border border-[#cccccc] bg-white shadow-[0_4px_14px_0_rgba(0,0,0,0.05)] grid md:grid-cols-2">
                         {/* {item?.subMenu.map((sub, i) => {
@@ -191,7 +202,33 @@ useEffect(() => {
                             </li>
                           );
                         })} */}
-                        <div className="pr-8 border-r border-LightWhite">
+                         {item?.megaMenu.map((group: any, gIdx: number) => (
+                          <div
+                            key={gIdx}
+                            className={`${gIdx % 2 === 0 ? "pr-8 border-r border-LightWhite" : "pl-8"} ${
+                              gIdx > 1 ? "mt-[15px]" : ""
+                            }`}
+                          >
+                            <p className="mb-5 font-Roboto text-PrimaryBlack font-medium leading-[28px] md:leading-[28px] text-[20px] md:text-[20px] tracking-[0px]">
+                              {group.title}
+                            </p>
+                            <ul className="flex flex-col gap-4">
+                              {group.links?.map((link: any, lIdx: number) => (
+                                <li key={lIdx}>
+                                  <Link
+                                    to={usePrefixPathWithLocale(link.url ?? "#")}
+                                    aria-label={link.label}
+                                    title={link.label}
+                                    className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]"
+                                  >
+                                    {link.label}
+                                  </Link>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        ))}
+                        {/* <div className="pr-8 border-r border-LightWhite">
                           <p className="mb-5 font-Roboto text-PrimaryBlack font-medium leading-[28px] md:leading-[28px] text-[20px] md:text-[20px] tracking-[0px]">Top US States</p>
                           <ul className="flex flex-col gap-4">
                             <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">California</Link></li>
@@ -222,10 +259,30 @@ useEffect(() => {
                             <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Singapore </Link></li>                                                                                                                                          
                             <li><Link  to="/country-location" className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">See All Locations</Link></li>
                           </ul>
-                        </div>
+                        </div> */}
                       </div>
                     </div>
                   )}
+
+                {item?.hasSubmenu && item?.submenuType === "regular" && item?.subMenu?.length > 0 && (
+                   <div className="min-w-[130px] absolute z-[2] left-0 mt-2 bg-white border border-LightWhite shadow-md rounded-[6px] hidden group-hover:block min-w-[100px]">
+                   <ul className="py-2">
+                     {item?.subMenu.map((sub, i) => {
+                       const localizedUrl = usePrefixPathWithLocale(sub?.url) ?? "#";
+                       return (
+                         <li key={i}>
+                           <Link
+                             to={localizedUrl}
+                             className="block px-4 py-[6px] text-PrimaryBlack hover:text-PrimaryBlack font-normal text-[14px] md:text-[14px] xl:text-[16px] leading-[24px] tracking-[0px]"
+                           >
+                             {sub?.label}
+                           </Link>
+                         </li>
+                       );
+                     })}
+                   </ul>
+                 </div>
+                )}
 
               </div>
             ))}
