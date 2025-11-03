@@ -39,38 +39,66 @@ export async function loader({context, request, params}: LoaderFunctionArgs) {
     try {
       results = await context.sanity.query({
         query: `{
-          "locations": *[_type == "location" && (
-            name match $search ||
-            displayName match $search ||
-            city match $search ||
-            postalCode match $search
-          )][0...10]{
-            _id,
-            displayName,
-            city,
-            stateCode,
-            addressLine1,
-            addressLine2,
-            postalCode,
-            coordinates,
-            "latitude":coordinates.lat,
-            "longitude":coordinates.lng,
-            featureList[]{
-              feature_id,
-              label,
-              description,
-              status,
-              type
-            },
-            ratingList[]{
-              rating_id,
-              type,
-              status,
-              value
-            },
-            planTier,
-            priceRange
-          }
+          "locations": *[_type == "location"]{
+  _id,
+        locationId,
+        displayName,
+        country,
+        countryCode,
+        state,
+        stateCode,
+        city,
+        addressLine1,
+        addressLine2,
+        postalCode,
+        coordinates,
+        "latitude": coordinates.lat,
+        "longitude": coordinates.lng,
+        webkey,
+        planList,
+        createdAt,
+ 
+        featureList[]{
+          "feature_id": feature.feature_id,
+          "label": feature.label,
+          "description": feature.description,
+          "category": feature.category,
+          "class": feature.class,
+          "status": feature.status,
+          "type": feature.type,
+          sort_order,
+          status,
+          type
+        },
+ 
+        ratingList[]{
+          rating_id,
+          value,
+          sort_order,
+          status,
+          type
+        },
+ 
+        attributeList[]{
+          attribute_id,
+          name,
+          value,
+          sort_order,
+          status,
+          type
+        },
+ 
+        calendarList[]{
+          calendar_id,
+          calendar_item_id,
+          day_of_the_week,
+          item_date,
+          label,
+          time_begin,
+          time_end,
+          type
+        }
+
         }`,
         params: {search: searchParam},
       });
@@ -80,34 +108,68 @@ export async function loader({context, request, params}: LoaderFunctionArgs) {
   } 
   else {
     const locations: LocationAPI[] = await context.sanity.query({
-      query: `*[_type == "location"][0...50]{
+query: `*[_type == "location"][0...50]{
         _id,
+        locationId,
         displayName,
-        city,
+        country,
+        countryCode,
+        state,
         stateCode,
+        city,
         addressLine1,
         addressLine2,
         postalCode,
         coordinates,
-        "latitude":coordinates.lat,
-        "longitude":coordinates.lng,
+        "latitude": coordinates.lat,
+        "longitude": coordinates.lng,
+        webkey,
+        planList,
+        createdAt,
+ 
         featureList[]{
-          feature_id,
-          label,
-          description,
+          "feature_id": feature.feature_id,
+          "label": feature.label,
+          "description": feature.description,
+          "category": feature.category,
+          "class": feature.class,
+          "status": feature.status,
+          "type": feature.type,
+          sort_order,
           status,
           type
         },
+ 
         ratingList[]{
           rating_id,
-          type,
+          value,
+          sort_order,
           status,
-          value
+          type
         },
-        planTier,
-        priceRange
+ 
+        attributeList[]{
+          attribute_id,
+          name,
+          value,
+          sort_order,
+          status,
+          type
+        },
+ 
+        calendarList[]{
+          calendar_id,
+          calendar_item_id,
+          day_of_the_week,
+          item_date,
+          label,
+          time_begin,
+          time_end,
+          type
+        }
       }`,
     });
+ 
     results.locations = locations;
   }
 

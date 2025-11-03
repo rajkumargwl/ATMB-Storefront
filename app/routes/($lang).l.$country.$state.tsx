@@ -32,7 +32,64 @@ console.log("decodedCountry, decodedState", decodedCountry, decodedState);
     context.sanity.query({
       query: /* groq */ `
         *[_type == "location" && country == $country && state == $state]{
-          _id, displayName, city, stateCode, addressLine1, addressLine2, postalCode, coordinates, "latitude":coordinates.lat, "longitude":coordinates.lng, featureList[]{feature_id,label,description,status,type}, ratingList[]{rating_id,type,status,value}, planTier, priceRange
+          _id,
+        locationId,
+        displayName,
+        country,
+        countryCode,
+        state,
+        stateCode,
+        city,
+        addressLine1,
+        addressLine2,
+        postalCode,
+        coordinates,
+        "latitude": coordinates.lat,
+        "longitude": coordinates.lng,
+        webkey,
+        planList,
+        createdAt,
+ 
+        featureList[]{
+          "feature_id": feature.feature_id,
+          "label": feature.label,
+          "description": feature.description,
+          "category": feature.category,
+          "class": feature.class,
+          "status": feature.status,
+          "type": feature.type,
+          sort_order,
+          status,
+          type
+        },
+ 
+        ratingList[]{
+          rating_id,
+          value,
+          sort_order,
+          status,
+          type
+        },
+ 
+        attributeList[]{
+          attribute_id,
+          name,
+          value,
+          sort_order,
+          status,
+          type
+        },
+ 
+        calendarList[]{
+          calendar_id,
+          calendar_item_id,
+          day_of_the_week,
+          item_date,
+          label,
+          time_begin,
+          time_end,
+          type
+        }
         }
       `,
       params: {country: decodedCountry, state: decodedState},
