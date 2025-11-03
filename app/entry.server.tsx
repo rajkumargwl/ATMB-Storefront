@@ -37,6 +37,7 @@ export default async function handleRequest(
       `'unsafe-inline'`,
       'https://fonts.googleapis.com',
       'https://cdn.shopify.com',
+      "https://anytime-mailbox.freshchat.com",
     ],
     scriptSrc: [
       `'self'`,
@@ -50,6 +51,7 @@ export default async function handleRequest(
       'https://www.youtube-nocookie.com',
       'https://in.fw-cdn.com/32520975/1392281.js', // Freshchat preloader
       'https://anytime-mailbox.freshchat.com', // ✅ Freshchat widget domain
+      "https://wchat.freshchat.com", // ✅ Freshchat widget domain
     ],
     fontSrc: [
       `'self'`,
@@ -70,6 +72,7 @@ export default async function handleRequest(
       'https://www.google.com/',
       'https://www.youtube.com',
       'https://www.youtube-nocookie.com',
+      "https://anytime-mailbox.freshchat.com", // ✅ Allow Freshchat iframe
     ],
     connectSrc: [
       `'self'`,
