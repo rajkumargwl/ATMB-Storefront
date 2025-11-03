@@ -1,9 +1,10 @@
 import { useLoaderData, useNavigate } from "@remix-run/react";
 import type { LoaderFunction } from "@remix-run/node";
 import { redirect } from "@shopify/remix-oxygen";
-import { notFound } from "~/lib/utils";
+import { DEFAULT_LOCALE, notFound } from "~/lib/utils";
 import type { Product } from "@shopify/hydrogen/storefront-api-types";
 import { PRODUCT_QUERY } from "~/queries/shopify/product";
+import { useRootLoaderData } from "~/root";
 
 export const loader: LoaderFunction = async ({ context }) => {
 const { env } = context;
@@ -43,6 +44,8 @@ cart,
 export default function CheckoutPage() {
 const { cart } = useLoaderData<typeof loader>();
 const navigate = useNavigate();
+const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
+let currencyCode = selectedLocale?.currency || 'USD';
 
 // Define visible attribute keys
 const VISIBLE_ATTRIBUTES = [
@@ -57,15 +60,15 @@ const VISIBLE_ATTRIBUTES = [
 
 return (
 <>
-{/* Header */} <div className="top-6 border-b border-[#DCDCDC] w-full mx-auto flex items-center justify-center py-4 px-6 md:px-12 lg:px-24 bg-white"> <img
+{/* Header */} <div className="top-6 border-b border-[#DCDCDC] w-full mx-auto flex items-center justify-center py-5 px-5 md:px-25 bg-white"> <img
        src="https://cdn.sanity.io/images/m5xb8z9y/production/6312d6eb4f994397153b67ef3043e166e1f574d4-101x50.svg"
        alt="Anytime Mailbox Logo"
        className="w-[101px]"
      /> </div>
-  <div className="flex flex-col items-center justify-center bg-white px-4">
+  <div className="flex flex-col items-center justify-center bg-white py-10 sm:py-10 sm:px-5">
     {/* Success Icon */}
-    <div className="mt-20 md:mt-24 mb-6">
-      <div className="rounded-full p-4">
+    <div className="">
+      <div className="rounded-full">
         <svg xmlns="http://www.w3.org/2000/svg" width="112" height="112" viewBox="0 0 112 112" fill="none">
           <g clipPath="url(#clip0_2232_18108)">
             <path
@@ -95,13 +98,13 @@ return (
     </div>
 
     {/* Title */}
-    <h1 className="text-2xl md:text-[36px] font-bold text-gray-900 text-center mb-8">
+    <h1 className="text-[24px] md:text-[36px] font-[600] md:leading-[43.2px] md:tracking-[-0.54px] leading-[31.2px] tracking-[-0.36px] text-[#091019] text-center mb-7 mt-7 sm:mb-10">
       Payment Successful — You’re All Set!
     </h1>
 
     {/* Cart Layout */}
     {cart?.lines?.edges?.length > 0 && (
-      <div className="w-full max-w-md border border-gray-200 rounded-xl shadow-sm p-5 mb-8">
+      <>
         {cart.lines.edges.map((edge: any) => {
           const line = edge.node;
           const variant = line.merchandise;
@@ -110,34 +113,36 @@ return (
           const currency = line.cost?.totalAmount?.currencyCode;
 
           return (
+            <div className="w-full max-w-[410px] border border-[#DCDCDC] rounded-xl shadow-sm p-6 mb-2 sm:mb-6">
             <div key={line.id} className="mb-6 last:mb-0">
               <div className="flex items-center gap-3 mb-4">
                 <div className="bg-orange-500 text-white p-2 rounded-full">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                    strokeWidth={2}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8m-9 13V5a2 2 0 012-2h4a2 2 0 012 2v16m-8 0h-4a2 2 0 01-2-2V5"
-                    />
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <mask id="path-1-inside-1_2285_18691" fill="white">
+                      <path d="M11.9996 3.6001C11.9996 2.9376 12.5371 2.4001 13.1996 2.4001C13.8621 2.4001 14.3996 2.9376 14.3996 3.6001C14.3996 4.2626 13.8621 4.8001 13.1996 4.8001C12.5371 4.8001 11.9996 4.2626 11.9996 3.6001ZM15.1996 3.6001C15.1996 2.4951 14.3046 1.6001 13.1996 1.6001C12.0946 1.6001 11.1996 2.4951 11.1996 3.6001C11.1996 4.7051 12.0946 5.6001 13.1996 5.6001C14.3046 5.6001 15.1996 4.7051 15.1996 3.6001ZM14.3996 11.2001V6.5676C14.1471 6.6701 13.8796 6.7401 13.5996 6.7751V11.2001C13.5996 11.6426 13.2421 12.0001 12.7996 12.0001H3.19961C2.75711 12.0001 2.39961 11.6426 2.39961 11.2001V5.9901L6.81711 9.2301C7.52211 9.7451 8.47961 9.7451 9.18211 9.2301L12.5771 6.7401C12.2546 6.6776 11.9496 6.5651 11.6721 6.4126L8.70961 8.5826C8.28711 8.8926 7.71211 8.8926 7.28961 8.5826L2.66961 5.1951C2.49961 5.0701 2.39961 4.8726 2.39961 4.6626C2.39961 4.2976 2.69711 4.0001 3.06211 4.0001H10.0246C10.0071 3.8701 9.99961 3.7351 9.99961 3.6001C9.99961 3.4651 10.0071 3.3301 10.0246 3.2001H3.06211C2.27461 3.2001 1.63211 3.8226 1.60211 4.6001H1.59961V11.2001C1.59961 12.0826 2.31711 12.8001 3.19961 12.8001H12.7996C13.6821 12.8001 14.3996 12.0826 14.3996 11.2001Z"/>
+                    </mask>
+                    <path d="M11.9996 3.6001C11.9996 2.9376 12.5371 2.4001 13.1996 2.4001C13.8621 2.4001 14.3996 2.9376 14.3996 3.6001C14.3996 4.2626 13.8621 4.8001 13.1996 4.8001C12.5371 4.8001 11.9996 4.2626 11.9996 3.6001ZM15.1996 3.6001C15.1996 2.4951 14.3046 1.6001 13.1996 1.6001C12.0946 1.6001 11.1996 2.4951 11.1996 3.6001C11.1996 4.7051 12.0946 5.6001 13.1996 5.6001C14.3046 5.6001 15.1996 4.7051 15.1996 3.6001ZM14.3996 11.2001V6.5676C14.1471 6.6701 13.8796 6.7401 13.5996 6.7751V11.2001C13.5996 11.6426 13.2421 12.0001 12.7996 12.0001H3.19961C2.75711 12.0001 2.39961 11.6426 2.39961 11.2001V5.9901L6.81711 9.2301C7.52211 9.7451 8.47961 9.7451 9.18211 9.2301L12.5771 6.7401C12.2546 6.6776 11.9496 6.5651 11.6721 6.4126L8.70961 8.5826C8.28711 8.8926 7.71211 8.8926 7.28961 8.5826L2.66961 5.1951C2.49961 5.0701 2.39961 4.8726 2.39961 4.6626C2.39961 4.2976 2.69711 4.0001 3.06211 4.0001H10.0246C10.0071 3.8701 9.99961 3.7351 9.99961 3.6001C9.99961 3.4651 10.0071 3.3301 10.0246 3.2001H3.06211C2.27461 3.2001 1.63211 3.8226 1.60211 4.6001H1.59961V11.2001C1.59961 12.0826 2.31711 12.8001 3.19961 12.8001H12.7996C13.6821 12.8001 14.3996 12.0826 14.3996 11.2001Z" fill="#091019"/>
+                    <path d="M14.3996 6.5676H15.5996V4.78536L13.9483 5.45572L14.3996 6.5676ZM13.5996 6.7751L13.4508 5.58436L12.3996 5.71576V6.7751H13.5996ZM2.39961 5.9901L3.10932 5.02246L1.19961 3.6218V5.9901H2.39961ZM6.81711 9.2301L6.1074 10.1977L6.10926 10.1991L6.81711 9.2301ZM9.18211 9.2301L9.8916 10.1979L9.89181 10.1977L9.18211 9.2301ZM12.5771 6.7401L13.2868 7.70774L15.5003 6.08428L12.8054 5.56202L12.5771 6.7401ZM11.6721 6.4126L12.25 5.36094L11.5799 4.99266L10.963 5.44452L11.6721 6.4126ZM8.70961 8.5826L8.0005 7.61452L7.99972 7.61509L8.70961 8.5826ZM7.28961 8.5826L7.99949 7.61509L7.99918 7.61486L7.28961 8.5826ZM2.66961 5.1951L1.95874 6.16188L1.96004 6.16283L2.66961 5.1951ZM10.0246 4.0001V5.2001H11.397L11.2139 3.84L10.0246 4.0001ZM10.0246 3.2001L11.2139 3.36019L11.397 2.0001H10.0246V3.2001ZM1.60211 4.6001V5.8001H2.7567L2.80122 4.64637L1.60211 4.6001ZM1.59961 4.6001V3.4001H0.399609V4.6001H1.59961ZM11.9996 3.6001H13.1996V3.6001V2.4001V1.2001C11.8744 1.2001 10.7996 2.27486 10.7996 3.6001H11.9996ZM13.1996 2.4001V3.6001V3.6001H14.3996H15.5996C15.5996 2.27486 14.5248 1.2001 13.1996 1.2001V2.4001ZM14.3996 3.6001H13.1996V3.6001V4.8001V6.0001C14.5248 6.0001 15.5996 4.92534 15.5996 3.6001H14.3996ZM13.1996 4.8001V3.6001V3.6001H11.9996H10.7996C10.7996 4.92534 11.8744 6.0001 13.1996 6.0001V4.8001ZM15.1996 3.6001H16.3996C16.3996 1.83236 14.9674 0.400098 13.1996 0.400098V1.6001V2.8001C13.6419 2.8001 13.9996 3.15784 13.9996 3.6001H15.1996ZM13.1996 1.6001V0.400098C11.4319 0.400098 9.99961 1.83236 9.99961 3.6001H11.1996H12.3996C12.3996 3.15784 12.7573 2.8001 13.1996 2.8001V1.6001ZM11.1996 3.6001H9.99961C9.99961 5.36784 11.4319 6.8001 13.1996 6.8001V5.6001V4.4001C12.7573 4.4001 12.3996 4.04236 12.3996 3.6001H11.1996ZM13.1996 5.6001V6.8001C14.9674 6.8001 16.3996 5.36784 16.3996 3.6001H15.1996H13.9996C13.9996 4.04236 13.6419 4.4001 13.1996 4.4001V5.6001ZM14.3996 11.2001H15.5996V6.5676H14.3996H13.1996V11.2001H14.3996ZM14.3996 6.5676L13.9483 5.45572C13.7937 5.51845 13.628 5.56221 13.4508 5.58436L13.5996 6.7751L13.7485 7.96583C14.1312 7.91798 14.5005 7.82174 14.851 7.67948L14.3996 6.5676ZM13.5996 6.7751H12.3996V11.2001H13.5996H14.7996V6.7751H13.5996ZM13.5996 11.2001H12.3996C12.3996 10.9799 12.5794 10.8001 12.7996 10.8001V12.0001V13.2001C13.9049 13.2001 14.7996 12.3053 14.7996 11.2001H13.5996ZM12.7996 12.0001V10.8001H3.19961V12.0001V13.2001H12.7996V12.0001ZM3.19961 12.0001V10.8001C3.41985 10.8001 3.59961 10.9799 3.59961 11.2001H2.39961H1.19961C1.19961 12.3053 2.09437 13.2001 3.19961 13.2001V12.0001ZM2.39961 11.2001H3.59961V5.9901H2.39961H1.19961V11.2001H2.39961ZM2.39961 5.9901L1.6899 6.95773L6.1074 10.1977L6.81711 9.2301L7.52682 8.26246L3.10932 5.02246L2.39961 5.9901ZM6.81711 9.2301L6.10926 10.1991C7.23515 11.0216 8.76602 11.023 9.8916 10.1979L9.18211 9.2301L8.47262 8.2623C8.1932 8.46715 7.80907 8.46864 7.52496 8.2611L6.81711 9.2301ZM9.18211 9.2301L9.89181 10.1977L13.2868 7.70774L12.5771 6.7401L11.8674 5.77246L8.47241 8.26246L9.18211 9.2301ZM12.5771 6.7401L12.8054 5.56202C12.6082 5.52379 12.4209 5.45481 12.25 5.36094L11.6721 6.4126L11.0942 7.46426C11.4784 7.67538 11.901 7.8314 12.3488 7.91818L12.5771 6.7401ZM11.6721 6.4126L10.963 5.44452L8.0005 7.61452L8.70961 8.5826L9.41871 9.55067L12.3812 7.38067L11.6721 6.4126ZM8.70961 8.5826L7.99972 7.61509H7.99949L7.28961 8.5826L6.57972 9.5501C7.42472 10.1701 8.5745 10.1701 9.41949 9.5501L8.70961 8.5826ZM7.28961 8.5826L7.99918 7.61486L3.37918 4.22736L2.66961 5.1951L1.96004 6.16283L6.58004 9.55033L7.28961 8.5826ZM2.66961 5.1951L3.38048 4.22832C3.51696 4.32867 3.59961 4.48958 3.59961 4.6626H2.39961H1.19961C1.19961 5.25561 1.48226 5.81153 1.95874 6.16188L2.66961 5.1951ZM2.39961 4.6626H3.59961C3.59961 4.96034 3.35985 5.2001 3.06211 5.2001V4.0001V2.8001C2.03437 2.8001 1.19961 3.63486 1.19961 4.6626H2.39961ZM3.06211 4.0001V5.2001H10.0246V4.0001V2.8001H3.06211V4.0001ZM10.0246 4.0001L11.2139 3.84C11.2048 3.77251 11.1996 3.69201 11.1996 3.6001H9.99961H8.79961C8.79961 3.77818 8.80942 3.96768 8.83534 4.16019L10.0246 4.0001ZM9.99961 3.6001H11.1996C11.1996 3.50818 11.2048 3.42768 11.2139 3.36019L10.0246 3.2001L8.83534 3.04C8.80942 3.23251 8.79961 3.42201 8.79961 3.6001H9.99961ZM10.0246 3.2001V2.0001H3.06211V3.2001V4.4001H10.0246V3.2001ZM3.06211 3.2001V2.0001C1.63011 2.0001 0.45787 3.13183 0.403002 4.55383L1.60211 4.6001L2.80122 4.64637C2.80635 4.51337 2.91911 4.4001 3.06211 4.4001V3.2001ZM1.60211 4.6001V3.4001H1.59961V4.6001V5.8001H1.60211V4.6001ZM1.59961 4.6001H0.399609V11.2001H1.59961H2.79961V4.6001H1.59961ZM1.59961 11.2001H0.399609C0.399609 12.7453 1.65437 14.0001 3.19961 14.0001V12.8001V11.6001C2.97985 11.6001 2.79961 11.4199 2.79961 11.2001H1.59961ZM3.19961 12.8001V14.0001H12.7996V12.8001V11.6001H3.19961V12.8001ZM12.7996 12.8001V14.0001C14.3449 14.0001 15.5996 12.7453 15.5996 11.2001H14.3996H13.1996C13.1996 11.4199 13.0194 11.6001 12.7996 11.6001V12.8001Z" fill="white" mask="url(#path-1-inside-1_2285_18691)"/>
                   </svg>
                 </div>
-                <h2 className="text-lg font-semibold text-gray-800">{productTitle}</h2>
+                <h2 className="text-[18px] font-[500] text-[#091019] leading-[27px]">{productTitle}</h2>
               </div>
-
+          
+              {/* Plan title + price on same line */}
+              <div className="flex justify-between items-center">
+                <div className="font-Roboto text-[14px] font-[400] text-[#091019] leading-[21px] mb-2">
+                  {variant.title} Plan
+                </div>
+                <div className="text-[16px] font-[500] text-[#171717] leading-[24px]">
+                  {currencyCode} {price}{" "}
+                  <span className="text-[16px] font-[500] text-[#4D4E4F] leading-[24px]">/ month</span>
+                </div>
+              </div>
+          
               {/* Filtered attributes display */}
               {line.attributes?.length > 0 && (
                 <div className="flex gap-5 justify-between">
                   <div>
-                    <div className="font-Roboto text-[#091019] font-[400] leading-[21px] text-[14px] mb-2">
-                      {variant.title} Plan
-                    </div>
                     {line.attributes
                       .filter((attr: any) => VISIBLE_ATTRIBUTES.includes(attr.key))
                       .map((attr: any, index: number) => (
@@ -145,8 +150,8 @@ return (
                           key={attr.key}
                           className={`font-Roboto tracking-[0px] ${
                             index === 0
-                              ? "font-semibold text-[18px] text-[#091019] leading-[27px] mb-1"
-                              : "font-normal text-[#4D4E4F] text-[16px] leading-[24px]"
+                              ? "font-[500] text-[18px] text-[#4D4E4F] leading-[27px] mb-1"
+                              : "font-[400] text-[#4D4E4F] text-[18px] leading-[27px]"
                           }`}
                         >
                           {attr.value}
@@ -155,33 +160,19 @@ return (
                   </div>
                 </div>
               )}
-
-              <div className="flex justify-between items-center text-gray-700 mt-3">
-                {/* <p className="text-sm">Qty: {line.quantity}</p> */}
-                <p className="text-sm"></p>
-                <p className="font-medium">
-                  {currency} {price}
-                </p>
-              </div>
+            </div>
             </div>
           );
         })}
-
-        {/* Total */}
-        {/* <div className="mt-4 flex justify-between items-center border-t border-gray-200 pt-4">
-          <span className="text-gray-700 font-medium">Total:</span>
-          <span className="font-semibold text-gray-900">
-            {cart.cost?.totalAmount?.currencyCode} {cart.cost?.totalAmount?.amount}
-          </span>
-        </div> */}
-      </div>
+      </>
     )}
 
     {/* Continue Button */}
         <button
+        aria-label="Continue"
+        title="Continue"
       onClick={async () => {
         try {
-        
           await fetch("/api/clear-cart", { method: "POST" });
           localStorage.removeItem("checkoutCart");
           navigate("/");
@@ -189,7 +180,7 @@ return (
           console.error("Error clearing cart:", error);
         }
       }}
-      className="px-10 py-3 border border-gray-400 rounded-full text-gray-800 font-medium hover:bg-gray-100 transition"
+      className="px-4 py-3 max-w-[236px] w-full border border-gray-400 rounded-full text-gray-800 font-medium hover:bg-gray-100 transition"
     >
       Continue
     </button>

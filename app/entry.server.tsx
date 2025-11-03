@@ -48,6 +48,8 @@ export default async function handleRequest(
       'https://maps.googleapis.com',
       'https://www.youtube.com',
       'https://www.youtube-nocookie.com',
+      'https://in.fw-cdn.com/32520975/1392281.js', // Freshchat preloader
+      'https://anytime-mailbox.freshchat.com', // ✅ Freshchat widget domain
     ],
     fontSrc: [
       `'self'`,
@@ -81,7 +83,8 @@ export default async function handleRequest(
       'ws://127.0.0.1:*',
       'ws://*.tryhydrogen.dev:*',
       'https://maps.googleapis.com',
-      'https://api.hsforms.com'
+      'https://api.hsforms.com',
+      'https://anytime-mailbox.freshchat.com', // ✅ Allow Freshchat API
     ],
   });
 
