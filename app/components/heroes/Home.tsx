@@ -107,11 +107,12 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
     if (item.type === "product") {
       navigate(`/products/${item.handle}`);
     } else if (item.type === "location") {
-      const queryParam = item.name || item.city;
-      navigate(`/sublocations?q=${encodeURIComponent(queryParam)}`);
+      const queryParam = item.displayName || item.city;
+      navigate(`/sublocations?q=${encodeURIComponent(item.displayName || item.city || '')}`);
     }
   }}
 />
+
             {/* Trusted Section */}
             <div className="flex items-center gap-3">
               <div className="flex -space-x-[10px]">
