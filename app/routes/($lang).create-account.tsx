@@ -257,7 +257,22 @@ export default function Register() {
    const rootData = useRootLoaderData();
     const cart = rootData?.cart?._data;
     const lines = cart?.lines?.edges;
-  const { bundleProducts, essentialsProducts,customer} = useLoaderData<typeof loader>();
+    useEffect(() => {
+      function handleMessage(event: MessageEvent) {
+        // Only accept from your domain
+        if (event.origin !== "https://shopifystage.anytimehq.co") return;
+    
+        if (event.data?.token) {
+          console.log("Received token:", event.data.token);
+    
+          // Redirect parent window with token in URL
+          window.location.href = `/account/login?token=${event.data.token}`;
+        }
+      }
+    
+      window.addEventListener("message", handleMessage);
+      return () => window.removeEventListener("message", handleMessage);
+    }, []);
   return (
      <section className="">
           <Suspense fallback={<div className="flex justify-center"><SpinnerIcon /></div>}>

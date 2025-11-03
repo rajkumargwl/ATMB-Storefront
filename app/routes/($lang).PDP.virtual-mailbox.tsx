@@ -128,8 +128,8 @@ export default function Plans() {
   const highlights = Array.from(
     new Set(
       location.featureList
-        .filter((feature) => feature.class === "HIGHLIGHT")
-        .map((feature) => feature.label)
+        .filter((featur) => featur.feature.class === "HIGHLIGHT")
+        .map((featur) => featur.feature.label)
     )
   );
 
@@ -137,8 +137,8 @@ export default function Plans() {
   const services = Array.from(
     new Set(
       location.featureList
-        .filter((feature) => feature.class === "Mail")
-        .map((feature) => feature.label)
+      .filter((featur) => featur.feature.class === "Mail")
+      .map((featur) => featur.feature.label)
     )
   );
   // this below code is as per the New Schema of Locations 

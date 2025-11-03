@@ -46,6 +46,7 @@ import Footer from '~/components/global/Footer';
 import {HEADER_QUERY} from '~/queries/sanity/header';
 import {FOOTER_QUERY} from '~/queries/sanity/footer';
 import {fetchGids, notFound} from '~/lib/utils';
+import { useEffect } from 'react';
 
 const seo: SeoHandleFunction<typeof loader> = ({data}) => ({
   title: data?.layout?.seo?.title,
@@ -268,6 +269,20 @@ export default function App() {
     location.pathname.endsWith(route)
   );
  
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.id = 'freshchat-js-sdk';
+    script.async = true;
+    script.src = 'https://anytime-mailbox.freshchat.com/js/widget.js';
+    script.onload = () => {
+      (window as any).fcWidget?.init({
+        token: 'aa2defea-55b6-45d0-9384-3b4d60196689',
+        host: 'https://anytime-mailbox.freshchat.com',
+      });
+    };
+    document.head.appendChild(script);
+  }, []);
+  
   return (
     <html lang={locale.language}>
       <head>

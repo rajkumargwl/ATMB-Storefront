@@ -38,7 +38,6 @@ export async function loader({context, params}: LoaderFunctionArgs) {
       cache,
     }),
   ]);
-
   const stateMap: Record<string, number> = {};
   locations.forEach((loc: any) => {
     const state = loc.state || 'Unknown';
