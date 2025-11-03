@@ -87,17 +87,17 @@ export default function CheckoutPage() {
 
   return (
     <>
-    <div className=" top-6 border-b border-[#DCDCDC] w-full mx-auto flex items-center justify-center py-4 px-6 md:px-12 lg:px-24 bg-white">
+    <div className="top-6 border-b border-[#DCDCDC] w-full mx-auto flex items-center justify-center py-5 px-5 md:px-25 bg-white">
         <img
           src="https://cdn.sanity.io/images/m5xb8z9y/production/6312d6eb4f994397153b67ef3043e166e1f574d4-101x50.svg"
           alt="Anytime Mailbox Logo"
           className="w-[101px]"
         />
     </div>
-   <div className="flex flex-col items-center text-center justify-center bg-white">
+    <div className="flex flex-col items-center justify-center bg-white py-10 sm:py-10 sm:px-5">
       {/* Success Icon */}
-      <div className="mt-20 md:mt-10 mb-6">
-        <div className="rounded-full p-4">
+      <div className="">
+        <div className="rounded-full">
         <svg width="112" height="112" viewBox="0 0 112 112" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g clip-path="url(#clip0_3650_73970)">
         <path d="M93.1115 93.1226C113.614 72.6201 113.614 39.3789 93.1115 18.8764C72.609 -1.62612 39.3678 -1.62612 18.8653 18.8764C-1.63723 39.3789 -1.63723 72.6201 18.8653 93.1226C39.3678 113.625 72.609 113.625 93.1115 93.1226Z" fill="#FF2E32"/>
@@ -120,30 +120,30 @@ export default function CheckoutPage() {
       </div>
 
       {/* Title */}
-      <h1 className="text-2xl md:text-3xl font-bold text-gray-900 text-center mb-8">
+      <h1 className="text-[24px] md:text-[36px] font-[600] md:leading-[43.2px] md:tracking-[-0.54px] leading-[31.2px] tracking-[-0.36px] text-[#091019] text-center mb-4 mt-7 sm:mb-4">
       Payment Failed!<br className="hidden md:block" /> 
       </h1>
-      <p className="text-[18px] font-[400]">Your card was declined due to invalid details. <br/>Please review your card information and try again</p>
+      <p className="text-[18px] font-[400] leading-[27px] text-[#091019]">Your card was declined due to invalid details. <br/>Please review your card information and try again</p>
 
       {/* Card */}
-      <div className="w-full max-w-md border border-gray-200 rounded-xl shadow-sm p-5 mb-8 mt-9">
-        <div className="flex items-center justify-between gap-3 mb-4">
-          <h2 className="text-lg font-semibold text-gray-800">Transaction details</h2>
-          <p className="font-medium">TXN127358GSJY&9</p>
+      <div className="w-full max-w-md border border-gray-200 rounded-xl shadow-sm p-6 mb-8 mt-7">
+        <div className="flex items-center justify-between gap-4 mb-4">
+          <h2 className="text-[14px] font-[400] text-[#091019] leading-[21px]">Transaction details</h2>
+          <p className="text-[16px] font-[400] text-[#171717] leading-[24px]">TXN127358GSJY&9</p>
         </div>
-        <div className="flex items-center justify-between gap-3 mb-4">
-          <h2 className="text-lg font-semibold text-gray-800">Date & Time</h2>
-          <p className="font-medium">22 Sept, 2025 10:40 AM</p>
+        <div className="flex items-center justify-between gap-4 ">
+          <h2 className="text-[14px] font-[400] text-[#091019] leading-[21px]">Date & Time</h2>
+          <p className="text-[16px] font-[400] text-[#171717] leading-[24px]">22 Sept, 2025 10:40 AM</p>
         </div>
         
       </div>
 
       {/* Continue Button */}
      <div className="flex gap-9">
-        <button className="px-10 py-3 border border-gray-400 rounded-full text-gray-800 font-medium hover:bg-gray-100 transition" onClick={() => navigate("/checkout")}>
+        <button aria-label=" Go Back to Checkout" title=" Go Back to Checkout" className="text-[16px] leading-[16px] tracking-[0.08px] px-4 py-3 w-[236px] border border-[#091019] rounded-full text-[#091019] font-[400]" onClick={() => navigate("/checkout")}>
             Go Back to Checkout
         </button>
-        <button className="bg-[#FF6600] px-10 py-3 rounded-full text-[#ffffff] font-medium hover:bg-gray-100 transition" onClick={() => navigate("/order-confirmation")}>
+        <button aria-label="Try Again" title="Try Again" className="text-[16px] leading-[16px] tracking-[0.08px] bg-[#FF6600] px-4 py-3 w-[236px] rounded-full text-[#ffffff] font-[400]" onClick={() => navigate("/order-confirmation")}>
             Try Again
         </button>
      </div>

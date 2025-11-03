@@ -33,6 +33,7 @@ import type {Product} from '@shopify/hydrogen/storefront-api-types';
 import {notFound} from '~/lib/utils';
 import { useRootLoaderData } from '~/root';
 import { usePrefixPathWithLocale } from '~/lib/utils';
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
 
 const seo: SeoHandleFunction<typeof loader> = () => ({
   title: 'Register',
@@ -65,6 +66,16 @@ export const action: ActionFunction = async ({request, context, params}) => {
   const first_name = formData.get('first_name');
   const last_name = formData.get('last_name');
   const phone = formData.get('phone');
+ 
+  const pn = parsePhoneNumberFromString(phone || '');
+  if (!pn || !pn.isValid()) {
+    return badRequest<ActionData>({ formError: 'Please enter a valid phone number.' });
+  }
+
+  const phone_country_code = `+${pn.countryCallingCode}`;
+  const phone_local_number = pn.nationalNumber; // no leading 0s for national significant number
+
+  console.log('Parsed phone:', {phone_country_code, phone_local_number});
   const password = "12345678"; // default password for all users
   
   if (!first_name || typeof first_name !== 'string') {
@@ -78,18 +89,31 @@ export const action: ActionFunction = async ({request, context, params}) => {
       formError: 'Last name is required',
     });
   }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!email || typeof email !== 'string' || !emailRegex.test(email)) {
+    return badRequest<ActionData>({
+      formError: 'Please enter a valid email address.',
+    });
+  }
 
-  if (!email || typeof email !== 'string') {
+  const phoneRegex = /^\+?[1-9]\d{7,14}$/;
+  if (!phone || typeof phone !== 'string' || !phoneRegex.test(phone)) {
     return badRequest<ActionData>({
-      formError: 'Email is required.',
+      formError: 'Please enter a valid phone number including country code.',
     });
   }
+
+  // if (!email || typeof email !== 'string') {
+  //   return badRequest<ActionData>({
+  //     formError: 'Email is required.',
+  //   });
+  // }
   
-  if (!phone || typeof phone !== 'string') {
-    return badRequest<ActionData>({
-      formError: 'Phone number is required',
-    });
-  }
+  // if (!phone || typeof phone !== 'string') {
+  //   return badRequest<ActionData>({
+  //     formError: 'Phone number is required',
+  //   });
+  // }
   
 
   try {
@@ -119,7 +143,7 @@ export const action: ActionFunction = async ({request, context, params}) => {
         body: new URLSearchParams({
           client_id: context.env.MS_ENTRA_CLIENT_ID!,
           client_secret: context.env.MS_ENTRA_CLIENT_SECRET!,
-          scope: 'api://anytimeapi.com/customer/.default',
+          scope: 'api://stg.anytimeapi.com/customer/.default',
           grant_type: 'client_credentials',
         }),
       }
@@ -134,7 +158,7 @@ export const action: ActionFunction = async ({request, context, params}) => {
     const accessToken = tokenData.access_token;
 
     // 3️ Call External API to Create User
-    const userResponse = await fetch('https://anytimeapi.com/customer/', {
+    const userResponse = await fetch('https://anytimeapi.com/customer/create', {
       method: 'POST',
       headers: {
         'API-Version': 'v1',
@@ -147,15 +171,16 @@ export const action: ActionFunction = async ({request, context, params}) => {
         email,
         first_name,
         last_name,
-        phone,
+        phone_country_code,
+        phone_local_number,
         status: 'Active',
         type: 'Lead',
       }),
     });
 
     const userResponses = await userResponse.json();
-    console.log('External API user creation response:', userResponses);
-    if (!userResponses?.success === false) {
+    // console.log('External API user creation response:', userResponses);
+    if (userResponses?.success !== true) {
       // console.error('External API failed', await userResponses.errors);
       throw new Error('Could not create user in external API: ' + userResponses?.errors.map((err: any) => err?.message).join(', '));
     }
@@ -257,7 +282,22 @@ export default function Register() {
    const rootData = useRootLoaderData();
     const cart = rootData?.cart?._data;
     const lines = cart?.lines?.edges;
-  const { bundleProducts, essentialsProducts,customer} = useLoaderData<typeof loader>();
+    useEffect(() => {
+      function handleMessage(event: MessageEvent) {
+        // Only accept from your domain
+        if (event.origin !== "https://shopifystage.anytimehq.co") return;
+    
+        if (event.data?.token) {
+          console.log("Received token:", event.data.token);
+    
+          // Redirect parent window with token in URL
+          window.location.href = `/account/login?token=${event.data.token}`;
+        }
+      }
+    
+      window.addEventListener("message", handleMessage);
+      return () => window.removeEventListener("message", handleMessage);
+    }, []);
   return (
      <section className="">
           <Suspense fallback={<div className="flex justify-center"><SpinnerIcon /></div>}>
@@ -409,12 +449,11 @@ export default function Register() {
                                         onFocus={() => setFormError(null)}
                                         onBlur={(event) => {
                                           const value = event.currentTarget.value.trim();
-                        
-                                          // International format: optional +, then 7-15 digits
-                                          const isValid = /^\+?\d{7,15}$/.test(value);
-                        
+                                          const phoneRegex = /^\+?[1-9]\d{7,14}$/;
                                           setPhoneError(
-                                            value.length && !isValid ? 'Invalid phone number. Include country code if needed.' : null,
+                                            value.length && !phoneRegex.test(value)
+                                              ? 'Invalid phone number. Please include country code (e.g. +91, +1, +63).'
+                                              : null,
                                           );
                                         }}
                                         onInput={(event) => {
@@ -432,6 +471,9 @@ export default function Register() {
                                       </label>
                                     </div>
                                   </div>
+                                    {phoneError && (
+                                      <p className="text-red text-[14px] mt-1">{phoneError}</p>
+                                    )}
                   
                                   {/* Email + Verification */}
                                   <div className="mt-5 flex flex-col gap-5">
@@ -445,10 +487,11 @@ export default function Register() {
                                         placeholder="chris.philip@anytime.com"
                                         onFocus={() => setFormError(null)}
                                         onBlur={(event) => {
+                                          const value = event.currentTarget.value.trim();
+                                          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                                           setNativeEmailError(
-                                            event.currentTarget.value.length &&
-                                              !event.currentTarget.validity.valid
-                                              ? 'Invalid email address'
+                                            value.length && !emailRegex.test(value)
+                                              ? 'Invalid email address.'
                                               : null,
                                           );
                                         }}
@@ -461,6 +504,9 @@ export default function Register() {
                                       >
                                         Email Address
                                       </label>
+                                      {nativeEmailError && (
+                                        <p className="text-red text-[14px] mt-1">{nativeEmailError}</p>
+                                      )}
                   
                                       {/* Desktop: inside input */}
                                       {/* <span className="hidden md:block absolute right-4 top-1/2 -translate-y-1/2 text-[#FF6600] text-[14px] cursor-pointer">
