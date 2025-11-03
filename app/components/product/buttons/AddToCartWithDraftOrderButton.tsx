@@ -78,7 +78,7 @@ type FormMode = 'default' | 'inline';
                     const cartId = fetcher.data.cart.id;
                     const cartRes = await fetch(`/api/cart/${btoa(cartId)}`);
                     const fullCart = await cartRes.json();
-                    
+                    console.log("cart data test ",cart);
                    // const edges = fullCart?.lines?.edges;
                     const edges = cart?.lines?.edges;
                     if (!edges || !Array.isArray(edges)) {
@@ -105,35 +105,7 @@ type FormMode = 'default' | 'inline';
                     const draftData = await draftRes.json();
               
                     if (draftData?.data?.draftOrderCreate?.draftOrder?.id) {
-                      
-                      let accessToken = "";
-
-                      try {
-                        const tokenResponse = await fetch(`${billingConfig?.baseUrl}/auth/token`, {
-                          method: "POST",
-                          headers: {
-                            "Api-Version": "v1",
-                            "Api-Environment": "dev",
-                            "Content-Type": "application/json",
-                            "Cache-Control": "no-cache",
-                            "Ocp-Apim-Subscription-Key": billingConfig?.subscriptionKey,
-                          },
-                          body: JSON.stringify({
-                            clientId: billingConfig?.clientId,
-                            clientSecret: billingConfig?.clientSecret,
-                            scope: billingConfig?.scope,
-                            grantType: "client_credentials",
-                          }),
-                        });
-                        const tokenData = await tokenResponse.json();
-                        accessToken = tokenData?.data?.accessToken;
-
-                      } catch (error) {
-                        console.error("Error in token request:", error);
-                      }
-                      
                   //Call Anytime Billing Purchase API
-              
                   const billingPayload = {
                     locationId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890", //D
                     locationUnitId: "b2c3d4e5-f6a7-8901-bcde-f12345678901",//static
@@ -200,17 +172,12 @@ type FormMode = 'default' | 'inline';
                     },
                   };
                   
-                  const billingResponse = await fetch(`${billingConfig?.baseUrl}/purchase`, {
+                  const billingResponse = await fetch("/api/create-billing-purchase", {
                     method: "POST",
-                    headers: {
-                      "Api-Version": "v1",
-                      "Api-Environment": "dev",
-                      "Ocp-Apim-Subscription-Key": billingConfig?.subscriptionKey,
-                      "Authorization": `Bearer ${accessToken}`,
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(billingPayload),
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ billingPayload }),
                   });
+                 
               
                   const billingResult = await billingResponse.json();
                   console.log("Billing purchase result:", billingResult);
