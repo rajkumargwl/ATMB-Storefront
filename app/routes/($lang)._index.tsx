@@ -107,16 +107,22 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
        const searchresults = await context.sanity.query({
          query: `{
            "locations": *[_type == "location" && (
-             name match $search ||
+             displayName match $search ||
              city match $search ||
              postalCode match $search
            )][0...5]{
-             _id,
-             _type,
-             name,
-             city,
-             postalCode,
-             "slug": slug.current
+              _id,
+        locationId,
+        displayName,
+        country,
+        countryCode,
+        state,
+        stateCode,
+        city,
+        addressLine1,
+        addressLine2,
+        postalCode,
+        coordinates,
            }
          }`,
          params: {search: searchParam},
@@ -130,6 +136,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
      } catch (err) {
        console.error('Search error:', err);
      }
+     console.log("Merged Search Results:", mergedSearchResults);
    }
   return defer({
     page,                           
@@ -148,9 +155,9 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
 
 
 export default function Index() {
+  
   //const { page, gids,  header, footer, mergedResults, q } = useLoaderData<typeof loader>();
-   const { page, gids, p, homeSearchResults,bundles,q, header, isLoggedIn, customer, language} = useLoaderData<typeof loader>();
-
+   const { page, gids, p, homeSearchResults,bundles, header, isLoggedIn, customer, language} = useLoaderData<typeof loader>();
   return (
     <>
      {/* <Header data={header} searchQuery={q} searchResults={homeSearchResults} isLoggedIn={isLoggedIn} customer={customer} currentLanguage={language} /> */}
