@@ -666,12 +666,12 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                   // Build query string with locationId
                   const queryParams = new URLSearchParams();
                   queryParams.set("locationId", loc._id);
+                  queryParams.set("variantId", variantId);
                   const bundlePDP = getPrefixedPath(`/PDP/bundle-product?${queryParams.toString()}`);
                   const virtualPDP = getPrefixedPath(`/PDP/virtual-mailbox?${queryParams.toString()}`);
 
                   if (variantId) {
                     // If variantId exists, add it and redirect to bundle-product
-                    queryParams.set("variantId", variantId);
                     navigate(bundlePDP);
                   } else {
                     // Otherwise, redirect to virtual-mailbox only with locationId

@@ -124,8 +124,7 @@ export default function Plans() {
   const {location, product, page} = useLoaderData<typeof loader>();
   const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
-  console.log('Page data:', page);
-  console.log('Location data:', location);
+
   const highlights = Array.from(
     new Set(
       location.featureList
@@ -190,7 +189,7 @@ console.log('services:', services);
   useEffect(() => {
     const storedLineId = sessionStorage.getItem('replaceLineId');
     if (storedLineId) setReplaceLineId(storedLineId);
-    console.log('Replace line ID from sessionStorage:', storedLineId);
+    //console.log('Replace line ID from sessionStorage:', storedLineId);
   }, []);
  
   return (
