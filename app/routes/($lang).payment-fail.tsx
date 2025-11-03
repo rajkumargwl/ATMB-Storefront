@@ -140,10 +140,10 @@ export default function CheckoutPage() {
 
       {/* Continue Button */}
      <div className="flex gap-9">
-        <button className="text-[16px] leading-[16px] tracking-[0.08px] px-4 py-3 w-[236px] border border-[#091019] rounded-full text-[#091019] font-[400]" onClick={() => navigate("/checkout")}>
+        <button aria-label=" Go Back to Checkout" title=" Go Back to Checkout" className="text-[16px] leading-[16px] tracking-[0.08px] px-4 py-3 w-[236px] border border-[#091019] rounded-full text-[#091019] font-[400]" onClick={() => navigate("/checkout")}>
             Go Back to Checkout
         </button>
-        <button className="text-[16px] leading-[16px] tracking-[0.08px] bg-[#FF6600] px-4 py-3 w-[236px] rounded-full text-[#ffffff] font-[400]" onClick={() => navigate("/order-confirmation")}>
+        <button aria-label="Try Again" title="Try Again" className="text-[16px] leading-[16px] tracking-[0.08px] bg-[#FF6600] px-4 py-3 w-[236px] rounded-full text-[#ffffff] font-[400]" onClick={() => navigate("/order-confirmation")}>
             Try Again
         </button>
      </div>
