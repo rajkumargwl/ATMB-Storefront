@@ -175,7 +175,9 @@ export const PRODUCT_QUERY = `#graphql
       selectedVariant: variantBySelectedOptions(selectedOptions: $selectedOptions) {
         ...ProductVariantFields
         metafields(identifiers: [
-          {namespace: "custom", key: "plan_type"}
+          {namespace: "custom", key: "plan_type"},
+          {namespace: "custom", key: "billing_product_id"},
+          {namespace: "custom", key: "bundle_product_id"}
         ]) {
           key
           value
@@ -185,7 +187,9 @@ export const PRODUCT_QUERY = `#graphql
         nodes {
           ...ProductVariantFields
           metafields(identifiers: [
-            {namespace: "custom", key: "plan_type"}
+            {namespace: "custom", key: "plan_type"},
+            {namespace: "custom", key: "billing_product_id"},
+            {namespace: "custom", key: "bundle_product_id"}
           ]) {
             key
             value

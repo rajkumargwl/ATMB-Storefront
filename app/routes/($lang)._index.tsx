@@ -25,6 +25,7 @@ const seo: SeoHandleFunction = ({data}) => ({
     'A custom storefront powered by Hydrogen and Sanity',
 });
 import { fetchBundleProducts } from '~/lib/bundle.server';
+import { fetchIndividualProducts } from '~/lib/individualProduct.server'; 
 import { is } from 'date-fns/locale';
 
 export const handle = { seo };
@@ -81,11 +82,12 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
   
 
   // Fetch all at once
-  const [page, header, footer,bundles] = await Promise.all([
+  const [page, header, footer,bundles,individualProducts] = await Promise.all([
     context.sanity.query({ query: HOME_PAGE_QUERY,  params: { language },cache }),
     context.sanity.query({ query: HEADER_QUERY,  params: { language },cache }),
     context.sanity.query({ query: FOOTER_QUERY, params: { language }, cache }),
     fetchBundleProducts(context), // Fetch bundle products
+     fetchIndividualProducts(context), // Fetch individual products
   ]);
  
   if (!page) throw notFound();
@@ -138,6 +140,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
      }
      console.log("Merged Search Results:", mergedSearchResults);
    }
+  
   return defer({
     page,                           
     header,
@@ -147,6 +150,7 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
     homeSearchResults: mergedSearchResults,
     language,
     bundles, // Pass bundles to the frontend 
+    individualProducts,
     analytics: { pageType: AnalyticsPageType.home },
     isLoggedIn: isAuthenticated,
     customer: customer?.customer || null,
@@ -157,8 +161,9 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
 export default function Index() {
   
   //const { page, gids,  header, footer, mergedResults, q } = useLoaderData<typeof loader>();
-   const { page, gids, p, homeSearchResults,bundles, header, isLoggedIn, customer, language} = useLoaderData<typeof loader>();
-  return (
+   const { page, gids, p, homeSearchResults,bundles, individualProducts,header, isLoggedIn, customer, language} = useLoaderData<typeof loader>();
+ 
+   return (
     <>
      {/* <Header data={header} searchQuery={q} searchResults={homeSearchResults} isLoggedIn={isLoggedIn} customer={customer} currentLanguage={language} /> */}
 
@@ -180,7 +185,7 @@ export default function Index() {
               {/* Page modules */}
               {page?.modules && (
                 // <div className={clsx('mb-32 mt-24 px-4', 'md:px-8')}>
-                  <ModuleGrid items={page.modules} searchQuery={p} homeSearchResults={homeSearchResults}  bundles={bundles}  />
+                  <ModuleGrid items={page.modules} searchQuery={p} homeSearchResults={homeSearchResults}  bundles={bundles}  individualProducts={individualProducts}/>
                 // </div>
               )}
             </Await>

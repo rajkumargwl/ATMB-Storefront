@@ -22,11 +22,32 @@ export default function ReplacePlanAddToCartButton({
   text,
 }: Props) {
   if (!selectedVariant) return null;
- 
+  
+      const billingProductId =
+      selectedVariant?.metafields?.find((m) => m.key === 'billing_product_id')?.value || '';
+
+    //Normalize locationProperties so it's always iterable
+    const normalizedLocationProps =
+      Array.isArray(locationProperties)
+        ? locationProperties
+        : Object.entries(locationProperties || {}).map(([key, value]) => ({
+            key,
+            value: String(value ?? ''),
+          }));
+
+    // Combine normalized location properties + billing_product_id
+    const attributes = [
+      ...normalizedLocationProps,
+      {
+        key: 'billing_product_id',
+        value: billingProductId,
+      },
+    ];
+
   // If replacing, first remove the old one
   if (replaceLineId) {
    // console.log('ReplacePlanAddToCartButton - replaceLineId:', replaceLineId);
-   console.log('Location Properties:', locationProperties);
+   //console.log('Location Properties:', locationProperties);
     return (
         <CartForm
         route={usePrefixPathWithLocale('/cart')}
@@ -37,11 +58,11 @@ export default function ReplacePlanAddToCartButton({
             {
               merchandiseId: selectedVariant.id,
               quantity: 1,
-             // attributes: locationProperties,
-             attributes: Object.entries(locationProperties).map(([key, value]) => ({
-              key,
-              value: String(value ?? ''),
-            })),
+              attributes, 
+            //  attributes: Object.entries(locationProperties).map(([key, value]) => ({
+            //   key,
+            //   value: String(value ?? ''),
+            // })),
             },
           ],
           redirectTo: usePrefixPathWithLocale('/cart'),
@@ -64,11 +85,11 @@ export default function ReplacePlanAddToCartButton({
           {
             merchandiseId: selectedVariant.id,
             quantity: 1,
-           // attributes: locationProperties,
-           attributes: Object.entries(locationProperties).map(([key, value]) => ({
-            key,
-            value: String(value ?? ''),
-          })),
+            attributes, 
+          //  attributes: Object.entries(locationProperties).map(([key, value]) => ({
+          //   key,
+          //   value: String(value ?? ''),
+          // })),
           },
         ],
         redirectTo: usePrefixPathWithLocale('/cart'),
