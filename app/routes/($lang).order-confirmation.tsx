@@ -144,21 +144,22 @@ export default function CheckoutPage() {
   return (
     <>
     <div className="absolute hidden md:flex z-[1] top-[-13px] right-[-20px] lg:right-[-23px]"><svg xmlns="http://www.w3.org/2000/svg" width="507" height="486" viewBox="0 0 507 486" fill="none"><g filter="url(#filter0_f_1664_59555)"><path d="M411.881 46.6449C401.099 52.2969 394.495 28.4027 382.786 25.0789C370.853 21.6916 357.913 24.4759 346.004 27.9448C331.506 32.1676 316.091 36.6981 305.594 47.5629C294.942 58.5867 276.999 77.417 286.863 89.1524C303.962 109.494 344.216 94.3713 361.734 114.352C371.288 125.25 344.748 138.798 343.008 153.192C341.04 169.488 334.911 202.927 351.227 201.319C376.574 198.821 381.924 159.41 404.26 147.157C411.576 143.144 418.013 156.232 424.944 160.881C440.834 171.538 455.265 201.694 472.141 192.681C488.214 184.097 468.288 156.878 466.405 138.738C465.509 130.098 462.92 121.66 463.873 113.027C464.667 105.836 466.661 98.2987 471.465 92.8942C489.283 72.8494 527.986 65.4332 529.966 38.6735C531.328 20.264 491.642 37.5227 476.32 27.2524C463.656 18.7633 468.593 -16.6418 453.998 -12.2493C430.704 -5.23929 433.43 35.3496 411.881 46.6449Z" fill="#FF6600"></path></g><defs><filter id="filter0_f_1664_59555" x="0" y="-296.625" width="814" height="782" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood><feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend><feGaussianBlur stdDeviation="142" result="effect1_foregroundBlur_1664_59555"></feGaussianBlur></filter></defs></svg></div>
-    <div className="px-25 pb-10">
-      <div className="top-6 w-full mx-auto flex items-center justify-center pt-9 pb-5 px-25 md:px-25 bg-white">
+    <div className="md:px-25 md:pb-10 px-5 pb-10">
+      <div className="top-6 w-full mx-auto flex items-center justify-center md:pt-9 pt-5 pb-5 px-5 md:px-25 bg-white">
           <img
             src="https://cdn.sanity.io/images/m5xb8z9y/production/6312d6eb4f994397153b67ef3043e166e1f574d4-101x50.svg"
             alt="Anytime Mailbox Logo"
             className="w-[101px]"
           />
       </div>
+      <hr className="md:hidden border border-[#DCDCDC] -mx-5 md:-mx-25 w-auto" />
       <div className=" bg-white flex flex-col items-center justify-center mt-10">
         {/* Header */}
         <div className="text-center mb-10">
-          <h1 className="text-[36px] font-[600] text-[#091019] leading-[43.2px] tracking-[-0.54px]">
+          <h1 className="text-[24px] leading-[31.2px] tracking-[-0.36px] md:text-[36px] font-[600] text-[#091019] md:leading-[43.2px] md:tracking-[-0.54px]">
             Want to supercharge your business even more?
           </h1>
-          <p className="text-[#091019] text-[18px] font-[400] leading-[27px] mt-2">
+          <p className="text-[16px] leading-[24px] text-[#091019] md:text-[18px] font-[400] md:leading-[27px] mt-2">
             Unlock add-ons that enhance your mailbox service instantly, helping you stay connected,
             look professional, and grow quickly.
           </p>
@@ -169,10 +170,10 @@ export default function CheckoutPage() {
           {/* Live Receptionist 100 */}
           <div className="border border-[#DCDCDC] rounded-lg pb-6 pt-2 px-2 shadow-sm hover:shadow-md transition bg-white">
             <div className="p-6 border border-[#FF6600] rounded-lg">
-              <h2 className="text-[24px] font-[600] text-[#091019] leading-[31.2px] tracking-[-0.36px] mb-4">
+              <h2 className="text-[20px] md:text-[24px] font-[600] text-[#091019] md:leading-[31.2px] md:tracking-[-0.36px] leading-[28px] tracking-[-0.3px] mb-4">
                 {LiveReceptionist?.product?.title}
               </h2>
-              <p className="flex items-baseline gap-1 text-[24px] font-[600] text-[#242629]">
+              <p className="flex items-baseline gap-1 text-[24px] leading-[31.2px] tracking-[-0.36] font-[600] text-[#242629]">
                 <Money data={{ amount: LiveReceptionist?.product?.variants?.nodes[0]?.price?.amount, currencyCode: currencyCode }}/> 
                 <span className="text-[14px] font-[400] text-[#4B5563] leading-[21px]">
                   /month
@@ -237,10 +238,10 @@ export default function CheckoutPage() {
           {/* Business Accelerator */}
           <div className="border border-[#DCDCDC] rounded-lg pb-6 pt-2 px-2 shadow-sm hover:shadow-md transition bg-white">
             <div className="p-6 border border-[#FF6600] rounded-lg">
-              <h2 className="text-[24px] font-[600] text-[#091019] leading-[31.2px] tracking-[-0.36px] mb-4">
-              {BusinessAcc?.product?.title}
+              <h2 className="text-[20px] md:text-[24px] font-[600] text-[#091019] md:leading-[31.2px] md:tracking-[-0.36px] leading-[28px] tracking-[-0.3px] mb-4">
+               {BusinessAcc?.product?.title}
               </h2>
-              <p className="flex items-baseline gap-1 text-[24px] font-[600] text-[#242629]">
+              <p className="flex items-baseline gap-1 text-[24px] leading-[31.2px] tracking-[-0.36] font-[600] text-[#242629]">
                 <Money
                   data={{
                     amount: BusinessAcc?.product?.variants?.nodes[0]?.price?.amount,
