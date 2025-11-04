@@ -26,6 +26,9 @@ type FormMode = 'default' | 'inline';
     customerId,
     billingConfig,
     cart,
+    user_id,
+    paymentMethodId,
+    customerPaymentKey,
     ...props
   }: {
     children?: React.ReactNode;
@@ -35,6 +38,9 @@ type FormMode = 'default' | 'inline';
     buttonClassName?: string;
     customerId: string | null;
     cart?: any;
+    user_id: string;
+    paymentMethodId: string;
+    customerPaymentKey: string;
     billingConfig?: {
       baseUrl: string;
       subscriptionKey: string;
@@ -78,7 +84,7 @@ type FormMode = 'default' | 'inline';
                     const cartId = fetcher.data.cart.id;
                     const cartRes = await fetch(`/api/cart/${btoa(cartId)}`);
                     const fullCart = await cartRes.json();
-                    console.log("cart data test ",cart);
+                   
                    // const edges = fullCart?.lines?.edges;
                     const edges = cart?.lines?.edges;
                     if (!edges || !Array.isArray(edges)) {
@@ -88,10 +94,28 @@ type FormMode = 'default' | 'inline';
                     }
                     
                     // Extract cart lines
-                    const cartLines = edges.map((l: any) => ({
-                      variantId: l.node?.merchandise?.id,
-                      quantity: l.node?.quantity ?? 1,
-                    }));
+                    // const cartLines = edges.map((l: any) => ({
+                    //   variantId: l.node?.merchandise?.id,
+                    //   quantity: l.node?.quantity ?? 1,
+                    // }));
+                    const cartLines = edges.map((l: any) => {
+                      const attrs = l.node?.attributes ?? [];
+                      
+                      // find the attributes
+                      const locationAttr = attrs.find((a: any) => a.key === "locationId");
+                      const billingAttr = attrs.find((a: any) => a.key === "billing_product_id");
+                      const selectedPlan =
+                      l.node?.merchandise?.selectedOptions?.[0]?.value || "Default Plan";
+                    const planPrice = parseFloat(l.node?.cost?.totalAmount?.amount || 0);
+                      return {
+                        variantId: l.node?.merchandise?.id,
+                        quantity: l.node?.quantity ?? 1,
+                        locationId: locationAttr?.value || null,
+                        billingProductId: billingAttr?.value || null,
+                        planName: selectedPlan,
+                        planPrice: planPrice,
+                      };
+                    });
                     
                     // Create Draft Order
                     const draftRes = await fetch("/api/create-draft-order", {
@@ -105,28 +129,38 @@ type FormMode = 'default' | 'inline';
                     const draftData = await draftRes.json();
               
                     if (draftData?.data?.draftOrderCreate?.draftOrder?.id) {
+                      const firstLine = cartLines[0] || {};
+                      const {
+                        locationId,
+                        billingProductId,
+                        planName,
+                        planPrice,
+                        quantity,
+                      } = firstLine;
                   //Call Anytime Billing Purchase API
                   const billingPayload = {
-                    locationId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890", //D
-                    locationUnitId: "b2c3d4e5-f6a7-8901-bcde-f12345678901",//static
-                    customerId: "c3d4e5f6-a7b8-9012-cdef-123456789012", //set user_id in metafields
+                    locationId: locationId,
+                    locationUnitId: "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+                    customerId: user_id, 
                     bundle: null,
                     subscription: {
-                      providerId: "d4e5f6a7-b8c9-0123-def1-234567890123",//s
-                      label: "Monthly Premium Subscription",//d
-                      culture: "en-US",//static
-                      currency: "USD",//static
+                      providerId: "d4e5f6a7-b8c9-0123-def1-234567890123",
+                      //label: "Monthly Premium Subscription",
+                      label: `${planName} Subscription`,
+                      culture: "en-US",
+                      currency: "USD",
                       items: [
                         {
-                          productId: "e5f6a7b8-c9d0-1234-ef12-345678901234",//metafields
+                          productId: billingProductId,
                           providerId: "d4e5f6a7-b8c9-0123-def1-234567890123",
                           isChargeProrated: false,
-                          label: "Premium License - Monthly",
-                          price: 99.99,
-                          quantity: 5,
-                          subtotal: 499.95,
-                          total: 449.95,
-                          totalAdjustment: 50.0,
+                         // label: "Premium License - Monthly",
+                          label: `${planName} License - Monthly`,
+                          price: planPrice,
+                          quantity: quantity,
+                          subtotal: planPrice * quantity,
+                          total: planPrice * quantity,
+                          totalAdjustment: 0,
                           recurrenceInterval: "month",
                           adjustments: [
                             {
@@ -160,18 +194,17 @@ type FormMode = 'default' | 'inline';
                       exemptTax: false,
                       status: "active",
                       type: "business",
-                    },
+                    }, 
                     payment: {
-                      paymentMethodId: "pm_1234567890abcdef",
-                      customerPaymentKey: "cus_ABC123XYZ789",
-                      metadata: {
-                        source: "web_portal",
-                        campaign: "spring_2024_promotion",
-                        sales_rep: "john.doe@company.com",
-                      },
+                      paymentMethodId: paymentMethodId,
+                      customerPaymentKey: customerPaymentKey,
+                      // metadata: {
+                      //   source: "web_portal",
+                      //   campaign: "spring_2024_promotion",
+                      //   sales_rep: "john.doe@company.com",
+                      // },
                     },
                   };
-                  
                   const billingResponse = await fetch("/api/create-billing-purchase", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },

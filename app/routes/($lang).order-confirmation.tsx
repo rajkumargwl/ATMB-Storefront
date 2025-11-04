@@ -324,20 +324,32 @@ export default function CheckoutPage() {
         navigate("/payment-fail");
         return;
       }
-      // ✅ Extract location_id from cart attributes
-      const locationAttr = cart?.attributes?.find(
-        (attr) => attr.key === "locationId"
-      );
-      const locationId = locationAttr?.value || null;
+      
 
-      console.log("Cart Lines Edges:", edges, locationId);
-
-      const cartLines = edges.map((l: any) => ({
-        variantId: l.node?.merchandise?.id,
-        quantity: l.node?.quantity ?? 1,
-      }));
-
-  
+      // const cartLines = edges.map((l: any) => ({
+      //   variantId: l.node?.merchandise?.id,
+      //   quantity: l.node?.quantity ?? 1,
+      // }));
+      const cartLines = edges.map((l: any) => {
+        const attrs = l.node?.attributes ?? [];
+        
+        // find the attributes
+        const locationAttr = attrs.find((a: any) => a.key === "locationId");
+        const billingAttr = attrs.find((a: any) => a.key === "billing_product_id");
+        const selectedPlan =
+        l.node?.merchandise?.selectedOptions?.[0]?.value || "Default Plan";
+      const planPrice = parseFloat(l.node?.cost?.totalAmount?.amount || 0);
+        return {
+          variantId: l.node?.merchandise?.id,
+          quantity: l.node?.quantity ?? 1,
+          locationId: locationAttr?.value || null,
+          billingProductId: billingAttr?.value || null,
+          planName: selectedPlan,
+          planPrice: planPrice,
+        };
+      });
+      
+      
       // Create Draft Order
       const draftRes = await fetch("/api/create-draft-order", {
         method: "POST",
@@ -357,29 +369,39 @@ export default function CheckoutPage() {
         navigate("/payment-fail");
         return;
       }
-
+      const firstLine = cartLines[0] || {};
+      const {
+        locationId,
+        billingProductId,
+        planName,
+        planPrice,
+        quantity,
+      } = firstLine;
+        
       // Billing Payload
       const billingPayload = {
-        locationId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890", //D
-        locationUnitId: "b2c3d4e5-f6a7-8901-bcde-f12345678901",//static
+        locationId: locationId,
+        locationUnitId: "b2c3d4e5-f6a7-8901-bcde-f12345678901",
         customerId: user_id, 
         bundle: null,
         subscription: {
-          providerId: "d4e5f6a7-b8c9-0123-def1-234567890123",//s
-          label: "Monthly Premium Subscription",//d
-          culture: "en-US",//static
-          currency: "USD",//static
+          providerId: "d4e5f6a7-b8c9-0123-def1-234567890123",
+          //label: "Monthly Premium Subscription",
+          label: `${planName} Subscription`,
+          culture: "en-US",
+          currency: "USD",
           items: [
             {
-              productId: "e5f6a7b8-c9d0-1234-ef12-345678901234",//metafields
+              productId: billingProductId,
               providerId: "d4e5f6a7-b8c9-0123-def1-234567890123",
               isChargeProrated: false,
-              label: "Premium License - Monthly",
-              price: 99.99,
-              quantity: 5,
-              subtotal: 499.95,
-              total: 449.95,
-              totalAdjustment: 50.0,
+             // label: "Premium License - Monthly",
+              label: `${planName} License - Monthly`,
+              price: planPrice,
+              quantity: quantity,
+              subtotal: planPrice * quantity,
+              total: planPrice * quantity,
+              totalAdjustment: 0,
               recurrenceInterval: "month",
               adjustments: [
                 {
@@ -417,11 +439,11 @@ export default function CheckoutPage() {
         payment: {
           paymentMethodId: paymentMethodId,
           customerPaymentKey: customerPaymentKey,
-          metadata: {
-            source: "web_portal",
-            campaign: "spring_2024_promotion",
-            sales_rep: "john.doe@company.com",
-          },
+          // metadata: {
+          //   source: "web_portal",
+          //   campaign: "spring_2024_promotion",
+          //   sales_rep: "john.doe@company.com",
+          // },
         },
       };
         

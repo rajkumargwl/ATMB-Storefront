@@ -534,7 +534,6 @@ case 'solutionMailboxBenefitFaqModule':
       return <Locations data={module} />;
     
      case 'plans':
-      console.log("check bundle data for plans module:", bundles);
        return <Plans data={module} bundles={bundles}/>;
     
      case 'bundles':
