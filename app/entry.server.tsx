@@ -52,6 +52,8 @@ export default async function handleRequest(
       'https://in.fw-cdn.com/32520975/1392281.js', // Freshchat preloader
       'https://anytime-mailbox.freshchat.com', // ✅ Freshchat widget domain
       "https://wchat.freshchat.com", // ✅ Freshchat widget domain
+      'https://www.google.com/recaptcha/',
+      'https://www.gstatic.com/recaptcha/',
     ],
     fontSrc: [
       `'self'`,
@@ -73,6 +75,7 @@ export default async function handleRequest(
       'https://www.youtube.com',
       'https://www.youtube-nocookie.com',
       "https://anytime-mailbox.freshchat.com", // ✅ Allow Freshchat iframe
+      'https://www.google.com/recaptcha/',
     ],
     connectSrc: [
       `'self'`,
@@ -88,6 +91,9 @@ export default async function handleRequest(
       'https://maps.googleapis.com',
       'https://api.hsforms.com',
       'https://anytime-mailbox.freshchat.com', // ✅ Allow Freshchat API
+       // ✅ Allow reCAPTCHA network requests
+      'https://www.google.com/recaptcha/',
+      'https://www.gstatic.com/recaptcha/',
     ],
   });
 

@@ -35,12 +35,17 @@ export async function loader({context, request, params}: LoaderFunctionArgs) {
   let results = {locations: [] as LocationAPI[]};
  
   if (q) {
+    console.log("Performing search for query:", q);
     const searchParam = `${q}*`;
     try {
       results = await context.sanity.query({
         query: `{
-          "locations": *[_type == "location"]{
-  _id,
+          "locations": *[_type == "location" && (
+             displayName match $search ||
+             city match $search ||
+             postalCode match $search
+           )]{
+        _id,
         locationId,
         displayName,
         country,
@@ -98,7 +103,7 @@ export async function loader({context, request, params}: LoaderFunctionArgs) {
           time_end,
           type
         }
- 
+        }
         }`,
         params: {search: searchParam},
       });
@@ -178,6 +183,7 @@ query: `*[_type == "location"][0...50]{
  
 export default function LocationsPage() {
   const {locations, q} = useLoaderData<typeof loader>();
+  console.log("Locations data:", locations);
   return <LocationsList locations={locations} initialQuery={q} isCityPage={false} country="" />;
 }
  

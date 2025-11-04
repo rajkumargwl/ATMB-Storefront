@@ -31,6 +31,7 @@ export async function loader({context}: LoaderFunctionArgs) {
     context.sanity.query({
       query: /* groq */ `
         *[_type == "location" && defined(country) && country != "" ]{
+          displayName,
           country,
           state,
           country_code,
@@ -185,7 +186,7 @@ export default function CountryLocationsPage() {
           initialQuery=""
           results={locations || []}
           onResultClick={(item) => {
-            navigate(`/sublocations?q=${encodeURIComponent(item.name || item.city || '')}`);
+            navigate(`/sublocations?q=${encodeURIComponent(item.displayName || item.city || '')}`);
           }}
         />
 

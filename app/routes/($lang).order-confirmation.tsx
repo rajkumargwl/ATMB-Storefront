@@ -143,254 +143,311 @@ export default function CheckoutPage() {
 
   return (
     <>
-    <div className="top-6 w-full mx-auto flex items-center justify-center py-4 px-6 md:px-12 lg:px-24 bg-white">
-        <img
-          src="https://cdn.sanity.io/images/m5xb8z9y/production/6312d6eb4f994397153b67ef3043e166e1f574d4-101x50.svg"
-          alt="Anytime Mailbox Logo"
-          className="w-[101px]"
-        />
-    </div>
-     <div className=" bg-white flex flex-col items-center justify-center p-6 mt-10">
-      {/* Header */}
-      <div className="text-center mb-10">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-800">
-          Want to supercharge your business even more?
-        </h1>
-        <p className="text-gray-600 mt-2 max-w-xl mx-auto">
-          Unlock add-ons that enhance your mailbox service instantly, helping you stay connected,
-          look professional, and grow quickly.
-        </p>
+    <div className="absolute hidden md:flex z-[1] top-[-13px] right-[-20px] lg:right-[-23px]"><svg xmlns="http://www.w3.org/2000/svg" width="507" height="486" viewBox="0 0 507 486" fill="none"><g filter="url(#filter0_f_1664_59555)"><path d="M411.881 46.6449C401.099 52.2969 394.495 28.4027 382.786 25.0789C370.853 21.6916 357.913 24.4759 346.004 27.9448C331.506 32.1676 316.091 36.6981 305.594 47.5629C294.942 58.5867 276.999 77.417 286.863 89.1524C303.962 109.494 344.216 94.3713 361.734 114.352C371.288 125.25 344.748 138.798 343.008 153.192C341.04 169.488 334.911 202.927 351.227 201.319C376.574 198.821 381.924 159.41 404.26 147.157C411.576 143.144 418.013 156.232 424.944 160.881C440.834 171.538 455.265 201.694 472.141 192.681C488.214 184.097 468.288 156.878 466.405 138.738C465.509 130.098 462.92 121.66 463.873 113.027C464.667 105.836 466.661 98.2987 471.465 92.8942C489.283 72.8494 527.986 65.4332 529.966 38.6735C531.328 20.264 491.642 37.5227 476.32 27.2524C463.656 18.7633 468.593 -16.6418 453.998 -12.2493C430.704 -5.23929 433.43 35.3496 411.881 46.6449Z" fill="#FF6600"></path></g><defs><filter id="filter0_f_1664_59555" x="0" y="-296.625" width="814" height="782" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood><feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend><feGaussianBlur stdDeviation="142" result="effect1_foregroundBlur_1664_59555"></feGaussianBlur></filter></defs></svg></div>
+    <div className="md:px-25 md:pb-10 px-5 pb-10">
+      <div className="top-6 w-full mx-auto flex items-center justify-center md:pt-9 pt-5 pb-5 px-5 md:px-25 bg-white">
+          <img
+            src="https://cdn.sanity.io/images/m5xb8z9y/production/6312d6eb4f994397153b67ef3043e166e1f574d4-101x50.svg"
+            alt="Anytime Mailbox Logo"
+            className="w-[101px]"
+          />
       </div>
-
-      {/* Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
-        {/* Live Receptionist 100 */}
-        <div className="border border-orange-300 rounded-2xl p-6 shadow-sm hover:shadow-md transition bg-white">
-          <h2 className="text-lg font-semibold text-gray-800 mb-2">
-            {LiveReceptionist?.product?.title}
-          </h2>
-          <p className="flex text-2xl font-bold text-gray-900 mb-4"><Money data={{ amount: LiveReceptionist?.product?.variants?.nodes[0]?.price?.amount, currencyCode: currencyCode }}/><span className="text-base font-medium">/month</span></p>
-
-          <ul className="space-y-2 text-gray-700 mb-6">
-            <li className="flex items-center gap-2">
-              <span className="text-orange-500 font-bold">✓</span> 100 Live Answering Minutes
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="text-orange-500 font-bold">✓</span> Appointment Scheduling
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="text-orange-500 font-bold">✓</span> Appointment Scheduling App
-            </li>
-          </ul>
-
-          {/* <button className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold transition">
-            Add Virtual Phone
-          </button> */}
-          <AddToCartWithDraftOrderButton
-              lines={[
-                {merchandiseId: LiveReceptionist?.product?.variants?.nodes[0]?.id, quantity: 1},
-              ]}
-              customerId={rootData?.customer?.id}
-              disabled={!LiveReceptionist?.product?.variants?.nodes[0]?.availableForSale}
-              analytics={
-                LiveReceptionistProductAnalytics
-                  ? {
-                      products: [LiveReceptionistProductAnalytics],
-                      totalValue: parseFloat(LiveReceptionistProductAnalytics.price),
-                    }
-                  : undefined
-              }
-              billingConfig={billingConfig} 
-              buttonClassName="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold transition"
-              text="Add Virtual Phone"
-              cart={cart}
-            /> 
+      <hr className="md:hidden border border-[#DCDCDC] -mx-5 md:-mx-25 w-auto" />
+      <div className=" bg-white flex flex-col items-center justify-center mt-10">
+        {/* Header */}
+        <div className="text-center mb-10">
+          <h1 className="text-[24px] leading-[31.2px] tracking-[-0.36px] md:text-[36px] font-[600] text-[#091019] md:leading-[43.2px] md:tracking-[-0.54px]">
+            Want to supercharge your business even more?
+          </h1>
+          <p className="text-[16px] leading-[24px] text-[#091019] md:text-[18px] font-[400] md:leading-[27px] mt-2">
+            Unlock add-ons that enhance your mailbox service instantly, helping you stay connected,
+            look professional, and grow quickly.
+          </p>
         </div>
 
-        {/* Business Accelerator */}
-        <div className="border border-orange-300 rounded-2xl p-6 shadow-sm hover:shadow-md transition bg-white">
-          <h2 className="text-lg font-semibold text-gray-800 mb-2">
-          {BusinessAcc?.product?.title}
-          </h2>
-          <p className="flex text-2xl font-bold text-gray-900 mb-4"><Money data={{ amount: BusinessAcc?.product?.variants?.nodes[0]?.price?.amount, currencyCode: currencyCode }}/><span className="text-base font-medium">/month</span></p>
+        {/* Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
+          {/* Live Receptionist 100 */}
+          <div className="border border-[#DCDCDC] rounded-lg pb-6 pt-2 px-2 shadow-sm hover:shadow-md transition bg-white">
+            <div className="p-6 border border-[#FF6600] rounded-lg">
+              <h2 className="text-[20px] md:text-[24px] font-[600] text-[#091019] md:leading-[31.2px] md:tracking-[-0.36px] leading-[28px] tracking-[-0.3px] mb-4">
+                {LiveReceptionist?.product?.title}
+              </h2>
+              <p className="flex items-baseline gap-1 text-[24px] leading-[31.2px] tracking-[-0.36] font-[600] text-[#242629]">
+                <Money data={{ amount: LiveReceptionist?.product?.variants?.nodes[0]?.price?.amount, currencyCode: currencyCode }}/> 
+                <span className="text-[14px] font-[400] text-[#4B5563] leading-[21px]">
+                  /month
+                </span>
+              </p>
+            </div>
 
-          <ul className="space-y-2 text-gray-700 mb-6">
-            <li className="flex items-center gap-2">
-              <span className="text-orange-500 font-bold">✓</span> Monthly Webinars, Podcasts
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="text-orange-500 font-bold">✓</span> Well-researched Playbooks and Whitepapers
-            </li>
-            <li className="flex items-center gap-2">
-              <span className="text-orange-500 font-bold">✓</span> Special Promotions
-            </li>
-          </ul>
+            <div className="mt-5 px-4">
+              <ul className="space-y-3 text-gray-700 mb-5">
+                <li className="flex items-center gap-3 text-[14px] font-[400] leading-[21px] font-roboto text-[#374151]">
+                <span className="text-orange-500 font-bold">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
+                  <path d="M16.5544 0.110975C16.8206 0.305975 16.8806 0.680975 16.6856 0.950975L6.18563 15.351C6.08063 15.4935 5.92313 15.5835 5.74688 15.5947C5.57063 15.606 5.40188 15.546 5.27438 15.4222L0.174375 10.3222C-0.058125 10.0897 -0.058125 9.70722 0.174375 9.47472C0.406875 9.24222 0.789375 9.24222 1.02188 9.47472L5.62688 14.0797L15.7144 0.245975C15.9094 -0.0202754 16.2844 -0.0802754 16.5544 0.114725V0.110975Z" fill="#091019"/>
+                </svg>
+                </span> 
+                100 Live Answering Minutes
+              </li>
+              <li className="flex items-center gap-3 text-[14px] font-[400] leading-[21px] font-roboto text-[#374151]">
+                <span className="text-orange-500 font-bold">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
+                  <path d="M16.5544 0.110975C16.8206 0.305975 16.8806 0.680975 16.6856 0.950975L6.18563 15.351C6.08063 15.4935 5.92313 15.5835 5.74688 15.5947C5.57063 15.606 5.40188 15.546 5.27438 15.4222L0.174375 10.3222C-0.058125 10.0897 -0.058125 9.70722 0.174375 9.47472C0.406875 9.24222 0.789375 9.24222 1.02188 9.47472L5.62688 14.0797L15.7144 0.245975C15.9094 -0.0202754 16.2844 -0.0802754 16.5544 0.114725V0.110975Z" fill="#091019"/>
+                </svg>
+                </span> 
+                Appointment Scheduling
+              </li>
+              <li className="flex items-center gap-3 text-[14px] font-[400] leading-[21px] font-roboto text-[#374151]">
+                  <span className="text-orange-500 font-bold">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
+                    <path d="M16.5544 0.110975C16.8206 0.305975 16.8806 0.680975 16.6856 0.950975L6.18563 15.351C6.08063 15.4935 5.92313 15.5835 5.74688 15.5947C5.57063 15.606 5.40188 15.546 5.27438 15.4222L0.174375 10.3222C-0.058125 10.0897 -0.058125 9.70722 0.174375 9.47472C0.406875 9.24222 0.789375 9.24222 1.02188 9.47472L5.62688 14.0797L15.7144 0.245975C15.9094 -0.0202754 16.2844 -0.0802754 16.5544 0.114725V0.110975Z" fill="#091019"/>
+                  </svg>
+                  </span> 
+                  Appointment Scheduling App
+              </li>
+            </ul>
+           
 
-          {/* <button className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold transition">
-            Add Business Accelerator
-          </button> */}
-          <AddToCartWithDraftOrderButton
-              lines={[
-                {merchandiseId: BusinessAcc?.product?.variants?.nodes[0]?.id, quantity: 1},
-              ]}
-              customerId={rootData?.customer?.id}
-              disabled={!BusinessAcc?.product?.variants?.nodes[0]?.availableForSale}
-              analytics={
-                BusinessAccProductAnalytics
-                  ? {
-                      products: [BusinessAccProductAnalytics],
-                      totalValue: parseFloat(BusinessAccProductAnalytics.price),
-                    }
-                  : undefined
-              }
-              billingConfig={billingConfig} 
-              buttonClassName="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold transition"
-              text="Add Business Accelerator"
-              cart={cart}
-            /> 
+            {/* <button className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold transition">
+              Add Virtual Phone
+            </button> */}
+            <AddToCartWithDraftOrderButton
+                lines={[
+                  {merchandiseId: LiveReceptionist?.product?.variants?.nodes[0]?.id, quantity: 1},
+                ]}
+                customerId={rootData?.customer?.id}
+                disabled={!LiveReceptionist?.product?.variants?.nodes[0]?.availableForSale}
+                analytics={
+                  LiveReceptionistProductAnalytics
+                    ? {
+                        products: [LiveReceptionistProductAnalytics],
+                        totalValue: parseFloat(LiveReceptionistProductAnalytics.price),
+                      }
+                    : undefined
+                }
+                billingConfig={billingConfig} 
+                buttonClassName="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 px-4 rounded-xl font-[400] text-[16px] leading-[16px] transition"
+                text="Add Virtual Phone"
+                cart={cart}
+              /> 
+               </div>
+          </div>
+
+          {/* Business Accelerator */}
+          <div className="border border-[#DCDCDC] rounded-lg pb-6 pt-2 px-2 shadow-sm hover:shadow-md transition bg-white">
+            <div className="p-6 border border-[#FF6600] rounded-lg">
+              <h2 className="text-[20px] md:text-[24px] font-[600] text-[#091019] md:leading-[31.2px] md:tracking-[-0.36px] leading-[28px] tracking-[-0.3px] mb-4">
+               {BusinessAcc?.product?.title}
+              </h2>
+              <p className="flex items-baseline gap-1 text-[24px] leading-[31.2px] tracking-[-0.36] font-[600] text-[#242629]">
+                <Money
+                  data={{
+                    amount: BusinessAcc?.product?.variants?.nodes[0]?.price?.amount,
+                    currencyCode: currencyCode,
+                  }}
+                />
+                <span className="text-[14px] font-[400] text-[#4B5563] leading-[21px]">
+                  /month
+                </span>
+              </p>
+            </div>
+            <div className="mt-5 px-4">
+              <ul className="space-y-3 text-gray-700 mb-5">
+                <li className="flex items-center gap-3 text-[14px] font-[400] leading-[21px] font-roboto text-[#374151]">
+                  <span className="text-orange-500 font-bold">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
+                    <path d="M16.5544 0.110975C16.8206 0.305975 16.8806 0.680975 16.6856 0.950975L6.18563 15.351C6.08063 15.4935 5.92313 15.5835 5.74688 15.5947C5.57063 15.606 5.40188 15.546 5.27438 15.4222L0.174375 10.3222C-0.058125 10.0897 -0.058125 9.70722 0.174375 9.47472C0.406875 9.24222 0.789375 9.24222 1.02188 9.47472L5.62688 14.0797L15.7144 0.245975C15.9094 -0.0202754 16.2844 -0.0802754 16.5544 0.114725V0.110975Z" fill="#091019"/>
+                  </svg>
+                  </span> 
+                  Monthly Webinars, Podcasts
+                </li>
+                <li className="flex items-center gap-3 text-[14px] font-[400] leading-[21px] font-roboto text-[#374151]">
+                  <span className="text-orange-500 font-bold">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
+                    <path d="M16.5544 0.110975C16.8206 0.305975 16.8806 0.680975 16.6856 0.950975L6.18563 15.351C6.08063 15.4935 5.92313 15.5835 5.74688 15.5947C5.57063 15.606 5.40188 15.546 5.27438 15.4222L0.174375 10.3222C-0.058125 10.0897 -0.058125 9.70722 0.174375 9.47472C0.406875 9.24222 0.789375 9.24222 1.02188 9.47472L5.62688 14.0797L15.7144 0.245975C15.9094 -0.0202754 16.2844 -0.0802754 16.5544 0.114725V0.110975Z" fill="#091019"/>
+                  </svg>
+                  </span> 
+                  Well-researched Playbooks and Whitepapers
+                </li>
+                <li className="flex items-center gap-3 text-[14px] font-[400] leading-[21px] font-roboto text-[#374151]">
+                  <span className="text-orange-500 font-bold">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none">
+                    <path d="M16.5544 0.110975C16.8206 0.305975 16.8806 0.680975 16.6856 0.950975L6.18563 15.351C6.08063 15.4935 5.92313 15.5835 5.74688 15.5947C5.57063 15.606 5.40188 15.546 5.27438 15.4222L0.174375 10.3222C-0.058125 10.0897 -0.058125 9.70722 0.174375 9.47472C0.406875 9.24222 0.789375 9.24222 1.02188 9.47472L5.62688 14.0797L15.7144 0.245975C15.9094 -0.0202754 16.2844 -0.0802754 16.5544 0.114725V0.110975Z" fill="#091019"/>
+                  </svg>
+                  </span> 
+                  Special Promotions
+                </li>
+              </ul>
+
+              {/* <button className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded-xl font-semibold transition">
+                Add Business Accelerator
+              </button> */}
+              <AddToCartWithDraftOrderButton
+                  lines={[
+                    {merchandiseId: BusinessAcc?.product?.variants?.nodes[0]?.id, quantity: 1},
+                  ]}
+                  customerId={rootData?.customer?.id}
+                  disabled={!BusinessAcc?.product?.variants?.nodes[0]?.availableForSale}
+                  analytics={
+                    BusinessAccProductAnalytics
+                      ? {
+                          products: [BusinessAccProductAnalytics],
+                          totalValue: parseFloat(BusinessAccProductAnalytics.price),
+                        }
+                      : undefined
+                  }
+                  billingConfig={billingConfig} 
+                  buttonClassName="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 px-4 rounded-xl font-[400] text-[16px] leading-[16px] transition"
+                  text="Add Business Accelerator"
+                  cart={cart}
+                /> 
+            </div>
+          </div>
         </div>
+
+        {/* No Thanks Button */}
+        {/* <button className="mt-8 border border-gray-400 text-gray-700 hover:bg-gray-100 py-2 px-6 rounded-full transition" onClick={() => {
+          navigate('/checkout', {state: {cartData}});
+        }}>
+          No Thanks, Continue
+        </button> */}
+        {/* No Thanks Button with Billing + Draft Order */}
+                <button
+          className="mt-10 border border-gray-400 text-[#091019] text-[16px] text-[500] leading-[16px] tracking-[0.08px] hover:bg-gray-100 py-3 px-4 rounded-full transition w-[236px]"
+          onClick={async () => {
+          try {
+          const stored = localStorage.getItem("checkoutCart");
+          const parsed = stored ? JSON.parse(stored) : null;
+            // Extract cart data safely
+            const cartData =
+              parsed?.lines?.edges?.map((edge: any) => ({
+                variantId: edge?.node?.merchandise?.id,
+                quantity: edge?.node?.quantity,
+              })) || [];
+
+            console.log("Extracted cartData:", cartData);
+
+            if (!Array.isArray(cartData) || cartData.length === 0) {
+              console.warn("No valid items found in checkoutCart");
+              navigate("/payment-fail");
+              return;
+            }
+
+          
+            const customerId = parsed?.buyerIdentity?.customer?.id || null;
+
+            const formattedLines = cartData.map((item: any) => ({
+              variantId: item.variantId,
+              quantity: item.quantity,
+            }));
+
+            // Create Draft Order
+            const draftRes = await fetch("/api/create-draft-order", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                lines: formattedLines,
+                customerId, // include if available
+              }),
+            });
+
+            const draftData = await draftRes.json();
+            console.log("Draft order response:", draftData);
+
+            const draftOrderId =
+              draftData?.data?.draftOrderCreate?.draftOrder?.id || null;
+
+            if (!draftOrderId) {
+              console.error("Draft order creation failed:", draftData);
+              navigate("/payment-fail");
+              return;
+            }
+
+            //  Get Billing Token
+            const tokenResponse = await fetch(`${billingConfig?.baseUrl}/auth/token`, {
+              method: "POST",
+              headers: {
+                "Api-Version": "v1",
+                "Api-Environment": "dev",
+                "Content-Type": "application/json",
+                "Cache-Control": "no-cache",
+                "Ocp-Apim-Subscription-Key": billingConfig?.subscriptionKey,
+              },
+              body: JSON.stringify({
+                clientId: billingConfig?.clientId,
+                clientSecret: billingConfig?.clientSecret,
+                scope: billingConfig?.scope,
+                grantType: "client_credentials",
+              }),
+            });
+
+            const tokenData = await tokenResponse.json();
+            const accessToken = tokenData?.data?.accessToken;
+
+            if (!accessToken) {
+              console.error("Billing token missing:", tokenData);
+              navigate("/payment-fail");
+              return;
+            }
+
+            //  Billing Payload
+            const billingPayload = {
+              locationId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+              customerId: "c3d4e5f6-a7b8-9012-cdef-123456789012",
+              subscription: {
+                providerId: "d4e5f6a7-b8c9-0123-def1-234567890123",
+                label: "Monthly Premium Subscription",
+                currency: "USD",
+                items: cartData.map((item: any) => ({
+                  productId: item.variantId,
+                  label: "Custom Product",
+                  price: 99.99,
+                  quantity: item.quantity,
+                  recurrenceInterval: "month",
+                })),
+              },
+              payment: {
+                paymentMethodId: "pm_1234567890abcdef",
+                customerPaymentKey: "cus_ABC123XYZ789",
+                metadata: { source: "web_portal" },
+              },
+            };
+
+            //  Call Billing API
+            const billingResponse = await fetch(`${billingConfig?.baseUrl}/purchase`, {
+              method: "POST",
+              headers: {
+                "Api-Version": "v1",
+                "Api-Environment": "dev",
+                "Ocp-Apim-Subscription-Key": billingConfig?.subscriptionKey,
+                Authorization: `Bearer ${accessToken}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(billingPayload),
+            });
+
+            const billingResult = await billingResponse.json();
+            console.log("Billing result:", billingResult);
+
+            if (!billingResponse.ok) {
+              console.error("Billing failed:", billingResult);
+              navigate("/payment-fail");
+              return;
+            }
+            localStorage.removeItem("checkoutCart");
+            //await fetch("/api/clear-cart", { method: "POST" });
+            navigate("/payment-success");
+          } catch (error) {
+            console.error("NoThanksButton flow error:", error);
+            navigate("/payment-fail");
+          }
+
+          }}
+          >
+          No Thanks, Continue </button>
       </div>
-
-      {/* No Thanks Button */}
-      {/* <button className="mt-8 border border-gray-400 text-gray-700 hover:bg-gray-100 py-2 px-6 rounded-full transition" onClick={() => {
-        navigate('/checkout', {state: {cartData}});
-      }}>
-        No Thanks, Continue
-      </button> */}
-      {/* No Thanks Button with Billing + Draft Order */}
-              <button
-        className="mt-8 border border-gray-400 text-gray-700 hover:bg-gray-100 py-2 px-6 rounded-full transition"
-        onClick={async () => {
-        try {
-        const stored = localStorage.getItem("checkoutCart");
-        const parsed = stored ? JSON.parse(stored) : null;
-          // Extract cart data safely
-          const cartData =
-            parsed?.lines?.edges?.map((edge: any) => ({
-              variantId: edge?.node?.merchandise?.id,
-              quantity: edge?.node?.quantity,
-            })) || [];
-
-          console.log("Extracted cartData:", cartData);
-
-          if (!Array.isArray(cartData) || cartData.length === 0) {
-            console.warn("No valid items found in checkoutCart");
-            navigate("/payment-fail");
-            return;
-          }
-
-         
-          const customerId = parsed?.buyerIdentity?.customer?.id || null;
-
-          const formattedLines = cartData.map((item: any) => ({
-            variantId: item.variantId,
-            quantity: item.quantity,
-          }));
-
-          // Create Draft Order
-          const draftRes = await fetch("/api/create-draft-order", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              lines: formattedLines,
-              customerId, // include if available
-            }),
-          });
-
-          const draftData = await draftRes.json();
-          console.log("Draft order response:", draftData);
-
-          const draftOrderId =
-            draftData?.data?.draftOrderCreate?.draftOrder?.id || null;
-
-          if (!draftOrderId) {
-            console.error("Draft order creation failed:", draftData);
-            navigate("/payment-fail");
-            return;
-          }
-
-          //  Get Billing Token
-          const tokenResponse = await fetch(`${billingConfig?.baseUrl}/auth/token`, {
-            method: "POST",
-            headers: {
-              "Api-Version": "v1",
-              "Api-Environment": "dev",
-              "Content-Type": "application/json",
-              "Cache-Control": "no-cache",
-              "Ocp-Apim-Subscription-Key": billingConfig?.subscriptionKey,
-            },
-            body: JSON.stringify({
-              clientId: billingConfig?.clientId,
-              clientSecret: billingConfig?.clientSecret,
-              scope: billingConfig?.scope,
-              grantType: "client_credentials",
-            }),
-          });
-
-          const tokenData = await tokenResponse.json();
-          const accessToken = tokenData?.data?.accessToken;
-
-          if (!accessToken) {
-            console.error("Billing token missing:", tokenData);
-            navigate("/payment-fail");
-            return;
-          }
-
-          //  Billing Payload
-          const billingPayload = {
-            locationId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-            customerId: "c3d4e5f6-a7b8-9012-cdef-123456789012",
-            subscription: {
-              providerId: "d4e5f6a7-b8c9-0123-def1-234567890123",
-              label: "Monthly Premium Subscription",
-              currency: "USD",
-              items: cartData.map((item: any) => ({
-                productId: item.variantId,
-                label: "Custom Product",
-                price: 99.99,
-                quantity: item.quantity,
-                recurrenceInterval: "month",
-              })),
-            },
-            payment: {
-              paymentMethodId: "pm_1234567890abcdef",
-              customerPaymentKey: "cus_ABC123XYZ789",
-              metadata: { source: "web_portal" },
-            },
-          };
-
-          //  Call Billing API
-          const billingResponse = await fetch(`${billingConfig?.baseUrl}/purchase`, {
-            method: "POST",
-            headers: {
-              "Api-Version": "v1",
-              "Api-Environment": "dev",
-              "Ocp-Apim-Subscription-Key": billingConfig?.subscriptionKey,
-              Authorization: `Bearer ${accessToken}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(billingPayload),
-          });
-
-          const billingResult = await billingResponse.json();
-          console.log("Billing result:", billingResult);
-
-          if (!billingResponse.ok) {
-            console.error("Billing failed:", billingResult);
-            navigate("/payment-fail");
-            return;
-          }
-          localStorage.removeItem("checkoutCart");
-          //await fetch("/api/clear-cart", { method: "POST" });
-          navigate("/payment-success");
-        } catch (error) {
-          console.error("NoThanksButton flow error:", error);
-          navigate("/payment-fail");
-        }
-
-        }}
-        >
-        No Thanks, Continue </button>
     </div>
     </>
   );

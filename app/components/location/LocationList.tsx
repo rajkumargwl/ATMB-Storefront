@@ -530,11 +530,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                     {loc.ratingList?.some(
                       (r) => r.type === 'TOPRATED' && r.status === 'ACTIVE',
                     ) && (
-                      <span className="text-xs bg-orange-100 text-orange-600 font-semibold px-2 py-1 rounded">
-                        TOP RATED
-                      </span>
-                    )}
-                    <div className="flex items-center gap-2 relative after:content-[''] after:absolute after:w-[1px] after:h-[13px] after:bg-LightWhite after:top-[1px] after:right-[-17px]">
+                      <div className="flex items-center gap-2 relative after:content-[''] after:absolute after:w-[1px] after:h-[13px] after:bg-LightWhite after:top-[1px] after:right-[-17px]">
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <mask id="path-1-inside-1_3106_3781" fill="white">
                           <path d="M7.28406 0.999941C7.72406 0.732441 8.27656 0.732441 8.71656 0.999941C8.98406 1.16244 9.17656 1.25244 9.36656 1.30244C9.55656 1.35244 9.76906 1.37244 10.0816 1.36494C10.5966 1.35244 11.0741 1.62994 11.3216 2.07994C11.4716 2.35244 11.5941 2.52744 11.7341 2.66744C11.8741 2.80744 12.0466 2.92994 12.3216 3.07994C12.7741 3.32744 13.0491 3.80494 13.0366 4.31994C13.0291 4.63244 13.0491 4.84244 13.0991 5.03494C13.1491 5.22744 13.2391 5.41744 13.4016 5.68494C13.6691 6.12494 13.6691 6.67744 13.4016 7.11744C13.2391 7.38494 13.1491 7.57744 13.0991 7.76744C13.0491 7.95744 13.0291 8.16994 13.0366 8.48244C13.0491 8.99744 12.7716 9.47494 12.3216 9.72244C12.0491 9.87244 11.8741 9.99494 11.7341 10.1349C11.5941 10.2749 11.4716 10.4474 11.3216 10.7224C11.2866 10.7874 11.2466 10.8474 11.2016 10.9049V14.8049C11.2016 14.9399 11.1341 15.0649 11.0216 15.1399C10.9091 15.2149 10.7666 15.2274 10.6441 15.1749L7.99906 14.0349L5.35656 15.1674C5.23406 15.2199 5.09156 15.2074 4.97906 15.1324C4.86656 15.0574 4.79906 14.9349 4.79906 14.7999V10.8999C4.75406 10.8424 4.71406 10.7824 4.67906 10.7174C4.52906 10.4449 4.40656 10.2699 4.26656 10.1299C4.12656 9.98994 3.95406 9.86744 3.67906 9.71744C3.22656 9.46994 2.95156 8.99244 2.96406 8.47744C2.97156 8.16494 2.95156 7.95494 2.90156 7.76244C2.85156 7.56994 2.76156 7.37994 2.59906 7.11244C2.33156 6.67244 2.33156 6.11994 2.59906 5.67994C2.76156 5.41244 2.85156 5.21994 2.90156 5.02994C2.95156 4.83994 2.97156 4.62744 2.96406 4.31494C2.95156 3.79994 3.22906 3.32244 3.67906 3.07494C3.95156 2.92494 4.12656 2.80244 4.26656 2.66244C4.40656 2.52244 4.52906 2.35494 4.67906 2.08244C4.92656 1.62994 5.40406 1.35494 5.91906 1.36744C6.23156 1.37494 6.44156 1.35494 6.63406 1.30494C6.82656 1.25494 7.01656 1.16494 7.28406 1.00244V0.999941ZM10.0791 11.4324C9.76656 11.4249 9.55656 11.4449 9.36406 11.4949C9.17156 11.5449 8.98156 11.6349 8.71406 11.7974C8.27406 12.0649 7.72156 12.0649 7.28156 11.7974C7.01406 11.6349 6.82156 11.5449 6.63156 11.4949C6.44156 11.4449 6.22906 11.4249 5.91656 11.4324C5.80656 11.4349 5.69906 11.4249 5.59656 11.4024V14.1924L7.83906 13.2324C7.93906 13.1899 8.05406 13.1899 8.15406 13.2324L10.3966 14.1924V11.4024C10.2916 11.4249 10.1841 11.4349 10.0766 11.4324H10.0791ZM8.29906 1.68494C8.11406 1.57244 7.88406 1.57244 7.69906 1.68494C7.39906 1.86744 7.13156 1.99744 6.83906 2.07744C6.54656 2.15744 6.25156 2.17494 5.89906 2.16744C5.68406 2.16244 5.48406 2.27744 5.37906 2.46744C5.21156 2.77744 5.04406 3.02244 4.83156 3.23744C4.61906 3.45244 4.37406 3.61494 4.06406 3.78244C3.87406 3.88494 3.75906 4.08494 3.76406 4.30244C3.77156 4.65494 3.75156 4.94994 3.67406 5.24244C3.59656 5.53494 3.46656 5.79994 3.28406 6.09994C3.17156 6.28494 3.17156 6.51494 3.28406 6.69994C3.46656 6.99994 3.59656 7.26744 3.67656 7.55994C3.75656 7.85244 3.77406 8.14744 3.76656 8.49994C3.76156 8.71494 3.87656 8.91494 4.06656 9.01994C4.37656 9.18744 4.62156 9.35494 4.83656 9.56744C5.05156 9.77994 5.21656 10.0274 5.38406 10.3374C5.48656 10.5274 5.68656 10.6424 5.90406 10.6374C6.25656 10.6299 6.55156 10.6499 6.84406 10.7274C7.13656 10.8049 7.40156 10.9374 7.70406 11.1199C7.88906 11.2324 8.11906 11.2324 8.30406 11.1199C8.60406 10.9374 8.87156 10.8074 9.16406 10.7274C9.45656 10.6474 9.75156 10.6299 10.1041 10.6374C10.3191 10.6424 10.5191 10.5274 10.6241 10.3374C10.7916 10.0299 10.9591 9.78244 11.1716 9.56744C11.3841 9.35244 11.6316 9.18744 11.9416 9.01994C12.1316 8.91744 12.2466 8.71744 12.2416 8.49994C12.2341 8.14744 12.2541 7.85244 12.3316 7.55994C12.4091 7.26744 12.5416 7.00244 12.7241 6.69994C12.8366 6.51494 12.8366 6.28494 12.7241 6.09994C12.5416 5.79994 12.4116 5.53244 12.3316 5.23994C12.2516 4.94744 12.2341 4.65244 12.2416 4.29994C12.2466 4.08494 12.1316 3.88494 11.9416 3.77994C11.6341 3.61244 11.3866 3.44494 11.1716 3.23244C10.9566 3.01994 10.7841 2.77494 10.6166 2.46494C10.5141 2.27494 10.3141 2.15994 10.0966 2.16494C9.74406 2.17244 9.44906 2.15244 9.15656 2.07494C8.86406 1.99744 8.59906 1.86744 8.29906 1.68494ZM5.99906 6.39994C5.99906 7.50494 6.89406 8.39994 7.99906 8.39994C9.10406 8.39994 9.99906 7.50494 9.99906 6.39994C9.99906 5.29494 9.10406 4.39994 7.99906 4.39994C6.89406 4.39994 5.99906 5.29494 5.99906 6.39994ZM7.99906 9.19994C6.45156 9.19994 5.19906 7.94744 5.19906 6.39994C5.19906 4.85244 6.45156 3.59994 7.99906 3.59994C9.54656 3.59994 10.7991 4.85244 10.7991 6.39994C10.7991 7.94744 9.54656 9.19994 7.99906 9.19994Z"/>
@@ -546,6 +542,8 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                          TOP RATED
                       </span>
                     </div>
+                    )}
+                   
                     <div className='flex items-center gap-2'>
                       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                         <mask id="path-1-inside-1_3106_3786" fill="white">
@@ -585,23 +583,81 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
 
                 {/* Feature Icons */}
                 <div className="flex flex-col md:flex-row md:justify-between md:items-center mt-4">
-                <div className="flex flex-wrap gap-3 text-sm text-gray-700">
-                  
-                  {loc.featureList?.slice(0, 3).map((feature) => (
-                    
-                    <div
-                      key={loc._id + feature.label}
-                      className="flex items-center gap-2 font-Roboto text-PrimaryBlack font-normal text-[14px] leading-[21px] tracking-[0px]"
-                    >
-                      <span className='flex items-center w-[20px] h-[20px]'><Map /> </span> {feature.label}
-                    </div>
-                  ))}
-                  {loc.featureList && loc.featureList.length > 3 && (
-                    <span className="">
-                      +{loc.featureList.length - 3}
-                    </span>
-                  )}
-                </div>
+              
+                <div className="flex flex-wrap gap-3 text-sm text-gray-700 relative">
+  {/* Remove duplicates safely */}
+  {Array.from(
+    new Set((loc.featureList || []).map((f) => f.label))
+  )
+    .slice(0, 3)
+    .map((label) => (
+      <div
+        key={loc._id + label}
+        className="flex items-center gap-2 font-Roboto text-PrimaryBlack font-normal text-[14px] leading-[21px] tracking-[0px]"
+      >
+        <span className="flex items-center w-[20px] h-[20px]">
+          <Map />
+        </span>
+        {label}
+      </div>
+    ))}
+
+  {/* +N and Popup */}
+  {loc.featureList && loc.featureList.length > 3 && (
+    <div className="relative">
+      {/* +N Button */}
+      <span
+        className="cursor-pointer text-PrimaryBlack font-medium px-2 py-1 bg-[#F6F6F6] rounded-full border border-LightWhite"
+        onClick={(e) => {
+          e.stopPropagation();
+          setShowMore((prev) => !prev);
+        }}
+      >
+        +{
+          Array.from(new Set((loc.featureList || []).map((f) => f.label)))
+            .length - 3
+        }
+      </span>
+
+      {/* Popup */}
+      {showMore && (
+        <div
+          className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 
+                     bg-PrimaryBlack rounded-[12px] p-4 z-[9999] 
+                     flex flex-col gap-3 shadow-2xl border border-gray-700"
+          style={{
+            position: 'absolute',
+            zIndex: 9999,
+            transform: 'translateX(-50%)',
+            minWidth: '184px',
+          }}
+        >
+          {Array.from(
+            new Set((loc.featureList || []).map((f) => f.label))
+          )
+            .slice(3)
+            .map((label, idx) => (
+              <div
+                key={loc._id + label + idx}
+                className="flex items-center gap-2 hover:bg-white/10 rounded-md cursor-pointer px-2 py-1"
+              >
+                <img
+                  src={Location}
+                  alt="location"
+                  className="w-[18px] h-[18px] object-contain invert"
+                />
+                <span className="font-Roboto text-white text-[14px] leading-[21px]">
+                  {label}
+                </span>
+              </div>
+            ))}
+        </div>
+      )}
+    </div>
+  )}
+</div>
+
+
 
                 <div className="flex items-center flex-wrap gap-3 relative">
                     {/* Show first 3 */}
@@ -628,10 +684,9 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                               }`}
                         >
                           +{hiddenItems.length}
-                        </button> */}
+                        </button>
 
-                        {/* Popover */}
-                        {/* {showMore && (
+                        {showMore && (
                           <div className="absolute left-[-75px] bottom-10 min-w-[184px] bg-PrimaryBlack rounded-[12px] p-4 z-10 flex flex-col gap-3">
                             {hiddenItems.map((service, idx) => (
                               <div key={idx} className="flex items-center gap-2 text-sm hover:bg-gray-100 rounded-md cursor-pointer">

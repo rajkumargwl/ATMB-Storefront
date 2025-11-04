@@ -136,7 +136,7 @@ export default function SearchBoxCountry({
                     }, 200);
                     }}
                   >
-                    <span className="mr-2 font-medium text-PrimaryBlack hover:text-[#ff6600]">{item.name}</span>
+                    <span className="mr-2 font-medium text-PrimaryBlack hover:text-[#ff6600]">{item.displayName}</span>
                     <span className="text-LightGray font-normal hover:text-[#ff6600]">
                       {item.city}, {item.postalCode}
                     </span>
