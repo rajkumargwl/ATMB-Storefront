@@ -14,14 +14,15 @@ type BusinessAcceleratorSectionProps = {
  
 export default function BusinessAcceleratorSection({ data }: BusinessAcceleratorSectionProps) {
   // if (!data) return null; // safety check
- 
+
  
   return (
     <section
       className="px-5 py-[40px] md:py-[54px] bg-white"
       aria-labelledby="business-accelerator-title"
       role="region"
-    >
+    > 
+
       <div className="max-w-[1240px] mx-auto flex flex-col md:flex-row gap-[62px] lg:gap-[135px] items-center">
         {/* Text Content */}
         <div className="w-full md:w-[51.4%] space-y-5 md:space-y-5">
@@ -30,7 +31,7 @@ export default function BusinessAcceleratorSection({ data }: BusinessAccelerator
               id="business-accelerator-title"
               className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px]"
             >
-              {data.title}
+              {data.title} 
             </h2>
           )}
  

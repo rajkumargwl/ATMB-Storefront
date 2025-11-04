@@ -129,7 +129,7 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
   return (
     <>
       {module.modules?.map((sub: any) => (
-        <Module key={sub._key} module={sub} />
+        <Module key={sub._key} module={sub} bundles={bundles}  />
       ))}
     </>
   );
@@ -166,7 +166,7 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
   return (
     <>
       {module.modules?.map((sub: any) => (
-        <Module key={sub._key} module={sub} />
+        <Module key={sub._key} module={sub} bundles={bundles} />
       ))}
     </>
   );
@@ -180,7 +180,7 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
   return (
     <>
       {module.modules?.map((sub: any) => (
-        <Module key={sub._key} module={sub} />
+        <Module key={sub._key} module={sub} bundles={bundles} />
       ))}
     </>
   );
@@ -219,7 +219,7 @@ case 'smartBusinessSection':
       return (
         <>
           {module.modules?.map((sub: any) => (
-            <Module key={sub._key} module={sub} pageType='operator' /> // 争 PASSING 'operator' down to children
+            <Module key={sub._key} module={sub} pageType='operator' bundles={bundles} /> // 争 PASSING 'operator' down to children
           ))}
         </>
       );
@@ -279,7 +279,7 @@ case 'smartBusinessSection':
   return (
     <>
       {module.modules?.map((sub: any) => (
-        <Module key={sub._key} module={sub} pageType={pageType} />
+        <Module key={sub._key} module={sub} pageType={pageType} bundles={bundles} />
       ))}
     </>
   );
@@ -318,7 +318,7 @@ case 'smartBusinessSection':
       return (
         <>
           {module.modules?.map((sub: any) => (
-            <Module key={sub._key} module={sub} pageType={pageType} />
+            <Module key={sub._key} module={sub} pageType={pageType} bundles={bundles} />
           ))}
         </>
       );
@@ -346,7 +346,7 @@ case 'smartBusinessSection':
       return (
         <>
           {module.modules?.map((sub: any) => (
-            <Module key={sub._key} module={sub} pageType={pageType} />
+            <Module key={sub._key} module={sub} pageType={pageType} bundles={bundles} />
           ))}
         </>
       );
@@ -370,7 +370,7 @@ case 'smartBusinessSection':
         <>
        
           {module.modules?.map((sub: any) => (
-            <Module key={sub._key} module={sub} pageType={pageType} />
+            <Module key={sub._key} module={sub} pageType={pageType}  bundles={bundles} />
           ))}
         </>
       );
@@ -384,7 +384,7 @@ case 'smartBusinessSection':
       return (
         <>
           {module.modules?.map((sub: any) => (
-            <Module key={sub._key} module={sub} pageType={pageType} />
+            <Module key={sub._key} module={sub} pageType={pageType} bundles={bundles} />
           ))}
         </>
       );
@@ -393,7 +393,7 @@ case 'smartBusinessSection':
       return (
         <>
           {module.modules?.map((sub: any) => (
-            <Module key={sub._key} module={sub} pageType={pageType} />
+            <Module key={sub._key} module={sub} pageType={pageType} bundles={bundles} />
           ))}
         </>
       );
@@ -434,7 +434,7 @@ case 'smartBusinessSection':
       return (
         <>
           {module.modules?.map((sub: any) => (
-            <Module key={sub._key} module={sub} pageType={pageType} />
+            <Module key={sub._key} module={sub} pageType={pageType} bundles={bundles} />
           ))}
         </>
       );
@@ -447,7 +447,7 @@ case 'smartBusinessSection':
       return (
         <>
           {module.modules?.map((sub: any) => (
-            <Module key={sub._key} module={sub} pageType={pageType} />
+            <Module key={sub._key} module={sub} pageType={pageType} bundles={bundles} />
           ))}
         </>
       );
@@ -467,7 +467,7 @@ case 'smartBusinessSection':
     return (
       <>
         {module.modules?.map((sub: any) => (
-          <Module key={sub._key} module={sub} pageType={pageType} />
+          <Module key={sub._key} module={sub} pageType={pageType} bundles={bundles} />
         ))}
       </>
     );
@@ -534,6 +534,7 @@ case 'solutionMailboxBenefitFaqModule':
       return <Locations data={module} />;
     
      case 'plans':
+      console.log("check bundle data for plans module:", bundles);
        return <Plans data={module} bundles={bundles}/>;
     
      case 'bundles':
@@ -559,7 +560,7 @@ case 'solutionMailboxBenefitFaqModule':
       return (
         <>
           {module.modules?.map((sub: any) => (
-            <Module key={sub._key} module={sub} pageType={pageType} />
+            <Module key={sub._key} module={sub} pageType={pageType} bundles={bundles} />
           ))}
         </>
       );
