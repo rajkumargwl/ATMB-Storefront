@@ -60,7 +60,7 @@ export default function SolutionHero({ data }: Props) {
           </p>
  
           {data?.cta?.label && (
-            <Link to={data?.cta?.url || "#"} className="flex items-center justify-center w-full md:w-[207px] bg-DarkOrange text-white font-Roboto font-medium leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-[16px] py-[12px] rounded-[100px] overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]">
+            <Link to={data?.cta?.url || "/PDP/virtual-phone-number"} className="flex items-center justify-center w-full md:w-[207px] bg-DarkOrange text-white font-Roboto font-medium leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-[16px] py-[12px] rounded-[100px] overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]">
               {data.cta.label}             
             </Link>
           )}

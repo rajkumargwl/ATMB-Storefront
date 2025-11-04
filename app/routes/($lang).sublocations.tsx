@@ -10,30 +10,30 @@ import {notFound, validateLocale} from '~/lib/utils';
    description:
      data?.page?.seo?.description ||
      'Choose the most practical location for your virtual business address. Customers will easily find your business and you will make a good first impression.',
- });
- export const handle = { seo };
+});
+export const handle = { seo };
 export async function loader({context, request, params}: LoaderFunctionArgs) {
   validateLocale({ context, params });
    let language = params.lang || 'en';
    if(language !== 'en-es'){
      language = 'en';
    }
-
+ 
   const cache = context.storefront.CacheCustom({mode: 'public', maxAge: 60, staleWhileRevalidate: 60});
-
+ 
   const [header, footer] = await Promise.all([
     context.sanity.query({query: HEADER_QUERY,params: { language }, cache}),
     context.sanity.query({query: FOOTER_QUERY,params: { language }, cache}),
   ]);
-
+ 
   if (!header || !footer) throw notFound();
-
+ 
   const url = new URL(request.url);
   const q = url.searchParams.get('q');
   console.log("Search query:", q);
-
+ 
   let results = {locations: [] as LocationAPI[]};
-
+ 
   if (q) {
     console.log("Performing search for query:", q);
     const searchParam = `${q}*`;
@@ -110,7 +110,7 @@ export async function loader({context, request, params}: LoaderFunctionArgs) {
     } catch (error) {
       console.error('Sanity query failed:', error);
     }
-  } 
+  }
   else {
     const locations: LocationAPI[] = await context.sanity.query({
 query: `*[_type == "location"][0...50]{
@@ -177,12 +177,13 @@ query: `*[_type == "location"][0...50]{
  
     results.locations = locations;
   }
-
+ 
   return defer({locations:results.locations, header, footer, q});
 }
-
+ 
 export default function LocationsPage() {
   const {locations, q} = useLoaderData<typeof loader>();
   console.log("Locations data:", locations);
   return <LocationsList locations={locations} initialQuery={q} isCityPage={false} country="" />;
 }
+ 

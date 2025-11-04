@@ -6,15 +6,16 @@ import { toHTML } from '@portabletext/to-html';
 import type { PortableTextBlock } from '@portabletext/types';
 import { Link } from 'react-router-dom';
 import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
+import RightArrowWhite from '~/components/icons/RightArrowWhite';
 const seo: SeoHandleFunction = ({ data }) => ({
-  title: data?.post?.title 
+  title: data?.post?.title
     ? `${data.post.title} | Anytime Mailbox`
     : 'How Digital Nomads Keep One U.S. Address for Taxes & Banking | Anytime Mailbox',
-  description: data?.post?.content 
+  description: data?.post?.content
     ? getPlainText(data.post.content).slice(0, 160) // optional: first 160 chars as description
     : 'Find out how digital nomads can keep one U.S. address for taxes and banking...'
 });
-
+ 
 export const handle = { seo };
 export async function loader({ context, params }: LoaderFunctionArgs) {
   const { slug } = params;
@@ -242,8 +243,11 @@ export default function BlogPost() {
                         <span className="font-Roboto text-white font-semibold leading-[43.2px] md:leading-[61.6px] text-[36px] md:text-[56px] tracking-[-0.54px] md:tracking-[-1.12px]">1000+</span>
                         <p className="font-Roboto text-white font-medium leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px]">Rely on Virtual Mailbox for a professional address, business line, and growth tools — all in one.</p>
                     </div>
-                   <Link to={`/create-account`} className="flex items-center justify-center w-full bg-DarkOrange text-white font-medium font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full h-[52px]">
-                   Get Started Today</Link>
+                   <Link to={`/create-account`} className="group relative  flex items-center justify-center w-full bg-DarkOrange text-white font-medium font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full h-[52px] overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]">
+                     <span className="relative flex items-center">Get Started Today <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
+                        <RightArrowWhite />
+                      </span></span>
+                   </Link>
                   </div>
                 </aside>            
               )}

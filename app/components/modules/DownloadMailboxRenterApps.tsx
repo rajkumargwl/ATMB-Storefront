@@ -31,7 +31,11 @@ const DownloadMailboxRenterApps: React.FC<DownloadMailboxRenterAppsProps> = ({
   googlePlayIcon,
   appStoreLink,
   googlePlayLink,
-}) => {
+  
+}) => 
+  
+  
+  {  
   return (
     <section className="download-mailbox-renter-apps px-5 py-[40px] md:py-[60px] lg:py-[80px] bg-PrimaryBlack relative z-[2] overflow-hidden">
       <div className="absolute hidden md:flex z-[1] top-[0px] left-[0px]">
@@ -92,7 +96,7 @@ const DownloadMailboxRenterApps: React.FC<DownloadMailboxRenterAppsProps> = ({
               </a>
             )}
  
-            {googlePlayIcon?.url && (
+             (
               <a
                 href={googlePlayLink || '#'}
                 target="_blank"
@@ -104,7 +108,7 @@ const DownloadMailboxRenterApps: React.FC<DownloadMailboxRenterAppsProps> = ({
                   className="w-full object-cover"
                 />
               </a>
-            )}
+            )
           </div>
         </div>
       </div>

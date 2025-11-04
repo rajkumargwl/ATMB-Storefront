@@ -97,7 +97,7 @@ export default defineType({
       fields: [
         defineField({ name: 'heading', title: 'Heading', type: 'string' }),
         defineField({ name: 'buttonText', title: 'Button Text', type: 'string' }),
-        defineField({ name: 'buttonUrl', title: 'Button URL', type: 'url' }),
+        defineField({ name: 'buttonUrl', title: 'Button URL', type: 'string' }),
       ],
     }),
 

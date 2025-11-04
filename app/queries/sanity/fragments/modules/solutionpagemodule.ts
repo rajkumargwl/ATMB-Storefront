@@ -112,7 +112,6 @@ export const SOLUTION_PAGE_MODULE = groq`
       }
     },
 
-    // ✅ FAQ module
     (_type == "faq") => {
       headline,
       subheadline,
