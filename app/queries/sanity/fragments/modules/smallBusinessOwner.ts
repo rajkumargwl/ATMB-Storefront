@@ -163,7 +163,7 @@ export const SMALL_BUSINESS_OWNER_MODULE = groq`
   }
 },
 
-    // 💰 Plans Section
+    //  Plans Section
     (_type == "plans") => {
       individualProductsTab {
         heading,
