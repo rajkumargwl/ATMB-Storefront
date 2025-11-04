@@ -40,14 +40,12 @@ export function HowItWorksVirtualbox({ data }: HowItWorksVirtualboxProps) {
                 {data.links.map((link, index) => (
                   <Link
                     key={index}
-                    to={link.url || '#'}
-                    className="group relative  font-Roboto text-DarkOrange font-normal leading-[21px] md:leading-[21px] text-[14px] md:text-[14px] tracking-[0px] md:tracking-[0px]
-                      underline decoration-solid decoration-skip-ink-auto decoration-auto underline-offset-auto  border-r border-LightWhite pr-[20px] last:border-none overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]"
+                    to={link.url || '#how-is-vm'}
+                    className="  font-Roboto text-DarkOrange font-normal leading-[21px] md:leading-[21px] text-[14px] md:text-[14px] tracking-[0px] md:tracking-[0px]
+                      underline decoration-solid decoration-skip-ink-auto decoration-auto underline-offset-auto  border-r border-LightWhite pr-[20px] last:border-none"
                   >
-                   
-                     <span className="relative flex items-center"> {link.label} <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
-              <RightArrowWhite />
-            </span></span>
+                   {link.label} 
+                    
                   </Link>
                 ))}
               </div>

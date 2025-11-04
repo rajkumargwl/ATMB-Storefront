@@ -15,7 +15,7 @@ interface HowItWorksHeroProps {
  
 export function HowItWorksHero({ data }: HowItWorksHeroProps) {
   return (
-    <section className="w-full bg-[#F6F6F6] py-[40px] md:py-[60px] lg:py-[100px] px-5">
+    <section   id="how-is-vm" className="w-full bg-[#F6F6F6] py-[40px] md:py-[60px] lg:py-[100px] px-5">
       <div className="max-w-[1240px] mx-auto">
         <div className="flex flex-col md:flex-row gap-[44px] lg:gap-[110px] items-start">
           

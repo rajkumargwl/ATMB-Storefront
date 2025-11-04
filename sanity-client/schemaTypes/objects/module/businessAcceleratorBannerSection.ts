@@ -29,16 +29,12 @@ export const businessAcceleratorBannerSection = defineType({
           initialValue: 'Join Business Accelerator',
           validation: (Rule) => Rule.required(),
         }),
-        defineField({
-          name: 'url',
-          title: 'Button URL',
-          type: 'url',
-          validation: (Rule) =>
-            Rule.uri({
-              allowRelative: true,
-              scheme: ['http', 'https'],
-            }),
-        }),
+       defineField({
+  name: 'buttonLink',
+  title: 'Button URL',
+  type: 'string',
+  description: 'Enter full or relative link',
+})
       ],
     }),
 

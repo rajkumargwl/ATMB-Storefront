@@ -74,11 +74,8 @@ export const howitworks2 = defineType({
         defineField({
           name: 'url',
           title: 'Button URL',
-          type: 'url',
-          validation: (Rule) =>
-            Rule.uri({
-              scheme: ['http', 'https', 'mailto', 'tel'],
-            }),
+          type: 'string',
+         
         }),
       ],
     }),

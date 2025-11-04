@@ -316,7 +316,8 @@ productplans,
 referralStep,
 renterReferralBannerModule,
 inviteAFriendSection,
-pdpanytimePhonebannerSection
+pdpanytimePhonebannerSection,
+operatorOurAdvantage
 ]
 
 import {portableTextType} from './portableText/portableTextType'
@@ -338,6 +339,7 @@ import {settingsType} from './singletons/settingsType'
 import { referralStep } from './objects/module/referralStep'
 import { renterReferralBannerModule } from './objects/module/renterReferralBannerModule'
 import { inviteAFriendSection } from './objects/module/inviteAFriend'
+import { operatorOurAdvantage } from './objects/module/operatorouradvantage'
 
 
 const singletons = [homeType, settingsType,]

@@ -139,7 +139,7 @@ export const ANYTIME_PHONE_MODULE = groq`
       }
     },
     // 🔸 PLANS Section
-    (_type == "plansSection") => {
+    (_type == "plans") => {
       // Individual Products Tab
       individualProductsTab {
         heading,

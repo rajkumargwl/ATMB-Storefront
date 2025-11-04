@@ -1,3 +1,4 @@
+import RightArrowWhite from '~/components/icons/RightArrowWhite';
 interface InviteFriendProps {
   data: {
     _key?: string;
@@ -15,7 +16,7 @@ interface InviteFriendProps {
     };
   };
 }
-
+ 
 export function InviteFriend({ data }: InviteFriendProps) {
   const {
     sectionTitle,
@@ -24,18 +25,18 @@ export function InviteFriend({ data }: InviteFriendProps) {
     mainImage,
     cta,
   } = data || {};
-
+ 
   // ✅ Map variables to your existing JSX names
   const label = sectionTitle;
   const buttonText = cta?.label;
   const buttonLink = cta?.url;
   const image = mainImage;
-
+ 
   const renderHeading = () => {
     if (!heading) return null;
     return heading;
   };
-
+ 
   return (
     <section className="px-5 py-[40px] md:py-[54px] bg-white">
       <div className="max-w-[1240px] mx-auto">
@@ -46,29 +47,32 @@ export function InviteFriend({ data }: InviteFriendProps) {
                 {label}
               </span>
             )}
-
+ 
             {heading && (
               <h1 className="mt-4 md:mt-6 font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[61.6px] text-[24px] md:text-[56px] tracking-[-0.36px] md:tracking-[-1.12px]">
                 {renderHeading()}
               </h1>
             )}
-
+ 
             {description && (
               <p className="mt-4 font-Roboto text-PrimaryBlack font-normal md:font-medium leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px]">
                 {description}
               </p>
             )}
-
+ 
             {buttonText && (
               <a
                 href={buttonLink || '#'}
-                className="mt-6 flex items-center justify-center w-full md:w-[259px] h-[52px] md:h-[52px] rounded-full bg-DarkOrange px-4 py-3 text-white font-Roboto font-medium text-[16px] md:text-[16px] leading-[16px] tracking-[0.08px]"
+                className="group relative mt-6 flex items-center justify-center w-full md:w-[259px] h-[52px] md:h-[52px] rounded-full bg-DarkOrange px-4 py-3 text-white font-Roboto font-medium text-[16px] md:text-[16px] leading-[16px] tracking-[0.08px] overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]"
               >
-                {buttonText}
+                
+                 <span className="relative flex items-center">{buttonText} <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
+              <RightArrowWhite />
+            </span></span>
               </a>
             )}
           </div>
-
+ 
           {image?.url && (
             <div className="w-full md:w-[54.85%] relative">
               <img

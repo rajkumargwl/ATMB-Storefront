@@ -247,15 +247,10 @@ case 'smartBusinessSection':
      case 'businessAtFingertips':
       return <BusinessAtFingertips data={module} />;
  
-  case 'whyBusinessChooseUs':
+    case 'operatorOurAdvantage':
+      return <OperatorAdvantage module={module} />;
      
-        return <OperatorAdvantage module={module} />;
- 
-      // Renter Referral Program Logic (module._key === '21b68d61ef37' was a key check)
-      if (module._key === '21b68d61ef37') {
-        return <RenterReferralWork data={module} />;
-      }
-      // Default Fallback
+      case 'whyBusinessChooseUs':
       return <WhyBusinessChooseUs data={module} />;
         
     // testimonial -> OperatorThousand / Testimonial
