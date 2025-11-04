@@ -371,10 +371,10 @@ useEffect(() => {
             {!isLoggedIn && getStartedButton && (
               <Link
                 // to={usePrefixPathWithLocale('create-account')}
-                to="#"
+                to={usePrefixPathWithLocale(getStartedButton?.link ?? '#')} 
                 className="rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-4 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2 transition-all hover:scale-[1.02] hover:bg-[#DD5827]"
               >
-                {getStartedButton.label} 
+                {getStartedButton?.label} 
               </Link>
             )}
           </div>
@@ -436,11 +436,11 @@ useEffect(() => {
               {getStartedButton && (
                 <Link
                   // to={usePrefixPathWithLocale('create-account')}
-                  to="#"
+                  to={usePrefixPathWithLocale(getStartedButton?.link ?? '#')}
                   className="w-fit rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-3 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2 transition-all hover:scale-[1.02] hover:bg-[#DD5827]"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  {getStartedButton.label} 
+                  {getStartedButton?.label} 
                 </Link>
               )}
             </nav>
@@ -534,7 +534,7 @@ useEffect(() => {
           </Link> */}
           <Link
             // to={usePrefixPathWithLocale('create-account')}
-            to="#"
+            to={usePrefixPathWithLocale(getStartedButton?.link ?? '#')}
             className="hidden md:flex rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-4 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2 transition-all hover:scale-[1.02] hover:bg-[#DD5827]"
           >
             {getStartedButton?.label || "Get Started"} 
