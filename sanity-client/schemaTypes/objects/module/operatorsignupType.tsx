@@ -20,6 +20,8 @@ name: 'operatorsignup',
        {type: 'whyBusinessChooseUs'}, 
          {type: 'joinTeamSection'}, 
           {type: 'testimonial'}, 
+          {type: 'operatorOurAdvantage'}, 
+          
       ],
     }),
   ],

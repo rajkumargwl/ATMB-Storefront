@@ -57,7 +57,7 @@ export const solutionMailboxLocationHowItWorksModule = defineType({
             defineField({
               name: 'buttonLink',
               title: 'Button Link',
-              type: 'url',
+              type: 'string',
               description: 'URL for button action',
             }),
           ],

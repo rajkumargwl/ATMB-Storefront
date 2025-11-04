@@ -96,7 +96,7 @@ export const homeSection4 = defineType({
     defineField({
       name: 'browseAllUrl',
       title: 'Browse All Locations URL',
-      type: 'url',
+      type: 'string',
     }),
   ],
   preview: {

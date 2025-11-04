@@ -43,7 +43,7 @@ export default function BusinessAcceleratorSection({ data }: BusinessAccelerator
  
           {data.cta?.label && (
             <a
-              href={data.cta.url ?? '#'}
+              href={data.cta.url ?? '/PDP/business-accelerator'}
               className="flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full w-full md:w-[209px] h-[52px]"
               aria-label={data.cta.label}
             >

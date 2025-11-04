@@ -7,13 +7,14 @@ import BlackChevron from "~/components/icons/BlackChevron";
 import BlackwhiteChevron from "~/components/icons/BlackwhiteChevron";
 import RightArrowWhite from '~/components/icons/RightArrowWhite';
 import { motion } from "framer-motion";
- 
+ import { useNavigate } from "@remix-run/react";
  
 type Props = {
   data: SanityWhoWeHelp;
 };
  
 export default function HomeHero({ data }: Props) {
+    const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(data?.tabs?.[0]?.label || "");
   const activeData = data?.tabs?.find((t) => t.label === activeTab);
   
@@ -324,7 +325,10 @@ export default function HomeHero({ data }: Props) {
               </div>  
  
               {activeData.button?.label && (
-                <button className="group flex items-center justify-center md:max-w-[386px] mt-6 w-full bg-DarkOrange text-white font-medium font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[14px] md:py-[18px] rounded-full overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]">
+                <button 
+                
+                  onClick={() => navigate("/small-buisness-owner")}
+                className="group flex items-center justify-center md:max-w-[386px] mt-6 w-full bg-DarkOrange text-white font-medium font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[14px] md:py-[18px] rounded-full overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]">
                   <span className="relative flex items-center">
                     {activeData.button.label}
                     <span className="sr-only">(Explore More services)</span>

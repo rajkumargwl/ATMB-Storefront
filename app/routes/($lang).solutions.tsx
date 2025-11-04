@@ -22,7 +22,7 @@ import { SOLUTIONS_PAGE_QUERY } from '~/queries/sanity/fragments/pages/solutionp
 // SEO
 // -----------------
 const seo: SeoHandleFunction = ({ data }) => ({
-  title: data?.page?.seo?.title || 'Solutions - Sanity x Hydrogen',
+  title: data?.page?.seo?.title || 'Solutions | Anytime Mailbox',
   description:
     data?.page?.seo?.description ||
     'Explore our virtual mailbox solutions and benefits.',

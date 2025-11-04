@@ -164,7 +164,7 @@ export default function CaseStudyPage() {
                 <a
                   href={caseStudy.cta.file.asset.url}
                   download
-                  className="mt-5 flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full w-[193px] h-[52px]"
+                  className="mt-5 flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full w-[193px] h-[52px] transition-all hover:scale-[1.02] hover:bg-[#DD5827]"
                 >
                   {caseStudy.cta.text}
                 </a>

@@ -29,7 +29,7 @@ export const howitworksVirtualbox = defineType({
           type: 'object',
           fields: [
             { name: 'label', title: 'Label', type: 'string' },
-            { name: 'url', title: 'URL', type: 'url' },
+            { name: 'url', title: 'URL', type: 'string' },
           ],
         }),
       ],
@@ -40,7 +40,7 @@ export const howitworksVirtualbox = defineType({
       type: 'object',
       fields: [
         { name: 'label', title: 'Label', type: 'string' },
-        { name: 'url', title: 'URL', type: 'url' },
+        { name: 'url', title: 'URL', type: 'string' },
       ],
     }),
     defineField({

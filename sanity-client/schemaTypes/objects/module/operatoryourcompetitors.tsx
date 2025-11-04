@@ -47,7 +47,7 @@ defineField({
     defineField({
       name: 'ctaUrl',
       title: 'Button URL',
-      type: 'url',
+      type: 'string',
       description: 'Link for the call-to-action button',
     }),
  

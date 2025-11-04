@@ -56,7 +56,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
       analytics: { pageType: AnalyticsPageType.page },
     });
   }
- 
+  console.log("founder dataa",JSON.stringify(founder,null,2));
   const gids = fetchGids({ page: founder, context });
  
   return defer({
@@ -94,7 +94,7 @@ export default function FounderDetails() {
  
   // unwrap the data
   const founderData = founder?.modules?.[0]?.founders;
- 
+
   return (
     <SanityPreview data={founder} query={FOUNDER_DETAIL_PAGE_QUERY}>
       {(founder) => (
@@ -149,7 +149,7 @@ export default function FounderDetails() {
                   {founderData?.socialLinks && (
                     <div className="hidden md:flex flex-row gap-4 items-start">
                       <a
-                        href={founderData.socialLinks}
+                         href={founderData.socialLinks?.linkedin}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="bg-transparent border border-LightWhite
@@ -192,7 +192,7 @@ export default function FounderDetails() {
                   {founderData?.socialLinks && (
                     <div className="flex md:hidden flex-row gap-4 items-start mt-6">
                       <a
-                        href={founderData.socialLinks}
+                         href={founderData.socialLinks?.linkedin}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="bg-transparent border border-LightWhite

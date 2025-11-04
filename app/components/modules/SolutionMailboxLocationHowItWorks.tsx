@@ -70,7 +70,7 @@ const SolutionMailboxLocationHowItWorks: React.FC<SolutionMailboxLocationHowItWo
                 {card?.buttonText && (
                   <div className="mt-8">
                     <a
-                      href={card?.buttonLink || "#"}
+                      href={card?.buttonLink || "/sublocations"}
                       className="flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full w-full h-[52px]"
                     >
                       {card.buttonText}

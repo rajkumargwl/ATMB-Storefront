@@ -21,7 +21,7 @@ const BusinessBanner: React.FC<BusinessBannerProps> = ({ title, cta, image }) =>
         <h2 className="mb-[32px] max-w-[772px] font-Roboto text-white font-semibold leading-[38.4px] md:leading-[61.6px] text-[32px] md:text-[56px] tracking-[-0.48px] md:tracking-[-1.12px]">{title}</h2>
         {cta?.label && (
           <a
-            href={cta.url ?? "#"}
+            href={cta.url ?? "/PDP/business-accelerator"}
             className="flex items-center justify-center w-full md:w-[248px] h-[52px] md:h-[52px] rounded-[100px] font-medium leading-[16px] tracking-[0.08px] text-[16px] text-PrimaryBlack bg-white px-4 py-[12px]"
           >
             {cta.label}
