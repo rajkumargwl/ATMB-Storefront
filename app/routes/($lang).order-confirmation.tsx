@@ -392,7 +392,7 @@ export default function CheckoutPage() {
                 const billingAttr = attrs.find((a: any) => a.key === "billing_product_id");
                 const selectedPlan =
                 l.node?.merchandise?.selectedOptions?.[0]?.value || "Default Plan";
-              const planPrice = parseFloat(l.node?.cost?.totalAmount?.amount || 0);
+                const planPrice = parseFloat(l.node?.cost?.totalAmount?.amount || 0);
                 return {
                   variantId: l.node?.merchandise?.id,
                   quantity: l.node?.quantity ?? 1,

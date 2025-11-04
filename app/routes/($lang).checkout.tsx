@@ -232,6 +232,8 @@ useEffect(() => {
 
     setLoading(false);
   };*/
+  const [cardHolderName, setCardHolderName] = useState("");
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -259,7 +261,7 @@ useEffect(() => {
         card: cardNumberElement, 
         //billing_details: email ? { email } : undefined,
         billing_details: {
-          name: customer.name,
+          name: cardHolderName || customer.name,
           email: customer.email,
         },
       });
@@ -276,7 +278,7 @@ useEffect(() => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: customer.email,
-          name: customer.name, 
+          name: cardHolderName || customer.name,
           paymentMethodId: paymentMethod.id,
         }),
         
@@ -504,6 +506,8 @@ useEffect(() => {
                                       type="text"
                                       aria-label="Card Holder Name"
                                       placeholder="John Doe"
+                                      value={cardHolderName}  
+                                      onChange={(e) => setCardHolderName(e.target.value)}  
                                       className="peer font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#b3b3b3] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
                                     />
                                     <label aria-label="Card Holder Name" className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#4D4E4F] transition-all duration-150">

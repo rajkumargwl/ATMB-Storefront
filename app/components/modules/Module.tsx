@@ -112,13 +112,14 @@ type Props = {
   homeSearchResults?: any;
   searchQuery?: string | null;
   bundles?: any[];
+  individualProducts?: any[];
   pageType?: 'operator' | 'default' ; // 争 ADDED pageType PROP
   highlights?: any[];
   productData?:any[];
   location?:any[];
 };
 
-export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery, bundles, pageType = 'default',highlights,productData, location}: Props) { // 争 Set default pageType
+export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery, bundles,individualProducts, pageType = 'default',highlights,productData, location}: Props) { // 争 Set default pageType
  
 
   // Helper boolean for conditional rendering
@@ -529,7 +530,7 @@ case 'solutionMailboxBenefitFaqModule':
       return <Locations data={module} />;
     
      case 'plans':
-       return <Plans data={module} bundles={bundles}/>;
+       return <Plans data={module} bundles={bundles} individualProducts={individualProducts} />;
     
      case 'bundles':
      return <Bundles data={module} />;
