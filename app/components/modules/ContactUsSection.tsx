@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Contact from "~/components/media/contact.png";
 
 type ContactUsProps = {
@@ -26,6 +26,24 @@ type ContactUsProps = {
 
 export default function ContactUsSection({ data }: ContactUsProps) {
   if (!data) return null;
+
+  const recaptchaRef = useRef<HTMLDivElement | null>(null);
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+
+  // ✅ Load Google reCAPTCHA script
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://www.google.com/recaptcha/api.js";
+    script.async = true;
+    document.body.appendChild(script);
+  
+    // ✅ Define global callback for reCAPTCHA
+    (window as any).onRecaptchaSuccess = (token: string) => {
+      setRecaptchaToken(token);
+    };
+  }, []);
+  
+  
   // const HUBSPOT_PORTAL_ID = '244116084';
   // const HUBSPOT_FORM_ID = '3fb77e45-e6b4-4275-ad2f-4ef212666d0d';
   const HUBSPOT_PORTAL_ID = '47460136'; //client's HubSpot Portal ID
@@ -33,6 +51,11 @@ export default function ContactUsSection({ data }: ContactUsProps) {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!recaptchaToken) {
+      alert("Please verify you are not a robot before submitting.");
+      return;
+    }
   
     const formData = new FormData(e.currentTarget);
     const payload = Object.fromEntries(formData.entries()); // convert to JSON
@@ -83,6 +106,10 @@ export default function ContactUsSection({ data }: ContactUsProps) {
       // --- Success message (only if both succeed) ---
       alert("Thank you! Your form has been submitted.");
       e.currentTarget?.reset(); 
+      setRecaptchaToken(null);
+      if (window.grecaptcha && recaptchaRef.current) {
+        window.grecaptcha.reset();
+      }
   
       // if (result.success) {
       //   alert("Thank you! Your form has been submitted.");
@@ -172,7 +199,13 @@ export default function ContactUsSection({ data }: ContactUsProps) {
 
               
               <div className="relative">
-                <img src={Contact} alt="captcha" className="rounded-[20px] w-full max-w-[368px] h-auto object-cover" />
+                 {/* ✅ Google reCAPTCHA */}
+                 <div
+                    className="g-recaptcha"
+                    ref={recaptchaRef}
+                    data-sitekey="6LeqBQIsAAAAAD5eyCvN_gJrVI8vGTvCp9h4PX0n"
+                    data-callback="onRecaptchaSuccess"
+                  ></div>
               </div>
 
               
