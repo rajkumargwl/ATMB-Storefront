@@ -7,6 +7,18 @@ import RightArrowWhite from '~/components/icons/RightArrowWhite';
 import { useEffect, useState } from 'react';
 import {usePrefixPathWithLocale} from '~/lib/utils';
 
+// -----------------
+// SEO
+// -----------------
+const seo: SeoHandleFunction = ({ data }) => ({
+  title: data?.page?.seo?.title || 'Mailbox Locations | Anytime Mailbox',
+  description:
+    data?.page?.seo?.description ||
+    'Explore our virtual mailbox solutions and benefits.',
+});
+export const handle = { seo };
+// -----------------
+
 // Loader
 export async function loader({context}: LoaderFunctionArgs) {
   const cache = context.storefront.CacheCustom({

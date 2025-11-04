@@ -34,12 +34,11 @@ export const businessAcceleratorSection = defineType({
           initialValue: 'Join for $9/month',
         }),
         defineField({
-          name: 'url',
-          title: 'Button URL',
-          type: 'url',
-          initialValue: '#',
-          description: 'Add the link for the CTA button',
-        }),
+  name: 'buttonLink',
+  title: 'Button URL',
+  type: 'string',
+  description: 'Enter full or relative link',
+})
       ],
     }),
     defineField({

@@ -76,7 +76,7 @@ export default function Locations({ data }: Props) {
         {/* Button */}
         <div className="mt-11 md:mt-8 text-center">
           <a
-            href={data?.browseAllUrl || "#"}
+            href={data?.browseAllUrl || "/country-location"}
             className="group flex items-center justify-center w-full md:w-auto max-w-[386px] mx-auto min-h-[44px] md:min-h-auto bg-DarkOrange text-white font-Roboto font-medium leading-[16px] text-[16px] tracking-[0.08px] py-[12px] md:py-[18px] px-[16px] md:px-[117px] rounded-[100px] inline-block overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]">
             
              <span className="relative flex items-center"> {data?.browseAllText }   <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">

@@ -139,6 +139,22 @@ export const OPERATOR_SIGNUP_FRAGMENT = groq`
           "url": asset->url
         }
       }
+    },    (_type == "operatorOurAdvantage") => {
+      heading,
+      features[] {
+        _key,
+        title,
+        description,
+        icon {
+          tooltipTitle,
+          upload {
+            asset->{
+              _id,
+              url
+            }
+          }
+        }
+      }
     },
        (_type == "operatorYourCompetitors") => {
       heading,
