@@ -7,12 +7,12 @@ export const SMALL_BUSINESS_OWNER_MODULE = groq`
     _type,
     _key,
 
-    // 🧩 Small Business Owner Section
+
     (_type == "smallBusinessOwnerSection") => {
       title,
       description,
-      primaryCta { label, url },
-      secondaryCta { label, url },
+      primaryCta { label, url,sectionid},
+      secondaryCta { label, url,sectionid },
       ownerImage { "url": asset->url },
       trustedByText,
       brandLogos[] {
@@ -21,7 +21,7 @@ export const SMALL_BUSINESS_OWNER_MODULE = groq`
       }
     },
 
-    // 🚀 Smart Business Section
+ 
     (_type == "smartBusinessSection") => {
       title,
       subtitle,
@@ -45,7 +45,7 @@ export const SMALL_BUSINESS_OWNER_MODULE = groq`
       }
     },
 
-    // 💼 Business Benefits Section
+    
     (_type == "businessBenefitsSection") => {
       heading,
       subHeading,
@@ -59,7 +59,7 @@ export const SMALL_BUSINESS_OWNER_MODULE = groq`
       }
     },
 
-    // 🏆 Business Industry Recognition Section
+  
     (_type == "businessIndustryRecognitionSection") => {
       heading,
       awards[] {
@@ -78,7 +78,7 @@ export const SMALL_BUSINESS_OWNER_MODULE = groq`
       }
     },
 
-    // 🤝 Business Trusted Section
+    
     (_type == "businessTrustedSection") => {
       heading,
       subHeading,
@@ -102,7 +102,7 @@ export const SMALL_BUSINESS_OWNER_MODULE = groq`
       }
     },
 
-    // 💬 Client Success Stories Section
+  
     (_type == "clientSuccessStoriesSection") => {
       heading,
       testimonials[] {
@@ -124,7 +124,7 @@ export const SMALL_BUSINESS_OWNER_MODULE = groq`
       }
     },
 
-    // ❓ FAQ With Comment
+
     (_type == "faqWithComment") => {
       headline,
       subheadline,

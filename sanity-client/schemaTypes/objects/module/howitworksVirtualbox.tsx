@@ -30,6 +30,7 @@ export const howitworksVirtualbox = defineType({
           fields: [
             { name: 'label', title: 'Label', type: 'string' },
             { name: 'url', title: 'URL', type: 'string' },
+            { name: 'sectionid', title: 'Section Id', type: 'string' },
           ],
         }),
       ],
@@ -40,6 +41,7 @@ export const howitworksVirtualbox = defineType({
       type: 'object',
       fields: [
         { name: 'label', title: 'Label', type: 'string' },
+        { name: 'sectionid', title: 'Section Id', type: 'string' },
         { name: 'url', title: 'URL', type: 'string' },
       ],
     }),

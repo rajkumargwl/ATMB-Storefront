@@ -182,6 +182,7 @@ export default function Plans() {
 const variantsWithBillingId = variants.map((variant) => {
   const planTypeField = variant.metafields?.find((m) => m && m.key === 'plan_type');
   const billingProductField = variant.metafields?.find((m) => m && m.key === 'billing_product_id');
+ 
 
   return {
     ...variant,

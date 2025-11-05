@@ -7,6 +7,8 @@ import type { PortableTextBlock } from '@portabletext/types';
 import { Link } from 'react-router-dom';
 import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
 import RightArrowWhite from '~/components/icons/RightArrowWhite';
+import { usePrefixPathWithLocale } from '~/lib/utils';
+
 const seo: SeoHandleFunction = ({ data }) => ({
   title: data?.post?.title
     ? `${data.post.title} | Anytime Mailbox`
@@ -18,6 +20,11 @@ const seo: SeoHandleFunction = ({ data }) => ({
  
 export const handle = { seo };
 export async function loader({ context, params }: LoaderFunctionArgs) {
+  let language = params.lang || 'en';
+  if(language !== 'en-es'){
+    language = 'en';
+  }
+
   const { slug } = params;
   if (!slug) throw notFound();
  
@@ -25,7 +32,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
   const dataset = context.env.SANITY_DATASET;
  
   const post = await context.sanity.query<WPPost>({
-    query: `*[_type == "wpPost" && slug.current == $slug][0]{
+    query: `*[_type == "wpPost" && slug.current == $slug && (language == $language || !defined(language))][0]{
       _id,
       title,
       slug,
@@ -36,7 +43,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
       link,
       categories
     }`,
-    params: { slug },
+    params: { slug, language },
   });
  
   if (!post) throw notFound();
@@ -198,7 +205,7 @@ export default function BlogPost() {
         <div className="max-w-[1240px] mx-auto">
           <nav className="flex items-center flex-row gap-[7px] mb-6" aria-label="Breadcrumb">
             <ol className="flex items-center flex-row gap-[7px]">
-              <li><Link to={`/blogs`}><span className="font-Roboto text-LightGray font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px]">Blog</span> </Link></li>
+              <li><Link to={usePrefixPathWithLocale(`/blogs`)}><span className="font-Roboto text-LightGray font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px]">Blog</span> </Link></li>
               <li className="flex items-center flex-row gap-[7px]"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path d="M10.6813 7.71732C10.8362 7.87232 10.8362 8.12732 10.6813 8.28232L6.68125 12.2823C6.52625 12.4373 6.27125 12.4373 6.11625 12.2823C5.96125 12.1273 5.96125 11.8723 6.11625 11.7173L9.83375 7.99982L6.11625 4.28232C5.96125 4.12732 5.96125 3.87232 6.11625 3.71732C6.27125 3.56232 6.52625 3.56232 6.68125 3.71732L10.6813 7.71732Z" fill="#091019"/>
                 </svg>
@@ -233,7 +240,7 @@ export default function BlogPost() {
                   <div className="flex gap-3 flex-col">
                     {renderAuthorDateRelatedRight(featured.authorName, featured.date)}
                     
-                    <Link to={`/blog/${featured.slug.current}`}>
+                    <Link to={usePrefixPathWithLocale(`/blog/${featured.slug.current}`)}>
                       <h3 className="line-clamp-2 font-Roboto text-PrimaryBlack font-medium md:font-semibold leading-[27px] md:leading-[28px] text-[18px] md:text-[20px] tracking-[-0.3px] md:tracking-[-0.3px]">{featured.title}</h3>
                     </Link>
                   </div>
@@ -243,7 +250,7 @@ export default function BlogPost() {
                         <span className="font-Roboto text-white font-semibold leading-[43.2px] md:leading-[61.6px] text-[36px] md:text-[56px] tracking-[-0.54px] md:tracking-[-1.12px]">1000+</span>
                         <p className="font-Roboto text-white font-medium leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px]">Rely on Virtual Mailbox for a professional address, business line, and growth tools — all in one.</p>
                     </div>
-                   <Link to={`/create-account`} className="group relative  flex items-center justify-center w-full bg-DarkOrange text-white font-medium font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full h-[52px] overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]">
+                   <Link to={usePrefixPathWithLocale(`/country-location`)} className="group relative  flex items-center justify-center w-full bg-DarkOrange text-white font-medium font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full h-[52px] overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]">
                      <span className="relative flex items-center">Get Started Today <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
                         <RightArrowWhite />
                       </span></span>
@@ -266,7 +273,7 @@ export default function BlogPost() {
               </div>
               <ul className="grid grid-cols-1 md:grid-cols-2  lg:grid-cols-3 gap-11 md:gap-6">
                 {others.map((rp) => (
-                  <Link to={`/blog/${rp.slug.current}`}>
+                  <Link to={usePrefixPathWithLocale(`/blog/${rp.slug.current}`)}>
                   <li key={rp._id} className="group relative border border-LightWhite hover:border-PrimaryBlack rounded-[20px] overflow-hidden bg-white transition">
                    
                     {rp.mainImage && <img src={rp.mainImage} alt={rp.title} className="w-full rounded-t-[20px] h-[249px] object-cover" />}

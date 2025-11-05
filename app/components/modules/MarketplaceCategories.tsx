@@ -37,7 +37,7 @@ export default function MarketplaceIntro({ data }: Props) {
     ?.filter((cat) => cat.subcategories && cat.subcategories.length > 0)
     ?.reduce((acc, cat) => acc + cat.subcategories!.length, 0) || 0;
 
-    console.log("marketplace categories:", data);
+   
 
   return (
     <section className="px-5 py-[40px] md:py-[60px] lg:py-[100px]">

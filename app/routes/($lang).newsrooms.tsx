@@ -5,11 +5,7 @@ import { useState } from "react";
 import { PortableText } from "@portabletext/react";
 import {useRootLoaderData} from '~/root';
 import { DEFAULT_LOCALE } from "~/lib/utils";
-// import { useRootLoaderData } from "@remix-run/react";
-// export const DEFAULT_LOCALE: I18nLocale = Object.freeze({
-//   ...countries.default,
-//   pathPrefix: '',
-// });
+
 
 export function usePrefixPathWithLocale() {
   const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
@@ -31,9 +27,15 @@ export function usePrefixPathWithLocale() {
      'Our Newsroom is the source for news about Anytime Mailbox. Read press releases, get updates, watch video and download images',
  });
  export const handle = { seo };
-export async function loader({ context }: LoaderFunctionArgs) {
+
+export async function loader({ context, params }: LoaderFunctionArgs) {
+  let language = params.lang || 'en';
+  if(language !== 'en-es'){
+    language = 'en';
+  }
+
   const newsItems = await context.sanity.query({
-    query: `*[_type == "news"] | order(date desc) {
+    query: `*[_type == "news" && (language == $language || !defined(language))] | order(date desc) {
       _id,
       title,
       "slug": slug.current,
@@ -48,6 +50,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
         alt
       }
     }`,
+    params: { language },
   });
  
   if (!newsItems || newsItems.length === 0) {

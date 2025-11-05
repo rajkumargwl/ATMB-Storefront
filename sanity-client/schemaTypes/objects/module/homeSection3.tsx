@@ -107,16 +107,7 @@ export const homeSection3 = defineType({
                 }),
               ],
             }),
-            defineField({
-              name: 'button',
-              title: 'Button',
-              type: 'object',
-              fields: [
-                {name: 'label', title: 'Label', type: 'string', description: 'e.g. Get Started'},
-                {name: 'textColor', title: 'Text Color', type: 'color'},
-                {name: 'bgColor', title: 'Background Color', type: 'color'},
-              ],
-            }),
+        
           ],
           preview: {
             select: {title: 'label', subtitle: 'heading'},

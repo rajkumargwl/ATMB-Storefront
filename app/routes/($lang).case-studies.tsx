@@ -2,6 +2,7 @@
 
 import {json, type LoaderFunctionArgs} from "@shopify/remix-oxygen";
 import {useLoaderData, Link} from "@remix-run/react";
+import { usePrefixPathWithLocale } from '~/lib/utils';
 
  import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
  const seo: SeoHandleFunction = ({data}) => ({
@@ -12,23 +13,36 @@ import {useLoaderData, Link} from "@remix-run/react";
 });
 export const handle = { seo };
  
-export async function loader({context}: LoaderFunctionArgs) {
- 
+export async function loader({ context, params }: LoaderFunctionArgs) {
+  let language = params.lang || 'en';
+  if(language !== 'en-es'){
+    language = 'en';
+  }
+
   const caseStudies = await context.sanity.query({
-    query: `*[_type == "caseStudy"] | order(date desc) {
+    query: `*[_type == "caseStudy" && (language == $language || !defined(language))] | order(date desc) {
       _id,
       title,
       "slug": slug.current,
-      heroImage {
-      
-        "url": asset->url
-      }
+      language,
+      heroImage { "url": asset->url }
     }`,
-  });
- 
- 
-  return json({caseStudies});
+    params: { language }, 
+  })
+
+  // Deduplicate by slug (keep latest per slug)
+  const uniqueCaseStudies = Object.values(
+    caseStudies.reduce((acc, curr) => {
+      if (!acc[curr.slug]) {
+        acc[curr.slug] = curr
+      }
+      return acc
+    }, {})
+  )
+
+  return json({ caseStudies: uniqueCaseStudies })
 }
+
  
 export default function CaseStudies() {
   const {caseStudies} = useLoaderData<typeof loader>();
@@ -77,7 +91,7 @@ export default function CaseStudies() {
               {/* Button */}
               {study?.slug ? (
                 <Link
-                  to={`/case-study/${study.slug}`}
+                  to={usePrefixPathWithLocale(`/case-study/${study.slug}`)}
                   className="mt-5 md:mt-6 w-[193px] h-[44px] md:h-[52px] flex items-center justify-center px-4 py-3 rounded-full border border-PrimaryBlack font-Roboto text-PrimaryBlack font-normal text-[16px] md:text-[16px] leading-[16px] tracking-[0.08px]"
                 >
                   View Case Study

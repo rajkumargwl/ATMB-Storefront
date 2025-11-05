@@ -19,7 +19,7 @@ const seo: SeoHandleFunction = ({data}) => ({
   title: data?.page?.seo?.title || 'Virtual phone number',
   description:
     data?.page?.seo?.description ||
-    'A custom storefront powered by Hydrogen and Sanity',
+    'Anytime | Mailbox',
 });
 export const handle = { seo };
 export async function loader({context, params, request}: LoaderFunctionArgs) {

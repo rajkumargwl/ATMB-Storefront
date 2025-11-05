@@ -69,7 +69,7 @@ const currentTab = tabs.find((t) => t.id === activeTab)!;
 const plans = currentTab.tabCards;
 
 return ( 
-<section className="bg-[#F6F6F6] px-5 py-[40px] md:py-[60px] lg:py-[100px]"> 
+<section id = "bundle-mail-phone" className="bg-[#F6F6F6] px-5 py-[40px] md:py-[60px] lg:py-[100px]"> 
   <div className="max-w-[1240px] mx-auto flex flex-col items-center justify-center">
 {/* Heading */} 
     <h2 className="max-w-[870px] mx-auto font-Roboto text-PrimaryBlack font-semibold leading-[33.8px] md:leading-[43.2px] text-[26px] md:text-[36px] tracking-[-0.39px] md:tracking-[-0.54px] text-center text-center">

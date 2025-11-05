@@ -14,15 +14,7 @@ export const solutionVirtualMailboxModule = defineType({
         hotspot: true,
       },
     }),
-    defineField({
-      name: 'mobileImage',
-      title: 'Mobile View Image',
-      type: 'image',
-      description: 'Main mockup image for mobile view',
-      options: {
-        hotspot: true,
-      },
-    }),
+    
     defineField({
       name: 'title',
       title: 'Title',

@@ -43,7 +43,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
     params: { language },
   });
  
-    console.log('Modules:', JSON.stringify(page.modules, null, 2));
+  
 //   if (!page) throw notFound();
 
   const gids = fetchGids({ page, context });

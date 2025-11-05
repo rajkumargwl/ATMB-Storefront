@@ -31,7 +31,6 @@ export const handle = { seo };
 export async function loader({ context, params }: LoaderFunctionArgs) {
   validateLocale({ context, params });
 
-  console.log('Fetching renter referral page by SLUG (Clean Attempt)...');
 
   try {
   
@@ -43,7 +42,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
     const page = pageResults?.[0];
 
     if (!page) {
-      console.log('Page not found via slug query. Please ensure page is published in Sanity.');
+    
       throw notFound();
     }
     
@@ -57,7 +56,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
       analytics: { pageType: AnalyticsPageType.page },
     });
   } catch (error) {
-    console.log('Query error:', error);
+  
     throw notFound();
   }
 }
@@ -68,7 +67,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
 export default function RenterReferralProgram() {
   const { page, gids } = useLoaderData<typeof loader>();
 
-  console.log('Rendering page with modules:', page?.modules);
+
 
   return (
     <SanityPreview data={page} query={RENTER_PAGE_QUERY}> 

@@ -106,12 +106,7 @@ export const solutionHeroModule = defineType({
           type: 'string',
           description: "e.g. 'Your Forwarding request has been submitted'",
         }),
-        defineField({
-          name: 'subtitle',
-          title: 'Overlay Subtitle',
-          type: 'string',
-          description: "e.g. 'Your Cheque is cleared successfully'",
-        }),
+       
         defineField({
           name: 'icon',
           title: 'Overlay Icon',
@@ -130,12 +125,6 @@ export const solutionHeroModule = defineType({
           title: 'Overlay Title',
           type: 'string',
           description: "e.g. 'New mail received at your address'",
-        }),
-        defineField({
-          name: 'subtitle',
-          title: 'Overlay Subtitle',
-          type: 'string',
-          description: "e.g. 'Your package has been forwarded'",
         }),
         defineField({
           name: 'icon',

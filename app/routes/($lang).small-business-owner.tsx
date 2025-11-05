@@ -61,7 +61,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
   );
 
   const gids = fetchGids({ page, context });
-  console.log("pageeee",JSON.stringify(page,null,2));
+ 
   return defer({
     page,
     bundles,

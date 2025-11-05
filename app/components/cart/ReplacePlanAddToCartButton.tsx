@@ -24,9 +24,9 @@ export default function ReplacePlanAddToCartButton({
   if (!selectedVariant) return null;
   
       const billingProductId =
-      //selectedVariant?.metafields?.find((m) => m.key === 'billing_product_id')?.value || '';
-      selectedVariant?.metafields?.find((m) => m && m.key === 'billing_product_id')?.value || ''
-
+      // selectedVariant?.metafields?.find((m) => m.key === 'billing_product_id')?.value || '';
+         selectedVariant?.metafields?.find((m) => m && m.key === 'billing_product_id')?.value || ''
+ 
     //Normalize locationProperties so it's always iterable
     const normalizedLocationProps =
       Array.isArray(locationProperties)

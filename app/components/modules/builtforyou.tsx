@@ -65,7 +65,7 @@ export function BuiltForYou({ data }: BuiltForYouProps) {
   };
  
   return (
-    <section className="bg-white px-5 py-[40px] md:py-[60px] lg:py-[100px]">
+    <section  id="use-case" className="bg-white px-5 py-[40px] md:py-[60px] lg:py-[100px]">
       <div className="max-w-[1214px] mx-auto">
         <div className="flex flex-col md:items-center justify-center gap-4 md:gap-4 mb-[44px] md:mb-[56px]">
           <h2 className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px]">
