@@ -43,10 +43,9 @@ export const smallBusinessOwnerSection = defineType({
         defineField({
           name: "url",
           title: "Button URL",
-          type: "url",
-          validation: (Rule) => Rule.uri({ allowRelative: true }),
+          type: "string",  
         }),
-      
+       { name: 'sectionid', title: 'Section Id', type: 'string' },
       ],
     }),
 
@@ -65,10 +64,10 @@ export const smallBusinessOwnerSection = defineType({
         defineField({
           name: "url",
           title: "Button URL",
-          type: "url",
-          validation: (Rule) => Rule.uri({ allowRelative: true }),
+          type: "string",
+
         }),
-     
+        { name: 'sectionid', title: 'Section Id', type: 'string' },
       ],
     }),
 

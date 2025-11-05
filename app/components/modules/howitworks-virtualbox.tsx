@@ -9,6 +9,7 @@ interface HowItWorksVirtualboxProps {
     links?: Array<{
       label?: string;
       url?: string;
+       sectionid?: string | null;
     }>;
     ctaButton?: {
       label?: string;
@@ -36,18 +37,37 @@ export function HowItWorksVirtualbox({ data }: HowItWorksVirtualboxProps) {
             </p>
             
             {data.links && data.links.length > 0 && (
-              <div className="flex flex-wrap gap-5">
-                {data.links.map((link, index) => (
-                  <Link
-                    key={index}
-                    to={link.url || '#how-is-vm'}
-                    className="  font-Roboto text-DarkOrange font-normal leading-[21px] md:leading-[21px] text-[14px] md:text-[14px] tracking-[0px] md:tracking-[0px]
-                      underline decoration-solid decoration-skip-ink-auto decoration-auto underline-offset-auto  border-r border-LightWhite pr-[20px] last:border-none"
-                  >
-                   {link.label} 
-                    
-                  </Link>
-                ))}
+                 <div className="flex flex-wrap gap-5">
+                {data.links.map((link, index) => {
+                  // Use the URL if available, otherwise fall back to sectionid as #sectionid
+                  const target =
+                    link.url && link.url.trim() !== ''
+                      ? link.url
+                      : link.sectionid
+                      ? `#${link.sectionid}`
+                      : '#';
+
+                  return (
+                  <a
+  key={index}
+  href={target}
+  onClick={(e) => {
+    // Prevent full navigation for section links
+    if (target.startsWith('#')) {
+      e.preventDefault();
+      const section = document.querySelector(target);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }}
+  className="font-Roboto text-DarkOrange font-normal leading-[21px] text-[14px] underline border-r border-LightWhite pr-[20px] last:border-none"
+>
+  {link.label}
+</a>
+
+                  );
+                })}
               </div>
             )}
             

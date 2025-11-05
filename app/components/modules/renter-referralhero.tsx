@@ -5,7 +5,6 @@ interface RenterReferralHeroProps {
 export function RenterReferralHero({ data }: RenterReferralHeroProps) {
   const { label, heading, highlightedText, description, image, buttonText, buttonLink } = data;
  
-  console.log('Hero data received:', data); // Debug log
  
   const renderHeading = () => {
     if (!heading) return null;

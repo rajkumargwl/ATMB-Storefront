@@ -13,8 +13,6 @@ interface OperatorMailCenterProps {
 export function OperatorMailCenter({module}: OperatorMailCenterProps) {
   const {title, subtitle, buttonText, buttonLink, backgroundColor = '#FF6600', textColor = '#FFFFFF'} = module;
  
-  // console.log('🎯 OperatorMailCenter COMPONENT CALLED!');
-  // console.log('📝 Module data:', module);
  
   return (
     <section

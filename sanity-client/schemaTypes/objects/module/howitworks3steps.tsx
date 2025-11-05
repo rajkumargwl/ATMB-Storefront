@@ -85,6 +85,7 @@ export const howitworks3steps = defineType({
       fields: [
         { name: 'label', title: 'Button Label', type: 'string' },
         { name: 'url', title: 'Button URL', type: 'string' },
+         { name: 'sectionid', title: 'Section Id', type: 'string' },
       ],
     }),
     defineField({
@@ -94,6 +95,7 @@ export const howitworks3steps = defineType({
       fields: [
         { name: 'label', title: 'Button Label', type: 'string' },
         { name: 'url', title: 'Button URL', type: 'string' },
+         { name: 'sectionid', title: 'Section Id', type: 'string' },
       ],
     }),
   ],

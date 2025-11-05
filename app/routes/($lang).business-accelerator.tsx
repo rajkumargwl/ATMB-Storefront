@@ -24,7 +24,7 @@ import { fetchBundleProducts } from '~/lib/bundle.server';
 // -----------------
 const seo: SeoHandleFunction = ({ data }) => ({
   title:
-    data?.page?.seo?.title || 'Business Accelerator - Sanity x Hydrogen',
+    data?.page?.seo?.title || 'Business Accelerator - Anytime | Mailbox',
   description:
     data?.page?.seo?.description ||
     'Explore our Business Accelerator program and resources.',
@@ -59,11 +59,11 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
     }),
     fetchBundleProducts(context), 
   ]);
-  //if (!page) throw notFound();
+  // if (!page) throw notFound();
 
 
   const gids = fetchGids({ page, context });
-  //console.log("pagee",JSON.stringify(page,null,2));
+
   return defer({
     page,
     bundles,
