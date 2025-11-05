@@ -180,7 +180,8 @@ useEffect(() => {
           : item.label === "Contact Us"
           ? "/contact"
         : item.url ?? "#")}
-        className="text-PrimaryBlack hover:text-PrimaryBlack font-normal text-base leading-[24px]"  >
+        className={`text-PrimaryBlack hover:text-PrimaryBlack font-normal flex items-center gap-[6px] text-[14px] md:text-[14px] ${currentLanguage === 'en-es' ? 'xl:text-[15px]' : 'xl:text-[16px]' } leading-[24px] tracking-[0px]`}
+               >
                   {item.label} 
                   {item.hasSubmenu && (
                  <span className="group-hover:transform group-hover:rotate-180 transition-all duration-500 ease-in-out"> <ArrowDownIcon /></span>
