@@ -16,7 +16,7 @@ import { CartForm } from '@shopify/hydrogen';
   title: data?.page?.seo?.title || 'Anytime Mailbox',
   description:
     data?.page?.seo?.description ||
-    'A custom storefront powered by Hydrogen and Sanity',
+    'Anytime | Mailbox',
 });
 export const handle = { seo };
 interface LocationData {
