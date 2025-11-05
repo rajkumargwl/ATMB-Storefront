@@ -35,7 +35,7 @@ export default function PlansWithoutBundles({product,planData,location}: PlansWi
  
   // Filter variants by metafield `plan_type`
   const filteredVariants = variants.filter((variant) => {
-    const planTypeField = variant.metafields?.find((m) => m.key === 'plan_type');
+    const planTypeField = variant.metafields?.find((m) => m && m.key === 'plan_type');
     return planTypeField?.value?.toLowerCase() === billingCycle;
   });
  

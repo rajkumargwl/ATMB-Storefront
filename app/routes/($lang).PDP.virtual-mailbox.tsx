@@ -180,8 +180,9 @@ export default function Plans() {
   const sortedVariants = filteredVariants.sort((a, b) => a.position - b.position);*/
  // Map variants to include metafields
 const variantsWithBillingId = variants.map((variant) => {
-  const planTypeField = variant.metafields?.find((m) => m.key === 'plan_type');
-  const billingProductField = variant.metafields?.find((m) => m.key === 'billing_product_id');
+  const planTypeField = variant.metafields?.find((m) => m && m.key === 'plan_type');
+  const billingProductField = variant.metafields?.find((m) => m && m.key === 'billing_product_id');
+ 
 
   return {
     ...variant,
