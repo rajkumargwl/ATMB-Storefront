@@ -431,7 +431,6 @@ useEffect(() => {
                       
                         <div className="max-w-[1240px] mx-auto gap-[24px] md:gap-[24px] flex flex-col lg:flex-row">
                           <div className="w-full lg:w-[65.35%]">                
-                            {/* Removed incorrect role="row" since this isn't part of a grid/table */}
                             <div className="flex flex-col p-6 border border-[#DCDCDC] rounded-[12px]">
                               <h3 className="font-[400] md:font-[600] text-[#091019] md:text-[24px] md:leading-[31.2px] tracking-[-0.48px] text-[20px] leading-[28px]">
                                 Payment Details
@@ -443,6 +442,38 @@ useEffect(() => {
                               <form onSubmit={handleSubmit} className="mt-[20px]">
                                 {error && <p className="text-red-500">{error}</p>}
 
+
+                                {/* <div className="relative">
+                                  <label
+                                    id="card-number-label"
+                                    htmlFor="card-number-element"
+                                    className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]
+                                              leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px]
+                                              peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150"
+                                  >
+                                    Card Number
+                                  </label>
+
+                                  <CardNumberElement
+                                    id="card-number-element"
+                                    aria-labelledby="card-number-label"
+                                    aria-describedby="card-number-desc"
+                                    options={{
+                                      style: {
+                                        base: { fontSize: "16px", color: "#091019" },
+                                        invalid: { color: "#FF6600" },
+                                      },
+                                      placeholder: "1212 1212 1212 1212", // ✅ visible placeholder
+                                    }}
+                                    className="peer font-[400] w-full border border-[#E5E7EB] rounded-[8px]
+                                              px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px]
+                                              placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
+                                  />
+                                  <span id="card-number-desc" className="sr-only">
+                                    Enter your 16-digit card number without spaces or dashes
+                                  </span>
+                                </div> */}
+
                                 {/* Card Number */}
                                 <div className="relative">
                                   <CardNumberElement
@@ -450,10 +481,14 @@ useEffect(() => {
                                       style: { base: { fontSize: "16px", color: "#091019" }, invalid: { color: "#FF6600" } },
                                       placeholder: '1212 1212 1212 1212'
                                     }}
+                                    id="card-number"
+                                    aria-labelledby="Credit or debit card number"
+                                    aria-describedby="Credit or debit card number"
                                     className="peer font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
                                   />
                                   <label
-                                    aria-label="Card Number"
+                                     htmlFor="card-number"
+                                     aria-label="card-number"
                                     className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150"
                                   >
                                     Card Number
@@ -461,8 +496,8 @@ useEffect(() => {
                                 </div>
 
                                 {/* Expiry & CVC */}
-                                <div className="grid grid-cols-2 gap-4 mt-[20px]" role="row">
-                                  <div className="relative" role="cell">
+                                <div className="grid grid-cols-2 gap-4 mt-[20px]">
+                                  <div className="relative">
                                     <CardExpiryElement
                                       options={{
                                         style: { base: { fontSize: "16px", color: "#091019" }, invalid: { color: "#FF6600" } },
@@ -470,11 +505,12 @@ useEffect(() => {
                                       }}
                                       className="peer font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
                                     />
-                                    <label aria-label="Expiry Date" className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150">
+                                    <label aria-label="Expiry Date" htmlFor="Expiry Date"
+                                     className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150">
                                       Expiry Date
                                     </label>
                                   </div>
-                                  <div className="relative" role="cell">
+                                  <div className="relative">
                                     <CardCvcElement
                                       options={{
                                         style: { base: { fontSize: "16px", color: "#091019" }, invalid: { color: "#FF6600" } },
@@ -482,35 +518,39 @@ useEffect(() => {
                                       }}
                                       className="peer font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
                                     />
-                                    <label aria-label="CVV" className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150">
+                                    <label aria-label="CVV"
+                                    htmlFor="CVV"
+                                     className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150">
                                       CVV
                                     </label>
                                   </div>
                                 </div>
 
                                 {/* Zip & Cardholder */}
-                                <div className="grid grid-cols-2 gap-4 mt-[20px]" role="row">
-                                  <div className="relative" role="cell">
+                                <div className="grid grid-cols-2 gap-4 mt-[20px]">
+                                  <div className="relative">
                                     <input
                                       type="text"
-                                      aria-label="Zip Code"
+                                      aria-label="zip-code"
+                                      id="zip-code"
                                       placeholder="11018"
                                       className="peer font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#b3b3b3] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
                                     />
-                                    <label aria-label="Zip Code" className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#4D4E4F] transition-all duration-150">
+                                    <label aria-label="zip-code" htmlFor="zip-code" className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#4D4E4F] transition-all duration-150">
                                       Zip Code
                                     </label>
                                   </div>
-                                  <div className="relative" role="cell">
+                                  <div className="relative">
                                     <input
                                       type="text"
-                                      aria-label="Card Holder Name"
+                                      aria-label="cardholder-name"
+                                      id="cardholder-name"
                                       placeholder="John Doe"
                                       value={cardHolderName}  
                                       onChange={(e) => setCardHolderName(e.target.value)}  
                                       className="peer font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#b3b3b3] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
                                     />
-                                    <label aria-label="Card Holder Name" className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#4D4E4F] transition-all duration-150">
+                                    <label aria-label="cardholder-name" htmlFor="cardholder-name" className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#4D4E4F] transition-all duration-150">
                                       Card Holder Name
                                     </label>
                                   </div>

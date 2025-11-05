@@ -13,11 +13,55 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'language',
+      title: 'Language',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'English', value: 'en'},
+          {title: 'Spanish', value: 'en-es'},
+        ],
+      },
+      hidden: true,
+    }),
+    // defineField({
+    //   name: 'slug',
+    //   title: 'Slug',
+    //   type: 'slug',
+    //   options: { source: 'title', maxLength: 96 },
+    // }),
+    defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: { source: 'title', maxLength: 96 },
+      options: {
+        source: 'title',
+        maxLength: 96,
+        isUnique: async (slug, context) => {
+          const { document, getClient } = context
+          const client = getClient({ apiVersion: '2023-01-01' })
+    
+          const language = document?.language
+    
+          // Query for *other* caseStudy documents with same slug + language
+          const duplicate = await client.fetch(
+            `*[
+              _type == "caseStudy" &&
+              slug.current == $slug &&
+              language == $language &&
+              !(_id in [$id, "drafts." + $id])
+            ][0]._id`,
+            { slug, language, id: document._id }
+          )
+    
+          // If none found, slug is unique for this language
+          return !duplicate
+        },
+      },
     }),
+    
+    
+    
     defineField({
       name: 'date',
       title: 'Publish Date',
@@ -97,7 +141,7 @@ export default defineType({
       fields: [
         defineField({ name: 'heading', title: 'Heading', type: 'string' }),
         defineField({ name: 'buttonText', title: 'Button Text', type: 'string' }),
-        defineField({ name: 'buttonUrl', title: 'Button URL', type: 'url' }),
+        defineField({ name: 'buttonUrl', title: 'Button URL', type: 'string' }),
       ],
     }),
 
