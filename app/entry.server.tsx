@@ -94,6 +94,7 @@ export default async function handleRequest(
        // ✅ Allow reCAPTCHA network requests
       'https://www.google.com/recaptcha/',
       'https://www.gstatic.com/recaptcha/',
+      'https://development.anytimeapi.com/',
     ],
   });
 
