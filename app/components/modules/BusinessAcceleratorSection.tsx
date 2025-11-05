@@ -6,6 +6,7 @@ type BusinessAcceleratorSectionProps = {
     _type?: string;
     title?: string;
     description?: string;
+     highlightedText?: string;
     image?: { url?: string };
     cta?: { label?: string; url?: string | null };
     [key: string]: any;
@@ -14,7 +15,19 @@ type BusinessAcceleratorSectionProps = {
  
 export default function BusinessAcceleratorSection({ data }: BusinessAcceleratorSectionProps) {
   // if (!data) return null; // safety check
-
+ const getHighlightedTitle = (title: string, highlightedText?: string) => {
+    if (!highlightedText) return title;
+    const parts = title.split(new RegExp(`(${highlightedText})`, 'gi'));
+    return parts.map((part, index) =>
+      part.toLowerCase() === highlightedText.toLowerCase() ? (
+        <span key={index} className="text-DarkOrange">
+          {part}
+        </span>
+      ) : (
+        part
+      )
+    );
+  };
  
   return (
     <section
@@ -27,11 +40,11 @@ export default function BusinessAcceleratorSection({ data }: BusinessAccelerator
         {/* Text Content */}
         <div className="w-full md:w-[51.4%] space-y-5 md:space-y-5">
           {data.title && (
-            <h2
+             <h2
               id="business-accelerator-title"
               className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px]"
             >
-              {data.title} 
+              {getHighlightedTitle(data.title, data.highlightedText)}
             </h2>
           )}
  

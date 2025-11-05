@@ -24,6 +24,7 @@ export const BUSINESS_ACCELERATOR_MODULE = groq`
     // 🔸 Business Accelerator Section
     (_type == "businessAcceleratorSection") => {
       title,
+      highlightedText,
       description,
       cta {
         label,

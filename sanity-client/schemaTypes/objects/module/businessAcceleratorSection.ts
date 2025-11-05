@@ -14,6 +14,12 @@ export const businessAcceleratorSection = defineType({
       initialValue: 'Accelerate your path to business success',
       validation: (Rule) => Rule.required(),
     }),
+     defineField({
+      name: 'highlightedText',
+      title: 'Highlighted Text',
+      type: 'string',
+      description: 'Words to highlight in color ',
+    }),
     defineField({
       name: 'description',
       title: 'Description',

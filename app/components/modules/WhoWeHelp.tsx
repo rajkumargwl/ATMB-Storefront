@@ -105,6 +105,7 @@ export default function HomeHero({ data }: Props) {
         {/* Tabs */}
         <div className="flex gap-4 items-center">
           <button
+            title="Previous slide"
             onClick={scrollLeft}
             className={`w-10 h-10 hidden md:flex items-center justify-center rounded-full border border-LightWhite text-white shrink-0 ${
               canScrollLeft
@@ -116,6 +117,7 @@ export default function HomeHero({ data }: Props) {
           >
             <span className="sr-only">(scroll left)</span>
               {canScrollLeft ? <WhiteChevron2 /> : <BlackChevron />}
+              
           </button>
  
           <div
@@ -186,6 +188,7 @@ export default function HomeHero({ data }: Props) {
           </div>
  
           <button
+           title=" Next slide"
             onClick={scrollRight}
             className={`w-10 h-10 hidden md:flex items-center justify-center rounded-full shrink-0 ${
               canScrollRight ? "bg-DarkOrange text-white" : "bg-[#E6E6E6] text-black"
@@ -195,6 +198,7 @@ export default function HomeHero({ data }: Props) {
           >
             <span className="sr-only">(scroll right)</span>
             {canScrollRight ? <WhiteChevron /> : <BlackwhiteChevron />}
+             
           </button>
         </div>
  {/* Content Grid */}
