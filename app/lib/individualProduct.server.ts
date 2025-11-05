@@ -1,5 +1,5 @@
 import type { Product } from "@shopify/hydrogen/storefront-api-types";
-import { ALL_PRODUCTS_QUERY } from "~/queries/shopify/product";
+import { ALL_PRODUCTS_INDIVIDUAL_QUERY } from "~/queries/shopify/product";
 
 export type PricingProduct = {
   id: string;
@@ -13,64 +13,130 @@ export type PricingProduct = {
   features?: string[] | null;
   ctaText?: string;
   ctaUrl?: string;
+  billingProductId?: string | null;
+  planType?: string | null;
 };
 
-// Parse an individual product from Shopify
 export function parsePricingProduct(product: any): PricingProduct {
-  const monthlyVariant = product.variants?.edges?.find(
-    (v: any) => v.node.title.toLowerCase() === "monthly"
-  )?.node;
-  const yearlyVariant = product.variants?.edges?.find(
-    (v: any) => v.node.title.toLowerCase() === "yearly"
-  )?.node;
+  const variants = product?.variants?.nodes ?? [];
+  const plans: Record<string, any> = {};
 
-  // Optional metafield with features stored as JSON or comma-separated
-  const featuresMf = product.metafields?.find(
-    (mf: any) => mf.key === "plan_features"
-  );
-  let features: string[] = [];
+  variants.forEach((variant: any) => {
+    const planOption = variant.selectedOptions?.find(
+      (o: any) => o.name?.toLowerCase() === "plans"
+    )?.value;
 
-  if (featuresMf?.value) {
-    try {
-      const parsed = JSON.parse(featuresMf.value);
-      if (Array.isArray(parsed)) features = parsed;
-    } catch {
-      features = featuresMf.value.split(",").map((f: string) => f.trim());
+    // Always check for "Plan Type" (monthly/yearly)
+    const planType = variant.selectedOptions?.find(
+      (o: any) => o.name?.toLowerCase() === "plan type"
+    )?.value?.toLowerCase();
+
+
+    if (!planType) return;
+
+    const metafields = Array.isArray(variant.metafields)
+      ? variant.metafields.filter(Boolean)
+      : [];
+
+    const featureField = metafields.find((f: any) => f?.key === "features");
+    let features: string[] = [];
+
+    if (featureField?.value) {
+      try {
+        const parsed = JSON.parse(featureField.value);
+        if (Array.isArray(parsed)) {
+          features = parsed;
+        } else {
+          features = featureField.value
+            .split(/[\n,•,;]+/)
+            .map((f: string) => f.trim())
+            .filter(Boolean);
+        }
+      } catch {
+        features = featureField.value
+          .split(/[\n,•,;]+/)
+          .map((f: string) => f.trim())
+          .filter(Boolean);
+      }
     }
+
+    //Handle both product types
+    const planKey = planOption || product.title;
+
+    if (!plans[planKey]) plans[planKey] = {};
+
+    plans[planKey][planType] = {
+      id: variant.id,
+      price: variant.price?.amount ?? "0.00",
+      currency: variant.price?.currencyCode ?? "USD",
+      features,
+    };
+  });
+
+  const firstPlanKey = Object.keys(plans)[0];
+  const firstPlan = plans[firstPlanKey] || {};
+
+  // Prefer monthly features if available
+  const selectedFeatures =
+    firstPlan.monthly?.features ??
+    firstPlan.yearly?.features ??
+    [];
+
+  // Determine redirect URL based on product title
+  let redirectUrl = "#";
+
+  switch (product.title.toLowerCase()) {
+    case "virtual mailbox":
+      redirectUrl = "/sublocations";
+      break;
+    case "business accelerator":
+      redirectUrl = "/pdp/business-accelerator";
+      break;
+    case "virtual phone number":
+      redirectUrl = "/pdp/virtual-phone-number";
+      break;
+    default:
+      redirectUrl = `/checkout/${(firstPlan.monthly?.id ?? firstPlan.yearly?.id)?.split("/").pop()}`;
   }
 
   return {
     id: product.id,
     title: product.title,
     description: product.description || "",
-    monthlyPrice: monthlyVariant?.priceV2?.amount ?? null,
-    yearlyPrice: yearlyVariant?.priceV2?.amount ?? null,
-    monthlyVariantId: monthlyVariant?.id ?? null,
-    yearlyVariantId: yearlyVariant?.id ?? null,
-    currency: monthlyVariant?.priceV2?.currencyCode ?? "USD",
-    features,
+    monthlyPrice: firstPlan.monthly?.price ?? null,
+    yearlyPrice: firstPlan.yearly?.price ?? null,
+    monthlyVariantId: firstPlan.monthly?.id ?? null,
+    yearlyVariantId: firstPlan.yearly?.id ?? null,
+    currency: firstPlan.monthly?.currency ?? "USD",
+    features: selectedFeatures,
     ctaText: "Buy Now",
-    ctaUrl: `/checkout/${monthlyVariant?.id?.split("/").pop()}`,
+    ctaUrl: redirectUrl,
   };
 }
 
 export async function fetchIndividualProducts(context: any) {
   try {
-    const data = await context.storefront.query(ALL_PRODUCTS_QUERY, {
-      variables: { first: 4 },
+    const data = await context.storefront.query(ALL_PRODUCTS_INDIVIDUAL_QUERY, {
+      variables: { first: 10 },
     });
 
     const products = data?.products?.nodes ?? [];
-    //console.log("Fetched products:", products.length,products);
-    // Filter by a naming convention or tag, if needed
-    // const pricingProducts = products.filter((p: any) =>
-    //   p.title.toLowerCase().includes("plan")
-    // );
 
-    //return pricingProducts.map((p: any) => parsePricingProduct(p));
-    return products.map((p: any) => parsePricingProduct(p));
+    const allowedTitles = [
+      "Virtual Mailbox",
+      "Virtual Phone Number",
+      "Business Accelerator",
+    ];
+
+    const filtered = products
+      .filter((p: any) => allowedTitles.includes(p.title))
+      .map((p: any) => parsePricingProduct(p))
+      .filter((p: any) => p.monthlyPrice); 
+
+    return filtered;
   } catch (err) {
-    console.error("Failed to fetch pricing products:", err);
+    console.error("Failed to fetch individual products:", err);
     return [];
   }
 }
+

@@ -73,7 +73,7 @@ export default function Plans() {
  
   const variants = (product?.variants?.nodes ?? []) as ProductVariant[];
   const filteredVariants = variants.filter((variant) => {
-    const planTypeField = variant.metafields?.find((m) => m.key === 'plan_type');
+    const planTypeField = variant.metafields?.find((m) => m && m.key === 'plan_type');
     return planTypeField?.value?.toLowerCase() === billingCycle;
   });
   const sortedVariants = filteredVariants.sort((a, b) => a.position - b.position);

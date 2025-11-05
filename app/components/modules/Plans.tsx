@@ -3,7 +3,12 @@ import PlanBg from '~/components/icons/PlanBg';
 import Fire from '~/components/icons/Fire';
 import CheckBlack from '~/components/icons/CheckBlack';
 import RightArrowWhite from '~/components/icons/RightArrowWhite';
-
+import {
+  flattenConnection,
+  Image,
+  Money,
+  ShopPayButton,
+} from '@shopify/hydrogen-react';
 type PlanType = {
 ctaBgColor?: string | null;
 ctaText: string;
@@ -42,7 +47,7 @@ export default function Pricingmodule({ data, bundles, individualProducts}: Pric
 const [activeTab, setActiveTab] = useState<"individual" | "bundles">("individual");
 const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
 const isYearly = billing === "yearly";
-//console.log("individual product in Pricing Module:", individualProducts);
+//console.log("individual product in Pricing Module:",individualProducts);
 const tabs = [
 {
 id: "individual",
@@ -218,11 +223,11 @@ return (
                   <div className="flex items-end mb-5 md:mb-6 gap-[2px]">
                     {displayCompare && (
                       <span className="line-through font-Roboto text-LightGray font-medium leading-[27px] md:leading-[27px] text-[18px] md:text-[18px] tracking-[0px]">
-                        {displayCompare} {bundle.currency}
+                        <Money data={{ amount: displayCompare, currencyCode: bundle.currency }} />
                       </span>
                     )}
                     <span className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[38.4px] text-[24px] md:text-[32px] tracking-[-0.36px] md:tracking-[-0.48px]">
-                      {displayPrice} {bundle.currency}
+                      <Money data={{ amount: displayPrice, currencyCode: bundle.currency }} />
                     </span>
                     <span className="font-Roboto text-[#4B5563] font-normal text-[14px] leading-[21px] tracking-[0px]">
                       /{billing === "monthly" ? "month" : "year"}
@@ -275,61 +280,112 @@ return (
           )}
         </div>
       ) : (
-        /* Individual Products (Sanity) */
         <div className="grid gap-6 grid-cols-1 md:grid-cols-[repeat(auto-fit,minmax(292px,1fr))] justify-center max-w-[1240px] mx-auto md:[&>*:only-child]:max-w-[calc(50%)] lg:[&>*:only-child]:max-w-[calc(33.333%)] md:[&>*:only-child]:mx-auto">
-          {plans.map((plan, idx) => {
-            const price = isYearly
-              ? plan.pricing?.yearly
-              : plan.pricing?.monthly;
-            return (
-              <div
-                key={idx}
-                className="flex flex-col justify-between p-6 md:p-8 bg-white rounded-[24px] border border-LightWhite"
-              >
-                <div>
-                <h3 className="mb-[11px] font-Roboto text-PrimaryBlack font-semibold leading-[28px] md:leading-[31.2px] text-[20px] md:text-[24px] tracking-[-0.3px] md:tracking-[-0.36px]">
-                  {plan.title}
-                </h3>
-                <p className="mb-5 md:mb-6 font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">{plan.subheading}</p>
-                  <p className="mb-1 font-Roboto text-[#4B5563] font-normal text-[14px] leading-[21px] tracking-[0px]">Starting from </p>
-                {price && (
-                  <div className="flex items-end mb-5 md:mb-6 ">
-                    <span className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[38.4px] text-[24px] md:text-[32px] tracking-[-0.36px] md:tracking-[-0.48px]">
-                      {price}
-                    </span>
-                    <span className="font-Roboto text-[#4B5563] font-normal text-[14px] leading-[21px] tracking-[0px]">
-                      /{isYearly ? "year" : "month"}
-                    </span>
-                  </div>
-                )}
+          {/* Individual Products (Dynamic from Shopify) */}   
+            {individualProducts && individualProducts.length > 0 ? (
+              individualProducts.map((product, idx) => {
+                const price =
+                          billing === "yearly"
+                            ? product.yearlyPrice
+                              ? `${product.yearlyPrice} ${product.currency}`
+                              : "Coming Soon"
+                            : product.monthlyPrice
+                              ? `${product.monthlyPrice} ${product.currency}`
+                              : "Coming Soon";
 
-                {plan.features && (
-                  <ul className="flex flex-col gap-4 mb-8 md:mb-10 pt-5 md:pt-6 border-t border-LightWhite">
-                    {plan.features.map((feature, i) => (
-                      <li key={i} className="flex items-center gap-3 font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">
-                        <span className="flex items-center justify-center w-[24px] h-[24px]">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none"><path d="M16.5544 0.110975C16.8206 0.305975 16.8806 0.680975 16.6856 0.950975L6.18563 15.351C6.08063 15.4935 5.92313 15.5835 5.74688 15.5947C5.57063 15.606 5.40188 15.546 5.27438 15.4222L0.174375 10.3222C-0.058125 10.0897 -0.058125 9.70722 0.174375 9.47472C0.406875 9.24222 0.789375 9.24222 1.02188 9.47472L5.62688 14.0797L15.7144 0.245975C15.9094 -0.0202754 16.2844 -0.0802754 16.5544 0.114725V0.110975Z" fill="#091019"></path>
+
+                return (
+          <div
+            key={product.id || idx}
+            className="flex flex-col justify-between p-6 md:p-8 bg-white rounded-[24px] border border-LightWhite"
+          >
+            <div>
+              <h3 className="mb-[11px] font-Roboto text-PrimaryBlack font-semibold leading-[28px] md:leading-[31.2px] text-[20px] md:text-[24px] tracking-[-0.3px] md:tracking-[-0.36px]">
+                {product.title}
+              </h3>
+
+              {product.description && (
+                    <p
+                      className="mb-5 md:mb-6 font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px] line-clamp-2"
+                    >
+                      {product.description}
+                    </p>
+                  )}
+
+
+              <p className="mb-1 font-Roboto text-[#4B5563] font-normal text-[14px] leading-[21px] tracking-[0px]">
+                Starting from
+              </p>
+
+              {/* Price */}
+              <div className="flex items-end mb-5 md:mb-6">
+            <span className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[38.4px] text-[24px] md:text-[32px] tracking-[-0.36px] md:tracking-[-0.48px]">
+              <Money
+                data={{
+                  amount:
+                    billing === "yearly"
+                      ? product.yearlyPrice || product.monthlyPrice
+                      : product.monthlyPrice,
+                  currencyCode: product.currency,
+                }}
+              />
+            </span>
+            <span className="font-Roboto text-[#4B5563] text-[14px] ml-1">
+              /{billing === "yearly" ? "year" : "month"}
+            </span>
+          </div>
+
+              {/* Features (from metafield or hardcoded) */}
+              {product.features && product.features.length > 0 && (
+                <ul className="flex flex-col gap-4 mb-8 md:mb-10 pt-5 md:pt-6 border-t border-LightWhite">
+                  {product.features.map((feature: string, i: number) => (
+                    <li
+                      key={i}
+                      className="flex items-center gap-3 font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px]"
+                    >
+                      <span className="flex items-center justify-center w-[24px] h-[24px]">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="17"
+                          height="16"
+                          viewBox="0 0 17 16"
+                          fill="none"
+                        >
+                          <path
+                            d="M16.5544 0.110975C16.8206 0.305975 16.8806 0.680975 16.6856 0.950975L6.18563 15.351C6.08063 15.4935 5.92313 15.5835 5.74688 15.5947C5.57063 15.606 5.40188 15.546 5.27438 15.4222L0.174375 10.3222C-0.058125 10.0897 -0.058125 9.70722 0.174375 9.47472C0.406875 9.24222 0.789375 9.24222 1.02188 9.47472L5.62688 14.0797L15.7144 0.245975C15.9094 -0.0202754 16.2844 -0.0802754 16.5544 0.114725V0.110975Z"
+                            fill="#091019"
+                          ></path>
                         </svg>
-                        </span>
-                         {feature}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                </div>
+                      </span>
+                      {feature}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
 
-                <button
-                  className="group relative flex items-center justify-center w-full h-[44px] md:h-[52px] rounded-[100px] font-normal tracking-[0.08px] text-[16px] leading-[16px] text-PrimaryBlack border border-[#091019] px-4 py-[12px] bg-white  hover:bg-DarkOrange hover:text-white hover:border-DarkOrange overflow-hidden transition-all"
-                  onClick={() => (window.location.href = plan.ctaUrl || "#")}
-                >
-                  
-                  <span className="relative flex items-center">{plan.ctaText} <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
-              <RightArrowWhite />
-            </span></span>
-                </button>
-              </div>
-            );
-          })}
+            {/* CTA */}
+            <button
+              className="group relative flex items-center justify-center w-full h-[44px] md:h-[52px] rounded-[100px] font-normal tracking-[0.08px] text-[16px] leading-[16px] text-PrimaryBlack border border-[#091019] px-4 py-[12px] bg-white  hover:bg-DarkOrange hover:text-white hover:border-DarkOrange overflow-hidden transition-all"
+              onClick={() =>
+                (window.location.href = product.ctaUrl || "#")
+              }
+            >
+              <span className="relative flex items-center">
+                {product.ctaText || "Buy Now"}
+                <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
+                  <RightArrowWhite />
+                </span>
+              </span>
+            </button>
+          </div>
+        );
+      })
+    ) : (
+      <p className="font-Roboto text-PrimaryBlack text-center text-[16px]">
+        No individual products found.
+      </p>
+    )}
         </div>
       )}
     </div>

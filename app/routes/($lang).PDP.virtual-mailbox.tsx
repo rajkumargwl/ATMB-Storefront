@@ -109,20 +109,20 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     }),
   ]);
 
- console.log("Product variants with metafields:");
- product.variants.nodes.forEach((variant: any, i: number) => {
-   const metafields = (variant.metafields || [])
-     .filter((m: any) => m !== null)
-     .map((m: any) => ({
-       key: m.key,
-       value: m.value,
-     }));
+ //console.log("Product variants with metafields:");
+//  product.variants.nodes.forEach((variant: any, i: number) => {
+//    const metafields = (variant.metafields || [])
+//      .filter((m: any) => m !== null)
+//      .map((m: any) => ({
+//        key: m.key,
+//        value: m.value,
+//      }));
  
-   console.log(`Variant ${i + 1}:`, {
-     title: variant.title,
-     metafields,
-   });
- });
+//    console.log(`Variant ${i + 1}:`, {
+//      title: variant.title,
+//      metafields,
+//    });
+//  });
  
 
   return defer({
@@ -180,8 +180,8 @@ export default function Plans() {
   const sortedVariants = filteredVariants.sort((a, b) => a.position - b.position);*/
  // Map variants to include metafields
 const variantsWithBillingId = variants.map((variant) => {
-  const planTypeField = variant.metafields?.find((m) => m.key === 'plan_type');
-  const billingProductField = variant.metafields?.find((m) => m.key === 'billing_product_id');
+  const planTypeField = variant.metafields?.find((m) => m && m.key === 'plan_type');
+  const billingProductField = variant.metafields?.find((m) => m && m.key === 'billing_product_id');
 
   return {
     ...variant,
