@@ -17,7 +17,8 @@ import ModuleGrid from '~/components/modules/ModuleGrid';
 import { fetchGids, notFound, validateLocale } from '~/lib/utils';
 import type { PortableTextBlock } from '@portabletext/types';
 import { SOLUTIONS_PAGE_QUERY } from '~/queries/sanity/fragments/pages/solutionpage';
-
+import { fetchBundleProducts } from '~/lib/bundle.server';
+import { fetchIndividualProducts } from '~/lib/individualProduct.server'; 
 // -----------------
 // SEO
 // -----------------
@@ -38,11 +39,24 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
     language = 'en';
   }
 
-  const page = await context.sanity.query({
-    query: SOLUTIONS_PAGE_QUERY, // ✅ use Solutions query
-    params: { language  }
+  // const page = await context.sanity.query({
+  //   query: SOLUTIONS_PAGE_QUERY, // ✅ use Solutions query
+  //   params: { language  }
+  // });
+  const cache = context.storefront.CacheCustom({
+    mode: "public",
+    maxAge: 60,
+    staleWhileRevalidate: 60,
   });
-   
+  const [page, bundles,individualProducts] = await Promise.all([
+    context.sanity.query({
+      query: SOLUTIONS_PAGE_QUERY,
+      params: { language },
+      cache,
+    }),
+    fetchBundleProducts(context), 
+    fetchIndividualProducts(context), // Fetch individual products
+  ]);
     const relatedPosts = await context.sanity.query<WPPost[]>({
       query: `*[_type == "wpPost"] | order(date desc) [0...3] {
     _id,
@@ -71,6 +85,8 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
   return defer({
     page,
     relatedPosts,
+    bundles,
+    individualProducts,
     gids,
     analytics: { pageType: AnalyticsPageType.page },
   });
@@ -125,7 +141,7 @@ const renderAuthorDateRelated = (author: string | undefined, date: string | unde
 
 
 export default function SolutionsPage() {
-  const { page,relatedPosts, gids } = useLoaderData<typeof loader>();
+  const { page,relatedPosts, gids,bundles,individualProducts } = useLoaderData<typeof loader>();
     
   return (
     <SanityPreview data={page} query={SOLUTIONS_PAGE_QUERY}>
@@ -134,7 +150,7 @@ export default function SolutionsPage() {
           <Await resolve={gids}>
             {page?.modules && page.modules.length > 0 && (
               <div className={clsx('mb-0 mt-0 px-0', 'md:px-0')}>
-                <ModuleGrid items={page.modules} />
+                <ModuleGrid items={page.modules}  bundles={bundles} individualProducts={individualProducts}/>
               </div>
               
             )}
