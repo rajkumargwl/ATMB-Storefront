@@ -256,7 +256,8 @@ export const useRootLoaderData = () => {
 };
  
 export default function App() {
-  const {preview, header, footer, q, searchResults,  isLoggedIn, customer, language, ...data} = useLoaderData<typeof loader>();
+  const {preview, header, footer, q, searchResults,  isLoggedIn, customer, language, cart, ...data} = useLoaderData<typeof loader>();
+  const cartCount = cart?._data?.lines?.edges.length || 0;
   const locale = data.selectedLocale ?? DEFAULT_LOCALE;
   const hasUserConsent = true;
   const nonce = useNonce();
@@ -309,7 +310,7 @@ export default function App() {
           </div>
           {/* 🔹 Global Header with search support */}
           {!hideHeaderFooter && (
-            <Header data={header} searchQuery={q} searchResults={searchResults} isLoggedIn={isLoggedIn} customer={customer} currentLanguage={language} />
+            <Header data={header} searchQuery={q} searchResults={searchResults} isLoggedIn={isLoggedIn} customer={customer} currentLanguage={language} cartCount={cartCount} />
           )}
           {/* <CartProvider> */}
           <Layout key={`${locale.language}-${locale.country}`}>

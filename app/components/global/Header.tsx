@@ -52,10 +52,11 @@ type HeaderProps = {
     lastName: string;
     email: string;
   } | null;               // 👈 new
+  cartCount: number;    // 👈 new
 };
 
 
-export default function Header({ data, searchResults, searchQuery, isLoggedIn, customer, currentLanguage }: HeaderProps) {
+export default function Header({ data, searchResults, searchQuery, isLoggedIn, customer, currentLanguage, cartCount }: HeaderProps) {
   if (!data) return null;
 
   const { logo, menu, icon1, icon2,icon3, loginButton, getStartedButton } = data;
@@ -138,6 +139,7 @@ useEffect(() => {
     document.body.classList.remove("no-scroll");
   }
 }, [isMobileMenuOpen]);
+
 
   return (
     <header className=" relative z-[99] w-full bg-white px-5 border-b border-LightWhite lg:border-none">
@@ -305,16 +307,37 @@ useEffect(() => {
 
           {/* Cart */}
           {icon2?.url && (
-             <Link
-               to={usePrefixPathWithLocale('/cart')}>
+            <Link
+              to={usePrefixPathWithLocale('/cart')}
+              className="relative flex items-center"
+            >
               <img
                 src={icon2.url}
                 alt="Cart"
                 title="Cart"
                 className="h-6 w-6 object-contain"
               />
+
+              {cartCount > 0 && (
+                <span
+                  className="
+                    absolute -top-1.5 -right-2
+                    flex items-center justify-center
+                    h-4 min-w-[16px]
+                    px-1.5
+                    rounded-full
+                    bg-[#FF6600]
+                    text-[10px] font-semibold text-white
+                    leading-none
+                    shadow-md
+                  "
+                >
+                  {cartCount > 99 ? '99+' : cartCount}
+                </span>
+              )}
             </Link>
           )}
+
            {/* {icon3?.url && ( */}
             <>
             {/* <Link
