@@ -6,7 +6,7 @@ export function RenterReferralNoCatch({ data }: RenterReferralNoCatchProps) {
   const { heading, buttonText, buttonLink, image, description } = data;
 
   // Debug log
-  console.log('No Catch section data:', data);
+
 
   return (
     <section className="py-16 bg-primary text-black">

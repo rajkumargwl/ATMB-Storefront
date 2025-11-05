@@ -16,7 +16,7 @@ export default function FAQ({ data }: Props) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="px-5 py-[40px] md:py-[60px] lg:py-[100px]">
+    <section id= "faq" className="px-5 py-[40px] md:py-[60px] lg:py-[100px]">
       <div className="max-w-[1240px] mx-auto">
         <div className="flex flex-col items-center">
           <div className="max-w-[744px] mx-auto pb-[44px] md:pb-[56px] flex flex-col align-center justify-center gap-5">
