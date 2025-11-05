@@ -1,7 +1,7 @@
 import {json, type LoaderFunctionArgs} from "@shopify/remix-oxygen";
 import {useLoaderData,Link} from "@remix-run/react";
 import {PortableText, type PortableTextComponents} from "@portabletext/react";
- 
+import { usePrefixPathWithLocale } from '~/lib/utils';
 
  import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
  const seo: SeoHandleFunction = ({data}) => ({
@@ -60,9 +60,13 @@ const components: PortableTextComponents = {
  
 export async function loader({params, context}: LoaderFunctionArgs) {
   const {slug} = params;
+  let language = params.lang || 'en';
+  if(language !== 'en-es'){
+    language = 'en';
+  }
  
   const caseStudy = await context.sanity.query({
-    query: `*[_type == "caseStudy" && slug.current == $slug][0] {
+    query: `*[_type == "caseStudy" && slug.current == $slug && (language == $language || !defined(language))][0] {
       _id,
       title,
       "slug": slug.current,
@@ -114,7 +118,7 @@ export async function loader({params, context}: LoaderFunctionArgs) {
         buttonUrl
       }
     }`,
-    params: { slug },
+    params: { slug, language },
   });
   return json({ caseStudy });
 }
@@ -306,7 +310,7 @@ export default function CaseStudyPage() {
       {caseStudy.relatedCaseStudies.map((related: any) => (
         <Link
           key={related?._id}
-          to={`/case-studies/${related?.slug ?? ""}`}
+          to={usePrefixPathWithLocale(`/case-study/${related?.slug ?? ""}`)}
           className="block overflow-hidden"
         >
           <div className="flex items-center gap-5">
@@ -363,7 +367,7 @@ export default function CaseStudyPage() {
               </h2>
               {caseStudy.virtualMailSection?.buttonText && (
                 <a
-                  href={caseStudy.virtualMailSection?.buttonUrl ?? "#"}
+                  href={usePrefixPathWithLocale(caseStudy.virtualMailSection?.buttonUrl ?? "#")}
                   className="flex items-center justify-center bg-white text-PrimaryBlack font-medium font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full w-[193px] h-[52px]"
                 >
                   {caseStudy.virtualMailSection.buttonText}
