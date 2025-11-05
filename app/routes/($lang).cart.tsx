@@ -354,17 +354,17 @@ export default function Cart() {
   {(cart) => {
    const availableEssentials = essentialsProducts.filter(
     (product) =>
-      !cart.lines.edges.some(
-        (line) => line.node.merchandise.product.handle === product.handle
+      !cart?.lines?.edges.some(
+        (line) => line?.node?.merchandise?.product?.handle === product?.handle
       )
   );
-  const firstEssential = availableEssentials.length
+  const firstEssential = availableEssentials?.length
   ? availableEssentials[Math.floor(Math.random() * availableEssentials.length)]
   : null;
 
     return (
       <>
-        {cart && cart.lines.edges.length > 0 && (
+        {cart && cart?.lines?.edges.length > 0 && (
           <div className="">
             <div className="bg-white px-5 pt-[32px] pb-[40px] md:pb-[60px]">
               <div className='max-w-[1240px] mx-auto'>
@@ -379,10 +379,10 @@ export default function Cart() {
               </div>
             <div className='max-w-[1240px] mx-auto gap-[24px] md:gap-[59px] flex flex-col lg:flex-row'>
               <div className='w-full lg:w-[65.35%]'>                
-                <CartLineItems linesObj={cart.lines} />
+                <CartLineItems linesObj={cart?.lines} />
               </div>
               <div className="w-full lg:w-[34.65%] md:sticky md:top-[80px] space-y-6">
-                <CartSummary cart={cart} cost={cart.cost} />
+                <CartSummary cart={cart} cost={cart?.cost} />
                 <CartActions cart={cart} />
               </div>
             </div>
