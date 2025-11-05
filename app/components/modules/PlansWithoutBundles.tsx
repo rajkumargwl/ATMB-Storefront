@@ -18,6 +18,7 @@ type PlansWithoutBundlesProps = {
 };
  
 export default function PlansWithoutBundles({product,planData,location}: PlansWithoutBundlesProps) {
+  
   const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
   let currencyCode = selectedLocale?.currency || 'USD';
     
@@ -33,12 +34,19 @@ export default function PlansWithoutBundles({product,planData,location}: PlansWi
   // Shopify variants
   const variants = (product?.variants?.nodes ?? []) as ProductVariant[];
  
-  // Filter variants by metafield `plan_type`
-  const filteredVariants = variants.filter((variant) => {
-    const planTypeField = variant.metafields?.find((m) => m && m.key === 'plan_type');
-    return planTypeField?.value?.toLowerCase() === billingCycle;
-  });
- 
+  // // Filter variants by metafield `plan_type`
+  // const filteredVariants = variants.filter((variant) => {
+  //   const planTypeField = variant.metafields?.find((m) => m && m.key === 'plan_type');
+  //   return planTypeField?.value?.toLowerCase() === billingCycle;
+  // });
+ // Filter variants by the "Plan Type" option
+const filteredVariants = variants.filter((variant) => {
+  const planTypeOption = variant.selectedOptions?.find(
+    (opt) => opt.name.toLowerCase() === 'plan type'
+  );
+  return planTypeOption?.value?.toLowerCase() === billingCycle;
+});
+
   // Sort by position (if defined)
   const sortedVariants = filteredVariants.sort((a, b) => a.position - b.position);
  
@@ -123,24 +131,65 @@ export default function PlansWithoutBundles({product,planData,location}: PlansWi
           )}
  
           {sortedVariants.map((variant, index) => {
-            const basePrice = parseFloat(variant.price.amount);
-            const yearlyPrice = (basePrice * 12 * 0.8).toFixed(2);
-            const displayPrice =
-              billingCycle === 'monthly' ? basePrice.toFixed(2) : yearlyPrice;
+            // const basePrice = parseFloat(variant.price.amount);
+            // const yearlyPrice = (basePrice * 12 * 0.8).toFixed(2);
+            // const displayPrice =
+            //   billingCycle === 'monthly' ? basePrice.toFixed(2) : yearlyPrice;
+         
+            const displayPrice = parseFloat(variant.price.amount).toFixed(2);
+            if (billingCycle === 'yearly') {
+              const monthlyVariant = variants.find(v => 
+                v.selectedOptions?.some(
+                  opt => opt.name.toLowerCase() === 'plan type' && opt.value.toLowerCase() === 'monthly'
+                )
+              );
+              if (monthlyVariant) {
+                const monthlyPrice = parseFloat(monthlyVariant.price.amount);
+                const fullYearPrice = monthlyPrice * 12;
+                const discountPercent = Math.round(100 - (parseFloat(displayPrice) / fullYearPrice) * 100);
+                console.log(`Discount applied: ${discountPercent}%`);
+              }
+            }
  
             // Mark “Most Popular”
             const isMostPopular =
               variant.title.toLowerCase().includes('50') || index === 1;
  
             // Example feature list
-            const features = [
-              variant.title.toLowerCase().includes('unlimited')
-                ? 'No live answering minutes'
-                : `${variant.title.split(' ')[1]} Live answering minutes`,
-              'Appointment scheduling',
-              'Appointment scheduling App',
-            ];
- 
+            // const features = [
+            //   variant.title.toLowerCase().includes('unlimited')
+            //     ? 'No live answering minutes'
+            //     : `${variant.title.split(' ')[1]} Live answering minutes`,
+            //   'Appointment scheduling',
+            //   'Appointment scheduling App',
+            // ];
+            const featuresMetafield = variant.metafields?.find(
+              (m) => m?.key === 'features' || m?.key === 'plan_features'
+            );
+            
+            let features: string[] = [];
+            
+            if (featuresMetafield?.value) {
+              try {
+                // Try parsing as JSON array: ["A","B","C"]
+                const parsed = JSON.parse(featuresMetafield.value);
+                if (Array.isArray(parsed)) {
+                  features = parsed.map((f) => f.trim());
+                } else if (typeof parsed === 'string') {
+                  // If it's a single string, split by commas or line breaks
+                  features = parsed.split(/[\n,]+/).map((f) => f.trim());
+                }
+              } catch {
+                // If not JSON, fallback to split by commas or newlines
+                features = featuresMetafield.value.split(/[\n,]+/).map((f) => f.trim());
+              }
+            }
+            
+            if (features.length === 0) {
+              features = ['Appointment scheduling', 'App access'];
+            }
+            
+
             let pricewithobj = {
               amount: displayPrice,
               currencyCode: currencyCode,
