@@ -16,7 +16,7 @@ import { fetchGids, notFound, validateLocale } from '~/lib/utils';
 
 import { SMALL_BUSINESS_OWNER_PAGE_QUERY } from '~/queries/sanity/fragments/pages/smallBusinessOwnerPage';
 import { fetchBundleProducts } from '~/lib/bundle.server';
-
+import { fetchIndividualProducts } from '~/lib/individualProduct.server'; 
 // -----------------
 // SEO
 // -----------------
@@ -45,12 +45,13 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
     maxAge: 60,
     staleWhileRevalidate: 60,
   });
-  const [page, bundles] = await Promise.all([
+  const [page, bundles,individualProducts] = await Promise.all([
     context.sanity.query({
       query: SMALL_BUSINESS_OWNER_PAGE_QUERY,
       cache,
     }),
     fetchBundleProducts(context), 
+    fetchIndividualProducts(context), // Fetch individual products
   ]);
   if (!page) throw notFound();
 
@@ -64,6 +65,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
   return defer({
     page,
     bundles,
+    individualProducts,
     gids,
     analytics: { pageType: AnalyticsPageType.page },
   });
@@ -73,7 +75,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
 // Component
 // -----------------
 export default function SmallBusinessOwnerPage() {
-  const { page, gids,bundles } = useLoaderData<typeof loader>();
+  const { page, gids,bundles,individualProducts } = useLoaderData<typeof loader>();
 
   return (
     <SanityPreview data={page} query={SMALL_BUSINESS_OWNER_PAGE_QUERY}>
@@ -82,7 +84,7 @@ export default function SmallBusinessOwnerPage() {
           <Await resolve={gids}>
             {page?.modules && page.modules.length > 0 && (
               <div className={clsx('mb-0 mt-0 px-0', 'md:px-0')}>
-                <ModuleGrid items={page.modules} bundles={bundles}/>
+                <ModuleGrid items={page.modules} bundles={bundles} individualProducts={individualProducts}/>
               </div>
             )}
           </Await>
