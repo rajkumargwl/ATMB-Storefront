@@ -19,7 +19,7 @@ const seo: SeoHandleFunction = ({data}) => ({
   title: data?.page?.seo?.title || 'Virtual phone number',
   description:
     data?.page?.seo?.description ||
-    'A custom storefront powered by Hydrogen and Sanity',
+    'Anytime | Mailbox',
 });
 export const handle = { seo };
 export async function loader({context, params, request}: LoaderFunctionArgs) {
@@ -73,7 +73,7 @@ export default function Plans() {
  
   const variants = (product?.variants?.nodes ?? []) as ProductVariant[];
   const filteredVariants = variants.filter((variant) => {
-    const planTypeField = variant.metafields?.find((m) => m.key === 'plan_type');
+    const planTypeField = variant.metafields?.find((m) => m && m.key === 'plan_type');
     return planTypeField?.value?.toLowerCase() === billingCycle;
   });
   const sortedVariants = filteredVariants.sort((a, b) => a.position - b.position);
