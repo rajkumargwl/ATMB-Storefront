@@ -177,6 +177,7 @@ export const PRODUCT_QUERY = `#graphql
         metafields(identifiers: [
           {namespace: "custom", key: "plan_type"},
           {namespace: "custom", key: "billing_product_id"},
+          { namespace: "custom", key: "features" },
           {namespace: "custom", key: "bundle_product_id"}
         ]) {
           key
@@ -189,6 +190,7 @@ export const PRODUCT_QUERY = `#graphql
           metafields(identifiers: [
             {namespace: "custom", key: "plan_type"},
             {namespace: "custom", key: "billing_product_id"},
+            { namespace: "custom", key: "features" },
             {namespace: "custom", key: "bundle_product_id"}
           ]) {
             key

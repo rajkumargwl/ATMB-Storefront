@@ -109,7 +109,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
     }),
   ]);
 
- //console.log("Product variants with metafields:");
+//  console.log("Product variants with metafields:");
 //  product.variants.nodes.forEach((variant: any, i: number) => {
 //    const metafields = (variant.metafields || [])
 //      .filter((m: any) => m !== null)
@@ -233,7 +233,7 @@ const sortedVariants = filteredVariants.sort((a, b) => a.position - b.position);
       <div className="flex flex-col min-h-screen">
         <main className="flex-1">
          
-<LocationInfo location={location} services={services} servicesIcons={servicesIcons}/>
+         <LocationInfo location={location} services={services} servicesIcons={servicesIcons}/>
           {/* Sanity Modules Grid */}
           {page?.modules && page.modules.length > 0 && (
             <div className="mb-0 mt-0 px-0 md:px-0">
