@@ -13,11 +13,13 @@ export const HOW_IT_WORKS_MODULE = groq`
       description,
       links[] {
         label,
-        url
+        url,
+        sectionid
       },
       ctaButton {
         label,
-        url
+        url,
+        sectionid
       },
       image {
         "url": asset->url,
@@ -49,7 +51,8 @@ export const HOW_IT_WORKS_MODULE = groq`
       },
       button {
         text,
-        url
+        url,
+        sectionid
       }
     },
  
@@ -95,11 +98,14 @@ export const HOW_IT_WORKS_MODULE = groq`
       },
       buttonPrimary {
         label,
-        url
+        url,
+        sectionid
       },
       buttonSecondary {
         label,
-        url
+        url,
+        sectionid
+
       }
     },
  

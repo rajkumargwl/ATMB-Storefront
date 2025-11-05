@@ -73,7 +73,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
 export default function RenterReferralProgram() {
   const { page, gids } = useLoaderData<typeof loader>();
 
-  console.log('Rendering page with modules:', page?.modules);
+
 
   return (
     <SanityPreview data={page} query={RENTER_PAGE_QUERY}> 

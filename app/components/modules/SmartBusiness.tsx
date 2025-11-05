@@ -30,7 +30,7 @@ const SmartBusiness: React.FC<Props> = ({
   testimonials,
 }) => {
   return (
-    <section className="bg-white px-5 py-[40px] md:py-[60px] lg:py-[100px]">
+    <section id = "benefits" className="bg-white px-5 py-[40px] md:py-[60px] lg:py-[100px]">
       <div className="max-w-[1170px] mx-auto">
         {/* Header */}
  

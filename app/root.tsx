@@ -300,12 +300,12 @@ export default function App() {
            {/* 🔹 Skip link should be FIRST */}
           <div className="absolute left-0 top-0">
             <a
-              href="#mainContent"
-              className="sr-only p-4 focus:not-sr-only focus:block"
-              
-            >
-              Skip to content
-            </a>
+  href="#mainContent"
+  className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-white text-black p-2 rounded"
+>
+  Skip to content
+</a>
+
           </div>
           {/* 🔹 Global Header with search support */}
           {!hideHeaderFooter && (

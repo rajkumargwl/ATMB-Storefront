@@ -45,7 +45,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
     params: { language  }
   });
 
- console.log("locccccccc",JSON.stringify(page,null,2));
+ 
   if (!page) throw notFound();
 
  const anytimemobile = page?.modules?.find(

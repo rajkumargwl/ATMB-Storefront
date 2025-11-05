@@ -6,8 +6,7 @@ export function RenterReferralWork({ data }: RenterReferralWorkProps) {
   const { heading, description, features } = data;
 
   // Debug log to see actual feature structure
-  console.log('Work section data:', data);
-  console.log('Features:', features);
+
 
   return (
     <section className="py-16 bg-gray-50">
@@ -28,7 +27,7 @@ export function RenterReferralWork({ data }: RenterReferralWorkProps) {
         {features && features.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature: any, index: number) => {
-              console.log('Feature:', feature); // Debug each feature
+            
               return (
                 <div
                   key={feature._key || index}
