@@ -13,8 +13,9 @@ import LeftChevron from '~/components/icons/LeftChevron';
 import {CountrySelector} from '~/components/global/CountrySelector';
 import LanguageSwitcher from "./LanguageSwitcher";
 import LanguageCurrencyMenu from '~/components/global/LanguageCurrencyMenu';
-import {usePrefixPathWithLocale} from '~/lib/utils';
+import {DEFAULT_LOCALE, usePrefixPathWithLocale} from '~/lib/utils';
 import GlobeIcon from '~/components/media/Globe.svg';
+import { useRootLoaderData } from "~/root";
 
 type HeaderProps = {
   data: {
@@ -140,6 +141,8 @@ useEffect(() => {
   }
 }, [isMobileMenuOpen]);
 
+ const buildLocalizedUrl = usePrefixPathWithLocale2(); 
+ const [openItem, setOpenItem] = useState<string | null>(null);
 
   return (
     <header className=" relative z-[99] w-full bg-white px-5 border-b border-LightWhite lg:border-none">
@@ -148,7 +151,7 @@ useEffect(() => {
           {/* Logo */}
           <div className="flex items-center">
             {logo?.url && (
-              <Link to={usePrefixPathWithLocale('/')} >
+              <Link to={buildLocalizedUrl('/')} >
                 <img
                   src={logo.url}
                   alt="Anytime Mailbox"
@@ -166,7 +169,7 @@ useEffect(() => {
               <div key={idx} className="relative group p-2">
                  <Link
                   to={
-                    usePrefixPathWithLocale(item.label === "Solutions"
+                    buildLocalizedUrl(item.label === "Solutions"
         ? "/solutionsvm"
         : item.label === "Locations"
         ? "/sublocations"
@@ -177,8 +180,7 @@ useEffect(() => {
           : item.label === "Contact Us"
           ? "/contact"
         : item.url ?? "#")}
-                  className={`text-PrimaryBlack hover:text-PrimaryBlack font-normal flex items-center gap-[6px] text-[14px] md:text-[14px] ${currentLanguage === 'en-es' ? 'xl:text-[15px]' : 'xl:text-[16px]' } leading-[24px] tracking-[0px]`}
-                >
+        className="text-PrimaryBlack hover:text-PrimaryBlack font-normal text-base leading-[24px]"  >
                   {item.label} 
                   {item.hasSubmenu && (
                  <span className="group-hover:transform group-hover:rotate-180 transition-all duration-500 ease-in-out"> <ArrowDownIcon /></span>
@@ -191,7 +193,7 @@ useEffect(() => {
                     <div className="absolute z-[2] left-0 pt-[15px] hidden group-hover:block min-w-[100px]">
                       <div className="min-w-[812px] p-6 rounded-[20px] border border-[#cccccc] bg-white shadow-[0_4px_14px_0_rgba(0,0,0,0.05)] grid md:grid-cols-2">
                         {/* {item?.subMenu.map((sub, i) => {
-                          const localizedUrl = usePrefixPathWithLocale(sub?.url) ?? "#";
+                          const localizedUrl = buildLocalizedUrl(sub?.url) ?? "#";
 
                           return (
                             <li key={i}>
@@ -218,7 +220,7 @@ useEffect(() => {
                               {group.links?.map((link: any, lIdx: number) => (
                                 <li key={lIdx}>
                                   <Link
-                                    to={usePrefixPathWithLocale(link.url ?? "#")}
+                                    to={buildLocalizedUrl(link.url ?? "#")}
                                     aria-label={link.label}
                                     title={link.label}
                                     className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]"
@@ -270,7 +272,7 @@ useEffect(() => {
                    <div className="min-w-[130px] absolute z-[2] left-0 mt-2 bg-white border border-LightWhite shadow-md rounded-[6px] hidden group-hover:block min-w-[100px]">
                    <ul className="py-2">
                      {item?.subMenu.map((sub, i) => {
-                       const localizedUrl = usePrefixPathWithLocale(sub?.url) ?? "#";
+                       const localizedUrl = buildLocalizedUrl(sub?.url) ?? "#";
                        return (
                          <li key={i}>
                            <Link
@@ -308,7 +310,7 @@ useEffect(() => {
           {/* Cart */}
           {icon2?.url && (
             <Link
-              to={usePrefixPathWithLocale('/cart')}
+              to={buildLocalizedUrl('/cart')}
               className="relative flex items-center"
             >
               <img
@@ -357,7 +359,7 @@ useEffect(() => {
           <div className="hidden lg:flex items-center space-x-4">
             {isLoggedIn ? (
                <Link
-               to={usePrefixPathWithLocale('/account')}
+               to={buildLocalizedUrl('/account')}
                className="text-base font-medium text-PrimaryBlack hover:underline cursor-pointer"
              >
                Welcome, {customer?.firstName || "User"}
@@ -393,8 +395,8 @@ useEffect(() => {
             )}
             {!isLoggedIn && getStartedButton && (
               <Link
-                // to={usePrefixPathWithLocale('create-account')}
-                to={usePrefixPathWithLocale(getStartedButton?.link ?? '#')} 
+                // to={buildLocalizedUrl('create-account')}
+                to={buildLocalizedUrl(getStartedButton?.link ?? "#")}
                 className="rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-4 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2 transition-all hover:scale-[1.02] hover:bg-[#DD5827]"
               >
                 {getStartedButton?.label} 
@@ -435,174 +437,278 @@ useEffect(() => {
 
             {/* Navigation */}
             <nav className="flex flex-col space-y-4 overflow-auto">
-              {menu?.map((item, idx) => (
-                <Link
-                  key={idx}
-                  to={item.label === "Solutions" ? "/solutions": item.label === "Locations"? "/locations": item.url ?? "#"}
-                  className="text-PrimaryBlack hover:text-PrimaryBlack font-normal text-base leading-[24px]"
-                  onClick={() => setIsMobileMenuOpen(false)} // auto close on link click
-                >
-                  {item.label}
-                </Link>
-              ))}
+              {menu?.map((item, idx) => {
+                const isOpen = openItem === item.label;
+                return (
+                  <div key={idx} className="pb-3">
+                    {/* Main item */}
+                    <button
+                      className="w-full flex justify-between items-center text-left text-PrimaryBlack font-normal text-base leading-[24px]"
+                      onClick={() => {
+                        if (item.hasSubmenu) {
+                          setOpenItem(isOpen ? null : item.label);
+                        } else {
+                          setIsMobileMenuOpen(false);
+                          navigate(
+                            buildLocalizedUrl(
+                              item.label === "Solutions"
+                                ? "/solutionsvm"
+                                : item.label === "Locations"
+                                ? "/sublocations"
+                                : item.url ?? "#"
+                            )
+                          );
+                        }
+                      }}
+                    >
+                      {item.label}
+                      {item.hasSubmenu && (
+                        <span
+                          className={`transform transition-transform ${
+                            isOpen ? "rotate-180" : ""
+                          }`}
+                        >
+                          <ArrowDownIcon />
+                        </span>
+                      )}
+                    </button>
 
-              {loginButton && (
-                <Link
-                  to={loginButton.link ?? "#"}
-                  className="w-fit rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[11px]"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {loginButton.label}
-                </Link>
-              )}
+                    {/* Regular Submenu */}
+                    {item.hasSubmenu &&
+                      item.submenuType === "regular" &&
+                      isOpen &&
+                      item.subMenu?.length > 0 && (
+                        <ul className="mt-2 pl-4 flex flex-col gap-2">
+                          {item.subMenu.map((sub, sIdx) => (
+                            <li key={sIdx}>
+                              <Link
+                                to={buildLocalizedUrl(sub.url ?? "#")}
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="text-LightGray text-sm"
+                              >
+                                {sub.label}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
 
-              {getStartedButton && (
+                    {/* Mega Menu */}
+                    {item.hasSubmenu &&
+                      item.submenuType === "mega" &&
+                      isOpen &&
+                      item.megaMenu?.length > 0 && (
+                        <div className="mt-2 pl-4 flex flex-col gap-4">
+                          {item.megaMenu.map((group, gIdx) => (
+                            <div key={gIdx}>
+                              <p className="text-PrimaryBlack font-medium mb-2">
+                                {group.title}
+                              </p>
+                              <ul className="flex flex-col gap-2">
+                                {group.links.map((link, lIdx) => (
+                                  <li key={lIdx}>
+                                    <Link
+                                      to={buildLocalizedUrl(link.url ?? "#")}
+                                      onClick={() => setIsMobileMenuOpen(false)}
+                                      className="text-LightGray text-sm"
+                                    >
+                                      {link.label}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                  </div>
+                );
+              })}
+
+               {isLoggedIn ? (
+               <Link
+               to={buildLocalizedUrl('/account')}
+               className="text-base font-medium text-PrimaryBlack hover:underline cursor-pointer"
+             >
+               Welcome, {customer?.firstName || "User"}
+             </Link>
+                ) : (
+                  loginButton && (
+                    <button
+                    className="w-fit rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[11px]"
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      const ssoUrl = "https://store.xecurify.com/moas/broker/login/shopify/0dv7ud-pz.myshopify.com/account?idpname=custom_openidconnect_Okf";
+                      const width = 800;
+                      const height = 600;
+                      const left = (window.screen.width - width) / 2;
+                      const top = (window.screen.height - height) / 2;
+                      window.open(
+                        ssoUrl,
+                        "SSO Login",
+                        `width=${width},height=${height},top=${top},left=${left},resizable,scrollbars=yes,status=1`
+                      );
+                    }}
+                  >
+                    {loginButton.label}
+                  </button>
+                  )
+                )}
+                {!isLoggedIn && getStartedButton && (
                 <Link
-                  // to={usePrefixPathWithLocale('create-account')}
-                  to={usePrefixPathWithLocale(getStartedButton?.link ?? '#')}
+                  // to={buildLocalizedUrl('create-account')}
+                  to={buildLocalizedUrl(getStartedButton?.link ?? '#')}
                   className="w-fit rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-3 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2 transition-all hover:scale-[1.02] hover:bg-[#DD5827]"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {getStartedButton?.label} 
                 </Link>
-              )}
+                )}
             </nav>
           </div>
         </div>
       )}
 
-     {/* Search Popup Modal */}
-{/* Search Popup Modal */}
-{isSearchOpen && (
-  <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 md:px-5">
-    <div className="h-[100vh] md:h-auto bg-white md:bg-[#F6F6F6] md:rounded-[20px] shadow-lg w-full max-w-[1010px] md:mt-5 md:px-4 md:pt-4 md:pb-6">
-      
-      {/* Header Row */}
-      <div className="relative flex flex-row flex-wrap items-center justify-betwee gap-[10px] rounded-[100px] bg-white m-5 ml-[60px] md:m-[0px] px-5 py-3 md:py-2 md:pl-5 md:pr-2 border border-LightWhite">
-        {/* Logo */}
-        {/* <div className="flex items-center">
-          <img
-            src={Logo}
-            alt="Logo"
-            className="h-13 w-auto"
-          />
-        </div> */}
+      {/* Search Popup Modal */}
+      {isSearchOpen && (
+        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/50 md:px-5">
+          <div className="h-[100vh] md:h-auto bg-white md:bg-[#F6F6F6] md:rounded-[20px] shadow-lg w-full max-w-[1010px] md:mt-5 md:px-4 md:pt-4 md:pb-6">
+            
+            {/* Header Row */}
+            <div className="relative flex flex-row flex-wrap items-center justify-betwee gap-[10px] rounded-[100px] bg-white m-5 ml-[60px] md:m-[0px] px-5 py-3 md:py-2 md:pl-5 md:pr-2 border border-LightWhite">
+              {/* Logo */}
+              {/* <div className="flex items-center">
+                <img
+                  src={Logo}
+                  alt="Logo"
+                  className="h-13 w-auto"
+                />
+              </div> */}
 
-        {/* Search Input */}
-        <button className="flex md:hidden absolute left-[-40px]">
-            <LeftChevron />
-          </button>
-        <div className="flex-1 gap-[10px] relative flex items-center justify-center">
-          <button className="hidden md:flex">
-            <LeftArrowBlack />
-          </button>
-          <button className="flex md:hidden">
-            <SearchIcon />
-          </button>
+              {/* Search Input */}
+              <button className="flex md:hidden absolute left-[-40px]">
+                  <LeftChevron />
+                </button>
+              <div className="flex-1 gap-[10px] relative flex items-center justify-center">
+                <button className="hidden md:flex">
+                  <LeftArrowBlack />
+                </button>
+                <button className="flex md:hidden">
+                  <SearchIcon />
+                </button>
 
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => {
-              const newValue = e.target.value;
-              setQuery(newValue);
+                <input
+                  type="text"
+                  value={query}
+                  onChange={(e) => {
+                    const newValue = e.target.value;
+                    setQuery(newValue);
 
-              const params = new URLSearchParams(location.search);
-              if (newValue.trim()) {
-                params.set("q", newValue);
-              } else {
-                params.delete("q");
-              }
+                    const params = new URLSearchParams(location.search);
+                    if (newValue.trim()) {
+                      params.set("q", newValue);
+                    } else {
+                      params.delete("q");
+                    }
 
-              navigate(`?${params.toString()}`, { replace: true });
-            }}
-            placeholder="Enter location, product, or keyword"
-            className="w-full md:py-[11px] font-Roboto text-PrimaryBlack font-normal leading-[24px] text-[16px] tracking-[0px] placeholder:text-PrimaryBlack rounded-xl focus:outline-none placeholder:font-Roboto placeholder:font-normal placeholder:leading-[24px] placeholder:text-[16px] placeholder:tracking-[0px]"
-          />
+                    navigate(`?${params.toString()}`, { replace: true });
+                  }}
+                  placeholder="Enter location, product, or keyword"
+                  className="w-full md:py-[11px] font-Roboto text-PrimaryBlack font-normal leading-[24px] text-[16px] tracking-[0px] placeholder:text-PrimaryBlack rounded-xl focus:outline-none placeholder:font-Roboto placeholder:font-normal placeholder:leading-[24px] placeholder:text-[16px] placeholder:tracking-[0px]"
+                />
 
-          {/* Close Icon inside input */}
-          {/* {query && (
-            <button
-              onClick={() => {
-                setQuery("");
-                setIsSearchOpen(false);
-                const params = new URLSearchParams(location.search);
-                params.delete("q");
-                navigate(`?${params.toString()}`, { replace: true });
-              }}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-            >
-              <CloseIcon />
-            </button>
-          )} */}
-        </div>
-
-        {/* Right Buttons */}
-        <div className="flex items-center space-x-[10px] w-auto justify-center mt-[0px]">
-          
-          <button onClick={() => {
-                setQuery("");
-                setIsSearchOpen(false);
-                const params = new URLSearchParams(location.search);
-                params.delete("q");
-                navigate(`?${params.toString()}`, { replace: true });
-              }}>
-            <CloseIconBlack />
-          </button>
-          {/* <Link
-            to={loginButton?.link ?? "/account/login"}
-            className="rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[15px]"
-          >
-            {loginButton?.label || "Login"}
-          </Link> */}
-          <Link
-            // to={usePrefixPathWithLocale('create-account')}
-            to={usePrefixPathWithLocale(getStartedButton?.link ?? '#')}
-            className="hidden md:flex rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-4 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2 transition-all hover:scale-[1.02] hover:bg-[#DD5827]"
-          >
-            {getStartedButton?.label || "Get Started"} 
-          </Link>
-        </div>
-      </div>
-
-      {/* Results List */}
-      {query && (
-        <div className="md:pt-2">
-          <div className="bg-white border-t md:border border-LightWhite md:rounded-[20px] shadow-md w-full p-5">
-            <ul className="max-h-72 overflow-y-auto space-y-6">
-              {results.length > 0 ? (
-                results.map((item) => (
-                  <li
-                    key={item._id}
-                    className="cursor-pointer font-Roboto leading-[27px] text-[18px] tracking-[0px]"
-                    onClick={() => handleResultClick(item)}
+                {/* Close Icon inside input */}
+                {/* {query && (
+                  <button
+                    onClick={() => {
+                      setQuery("");
+                      setIsSearchOpen(false);
+                      const params = new URLSearchParams(location.search);
+                      params.delete("q");
+                      navigate(`?${params.toString()}`, { replace: true });
+                    }}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                   >
-                    {item.type === "location" ? (
-                      <>
-                        <span className="mr-2 font-medium text-PrimaryBlack">{item.name}</span>
-                        <span className="text-LightGray font-normal">
-                          {item.city}, {item.postalCode}
-                        </span>
-                      </>
+                    <CloseIcon />
+                  </button>
+                )} */}
+              </div>
+
+              {/* Right Buttons */}
+              <div className="flex items-center space-x-[10px] w-auto justify-center mt-[0px]">
+                
+                <button onClick={() => {
+                      setQuery("");
+                      setIsSearchOpen(false);
+                      const params = new URLSearchParams(location.search);
+                      params.delete("q");
+                      navigate(`?${params.toString()}`, { replace: true });
+                    }}>
+                  <CloseIconBlack />
+                </button>
+                {/* <Link
+                  to={loginButton?.link ?? "/account/login"}
+                  className="rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[15px]"
+                >
+                  {loginButton?.label || "Login"}
+                </Link> */}
+                <Link
+                  // to={buildLocalizedUrl('create-account')}
+                  to={buildLocalizedUrl(getStartedButton?.link ?? '#')}
+                  className="hidden md:flex rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-4 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2 transition-all hover:scale-[1.02] hover:bg-[#DD5827]"
+                >
+                  {getStartedButton?.label || "Get Started"} 
+                </Link>
+              </div>
+            </div>
+
+            {/* Results List */}
+            {query && (
+              <div className="md:pt-2">
+                <div className="bg-white border-t md:border border-LightWhite md:rounded-[20px] shadow-md w-full p-5">
+                  <ul className="max-h-72 overflow-y-auto space-y-6">
+                    {results.length > 0 ? (
+                      results.map((item) => (
+                        <li
+                          key={item._id}
+                          className="cursor-pointer font-Roboto leading-[27px] text-[18px] tracking-[0px]"
+                          onClick={() => handleResultClick(item)}
+                        >
+                          {item.type === "location" ? (
+                            <>
+                              <span className="mr-2 font-medium text-PrimaryBlack">{item.name}</span>
+                              <span className="text-LightGray font-normal">
+                                {item.city}, {item.postalCode}
+                              </span>
+                            </>
+                          ) : (
+                            <>
+                              <span className="mr-2 font-medium text-PrimaryBlack">{item.title}</span>
+                              <span className="text-LightGray font-normal">(Product)</span>
+                            </>
+                          )}
+                        </li>
+                      ))
                     ) : (
-                      <>
-                        <span className="mr-2 font-medium text-PrimaryBlack">{item.title}</span>
-                        <span className="text-LightGray font-normal">(Product)</span>
-                      </>
+                      <li className="px-4 py-3 font-Roboto text-PrimaryBlack font-normal leading-[24px] text-[16px] tracking-[0px]">No results found</li>
                     )}
-                  </li>
-                ))
-              ) : (
-                <li className="px-4 py-3 font-Roboto text-PrimaryBlack font-normal leading-[24px] text-[16px] tracking-[0px]">No results found</li>
-              )}
-            </ul>
+                  </ul>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
-    </div>
-  </div>
-)}
 
     </header>
   );
+}
+
+export function usePrefixPathWithLocale2() {
+  const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
+
+  return (path?: string | null) => {
+    if (!path) return selectedLocale.pathPrefix || '/';
+    return `${selectedLocale.pathPrefix}${path.startsWith('/') ? path : '/' + path}`;
+  };
 }
