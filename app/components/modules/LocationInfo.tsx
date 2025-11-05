@@ -14,7 +14,7 @@ export default function LocationInfo({ location, services, servicesIcons }: Loca
   const isTopRated = location?.ratingList?.some(
     (r: any) => r.type === "TOPRATED"
   );
-  console.log("featureeeeeee",JSON.stringify(services,null,2));
+  //console.log("featureeeeeee",JSON.stringify(services,null,2));
  
   return (
     <div className="px-5 pt-[24px] md:pt-[32px] pb-[24px] md:pb-[40px] relative z-[2] bg-white">

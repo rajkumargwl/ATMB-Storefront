@@ -14,6 +14,7 @@ import { Suspense } from 'react';
 import ModuleGrid from '~/components/modules/ModuleGrid';
 import { fetchGids, notFound, validateLocale } from '~/lib/utils';
 import { ANYTIME_PHONE_PAGE_QUERY } from '~/queries/sanity/fragments/pages/anytimePhonepage';
+import { fetchBundleProducts } from '~/lib/bundle.server';
 
 // -----------------
 // SEO
@@ -38,17 +39,30 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
   }
 
   // Fetch the page data from Sanity
-  const page = await context.sanity.query({
+  /*const page = await context.sanity.query({
     query: ANYTIME_PHONE_PAGE_QUERY,
     params: { language  }
+  });*/
+  const cache = context.storefront.CacheCustom({
+    mode: "public",
+    maxAge: 60,
+    staleWhileRevalidate: 60,
   });
-
+  const [page, bundles] = await Promise.all([
+    context.sanity.query({
+      query: ANYTIME_PHONE_PAGE_QUERY,
+      params: { language },
+      cache,
+    }),
+    fetchBundleProducts(context), 
+  ]);
   if (!page) throw notFound();
 
   const gids = fetchGids({ page, context });
 
   return defer({
     page,
+    bundles,
     gids,
     analytics: { pageType: AnalyticsPageType.page },
   });
@@ -58,7 +72,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
 // Component
 // -----------------
 export default function AnytimePhonePage() {
-  const { page, gids } = useLoaderData<typeof loader>();
+  const { page, gids,bundles } = useLoaderData<typeof loader>();
 
   return (
     <SanityPreview data={page} query={ANYTIME_PHONE_PAGE_QUERY}>
@@ -67,7 +81,7 @@ export default function AnytimePhonePage() {
           <Await resolve={gids}>
             {page?.modules && page.modules.length > 0 && (
               <div className={clsx('mb-0 mt-0 px-0', 'md:px-0')}>
-                <ModuleGrid items={page.modules} />
+                <ModuleGrid items={page.modules}  bundles={bundles}/>
               </div>
             )}
           </Await>

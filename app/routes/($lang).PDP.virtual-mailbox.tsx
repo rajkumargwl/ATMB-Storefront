@@ -108,7 +108,23 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
       cache,
     }),
   ]);
+
+ console.log("Product variants with metafields:");
+ product.variants.nodes.forEach((variant: any, i: number) => {
+   const metafields = (variant.metafields || [])
+     .filter((m: any) => m !== null)
+     .map((m: any) => ({
+       key: m.key,
+       value: m.value,
+     }));
  
+   console.log(`Variant ${i + 1}:`, {
+     title: variant.title,
+     metafields,
+   });
+ });
+ 
+
   return defer({
     location,
     page,
@@ -150,19 +166,38 @@ export default function Plans() {
 //       .filter(Boolean) // remove undefined/null
 //   )
 // );
-console.log('services:', services);
+//console.log('services:', services);
 
   const variants = (product?.variants?.nodes ?? []) as ProductVariant[];
  
   // Filter by billing cycle from metafields
-  const filteredVariants = variants.filter((variant) => {
+  /*const filteredVariants = variants.filter((variant) => {
     const planTypeField = variant.metafields?.find((m) => m.key === 'plan_type');
     return planTypeField?.value?.toLowerCase() === billingCycle;
   });
  
   // Sort by Shopify's built-in `position`
-  const sortedVariants = filteredVariants.sort((a, b) => a.position - b.position);
- 
+  const sortedVariants = filteredVariants.sort((a, b) => a.position - b.position);*/
+ // Map variants to include metafields
+const variantsWithBillingId = variants.map((variant) => {
+  const planTypeField = variant.metafields?.find((m) => m.key === 'plan_type');
+  const billingProductField = variant.metafields?.find((m) => m.key === 'billing_product_id');
+
+  return {
+    ...variant,
+    planType: planTypeField?.value?.toLowerCase() || null,
+    billingProductId: billingProductField?.value || null,
+  };
+});
+
+// Filter variants by billing cycle (monthly/yearly)
+const filteredVariants = variantsWithBillingId.filter(
+  (variant) => variant.planType === billingCycle
+);
+
+// Sort by Shopify's built-in position
+const sortedVariants = filteredVariants.sort((a, b) => a.position - b.position);
+
   const productAnalytics: ShopifyAnalyticsProduct | null = selectedVariant
     ? {
         productGid: product.id,

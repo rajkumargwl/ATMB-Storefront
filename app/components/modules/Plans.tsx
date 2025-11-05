@@ -35,13 +35,14 @@ yearlyLabel: string;
 type PricingModuleProps = {
 data: PricingData;
 bundles?: any[];
+individualProducts?: any[];
 };
 
-export default function Pricingmodule({ data, bundles }: PricingModuleProps) {
+export default function Pricingmodule({ data, bundles, individualProducts}: PricingModuleProps) {
 const [activeTab, setActiveTab] = useState<"individual" | "bundles">("individual");
 const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
 const isYearly = billing === "yearly";
-console.log("Pricing Module Data:", data);
+//console.log("individual product in Pricing Module:", individualProducts);
 const tabs = [
 {
 id: "individual",

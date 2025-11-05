@@ -183,7 +183,7 @@ query: `*[_type == "location"][0...50]{
  
 export default function LocationsPage() {
   const {locations, q} = useLoaderData<typeof loader>();
-  console.log("Locations data:", locations);
+  //console.log("Locations data:", locations);
   return <LocationsList locations={locations} initialQuery={q} isCityPage={false} country="" />;
 }
  

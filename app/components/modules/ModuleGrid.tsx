@@ -97,7 +97,8 @@ type ModuleGridProps = {
   items: any[];
   searchQuery: string;
   homeSearchResults: any[];
-  bundles?: any[]; // 🔹 add this
+  bundles?: any[]; 
+  individualProducts?: any[];
   highlights?: any[]; 
   productData?:any[];
   location?:any[];
@@ -106,7 +107,7 @@ type ModuleGridProps = {
 
 //export default function ModuleGrid({items, homeSearchResults, searchQuery}: Props) {
 
-  export default function ModuleGrid({ items, homeSearchResults, searchQuery, bundles ,highlights,productData,location}: ModuleGridProps) {
+  export default function ModuleGrid({ items, homeSearchResults, searchQuery, bundles ,individualProducts,highlights,productData,location}: ModuleGridProps) {
     
  
   return (
@@ -120,6 +121,7 @@ type ModuleGridProps = {
            homeSearchResults={homeSearchResults}
            searchQuery={searchQuery}
            bundles={bundles} 
+           individualProducts={individualProducts}
            productData={productData}
            location={location}
            highlights={highlights}

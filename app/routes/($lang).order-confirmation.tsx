@@ -34,7 +34,7 @@ import AddToCartWithDraftOrderButton from '~/components/product/buttons/AddToCar
 import { type CartType } from '~/types'; // Add this import
 
 export const loader: LoaderFunction = async ({ context, params }) => {
-  const { env } = context;
+  const { env,storefront } = context;
 
   const cart = await context.cart.get();
   
@@ -43,6 +43,52 @@ export const loader: LoaderFunction = async ({ context, params }) => {
   if (customerAccessToken === null || customerAccessToken === undefined || customerAccessToken === '') {
     return redirect('/create-account');
   }
+  const CUSTOMER_QUERY = `
+  query CustomerQuery($accessToken: String!) {
+    customer(customerAccessToken: $accessToken) {
+      id
+      email
+      firstName
+      lastName
+      metafields(identifiers: [
+        { namespace: "custom", key: "user_id" },
+        { namespace: "custom", key: "payment_details" }
+      ]) {
+        namespace
+        key
+        value
+      }
+    }
+  }
+`;
+
+
+    const customerRes = await storefront.query(CUSTOMER_QUERY, {
+      variables: { accessToken: customerAccessToken },
+    });
+
+    const customer = customerRes?.customer;
+    const metafields = Array.isArray(customer?.metafields) ? customer.metafields : [];
+
+    const userIdMetafield = metafields.find((m: any) => m?.key === 'user_id');
+    const paymentDetailsMetafield = metafields.find((m: any) => m?.key === 'payment_details');
+
+    const user_id = userIdMetafield?.value ?? null;
+    const paymentDetailsMetafieldValue = paymentDetailsMetafield?.value ?? null;   
+   
+    // Parse payment details JSON safely
+    let paymentMethodId = null;
+    let customerPaymentKey = null;
+
+    if (paymentDetailsMetafield?.value) {
+      try {
+        const paymentDetails = JSON.parse(paymentDetailsMetafield.value);
+        paymentMethodId = paymentDetails.paymentMethodId ?? null;
+        customerPaymentKey = paymentDetails.customerPaymentKey ?? null;
+      } catch (err) {
+        console.error("Error parsing payment_details metafield:", err);
+      }
+    }
 
   const [virtualMailbox, virtualPhone, BusinessAcc, LiveReceptionist] = await Promise.all([
       context.storefront.query<{product: Product}>(PRODUCT_QUERY, {
@@ -89,6 +135,9 @@ export const loader: LoaderFunction = async ({ context, params }) => {
       essentialsProducts: AllProducts ?? [],
       BusinessAcc,
       LiveReceptionist,
+      user_id,
+      paymentMethodId,
+      customerPaymentKey,
       cart
     }),
     { headers: { "Content-Type": "application/json" } }
@@ -101,7 +150,7 @@ export default function CheckoutPage() {
   let currencyCode = selectedLocale?.currency || 'USD';
  
   const rootData = useRootLoaderData();
-  const { bundleProducts, essentialsProducts, cart, BusinessAcc, LiveReceptionist,billingConfig} = useLoaderData<typeof loader>();
+  const { bundleProducts, essentialsProducts, cart, BusinessAcc, LiveReceptionist,billingConfig,user_id,customerPaymentKey,paymentMethodId} = useLoaderData<typeof loader>();
   const [selectedVariant, setSelectedVariant] = useState<ProductVariant | null>(null);
 
   const navigate = useNavigate();
@@ -231,6 +280,9 @@ export default function CheckoutPage() {
                 buttonClassName="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 px-4 rounded-xl font-[400] text-[16px] leading-[16px] transition"
                 text="Add Virtual Phone"
                 cart={cart}
+                userId={user_id}
+              paymentMethodId={paymentMethodId}
+              customerPaymentKey={customerPaymentKey}
               /> 
                </div>
           </div>
@@ -302,6 +354,9 @@ export default function CheckoutPage() {
                   buttonClassName="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 px-4 rounded-xl font-[400] text-[16px] leading-[16px] transition"
                   text="Add Business Accelerator"
                   cart={cart}
+                  userId={user_id}
+              paymentMethodId={paymentMethodId}
+              customerPaymentKey={customerPaymentKey}
                 /> 
             </div>
           </div>
@@ -317,135 +372,157 @@ export default function CheckoutPage() {
                 <button
           className="mt-10 border border-gray-400 text-[#091019] text-[16px] text-[500] leading-[16px] tracking-[0.08px] hover:bg-gray-100 py-3 px-4 rounded-full transition w-[236px]"
           onClick={async () => {
-          try {
-          const stored = localStorage.getItem("checkoutCart");
-          const parsed = stored ? JSON.parse(stored) : null;
-            // Extract cart data safely
-            const cartData =
-              parsed?.lines?.edges?.map((edge: any) => ({
-                variantId: edge?.node?.merchandise?.id,
-                quantity: edge?.node?.quantity,
-              })) || [];
-
-            console.log("Extracted cartData:", cartData);
-
-            if (!Array.isArray(cartData) || cartData.length === 0) {
-              console.warn("No valid items found in checkoutCart");
+            try {
+              const edges = cart?.lines?.edges;
+              if (!edges || edges.length === 0) {
+                navigate("/payment-fail");
+                return;
+              }
+              
+        
+              // const cartLines = edges.map((l: any) => ({
+              //   variantId: l.node?.merchandise?.id,
+              //   quantity: l.node?.quantity ?? 1,
+              // }));
+              const cartLines = edges.map((l: any) => {
+                const attrs = l.node?.attributes ?? [];
+                
+                // find the attributes
+                const locationAttr = attrs.find((a: any) => a.key === "locationId");
+                const billingAttr = attrs.find((a: any) => a.key === "billing_product_id");
+                const selectedPlan =
+                l.node?.merchandise?.selectedOptions?.[0]?.value || "Default Plan";
+                const planPrice = parseFloat(l.node?.cost?.totalAmount?.amount || 0);
+                return {
+                  variantId: l.node?.merchandise?.id,
+                  quantity: l.node?.quantity ?? 1,
+                  locationId: locationAttr?.value || null,
+                  billingProductId: billingAttr?.value || null,
+                  planName: selectedPlan,
+                  planPrice: planPrice,
+                };
+              });
+              
+              
+              // Create Draft Order
+              const draftRes = await fetch("/api/create-draft-order", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  lines: cartLines,
+                  customerId: rootData?.customer?.id || null,
+                }),
+              });
+        
+              const draftData = await draftRes.json();
+              const draftOrderId =
+                draftData?.data?.draftOrderCreate?.draftOrder?.id || null;
+        
+              if (!draftOrderId) {
+                console.error("Draft order creation failed:", draftData);
+                navigate("/payment-fail");
+                return;
+              }
+              const firstLine = cartLines[0] || {};
+              const {
+                locationId,
+                billingProductId,
+                planName,
+                planPrice,
+                quantity,
+              } = firstLine;
+                
+              // Billing Payload
+              const billingPayload = {
+                locationId: locationId,
+                locationUnitId: "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+                customerId: user_id, 
+                bundle: null,
+                subscription: {
+                  providerId: "d4e5f6a7-b8c9-0123-def1-234567890123",
+                  //label: "Monthly Premium Subscription",
+                  label: `${planName} Subscription`,
+                  culture: "en-US",
+                  currency: "USD",
+                  items: [
+                    {
+                      productId: billingProductId,
+                      providerId: "d4e5f6a7-b8c9-0123-def1-234567890123",
+                      isChargeProrated: false,
+                     // label: "Premium License - Monthly",
+                      label: `${planName} License - Monthly`,
+                      price: planPrice,
+                      quantity: quantity,
+                      subtotal: planPrice * quantity,
+                      total: planPrice * quantity,
+                      totalAdjustment: 0,
+                      recurrenceInterval: "month",
+                      adjustments: [
+                        {
+                          label: "10% Volume Discount",
+                          adjustAmount: 50.0,
+                          adjustPercent: 10.0,
+                          adjustSubtotal: 50.0,
+                        },
+                      ],
+                      attribution: [
+                        {
+                          organizationId: "f6a7b8c9-d0e1-2345-f123-456789012345",
+                          quantityMin: 0.0,
+                          quantityMax: 5.0,
+                          quantityUnit: "licenses",
+                          splitAmount: 449.95,
+                          splitPercent: 100.0,
+                          splitSubtotal: 449.95,
+                          label: "Organization ABC",
+                          type: "organization",
+                          status: "active",
+                          providerKey: "org_abc123",
+                        },
+                      ],
+                    },
+                  ],
+                },
+                customer: {
+                  defaultCulture: "en-US",
+                  defaultCurrency: "USD",
+                  exemptTax: false,
+                  status: "active",
+                  type: "business",
+                }, 
+                payment: {
+                  paymentMethodId: paymentMethodId,
+                  customerPaymentKey: customerPaymentKey,
+                  // metadata: {
+                  //   source: "web_portal",
+                  //   campaign: "spring_2024_promotion",
+                  //   sales_rep: "john.doe@company.com",
+                  // },
+                },
+              };
+                
+              const res = await fetch("/api/create-billing-purchase", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ billingPayload }),
+              });
+             
+              const data = await res.json();
+        
+              if (!data.success) {
+                console.error("Billing failed with new code:", data.error);
+                navigate("/payment-fail");
+                return;
+              }
+              localStorage.removeItem("checkoutCart");
+              navigate("/payment-success");
+        
+            } catch (error) {
+              console.error("NoThanksButton flow error:", error);
               navigate("/payment-fail");
-              return;
             }
-
-          
-            const customerId = parsed?.buyerIdentity?.customer?.id || null;
-
-            const formattedLines = cartData.map((item: any) => ({
-              variantId: item.variantId,
-              quantity: item.quantity,
-            }));
-
-            // Create Draft Order
-            const draftRes = await fetch("/api/create-draft-order", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                lines: formattedLines,
-                customerId, // include if available
-              }),
-            });
-
-            const draftData = await draftRes.json();
-            console.log("Draft order response:", draftData);
-
-            const draftOrderId =
-              draftData?.data?.draftOrderCreate?.draftOrder?.id || null;
-
-            if (!draftOrderId) {
-              console.error("Draft order creation failed:", draftData);
-              navigate("/payment-fail");
-              return;
-            }
-
-            //  Get Billing Token
-            const tokenResponse = await fetch(`${billingConfig?.baseUrl}/auth/token`, {
-              method: "POST",
-              headers: {
-                "Api-Version": "v1",
-                "Api-Environment": "dev",
-                "Content-Type": "application/json",
-                "Cache-Control": "no-cache",
-                "Ocp-Apim-Subscription-Key": billingConfig?.subscriptionKey,
-              },
-              body: JSON.stringify({
-                clientId: billingConfig?.clientId,
-                clientSecret: billingConfig?.clientSecret,
-                scope: billingConfig?.scope,
-                grantType: "client_credentials",
-              }),
-            });
-
-            const tokenData = await tokenResponse.json();
-            const accessToken = tokenData?.data?.accessToken;
-
-            if (!accessToken) {
-              console.error("Billing token missing:", tokenData);
-              navigate("/payment-fail");
-              return;
-            }
-
-            //  Billing Payload
-            const billingPayload = {
-              locationId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-              customerId: "c3d4e5f6-a7b8-9012-cdef-123456789012",
-              subscription: {
-                providerId: "d4e5f6a7-b8c9-0123-def1-234567890123",
-                label: "Monthly Premium Subscription",
-                currency: "USD",
-                items: cartData.map((item: any) => ({
-                  productId: item.variantId,
-                  label: "Custom Product",
-                  price: 99.99,
-                  quantity: item.quantity,
-                  recurrenceInterval: "month",
-                })),
-              },
-              payment: {
-                paymentMethodId: "pm_1234567890abcdef",
-                customerPaymentKey: "cus_ABC123XYZ789",
-                metadata: { source: "web_portal" },
-              },
-            };
-
-            //  Call Billing API
-            const billingResponse = await fetch(`${billingConfig?.baseUrl}/purchase`, {
-              method: "POST",
-              headers: {
-                "Api-Version": "v1",
-                "Api-Environment": "dev",
-                "Ocp-Apim-Subscription-Key": billingConfig?.subscriptionKey,
-                Authorization: `Bearer ${accessToken}`,
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(billingPayload),
-            });
-
-            const billingResult = await billingResponse.json();
-            console.log("Billing result:", billingResult);
-
-            if (!billingResponse.ok) {
-              console.error("Billing failed:", billingResult);
-              navigate("/payment-fail");
-              return;
-            }
-            localStorage.removeItem("checkoutCart");
-            //await fetch("/api/clear-cart", { method: "POST" });
-            navigate("/payment-success");
-          } catch (error) {
-            console.error("NoThanksButton flow error:", error);
-            navigate("/payment-fail");
-          }
-
           }}
-          >
+        >
           No Thanks, Continue </button>
       </div>
     </div>
