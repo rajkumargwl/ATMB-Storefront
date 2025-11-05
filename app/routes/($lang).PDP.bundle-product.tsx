@@ -11,12 +11,13 @@ import type { Product, ProductVariant } from '@shopify/hydrogen/storefront-api-t
 import { useCart } from '@shopify/hydrogen-react';
 import { useState, useEffect } from 'react';
 import { CartForm } from '@shopify/hydrogen';
- import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
- const seo: SeoHandleFunction = ({data}) => ({
+import RightArrowWhite from '~/components/icons/RightArrowWhite';
+import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
+const seo: SeoHandleFunction = ({data}) => ({
   title: data?.page?.seo?.title || 'Anytime Mailbox',
   description:
     data?.page?.seo?.description ||
-    'Anytime | Mailbox',
+    'A custom storefront powered by Hydrogen and Sanity',
 });
 export const handle = { seo };
 interface LocationData {
@@ -25,7 +26,7 @@ interface LocationData {
   displayName: string;
   addressLine1: string;
 }
-
+ 
 // Location query
 const LOCATION_QUERY = /* groq */ `
   *[_type == "location" && locationId == $id][0]{
@@ -35,7 +36,7 @@ const LOCATION_QUERY = /* groq */ `
     addressLine1
   }
 `;
-
+ 
 export async function loader({ context, request, params }: LoaderFunctionArgs) {
    validateLocale({ context, params });
     let language = params.lang || 'en';
@@ -43,35 +44,35 @@ export async function loader({ context, request, params }: LoaderFunctionArgs) {
       language = 'en';
     }
   const cache = context.storefront.CacheCustom({ mode: 'public', maxAge: 60, staleWhileRevalidate: 60 });
-
+ 
   const [header, footer] = await Promise.all([
     context.sanity.query({ query: HEADER_QUERY, params: { language }, cache }),
     context.sanity.query({ query: FOOTER_QUERY, params: { language }, cache }),
   ]);
   if (!header || !footer) throw notFound();
-
+ 
   const url = new URL(request.url);
   const locationId = url.searchParams.get('locationId') ?? '101';
   const variantId = url.searchParams.get('variantId');
   if (!variantId) throw notFound();
-
+ 
   const variantGlobalId = `gid://shopify/ProductVariant/${variantId}`;
-
+ 
   const { productVariant } = await context.storefront.query<{
     productVariant: ProductVariant & { product: Product };
   }>(VARIANT_WITH_PRODUCT_QUERY, {
     variables: { variantId: variantGlobalId },
   });
-
+ 
   if (!productVariant || !productVariant.product) throw notFound();
-
+ 
   const location = await context.sanity.query<LocationData>({
     query: LOCATION_QUERY,
     params: { id: locationId },
     cache,
   });
   if (!location) throw notFound();
-
+ 
   return defer({
     location,
     header,
@@ -80,9 +81,9 @@ export async function loader({ context, request, params }: LoaderFunctionArgs) {
     selectedVariant: productVariant,
   });
 }
-
+ 
 export default function BundleDetails() {
- // const { location, header, footer, product, selectedVariant } = useLoaderData<typeof loader>();
+// const { location, header, footer, product, selectedVariant } = useLoaderData<typeof loader>();
   const { location, header, footer, product, selectedVariant } = useLoaderData<{
     location: LocationData;
     header: any;
@@ -110,16 +111,16 @@ export default function BundleDetails() {
       return [String(raw)];
     }
   })();
-
+ 
     // Parse associated products robustly
     const associatedProducts: any[] = (() => {
       const metafield = selectedVariant.metafields?.find(
         (m) => m && m.key === "bundle_items"
       );
       if (!metafield) return [];
-
+ 
       let parsed: any[] = [];
-
+ 
       // Try parsing JSON string
       if (metafield.value) {
         try {
@@ -129,14 +130,14 @@ export default function BundleDetails() {
           parsed = [];
         }
       }
-
+ 
       // Fallback: handle GraphQL references safely
       if (metafield.references?.edges?.length) {
         const refs = metafield.references.edges
           .map((edge) => {
             const node = edge?.node;
             if (!node) return null; // skip null refs
-
+ 
             // If reference is a ProductVariant
             if (node.__typename === "ProductVariant") {
               return {
@@ -150,7 +151,7 @@ export default function BundleDetails() {
                   ) || [],
               };
             }
-
+ 
             // If reference is a Product (no variants)
             if (node.__typename === "Product") {
               return {
@@ -161,18 +162,18 @@ export default function BundleDetails() {
                 features: [],
               };
             }
-
+ 
             return null; // ignore anything else
           })
           .filter(Boolean);
-
+ 
         parsed = [...parsed, ...refs];
       }
-
+ 
       return parsed;
     })();
-
-
+ 
+ 
     const handleAddToCart = async (variantId: string) => {
       if (!selectedVariant) return;
     
@@ -201,43 +202,49 @@ export default function BundleDetails() {
     };
     
     
-
+ 
   useEffect(() => {
     const storedLineId = sessionStorage.getItem('replaceLineId');
     if (storedLineId) console.log('Replace line ID from sessionStorage:', storedLineId);
   }, []);
-
+ 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="px-5 pt-[24px] md:pt-[32px] pb-[40px] bg-white">
      
-      <main className="flex-1 p-8 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <main className="max-w-[1240px] mx-auto flex flex-col md:flex-row gap-10 items-start">
         {/* Main product info */}
-        <section className="lg:col-span-2">
-          <h1 className="text-3xl font-bold mb-2">{product.title}</h1>
-          <p className="text-lg font-semibold">{location.displayName}</p>
-          <p className="text-gray-600">{location.addressLine1}</p>
-          <p className="text-gray-600 mb-4">
-            Mailbox ID: <span className="font-bold">#{location.locationId}</span>
+        <section className="w-full md:w-[60.14%] flex flex-col">
+          <h1 className="mb-4 md:mb-5 font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[38.4px] text-[24px] md:text-[32px] tracking-[-0.36px] md:tracking-[-0.48px]">{product.title}</h1>
+          <p className=" font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px]">{location.displayName}</p>
+          <p className=" font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px]">{location.addressLine1}</p>
+          <p className=" font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px]">
+            Mailbox ID: <span className=" font-Roboto text-PrimaryBlack font-semibold leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px]">#{location.locationId}</span>
           </p>
-
+ 
           {/* Description */}
           <p
-            className="text-gray-700 mb-4"
+            className=" font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px]"
             dangerouslySetInnerHTML={{
               __html: product.descriptionHtml || product.description || '',
             }}
           />
-
+ 
           {/* Price & Features */}
           {selectedVariant && (
-            <div className="mb-6">
-              <p className="text-xl font-semibold mb-2">Price: ${selectedVariant.price.amount}</p>
+            <div className="mt-6">
+              <p className="mb-2 font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[38.4px] text-[24px] md:text-[32px] tracking-[-0.36px] md:tracking-[-0.48px]">Price: ${selectedVariant.price.amount}</p>
               {features.length > 0 && (
                 <>
-                  <p className="font-semibold mb-1">Features:</p>
-                  <ul className="list-disc list-inside">
+                  <p className="mb-3 md:mb-6 font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px] mb-1">Features:</p>
+                  <ul className="flex flex-col gap-4 mb-8 md:mb-10">
                     {features.map((f, idx) => (
-                      <li key={idx}>{f}</li>
+                      <li key={idx} className='flex items-center gap-3 font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]'>
+                        <span className='flex items-center justify-center w-[24px] h-[24px]'>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none"><path d="M16.5544 0.110975C16.8206 0.305975 16.8806 0.680975 16.6856 0.950975L6.18563 15.351C6.08063 15.4935 5.92313 15.5835 5.74688 15.5947C5.57063 15.606 5.40188 15.546 5.27438 15.4222L0.174375 10.3222C-0.058125 10.0897 -0.058125 9.70722 0.174375 9.47472C0.406875 9.24222 0.789375 9.24222 1.02188 9.47472L5.62688 14.0797L15.7144 0.245975C15.9094 -0.0202754 16.2844 -0.0802754 16.5544 0.114725V0.110975Z" fill="#091019"></path>
+                          </svg>
+                        </span>
+                        {f}
+                        </li>
                     ))}
                   </ul>
                 </>
@@ -270,8 +277,11 @@ export default function BundleDetails() {
                   redirectTo: usePrefixPathWithLocale('/cart') // redirect after adding
                 }}
               >
-                <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-                  Add to Cart
+                <button className="group relative flex items-center justify-center w-full md:w-[330px] h-[44px] md:h-[52px] rounded-[100px] font-normal tracking-[0.08px] text-[16px] leading-[16px] text-PrimaryBlack border border-[#091019] px-4 py-[12px] bg-white  hover:bg-DarkOrange hover:text-white hover:border-DarkOrange overflow-hidden transition-all">
+                  
+                    <span className="relative flex items-center">Add to Cart <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
+              <RightArrowWhite />
+            </span></span>
                 </button>
               </CartForm>
 )}
@@ -281,30 +291,30 @@ export default function BundleDetails() {
             >
               Add to Cart
             </button> */}
-
+ 
             </div>
           )}
-
+ 
         </section>
-
+ 
           {/* Associated products aside */}
-          <aside className="lg:col-span-1 bg-gray-50 p-4 rounded-lg border border-gray-200 w-full max-w-full">
-            <h2 className="text-xl font-bold mb-4">Associated Products</h2>
-
+          <aside className="w-full md:w-[39.86%] flex flex-col  p-6 md:p-8 bg-white rounded-[24px] border border-LightWhite">
+            <h2 className="mb-[11px] font-Roboto text-PrimaryBlack font-semibold leading-[28px] md:leading-[31.2px] text-[20px] md:text-[24px] tracking-[-0.3px] md:tracking-[-0.36px]">Associated Products</h2>
+ 
             {associatedProducts.filter(item => item.title || (item.features?.length ?? 0) > 0).length === 0 ? (
-              <p className="text-gray-500">No associated products.</p>
+              <p className=" font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px]">No associated products.</p>
             ) : (
-              <ul className="space-y-2">
+              <ul className="list-none p-0 m-0 flex flex-col gap-4">
                 {associatedProducts
                   .filter(item => item.title || (item.features?.length ?? 0) > 0)
                   .map((item: any, idx: number) => (
-                    <li key={item.id || idx}>
-                      {item.title && <p className="font-semibold">{item.title}</p>}
-
+                    <li key={item.id || idx} className='pb-4 border-b border-LightWhite last:pb-0 last:border-b-0'>
+                      {item.title && <p className="mb-1 block font-Roboto text-PrimaryBlack font-medium leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">{item.title}</p>}
+ 
                       {item.features?.length > 0 && (
-                        <ul className="list-disc list-inside text-gray-700 mb-1">
+                        <ul className="list-none p-0 m-0">
                           {item.features.map((f: string, i: number) => (
-                            <li key={i}>{f}</li>
+                            <li key={i} className='font-Roboto text-LightGray font-normal leading-[21px] md:leading-[21px] text-[14px] md:text-[14px] tracking-[0px]'>{f}</li>
                           ))}
                         </ul>
                       )}
@@ -318,3 +328,4 @@ export default function BundleDetails() {
     </div>
   );
 }
+ 

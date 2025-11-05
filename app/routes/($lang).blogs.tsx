@@ -6,6 +6,8 @@ import {WPPost} from '../../shopify-hydrogen/schemaTypes/wpPost';
 import {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
+import { usePrefixPathWithLocale } from '~/lib/utils';
+
 const FIRST_PAGE_SIZE = 11;
 const NEXT_PAGE_SIZE = 12;
  const seo: SeoHandleFunction = ({data}) => ({
@@ -15,13 +17,17 @@ const NEXT_PAGE_SIZE = 12;
     'Explore virtual mailbox tips, guides, and news to streamline mail management and boost productivity',
 });
 export const handle = { seo };
-export async function loader({context, request}: LoaderFunctionArgs) {
+export async function loader({context, request, params}: LoaderFunctionArgs) {
+  let language = params.lang || 'en';
+  if(language !== 'en-es'){
+    language = 'en';
+  }
   const url = new URL(request.url);
   const offset = Number(url.searchParams.get('offset') || 0);
   const pageSize = offset === 0 ? FIRST_PAGE_SIZE : NEXT_PAGE_SIZE;
  
   const posts: WPPost[] = await context.sanity.query({
-    query: `*[_type == "wpPost"] | order(date desc) [${offset}...${offset + pageSize}] {
+    query: `*[_type == "wpPost" && (language == $language || !defined(language))] | order(date desc) [${offset}...${offset + pageSize}] {
       _id,
       title,
       slug,
@@ -31,6 +37,7 @@ export async function loader({context, request}: LoaderFunctionArgs) {
       authorName,
       link
     }`,
+    params: { language }, 
   });
  
   if (!posts) throw notFound();
@@ -84,7 +91,7 @@ export default function BlogIndex() {
           {/* First row: only first 2 posts */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-11 md:gap-6">
             {posts.slice(0, 2).map((post) => (
-              <Link to={`/blog/${post.slug.current}`}>
+              <Link to={usePrefixPathWithLocale(`/blog/${post.slug.current}`)}>
               <div key={post._id} className="overflow-hidden relative">
                 
                 {post.mainImage && <img src={post.mainImage} alt={post.title} className="w-full rounded-[20px] h-[342px] object-cover"/>}
@@ -134,7 +141,7 @@ export default function BlogIndex() {
             {/* Rest of posts: 3 per row */}
             <div className="mb-6 md:mb-11 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-6 md:gap-y-11">
               {posts.slice(2).map((post) => (
-                <Link to={`/blog/${post.slug.current}`}>
+                <Link to={usePrefixPathWithLocale(`/blog/${post.slug.current}`)}>
                 <div key={post._id} className="group relative border border-LightWhite hover:border-PrimaryBlack rounded-[20px] overflow-hidden bg-white transition">
                  
                   {post.mainImage && <img src={post.mainImage} alt={post.title} className="w-full rounded-t-[20px] h-[249px] object-cover"/>}

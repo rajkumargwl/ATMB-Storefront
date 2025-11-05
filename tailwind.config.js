@@ -131,6 +131,7 @@ module.exports = {
       semibold: 600,
       medium: 500,
       normal: 400,
+      light: 300,
     },
     letterSpacing: {
       normal: '-0.03em',

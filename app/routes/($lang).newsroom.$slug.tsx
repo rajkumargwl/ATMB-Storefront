@@ -3,7 +3,18 @@ import { useLoaderData, Link } from "@remix-run/react";
 import { Image } from '@shopify/hydrogen';
 import { PortableText } from '@portabletext/react';
 import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
-import {usePrefixPathWithLocale} from '~/lib/utils';
+import { useRootLoaderData } from "~/root";
+import { DEFAULT_LOCALE } from "~/lib/utils";
+
+export function usePrefixPathWithLocale() {
+  const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
+
+  // Return a function that safely prefixes any path
+  return (path?: string | null) => {
+    if (!path) return selectedLocale.pathPrefix || "/";
+    return `${selectedLocale.pathPrefix}${path.startsWith("/") ? path : "/" + path}`;
+  };
+}
 
   const seo: SeoHandleFunction = ({data}) => ({
    title: data?.page?.seo?.title || 'Anytime Mailbox',
@@ -37,10 +48,14 @@ const truncateText = (text: string, maxLength = 120) => {
  
 export async function loader({ params, context }: LoaderFunctionArgs) {
   const { slug } = params;
+  let language = params.lang || 'en';
+  if(language !== 'en-es'){
+    language = 'en';
+  }
  
   // Fetch the current news item
   const newsItem = await context.sanity.query({
-    query: `*[_type == "news" && slug.current == $slug][0] {
+    query: `*[_type == "news" && slug.current == $slug && (language == $language || !defined(language))][0] {
       _id,
       title,
       "slug": slug.current,
@@ -63,7 +78,7 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
         alt
       }
     }`,
-    params: { slug },
+    params: { slug, language },
   });
  
   if (!newsItem) throw new Response(null, { status: 404 });
@@ -153,6 +168,7 @@ export default function NewsroomDetailPage() {
   const { newsItem, relatedNews } = useLoaderData<typeof loader>()
  
   const { mainBlocks, asideBlocks } = splitContent(newsItem.description || [])
+   const prefixPathWithLocale = usePrefixPathWithLocale();
  
   return (
     <div className="min-h-screen">
@@ -268,7 +284,7 @@ export default function NewsroomDetailPage() {
                 return (
                   <Link
                     key={item._id}
-                    to={usePrefixPathWithLocale(`/newsroom/${item.slug}`)}
+                    to={prefixPathWithLocale(`/newsroom/${item.slug}`)}
                     className="flex md:min-h-[358px]"
                   >
                     <div className="bg-white group border border-LightWhite rounded-[20px] p-6 hover:border-PrimaryBlack relative overflow-hidden">

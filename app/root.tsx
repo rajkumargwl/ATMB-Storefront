@@ -256,7 +256,8 @@ export const useRootLoaderData = () => {
 };
  
 export default function App() {
-  const {preview, header, footer, q, searchResults,  isLoggedIn, customer, language, ...data} = useLoaderData<typeof loader>();
+  const {preview, header, footer, q, searchResults,  isLoggedIn, customer, language, cart, ...data} = useLoaderData<typeof loader>();
+  const cartCount = cart?._data?.lines?.edges.length || 0;
   const locale = data.selectedLocale ?? DEFAULT_LOCALE;
   const hasUserConsent = true;
   const nonce = useNonce();
@@ -298,18 +299,18 @@ export default function App() {
       <body>
         <PreviewProvider previewConfig={preview} fallback={<PreviewLoading />}>
            {/* 🔹 Skip link should be FIRST */}
-          <div className="absolute left-0 top-0">
-            <a
-  href="#mainContent"
-  className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 bg-white text-black p-2 rounded"
->
-  Skip to content
-</a>
-
-          </div>
+        
+               <a
+              href="#mainContent"
+              className="absolute top-0 mt-2 ml-3 p-[10px!important] inline-block border border-black left-[-999px] focus:not-sr-only focus:left-4"
+              
+            >
+              Skip to content
+            </a>
+         
           {/* 🔹 Global Header with search support */}
           {!hideHeaderFooter && (
-            <Header data={header} searchQuery={q} searchResults={searchResults} isLoggedIn={isLoggedIn} customer={customer} currentLanguage={language} />
+            <Header data={header} searchQuery={q} searchResults={searchResults} isLoggedIn={isLoggedIn} customer={customer} currentLanguage={language} cartCount={cartCount} />
           )}
           {/* <CartProvider> */}
           <Layout key={`${locale.language}-${locale.country}`}>
