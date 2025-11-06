@@ -181,7 +181,7 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
   return (
     <>
       {module.modules?.map((sub: any) => (
-        <Module key={sub._key} module={sub} bundles={bundles} />
+        <Module key={sub._key} module={sub} bundles={bundles} individualProducts={individualProducts}/>
       ))}
     </>
   );
