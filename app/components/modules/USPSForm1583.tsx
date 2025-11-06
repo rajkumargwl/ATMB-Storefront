@@ -82,7 +82,7 @@ export default function USPSForm1583Module({module}: Props) {
 
         <aside className="w-full md:w-[29.5%] md:sticky md:top-0 h-fit z-10 order-1 md:order-2">
           <div className="p-6 md:py-[40px] md:px-8 rounded-[12px] bg-[#F6F6F6]">
-            <h3 className="mb-4 font-Roboto text-LightGray font-medium leading-[28px] md:leading-[28px] text-[20px] md:text-[20px] tracking-[0px]">In This Guide</h3>
+            <h3 className="mb-4 font-Roboto text-PrimaryBlack font-medium leading-[28px] md:leading-[28px] text-[20px] md:text-[20px] tracking-[0px]">Content</h3>
             
             {contentModule?.contentBlocks?.length > 0 ? (
               <nav>
@@ -194,16 +194,18 @@ function ContentBlock({block}: {block: any}) {
         <div className="my-6 md:my-[30px] flex flex-wrap gap-6 md:gap-[136px]">
           {block.leftImage?.asset?.url && (
             <div className="flex-1 min-w-[200px]">
+            
               <img
                 src={block.leftImage.asset.url}
                 alt={block.leftImage.alt || ''}
                 loading="lazy"
-                className="rounded-[12px] border border-LightWhite w-full h-auto"
+                className=" w-full h-auto"
               />
             </div>
           )}
           {block.rightImage?.asset?.url && (
             <div className="flex-1 min-w-[200px]">
+               
               <img
                 src={block.rightImage.asset.url}
                 alt={block.rightImage.alt || ''}

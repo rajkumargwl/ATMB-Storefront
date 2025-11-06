@@ -22,7 +22,7 @@ import { FOUNDER_DETAIL_PAGE_QUERY } from '~/queries/sanity/fragments/pages/foun
 // SEO
 // -----------------
 const seo: SeoHandleFunction = ({ data }) => ({
-  title: data?.founder?.seo?.title || data?.founder?.title || 'Founder Details',
+  title: data?.founder?.seo?.title || data?.founder?.title || 'Founders | Anytime Mailbox',
   description:
     data?.founder?.seo?.description ||
     (data?.founder?.title ? `Learn more about ${data.founder.title}` : 'Learn more about our founder'),
