@@ -17,6 +17,18 @@ export const homeType = defineField({
     //   group: 'editorial',
     // }),
     defineField({
+      name: 'language',
+      title: 'Language',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'English', value: 'en'},
+          {title: 'Spanish', value: 'en-es'},
+        ],
+      },
+      hidden: true,
+    }),
+    defineField({
       name: 'modules',
       type: 'array',
       of: [

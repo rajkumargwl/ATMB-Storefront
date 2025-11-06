@@ -332,6 +332,9 @@ export default function App() {
         {/* <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://anytime-cdn-cdc3c2fbcrffb0db.z03.azurefd.net/js/navigation.js"></script> */}
+
+        {/* <!-- Master Tag add just before the closing </body> tag --> */}
+        <script src="https://www.dwin1.com/61685.js" type="text/javascript" defer="defer"></script>
       </body>
     </html>
   );
