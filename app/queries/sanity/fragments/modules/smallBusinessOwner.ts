@@ -79,7 +79,8 @@ export const SMALL_BUSINESS_OWNER_MODULE = groq`
       highlightedWord,
       ratings[] {
         icon { "url": asset->url },
-        ratingText
+        ratingText,
+        ratingnum
       },
       testimonialVideo {
         thumbnail { "url": asset->url },

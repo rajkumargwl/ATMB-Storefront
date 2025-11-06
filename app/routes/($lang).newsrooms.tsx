@@ -19,14 +19,9 @@ export function usePrefixPathWithLocale() {
 
 
   import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
+import { SEO } from "~/queries/sanity/fragments/seo";
 
-  const seo: SeoHandleFunction = ({data}) => ({
-   title: data?.page?.seo?.title || 'Newsroom | Anytime Mailbox',
-   description:
-     data?.page?.seo?.description ||
-     'Our Newsroom is the source for news about Anytime Mailbox. Read press releases, get updates, watch video and download images',
- });
- export const handle = { seo };
+
 
 export async function loader({ context, params }: LoaderFunctionArgs) {
   let language = params.lang || 'en';
@@ -48,7 +43,8 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
           metadata { dimensions { width, height } }
         },
         alt
-      }
+      },
+       ${SEO}
     }`,
     params: { language },
   });
@@ -67,6 +63,13 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
  
   return json({ allCards });
 }
+  const seo: SeoHandleFunction = ({data}) => ({
+   title: data?.page?.seo?.title || 'Newsroom | Anytime Mailbox',
+   description:
+     data?.page?.seo?.description ||
+     'Our Newsroom is the source for news about Anytime Mailbox. Read press releases, get updates, watch video and download images',
+ });
+ export const handle = { seo };
  
 export default function Newsroom() {
   const { allCards } = useLoaderData<typeof loader>();

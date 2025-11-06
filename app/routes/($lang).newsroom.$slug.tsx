@@ -5,6 +5,7 @@ import { PortableText } from '@portabletext/react';
 import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
 import { useRootLoaderData } from "~/root";
 import { DEFAULT_LOCALE } from "~/lib/utils";
+import { SEO } from "~/queries/sanity/fragments/seo";
 
 export function usePrefixPathWithLocale() {
   const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
@@ -16,13 +17,7 @@ export function usePrefixPathWithLocale() {
   };
 }
 
-  const seo: SeoHandleFunction = ({data}) => ({
-   title: data?.page?.seo?.title || 'Anytime Mailbox',
-   description:
-     data?.page?.seo?.description ||
-     'A custom storefront powered by Hydrogen and Sanity',
- });
- export const handle = { seo };
+ 
 // Helper to extract text content from PortableText blocks
 const extractText = (blocks: any[]) => {
   if (!blocks || !Array.isArray(blocks)) return "";
@@ -76,7 +71,8 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
           metadata { dimensions { width, height } }
         },
         alt
-      }
+      },
+      ${SEO}
     }`,
     params: { slug, language },
   });
@@ -121,7 +117,13 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
  
   return json({ newsItem, relatedNews });
 }
- 
+  const seo: SeoHandleFunction = ({data}) => ({
+   title: data?.page?.seo?.title || 'Anytime Mailbox',
+   description:
+     data?.page?.seo?.description ||
+     'Anytime Mailbox',
+ });
+ export const handle = { seo };
  
 // PortableText components
 const ptComponents = {
