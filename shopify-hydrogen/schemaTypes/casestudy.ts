@@ -21,11 +21,10 @@ export default defineType({
       initialValue: 'en',
       options: {
         list: [
-          {title: 'English', value: 'en'},
-          {title: 'Spanish', value: 'en-es'},
+          { title: 'English', value: 'en' },
+          { title: 'Spanish', value: 'en-es' },
         ],
       },
-      hidden: true,
     }),
 
     defineField({
@@ -38,19 +37,26 @@ export default defineType({
         isUnique: async (slug, context) => {
           const { document, getClient } = context
           const client = getClient({ apiVersion: '2023-01-01' })
-          const language = document?.language || 'en'
 
+          // Ensure slug and language exist
+          if (!slug || !document) return true
+
+          const language = document.language || 'en'
+          const id = document._id.replace(/^drafts\./, '')
+
+          // ✅ Fetch documents with same slug *and* same language, excluding self
           const duplicate = await client.fetch(
-            `*[
+            `count(*[
               _type == "caseStudy" &&
               slug.current == $slug &&
               language == $language &&
               !(_id in [$id, "drafts." + $id])
-            ][0]._id`,
-            { slug, language, id: document._id }
+            ])`,
+            { slug, language, id }
           )
 
-          return !duplicate
+          // If 0 matches found, it’s unique
+          return duplicate === 0
         },
       },
     }),
