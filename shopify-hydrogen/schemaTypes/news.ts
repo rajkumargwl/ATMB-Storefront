@@ -1,3 +1,5 @@
+
+import { GROUPS } from '../constants'
 export default {
   name: 'news',
   title: 'Newsroom',
@@ -97,5 +99,11 @@ export default {
       type: 'datetime',
       validation: Rule => Rule.required(),
     },
+     ({
+      name: 'seo',
+      title: 'SEO',
+      type: 'seo',
+      group: 'seo',
+    }),
   ],
 };

@@ -1,11 +1,21 @@
 import {useLoaderData, useNavigate} from '@remix-run/react';
+import { SeoHandleFunction } from '@shopify/hydrogen';
 import {defer, type LoaderFunctionArgs} from '@shopify/remix-oxygen';
 import {useEffect, useRef, useState} from 'react';
 import ArrowRightCountries from '~/components/icons/ArrowRightCountries';
 import LeftArrowBlack from '~/components/icons/LeftArrowBlack';
 import { DEFAULT_LOCALE } from '~/lib/utils';
 import { useRootLoaderData } from '~/root';
-
+// -----------------
+// SEO
+// -----------------
+const seo: SeoHandleFunction = ({ data }) => ({
+  title: data?.page?.seo?.title || 'Mailbox Loaction | Anytime Mailbox',
+  description:
+    data?.page?.seo?.description ||
+    'Find the Location ',
+});
+export const handle = { seo };
 // 🔹 Loader
 export async function loader({context, params}: LoaderFunctionArgs) {
   const {country} = params;
@@ -165,6 +175,7 @@ function CountryMap({
       mapInstance.current.setZoom(mapInstance.current.getZoom()! - 1);
     }
   };
+
 
   return (
     <div className="relative w-full h-[750px] rounded-xl overflow-hidden">

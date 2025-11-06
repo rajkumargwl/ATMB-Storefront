@@ -16,8 +16,18 @@ export const header = defineType({
       type: "image",
       options: { hotspot: true },
     }),
- 
-    // ✅ Menu with optional submenus
+    defineField({
+      name: 'language',
+      title: 'Language',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'English', value: 'en'},
+          {title: 'Spanish', value: 'en-es'},
+        ],
+      },
+      hidden: true,
+    }),
     defineField({
       name: "menu",
       title: "Menu",
@@ -37,10 +47,23 @@ export const header = defineType({
               initialValue: false,
             }),
             defineField({
+              name: "submenuType",
+              title: "Submenu Type",
+              type: "string",
+              options: {
+                list: [
+                  { title: "Regular", value: "regular" },
+                  { title: "Mega Menu", value: "mega" },
+                ],
+              },
+              hidden: ({ parent }) => !parent?.hasSubmenu,
+            }),
+            defineField({
               name: "subMenu",
               title: "Sub Menu",
               type: "array",
-              hidden: ({ parent }) => !parent?.hasSubmenu,
+              hidden: ({ parent }) =>
+                !parent?.hasSubmenu || parent?.submenuType !== "regular",
               of: [
                 {
                   name: "subLink",
@@ -53,10 +76,44 @@ export const header = defineType({
                 },
               ],
             }),
+            defineField({
+              name: "megaMenu",
+              title: "Mega Menu Groups",
+              type: "array",
+              hidden: ({ parent }) =>
+                !parent?.hasSubmenu || parent?.submenuType !== "mega",
+              of: [
+                {
+                  name: "megaGroup",
+                  title: "Mega Group",
+                  type: "object",
+                  fields: [
+                    defineField({ name: "title", title: "Title", type: "string" }),
+                    defineField({
+                      name: "links",
+                      title: "Links",
+                      type: "array",
+                      of: [
+                        {
+                          name: "megaLink",
+                          title: "Mega Link",
+                          type: "object",
+                          fields: [
+                            defineField({ name: "label", title: "Label", type: "string" }),
+                            defineField({ name: "url", title: "URL", type: "string" }),
+                          ],
+                        },
+                      ],
+                    }),
+                  ],
+                },
+              ],
+            }),
           ],
         },
       ],
     }),
+    
  
     // ✅ 2 Icons
     defineField({
@@ -85,7 +142,7 @@ export const header = defineType({
       type: "object",
       fields: [
         defineField({ name: "label", type: "string", title: "Label" }),
-        defineField({ name: "link", type: "url", title: "Link" }),
+        defineField({ name: "link", type: "string", title: "Link" }),
       ],
     }),
  
@@ -96,7 +153,7 @@ export const header = defineType({
       type: "object",
       fields: [
         defineField({ name: "label", type: "string", title: "Label" }),
-        defineField({ name: "link", type: "url", title: "Link" }),
+        defineField({ name: "link", type: "string", title: "Link" }),
       ],
     }),
   ],
