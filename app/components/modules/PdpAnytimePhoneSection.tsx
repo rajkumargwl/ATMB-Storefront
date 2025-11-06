@@ -89,17 +89,47 @@ const PdpAnytimePhoneSection: React.FC<Props> = ({
                     <Link to={`#`} aria-current="page"><span className="font-Roboto text-PrimaryBlack font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px]">Business Accelerator</span> </Link></li>) }
               </ol>  
           </nav>
-          {!hasImage ? (
-                <div className="hidden md:flex items-center justify-end gap-2">
-            <span className="font-Roboto text-PrimaryBlack font-normal leading-[21px] md:leading-[21px] text-[14px] md:text-[14px] tracking-[0px]">Monthly</span>
-            <button className="bg-[#BFBFBF] rounded-[16px] w-10 h-[22px] relative">
-              <span className="absolute left-[2px] top-[2px] w-[18px] h-[18px] bg-white rounded-[16px]"></span>
-            </button>
-            <span className="font-Roboto text-PrimaryBlack font-normal leading-[21px] md:leading-[21px] text-[14px] md:text-[14px] tracking-[0px]">Yearly</span>
-            <span className="font-Roboto text-white font-normal leading-[18px] md:leading-[18px] text-[12px] md:text-[12px] tracking-[0px] px-2 py-1 rounded-full bg-[#537D1B]">20% Off</span>
- 
-          </div>
-          ) : null}
+         {!hasImage ? (
+  <div className="hidden md:flex items-center justify-end gap-2">
+    <span
+      className={`font-Roboto text-PrimaryBlack font-normal leading-[21px] text-[14px] ${
+        productData?.billingCycle === 'monthly' ? 'opacity-100' : 'opacity-50'
+      }`}
+    >
+      Monthly
+    </span>
+
+    <button
+      onClick={() =>
+        productData?.setBillingCycle(
+          productData.billingCycle === 'monthly' ? 'yearly' : 'monthly'
+        )
+      }
+      className={`rounded-[16px] w-10 h-[22px] relative transition-all ${
+        productData?.billingCycle === 'yearly' ? 'bg-DarkOrange' : 'bg-[#BFBFBF]'
+      }`}
+    >
+      <span
+        className={`absolute top-[2px] w-[18px] h-[18px] bg-white rounded-[16px] transition-all duration-300 ${
+          productData?.billingCycle === 'yearly' ? 'left-[20px]' : 'left-[2px]'
+        }`}
+      ></span>
+    </button>
+
+    <span
+      className={`font-Roboto text-PrimaryBlack font-normal leading-[21px] text-[14px] ${
+        productData?.billingCycle === 'yearly' ? 'opacity-100' : 'opacity-50'
+      }`}
+    >
+      Yearly
+    </span>
+
+    <span className="font-Roboto text-white font-normal leading-[18px] text-[12px] px-2 py-1 rounded-full bg-[#537D1B]">
+      20% Off
+    </span>
+  </div>
+) : null}
+
       </div>
       <div className="relative z-[2] max-w-[1240px] mx-auto flex flex-col md:flex-row gap-[44px] md:gap-[40px] ">
         
@@ -173,17 +203,47 @@ const PdpAnytimePhoneSection: React.FC<Props> = ({
  
         {/* RIGHT: Main Image or Shopify Product Card */}
         <div className="w-full md:w-[39.86%]">
-          {!hasImage ? (
-            <div className="flex md:hidden items-center justify-center gap-2 mb-6">
-            <span className="font-Roboto text-PrimaryBlack font-normal leading-[21px] md:leading-[21px] text-[14px] md:text-[14px] tracking-[0px]">Monthly</span>
-            <button className="bg-[#BFBFBF] rounded-[16px] w-10 h-[22px] relative">
-              <span className="absolute left-[2px] top-[2px] w-[18px] h-[18px] bg-white rounded-[16px]"></span>
-            </button>
-            <span className="font-Roboto text-PrimaryBlack font-normal leading-[21px] md:leading-[21px] text-[14px] md:text-[14px] tracking-[0px]">Yearly</span>
-            <span className="font-Roboto text-white font-normal leading-[18px] md:leading-[18px] text-[12px] md:text-[12px] tracking-[0px] px-2 py-1 rounded-full bg-[#537D1B]">20% Off</span>
- 
-          </div>
-          ) : null}
+         {!hasImage ? (
+  <div className="flex md:hidden items-center justify-center gap-2 mb-6">
+    <span
+      className={`font-Roboto text-PrimaryBlack font-normal text-[14px] ${
+        productData?.billingCycle === 'monthly' ? 'opacity-100' : 'opacity-50'
+      }`}
+    >
+      Monthly
+    </span>
+
+    <button
+      onClick={() =>
+        productData?.setBillingCycle(
+          productData.billingCycle === 'monthly' ? 'yearly' : 'monthly'
+        )
+      }
+      className={`rounded-[16px] w-10 h-[22px] relative transition-all ${
+        productData?.billingCycle === 'yearly' ? 'bg-DarkOrange' : 'bg-[#BFBFBF]'
+      }`}
+    >
+      <span
+        className={`absolute top-[2px] w-[18px] h-[18px] bg-white rounded-[16px] transition-all duration-300 ${
+          productData?.billingCycle === 'yearly' ? 'left-[20px]' : 'left-[2px]'
+        }`}
+      ></span>
+    </button>
+
+    <span
+      className={`font-Roboto text-PrimaryBlack font-normal text-[14px] ${
+        productData?.billingCycle === 'yearly' ? 'opacity-100' : 'opacity-50'
+      }`}
+    >
+      Yearly
+    </span>
+
+    <span className="font-Roboto text-white font-normal text-[12px] px-2 py-1 rounded-full bg-[#537D1B]">
+      20% Off
+    </span>
+  </div>
+) : null}
+
           {hasImage ? (
             <img
               src={mainImage.url}

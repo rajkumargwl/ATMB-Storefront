@@ -72,16 +72,12 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
     
 
 
-  // Optionally: pick specific solution module
-//   const solutionPageModule = page?.modules?.find(
-//     (mod: any) => mod._type === 'solutionPageModule'
-//   );
 
   if (!page) throw notFound();
 
   const gids = fetchGids({ page, context });
 
-   console.log("soultion page data",JSON.stringify(page,null,2));
+
   return defer({
     page,
     relatedPosts,

@@ -7,16 +7,11 @@ import {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
 import { usePrefixPathWithLocale } from '~/lib/utils';
+import { SEO } from '~/queries/sanity/fragments/seo';
 
 const FIRST_PAGE_SIZE = 11;
 const NEXT_PAGE_SIZE = 12;
- const seo: SeoHandleFunction = ({data}) => ({
-  title: data?.page?.seo?.title || 'Virtual Mailbox Blog: Tips, News & Guides',
-  description:
-    data?.page?.seo?.description ||
-    'Explore virtual mailbox tips, guides, and news to streamline mail management and boost productivity',
-});
-export const handle = { seo };
+
 export async function loader({context, request, params}: LoaderFunctionArgs) {
   let language = params.lang || 'en';
   if(language !== 'en-es'){
@@ -35,7 +30,8 @@ export async function loader({context, request, params}: LoaderFunctionArgs) {
       date,
       "mainImage": mainImage.asset->url,
       authorName,
-      link
+      link,
+        ${SEO}
     }`,
     params: { language }, 
   });
@@ -55,6 +51,13 @@ function portableTextToPlainText(blocks: any[]): string {
     })
     .join("\n");
 }
+ const seo: SeoHandleFunction = ({data}) => ({
+  title: data?.page?.seo?.title || 'Virtual Mailbox Blog: Tips, News & Guides',
+  description:
+    data?.page?.seo?.description ||
+    'Explore virtual mailbox tips, guides, and news to streamline mail management and boost productivity',
+});
+export const handle = { seo };
  
 export default function BlogIndex() {
   const {posts: initialPosts, offset: initialOffset} = useLoaderData<typeof loader>();

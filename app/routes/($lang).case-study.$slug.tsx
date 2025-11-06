@@ -4,13 +4,8 @@ import {PortableText, type PortableTextComponents} from "@portabletext/react";
 import { usePrefixPathWithLocale } from '~/lib/utils';
 
  import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
- const seo: SeoHandleFunction = ({data}) => ({
-  title: data?.page?.seo?.title || 'Anytime Mailbox',
-  description:
-    data?.page?.seo?.description ||
-    'A custom storefront powered by Hydrogen and Sanity',
-});
-export const handle = { seo };
+import { SEO } from "~/queries/sanity/fragments/seo";
+ 
 
 // Custom renderers for PortableText content
 const components: PortableTextComponents = {
@@ -116,13 +111,20 @@ export async function loader({params, context}: LoaderFunctionArgs) {
         heading,
         buttonText,
         buttonUrl
-      }
+      },
+       ${SEO}
     }`,
     params: { slug, language },
   });
   return json({ caseStudy });
 }
- 
+ const seo: SeoHandleFunction = ({data}) => ({
+  title: data?.page?.seo?.title || 'Anytime Mailbox',
+  description:
+    data?.page?.seo?.description ||
+    'A custom storefront powered by Hydrogen and Sanity',
+});
+export const handle = { seo };
 export default function CaseStudyPage() {
   const {caseStudy} = useLoaderData<typeof loader>();
  

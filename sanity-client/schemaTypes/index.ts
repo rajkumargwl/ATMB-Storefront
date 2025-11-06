@@ -330,9 +330,9 @@ import {colorThemeType} from './documents/colorTheme'
 import {pageType} from './documents/page'
 import {productType} from './documents/product'
 import {productVariantType} from './documents/productVariant'
-import {plansType} from './documents/plans'
+// import {plansType} from './documents/plans'
 
-const documents = [collectionType, colorThemeType, pageType, productType, productVariantType,plansType,wpPost,blockContent,casestudy,news]
+const documents = [collectionType, colorThemeType, pageType, productType, productVariantType,wpPost,blockContent,casestudy,news]
 
 import {homeType} from './singletons/homeType'
 import {settingsType} from './singletons/settingsType'
