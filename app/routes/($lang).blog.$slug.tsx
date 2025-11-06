@@ -8,17 +8,9 @@ import { Link } from 'react-router-dom';
 import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
 import RightArrowWhite from '~/components/icons/RightArrowWhite';
 import { usePrefixPathWithLocale } from '~/lib/utils';
+import { SEO } from "~/queries/sanity/fragments/seo";
 
-const seo: SeoHandleFunction = ({ data }) => ({
-  title: data?.post?.title
-    ? `${data.post.title} | Anytime Mailbox`
-    : 'How Digital Nomads Keep One U.S. Address for Taxes & Banking | Anytime Mailbox',
-  description: data?.post?.content
-    ? getPlainText(data.post.content).slice(0, 160) // optional: first 160 chars as description
-    : 'Find out how digital nomads can keep one U.S. address for taxes and banking...'
-});
- 
-export const handle = { seo };
+
 export async function loader({ context, params }: LoaderFunctionArgs) {
   let language = params.lang || 'en';
   if(language !== 'en-es'){
@@ -41,7 +33,8 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
       "mainImage": mainImage.asset->url,
       authorName,
       link,
-      categories
+      categories,
+          ${SEO}
     }`,
     params: { slug, language },
   });
@@ -76,7 +69,13 @@ function getPlainText(content: PortableTextBlock[] | undefined): string {
     )
     .join(" ");
 }
- 
+ const seo: SeoHandleFunction = ({ data }) => ({
+  title:
+    data?.page?.seo?.title || 'Business Accelerator - Anytime | Mailbox',
+  description:
+    data?.page?.seo?.description ||
+    'Explore our Business Accelerator program and resources.',
+});
 // To render author + date
 const renderAuthorDate = (author: string | undefined, date: string | undefined) => (
   <p className="flex items-center gap-2">
@@ -103,7 +102,7 @@ const renderAuthorDate = (author: string | undefined, date: string | undefined) 
     </span>
   </p>
 );
- 
+
  
 // To render author + date
 const renderAuthorDateRelated = (author: string | undefined, date: string | undefined) => (

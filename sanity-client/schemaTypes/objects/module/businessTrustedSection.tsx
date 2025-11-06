@@ -43,6 +43,12 @@ export const businessTrustedSection =  defineType({
               options: {hotspot: true},
             }),
             defineField({
+              name: 'ratingnum',
+              title: 'Rating Number',
+              type: 'string',
+             
+            }),
+            defineField({
               name: 'ratingText',
               title: 'Rating Text',
               type: 'string',
