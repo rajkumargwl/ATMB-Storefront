@@ -41,7 +41,7 @@ export default defineConfig({
         {id: 'en-es', title: 'Spanish'},
       ],
       // Replace with the names of the schemas you want to translate
-      schemaTypes: ['header', 'footer','home', 'page'], // ✅ CONFIGURE YOUR SCHEMAS
+      schemaTypes: ['header', 'footer','home', 'page', 'caseStudy', 'wpPost', 'news', 'products', 'product'], // ✅ CONFIGURE YOUR SCHEMAS
     }),
   ],
 

@@ -12,6 +12,18 @@ import CityImage from "~/components/media/city.svg";
 import KeyFactor from "~/components/media/key-factor.svg";
 import Testimonial from "~/components/icons/Testimonial";
 import {usePrefixPathWithLocale} from '~/lib/utils';
+import { SeoHandleFunction } from '@shopify/hydrogen';
+
+// -----------------
+// SEO
+// -----------------
+const seo: SeoHandleFunction = ({ data }) => ({
+  title: data?.page?.seo?.title || 'Mailbox Loaction | Anytime Mailbox',
+  description:
+    data?.page?.seo?.description ||
+    'Find the Location ',
+});
+export const handle = { seo };
 
 // Loader
 export async function loader({context, params}: LoaderFunctionArgs) {
