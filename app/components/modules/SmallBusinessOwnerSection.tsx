@@ -98,7 +98,8 @@ export default function SmallBusinessOwnerSection({
             }
           }
         }}
-        className="flex items-center justify-center w-full md:w-[192px] bg-white text-PrimaryBlack font-Roboto font-normal leading-[16px] text-[14px] md:text-[16px] tracking-[0.08px] h-[52px] px-[12px] md:px-[16px] py-[12px] rounded-[100px] border border-PrimaryBlack hover:bg-[#F6F6F6] transition-all"
+        className="flex items-center justify-center w-full md:w-[192px] bg-white text-PrimaryBlack font-Roboto font-normal leading-[16px] text-[14px] md:text-[16px] tracking-[0.08px] h-[52px] px-[12px] md:px-[16px] py-[12px] rounded-[100px] border border-PrimaryBlack [13:23] GWL Ravishankar Singh Rajpoot
+transition-all hover:bg-DarkOrange hover:text-white hover:border-DarkOrange"
       >
         {secondaryCta.label}
       </a>

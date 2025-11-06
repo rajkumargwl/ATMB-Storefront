@@ -17,13 +17,59 @@ export default defineType({
       group: 'editorial',
       validation: Rule => Rule.required(),
     }),
+
     defineField({
+      name: 'language',
+      title: 'Language',
+      type: 'string',
+      initialValue: 'en',
+      options: {
+        list: [
+          { title: 'English', value: 'en' },
+          { title: 'Spanish', value: 'en-es' },
+        ],
+      },
+    }),
+    // defineField({
+    //   name: 'slug',
+    //   title: 'Slug',
+    //   type: 'slug',
+    //   options: { source: 'title', maxLength: 96 },
+    //   group: 'editorial',
+    //   validation: Rule => Rule.required(),
+    // }),
+     defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: { source: 'title', maxLength: 96 },
-      group: 'editorial',
-      validation: Rule => Rule.required(),
+      options: {
+        source: 'title',
+        maxLength: 96,
+        isUnique: async (slug, context) => {
+          const { document, getClient } = context
+          const client = getClient({ apiVersion: '2023-01-01' })
+
+          // Ensure slug and language exist
+          if (!slug || !document) return true
+
+          const language = document.language || 'en'
+          const id = document._id.replace(/^drafts\./, '')
+
+          // ✅ Fetch documents with same slug *and* same language, excluding self
+          const duplicate = await client.fetch(
+            `count(*[
+              _type == "caseStudy" &&
+              slug.current == $slug &&
+              language == $language &&
+              !(_id in [$id, "drafts." + $id])
+            ])`,
+            { slug, language, id }
+          )
+
+          // If 0 matches found, it’s unique
+          return duplicate === 0
+        },
+      },
     }),
     defineField({
       name: 'date',
@@ -111,6 +157,7 @@ export default defineType({
         defineField({ name: 'buttonUrl', title: 'Button URL', type: 'string' }),
       ],
     }),
+
     defineField({
       name: 'relatedCaseStudies',
       title: 'Related Case Studies',
