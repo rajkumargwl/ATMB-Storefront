@@ -5,11 +5,63 @@ import { DEFAULT_LOCALE, notFound } from "~/lib/utils";
 import type { Product } from "@shopify/hydrogen/storefront-api-types";
 import { PRODUCT_QUERY } from "~/queries/shopify/product";
 import { useRootLoaderData } from "~/root";
+import { useEffect } from "react";
+import {ClientOnly} from "~/components/ClientOnly"; // custom helper
+import RoktIntegration from "~/components/RoktIntegration.client";
 
 export const loader: LoaderFunction = async ({ context }) => {
-const { env } = context;
+const { env, storefront } = context;
 const cart = await context.cart.get();
-const customerAccessToken = await context.session.get("customerAccessToken");
+const customerAccessToken = await context.session.get('customerAccessToken');
+  
+if (customerAccessToken === null || customerAccessToken === undefined || customerAccessToken === '') {
+  return redirect('/create-account');
+}
+const CUSTOMER_QUERY = `
+query CustomerQuery($accessToken: String!) {
+  customer(customerAccessToken: $accessToken) {
+    id
+    email
+    firstName
+    lastName
+    phone
+    addresses(first: 5) {
+      edges {  
+        node {
+          id
+          city
+          country
+          countryCodeV2
+          zip
+          province
+          provinceCode
+          address1
+          address2
+          company
+          firstName
+          lastName
+          formattedArea
+          name
+          phone
+          }
+        }
+      }
+    metafields(identifiers: [
+      { namespace: "custom", key: "user_id" },
+      { namespace: "custom", key: "payment_details" }
+    ]) {
+      namespace
+      key
+      value
+    }
+  }
+}
+`;
+const customerRes = await storefront.query(CUSTOMER_QUERY, {
+  variables: { accessToken: customerAccessToken },
+});
+
+const customer = customerRes?.customer;
 
 if (!customerAccessToken) {
 return redirect("/create-account");
@@ -36,13 +88,15 @@ JSON.stringify({
 stripePublishableKey: env.VITE_STRIPE_PUBLISHABLE_KEY,
 essentialsProducts: [virtualMailbox.product, virtualPhone.product, BusinessAcc.product],
 cart,
+customer,
 }),
 { headers: { "Content-Type": "application/json" } }
 );
 };
 
+
 export default function CheckoutPage() {
-const { cart } = useLoaderData<typeof loader>();
+const { cart, customer } = useLoaderData<typeof loader>();
 const navigate = useNavigate();
 const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
 let currencyCode = selectedLocale?.currency || 'USD';
@@ -58,13 +112,82 @@ const VISIBLE_ATTRIBUTES = [
 "country",
 ];
 
+useEffect(() => {
+  console.log("AWIN Tracking Script Executed", cart);
+  if (!cart || !cart.cost?.totalAmount?.amount) return;
+
+  const merchantId = 61685;
+  const orderSubtotal = cart.cost.totalAmount.amount;
+  const currencyCode = cart.cost.totalAmount.currencyCode;
+  const orderRef = cart.id;
+  const commissionGroup = "default";
+  const saleAmount = orderSubtotal;
+  const channel = "online";
+  const voucherCode = "";
+  const customerAcquisition = "new";
+
+  // ✅ Add AWIN Global Object
+  window.AWIN = window.AWIN || {};
+  window.AWIN.Tracking = window.AWIN.Tracking || {};
+  window.AWIN.Tracking.Sale = {
+    amount: orderSubtotal,
+    orderRef,
+    parts: `${commissionGroup}:${saleAmount}`,
+    voucher: voucherCode,
+    currency: currencyCode,
+    channel,
+    customerAcquisition,
+  };
+
+  // ✅ Create fallback pixel
+  const img = document.createElement("img");
+  img.src = `https://www.awin1.com/sread.img?tt=ns&tv=2&merchant=${merchantId}&amount=${orderSubtotal}&cr=${currencyCode}&ref=${orderRef}&parts=${commissionGroup}:${saleAmount}&vc=${voucherCode}&ch=${channel}&customeracquisition=${customerAcquisition}`;
+  img.width = 1;
+  img.height = 1;
+  img.style.display = "none";
+  document.body.appendChild(img);
+
+  // ✅ Product Level Tracking (optional)
+  if (cart.lines?.edges?.length > 0) {
+    const basketLines = cart.lines.edges
+      .map((edge) => {
+        const product = edge.node.merchandise.product;
+        const qty = edge.node.quantity;
+        const price = edge.node.cost.totalAmount.amount;
+        const sku = product.id;
+        const name = product.title;
+
+        return `AW:P|${merchantId}|${orderRef}|${product.id}|${name}|${price}|${qty}|${sku}|${commissionGroup}|default`;
+      })
+      .join("\n");
+
+    const form = document.createElement("form");
+    form.style.display = "none";
+    form.innerHTML = `<textarea id="aw_basket">${basketLines}</textarea>`;
+    document.body.appendChild(form);
+  }
+}, [cart]);
+
+console.log("customercustomer Payment Success Page with cart:", customer);
 return (
 <>
-{/* Header */} <div className="top-6 border-b border-[#DCDCDC] w-full mx-auto flex items-center justify-center py-5 px-5 md:px-25 bg-white"> <img
+    <ClientOnly>
+      <RoktIntegration 
+        userData={{
+          email: customer?.email, // or fetch customer info from session
+          firstName: customer?.firstName,
+          lastName: customer?.lastName,
+        }}
+        cart={cart}
+      />
+    </ClientOnly>
+    {/* Header */}
+    <div className="top-6 border-b border-[#DCDCDC] w-full mx-auto flex items-center justify-center py-5 px-5 md:px-25 bg-white"> <img
        src="https://cdn.sanity.io/images/m5xb8z9y/production/6312d6eb4f994397153b67ef3043e166e1f574d4-101x50.svg"
        alt="Anytime Mailbox Logo"
        className="w-[101px]"
-     /> </div>
+     /> 
+    </div>
   <div className="flex flex-col items-center justify-center bg-white py-10 sm:py-10 sm:px-5">
     {/* Success Icon */}
     <div className="">

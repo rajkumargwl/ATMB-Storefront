@@ -17,6 +17,22 @@ export default async function handleRequest(
   remixContext: EntryContext,
   loadContext: AppLoadContext,
 ) {
+  // Capture “awc” from URL and set cookie
+  try {
+    const url = new URL(request.url);
+    const awc = url.searchParams.get('awc');
+
+    if (awc) {
+      // Set cookie valid for 1 year, Secure & HttpOnly
+      responseHeaders.append(
+        'Set-Cookie',
+        `awc=${awc}; Path=/; Secure; HttpOnly; Max-Age=${60 * 60 * 24 * 365}`
+      );
+    }
+  } catch (err) {
+    console.error('AWIN cookie set error:', err);
+  }
+  
   const {SANITY_PROJECT_ID: projectId} = loadContext.env;
 
   const {nonce, header, NonceProvider} = createContentSecurityPolicy({
