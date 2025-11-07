@@ -233,38 +233,6 @@ useEffect(() => {
                             </ul>
                           </div>
                         ))}
-                        {/* <div className="pr-8 border-r border-LightWhite">
-                          <p className="mb-5 font-Roboto text-PrimaryBlack font-medium leading-[28px] md:leading-[28px] text-[20px] md:text-[20px] tracking-[0px]">Top US States</p>
-                          <ul className="flex flex-col gap-4">
-                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">California</Link></li>
-                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Florida</Link></li>
-                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Texas</Link></li>
-                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Georgia</Link></li>
-                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">New York</Link></li>
-                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">North Carolina</Link></li>
-                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Wyoming</Link></li>
-                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Delaware</Link></li>
-                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Illinois</Link></li>
-                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Colorado</Link></li>
-                            <li><Link to="/country-location" className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">See All Locations</Link></li>
-                          </ul>
-                        </div>
-                        <div className="pl-8">
-                          <p className="mb-5 font-Roboto text-PrimaryBlack font-medium leading-[28px] md:leading-[28px] text-[20px] md:text-[20px] tracking-[0px]">Top Countries</p>
-                          <ul className="flex flex-col gap-4">
-                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">United States</Link></li>
-                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Canada</Link></li>
-                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">United Kingdom</Link></li>
-                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Australia </Link></li>
-                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Hong Kong </Link></li>
-                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">China</Link></li>
-                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Ireland </Link></li>
-                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Taiwan</Link></li>
-                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Indonesia </Link></li>
-                            <li><Link to={`#`} className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">Singapore </Link></li>                                                                                                                                          
-                            <li><Link  to="/country-location" className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">See All Locations</Link></li>
-                          </ul>
-                        </div> */}
                       </div>
                     </div>
                   )}
@@ -404,8 +372,7 @@ useEffect(() => {
               </Link>
             )}
           </div>
-           {/* <LanguageSwitcher currentLanguage="en" /> */}
-          {/* <CountrySelector align="left" /> */}
+      
 
           {/* Mobile menu button */}
           <button

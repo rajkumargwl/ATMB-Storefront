@@ -108,7 +108,7 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
       navigate(`/products/${item.handle}`);
     } else if (item.type === "location") {
       const queryParam = item.displayName || item.city;
-      navigate(`/sublocations?q=${encodeURIComponent(item.displayName || item.city || '')}`);
+      navigate(`/sublocations?q=${encodeURIComponent(item.city || '')}`);
     }
   }}
 />
