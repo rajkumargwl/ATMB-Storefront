@@ -1,3 +1,4 @@
+
 import { Link } from '@remix-run/react';
  
 interface HowItWork3StepsProps {
@@ -108,7 +109,7 @@ export function HowItWork3Steps({ data }: HowItWork3StepsProps) {
           {data.buttonPrimary && (
             <Link
               to={data.buttonPrimary.url || '#'}
-              className="flex items-center justify-center w-full md:w-[249px] bg-PrimaryBlack text-white font-Roboto font-normal leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-[16px] py-[12px] rounded-[100px]"
+              className="flex items-center justify-center w-full md:w-[249px] bg-PrimaryBlack text-white font-Roboto font-normal leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-[16px] py-[12px] rounded-[100px] border border-PrimaryBlack transition-all  hover:bg-PrimaryBlack hover:text-white"
             >
               {data.buttonPrimary.label }
             </Link>
@@ -116,7 +117,7 @@ export function HowItWork3Steps({ data }: HowItWork3StepsProps) {
           {data.buttonSecondary && (
             <Link
               to={data.buttonSecondary.url || '#'}
-              className="flex items-center justify-center w-full md:w-[249px] bg-white text-PrimaryBlack font-Roboto font-normal leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-[16px] py-[12px] rounded-[100px] border border-PrimaryBlack"
+              className="flex items-center justify-center w-full md:w-[249px] bg-white text-PrimaryBlack font-Roboto font-normal leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-[16px] py-[12px] rounded-[100px] border border-PrimaryBlack transition-all  hover:bg-PrimaryBlack hover:text-white"
             >
               {data.buttonSecondary.label }
             </Link>
@@ -126,3 +127,4 @@ export function HowItWork3Steps({ data }: HowItWork3StepsProps) {
     </section>
   );
 }
+ 

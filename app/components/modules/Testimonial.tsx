@@ -1,17 +1,18 @@
 import { useRef, useState, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation } from "swiper/modules";
+import { Navigation, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
+import "swiper/css/pagination"; // Make sure this is imported
 import ArrowRightIcon from "~/components/icons/ArrowRightIcon";
 import ArrowLeftIcon from "~/components/icons/ArrowLeftIcon";
 import Testimonial from "~/components/icons/Testimonial";
 import type { SanityTestimonial } from "~/lib/sanity";
-
+ 
 type Props = {
   data: SanityTestimonial;
 };
-
+ 
 export default function Testimonials({ data }: Props) {
   const prevRef = useRef<HTMLButtonElement>(null);
   const nextRef = useRef<HTMLButtonElement>(null);
@@ -19,7 +20,7 @@ export default function Testimonials({ data }: Props) {
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
-
+ 
   const openVideo = (url: string) => {
     if (!url) return;
   
@@ -45,15 +46,15 @@ export default function Testimonials({ data }: Props) {
     setActiveVideo(null);
     setIsOpen(false);
   };
-
+ 
   const showNavigation = (data?.testimonials?.length || 0) > 3;
-
+ 
   return (
     <section className="py-[40px] md:py-[60px] lg:py-[100px] bg-white px-5">
       <div className="max-w-[1240px] mx-auto flex flex-col gap-11 md:gap-14">
-
+ 
         {/* Heading + Arrows */}
-        <div className="flex flex-col md:flex-row justify-between items-end">
+        <div className="flex flex-col md:flex-row justify-between md:items-end">
           <h2 className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[26px] md:text-[36px] tracking-[-0.39px] md:tracking-[-0.54px] text-center md:text-left">
             {data?.subheadline || data?.headline}
           </h2>
@@ -78,11 +79,19 @@ export default function Testimonials({ data }: Props) {
             </div>
           )}
         </div>
-
-        {/* Slider */}
+ 
+        {/* Slider with gradient fade and scroll indicators */}
         <div className="relative">
+          {/* Gradient fade overlay for content indication */}
+          {!isBeginning && (
+            <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none hidden md:block" />
+          )}
+          {!isEnd && (
+            <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none hidden md:block" />
+          )}
+          
           <Swiper
-            modules={[Navigation]}
+            modules={[Navigation, Pagination]}
             spaceBetween={24}
             slidesPerView={1}
             breakpoints={{
@@ -97,6 +106,10 @@ export default function Testimonials({ data }: Props) {
                   }
                 : false
             }
+            pagination={{
+              clickable: true,
+              dynamicBullets: true, // This helps with visibility
+            }}
             onBeforeInit={(swiper) => {
               if (showNavigation) {
                 // @ts-ignore
@@ -118,7 +131,7 @@ export default function Testimonials({ data }: Props) {
               item.type === "quote" ? (
                 <SwiperSlide key={item._key} className="!h-auto !flex-shrink-0">
                   <div className="transition-all duration-500 ease-in-out group bg-white rounded-[20px] border border-LightWhite p-6 flex flex-col justify-between hover:bg-PrimaryBlack">
-
+ 
                     {/* Top: Quote + Rating */}
                     <div className="flex items-center justify-between">
                       {item.authorImage && (
@@ -137,9 +150,9 @@ export default function Testimonials({ data }: Props) {
                         </span>
                       </div>
                     </div>
-
+ 
                     <span className="mt-[28px] mb-[22px]"><Testimonial /></span>
-
+ 
                     {/* Quote */}
                     <p
                       className="transition-all duration-500 ease-in-out font-Roboto text-PrimaryBlack font-normal leading-[27px] md:leading-[27px] text-[18px] md:text-[18px] tracking-[0px] group-hover:text-white overflow-hidden text-ellipsis line-clamp-6"
@@ -155,7 +168,7 @@ export default function Testimonials({ data }: Props) {
                         {item.readMoreText}
                       </a>
                     )}
-
+ 
                     {/* Author */}
                     <div className="mt-[72px] pl-4 border-l border-LightWhite flex flex-col gap-1">
                       <p className="transition-all duration-500 ease-in-out font-Roboto text-PrimaryBlack text-[16px] leading-[24px] font-medium tracking-[0px] group-hover:text-white">
@@ -170,7 +183,7 @@ export default function Testimonials({ data }: Props) {
               ) : (
                 <SwiperSlide key={item._key} className="!h-auto !flex-shrink-0">
                   <div className="transition-all duration-500 ease-in-out group bg-white rounded-[20px] border border-LightWhite p-6 flex flex-col justify-between hover:bg-PrimaryBlack">
-
+ 
                     {/* Top: Author */}
                     <div className="flex items-center justify-between">
                       {item.authorImage && (
@@ -189,7 +202,7 @@ export default function Testimonials({ data }: Props) {
                         </span>
                       </div>
                     </div>
-
+ 
                     {/* Video */}
                     {item.videoThumbnail?.url && (
                       <div className="relative mt-6">
@@ -213,7 +226,7 @@ export default function Testimonials({ data }: Props) {
                         )}
                       </div>
                     )}
-
+ 
                     {/* Author */}
                     <div className="mt-[62px] pl-4 border-l border-LightWhite flex flex-col gap-1">
                       <p className="transition-all duration-500 ease-in-out font-Roboto text-PrimaryBlack text-[16px] leading-[24px] font-medium group-hover:text-white">
@@ -229,8 +242,30 @@ export default function Testimonials({ data }: Props) {
             )}
           </Swiper>
         </div>
+ 
+        {/* Mobile navigation arrows (always visible on mobile) */}
+        {/* {(data?.testimonials?.length || 0) > 1 && (
+          // <div className="flex md:hidden justify-center gap-5 mt-4">
+          //   <button
+          //     ref={prevRef}
+          //     className={`w-12 h-12 flex items-center justify-center rounded-full text-white ${
+          //       isBeginning ? "bg-[#D3D3D3]" : "bg-DarkOrange"
+          //     }`}
+          //   >
+          //     <ArrowLeftIcon />
+          //   </button>
+          //   <button
+          //     ref={nextRef}
+          //     className={`w-12 h-12 flex items-center justify-center rounded-full text-white ${
+          //       isEnd ? "bg-[#D3D3D3]" : "bg-DarkOrange"
+          //     }`}
+          //   >
+          //     <ArrowRightIcon />
+          //   </button>
+          // </div>
+        )} */}
       </div>
-
+ 
       {/* Video Popup */}
       {isOpen && activeVideo && (
         <div className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
@@ -252,7 +287,38 @@ export default function Testimonials({ data }: Props) {
           </div>
         </div>
       )}
-
+ 
+      {/* Custom CSS for pagination bullets */}
+      <style jsx global>{`
+      @media (min-width: 767px) {
+        .swiper-pagination  {
+            display:none;
+        }
+      }
+        .swiper-pagination {
+          position: relative;
+          margin-top: 16px;
+          text-align: center;
+          width: 100%!important;
+        }
+      
+        .swiper-pagination-bullet {
+          width: 12px;
+          height: 12px;
+          background-color: #DCDCDC;
+          opacity: 1;
+          margin: 0 6px !important;
+          transition: all 0.3s ease;
+          display: inline-block;
+          border-radius: 12px;
+        }
+      
+        .swiper-pagination-bullet-active {
+          background-color: #091019;
+        
+        }
+`}</style>
+ 
     </section>
   );
 }
