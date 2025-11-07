@@ -442,9 +442,9 @@ export function CartActions({cart}: {cart: Cart}) {
       {/* {cart.checkoutUrl} */}
       <Button
         to="/checkout"
-        className={clsx([defaultButtonStyles(), 'w-1/2 flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full h-[52px]'])}
+        className={clsx([defaultButtonStyles(), 'w-1/2 flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full h-[52px] transition-all  hover:bg-[#DF5D07] hover:text-white hover:opacity-100'])}
       >
-        Checkout 
+        Checkout         
       </Button>
     </div>
   );

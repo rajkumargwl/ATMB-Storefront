@@ -1,4 +1,6 @@
+
 import { PortableText } from '@portabletext/react';
+import RightArrowWhite from '~/components/icons/RightArrowWhite';
  
 type BusinessAcceleratorSectionProps = {
   data: {
@@ -15,7 +17,7 @@ type BusinessAcceleratorSectionProps = {
  
 export default function BusinessAcceleratorSection({ data }: BusinessAcceleratorSectionProps) {
   // if (!data) return null; // safety check
- const getHighlightedTitle = (title: string, highlightedText?: string) => {
+const getHighlightedTitle = (title: string, highlightedText?: string) => {
     if (!highlightedText) return title;
     const parts = title.split(new RegExp(`(${highlightedText})`, 'gi'));
     return parts.map((part, index) =>
@@ -34,8 +36,8 @@ export default function BusinessAcceleratorSection({ data }: BusinessAccelerator
       className="px-5 py-[40px] md:py-[54px] bg-white"
       aria-labelledby="business-accelerator-title"
       role="region"
-    > 
-
+    >
+ 
       <div className="max-w-[1240px] mx-auto flex flex-col md:flex-row gap-[62px] lg:gap-[135px] items-center">
         {/* Text Content */}
         <div className="w-full md:w-[51.4%] space-y-5 md:space-y-5">
@@ -57,10 +59,13 @@ export default function BusinessAcceleratorSection({ data }: BusinessAccelerator
           {data.cta?.label && (
             <a
               href={data.cta.url ?? '/PDP/business-accelerator'}
-              className="flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full w-full md:w-[209px] h-[52px]"
+              className="group relative overflow-hidden flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full w-full md:w-[209px] h-[52px] transition-all  hover:bg-[#DF5D07] hover:text-white"
               aria-label={data.cta.label}
             >
-              {data.cta.label}
+            
+                 <span className="relative flex items-center transition-all duration-300">  {data.cta.label} <span className="relative right-0 opacity-0 translate-x-[12px] hidden group-hover:opacity-100 group-hover:block group-hover:translate-x-[12px] transition-all duration-300">
+              <RightArrowWhite />
+            </span></span>
             </a>
           )}
         </div>
@@ -80,3 +85,4 @@ export default function BusinessAcceleratorSection({ data }: BusinessAccelerator
     </section>
   );
 }
+ 

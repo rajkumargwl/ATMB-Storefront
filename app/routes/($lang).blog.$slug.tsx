@@ -9,14 +9,14 @@ import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
 import RightArrowWhite from '~/components/icons/RightArrowWhite';
 import { usePrefixPathWithLocale } from '~/lib/utils';
 import { SEO } from "~/queries/sanity/fragments/seo";
-
-
+ 
+ 
 export async function loader({ context, params }: LoaderFunctionArgs) {
   let language = params.lang || 'en';
   if(language !== 'en-es'){
     language = 'en';
   }
-
+ 
   const { slug } = params;
   if (!slug) throw notFound();
  
@@ -69,7 +69,7 @@ function getPlainText(content: PortableTextBlock[] | undefined): string {
     )
     .join(" ");
 }
- const seo: SeoHandleFunction = ({ data }) => ({
+const seo: SeoHandleFunction = ({ data }) => ({
   title:
     data?.page?.seo?.title || 'Business Accelerator - Anytime | Mailbox',
   description:
@@ -102,7 +102,7 @@ const renderAuthorDate = (author: string | undefined, date: string | undefined) 
     </span>
   </p>
 );
-
+ 
  
 // To render author + date
 const renderAuthorDateRelated = (author: string | undefined, date: string | undefined) => (
@@ -249,10 +249,10 @@ export default function BlogPost() {
                         <span className="font-Roboto text-white font-semibold leading-[43.2px] md:leading-[61.6px] text-[36px] md:text-[56px] tracking-[-0.54px] md:tracking-[-1.12px]">1000+</span>
                         <p className="font-Roboto text-white font-medium leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px]">Rely on Virtual Mailbox for a professional address, business line, and growth tools — all in one.</p>
                     </div>
-                   <Link to={usePrefixPathWithLocale(`/country-location`)} className="group relative  flex items-center justify-center w-full bg-DarkOrange text-white font-medium font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full h-[52px] overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]">
-                     <span className="relative flex items-center">Get Started Today <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
-                        <RightArrowWhite />
-                      </span></span>
+                   <Link to={usePrefixPathWithLocale(`/country-location`)} className="group relative  flex items-center justify-center w-full bg-DarkOrange text-white font-medium font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full h-[52px] overflow-hidden transition-all hover:bg-[#DF5D07] hover:text-white">
+                        <span className="relative flex items-center transition-all duration-300">Get Started Today <span className="relative right-0 opacity-0 translate-x-[12px] hidden group-hover:opacity-100 group-hover:block group-hover:translate-x-[12px] transition-all duration-300">
+                          <RightArrowWhite />
+                        </span></span>
                    </Link>
                   </div>
                 </aside>            

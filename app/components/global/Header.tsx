@@ -311,15 +311,7 @@ useEffect(() => {
 
            {/* {icon3?.url && ( */}
             <>
-            {/* <Link
-               to="#">
-              <img
-                src={icon3.url}
-                alt="Language"
-                title="Language"
-                className="h-6 w-6 object-contain hidden md:inline-block"
-              />
-            </Link> */}
+           
             <LanguageCurrencyMenu  iconUrl={GlobeIcon} />
             </>
           {/* )} */}
