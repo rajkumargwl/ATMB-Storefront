@@ -1,3 +1,4 @@
+
 import {defineType, defineField} from 'sanity'
 
 export const homeSection2 = defineType({
@@ -41,6 +42,25 @@ export const homeSection2 = defineType({
               title: 'Platform Logo',
               type: 'image',
               options: {hotspot: true},
+              validation: (Rule) =>
+                Rule.custom(async (image, context) => {
+                  if (!image?.asset?._ref) return true
+
+                  const client = context.getClient({apiVersion: '2023-01-01'})
+                  const asset = await client.fetch(
+                    `*[_id == $id][0]{metadata{dimensions{width,height}}}`,
+                    {id: image.asset._ref}
+                  )
+
+                  const width = asset?.metadata?.dimensions?.width
+                  const height = asset?.metadata?.dimensions?.height
+
+                  if (width > 156 || height > 88) {
+                    return `Image dimensions must not exceed 156×88 pixels (uploaded: ${width}×${height})`
+                  }
+
+                  return true
+                }),
             },
             {
               name: 'score',
@@ -74,6 +94,25 @@ export const homeSection2 = defineType({
               title: 'Logo',
               type: 'image',
               options: {hotspot: true},
+              validation: (Rule) =>
+                Rule.custom(async (image, context) => {
+                  if (!image?.asset?._ref) return true
+
+                  const client = context.getClient({apiVersion: '2023-01-01'})
+                  const asset = await client.fetch(
+                    `*[_id == $id][0]{metadata{dimensions{width,height}}}`,
+                    {id: image.asset._ref}
+                  )
+
+                  const width = asset?.metadata?.dimensions?.width
+                  const height = asset?.metadata?.dimensions?.height
+
+                  if (width > 156 || height > 88) {
+                    return `Image dimensions must not exceed 156×88 pixels (uploaded: ${width}×${height})`
+                  }
+
+                  return true
+                }),
             },
             {
               name: 'alt',

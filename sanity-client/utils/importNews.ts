@@ -190,7 +190,13 @@ async function importNews() {
   for (const item of newsItems) {
     const mainImage = await fetchFeaturedImage(item)
     const description = await htmlToPortableText(item.content.rendered)
-
+    const seo = item.yoast_head_json
+    ? {
+        _type: 'seo',
+        title: item.yoast_head_json.title || '',
+        description: item.yoast_head_json.description || '',
+      }
+    : null
     const doc: any = {
       _id: `news-${item.slug}`,
       _type: 'news',
@@ -198,6 +204,7 @@ async function importNews() {
       slug: { _type: 'slug', current: item.slug },
       description, 
       date: item.date,
+      seo,
     }
 
     if (mainImage) doc.featuredImage = mainImage

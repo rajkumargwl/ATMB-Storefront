@@ -29,6 +29,7 @@ export default defineType({
           { title: 'Spanish', value: 'en-es' },
         ],
       },
+      hidden: true,
     }),
     // defineField({
     //   name: 'slug',
