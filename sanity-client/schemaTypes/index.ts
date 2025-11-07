@@ -106,6 +106,12 @@ import {renterEditor} from './objects/module/rentereditor'
 import {marketPlaceModule} from './objects/module/marketPlaceModule'
 import {marketPlaceIntroSection} from './objects/module/marketPlaceIntroSection'
 import {marketPlaceCategoriesSection} from './objects/module/marketPlaceCategoriesSection'
+import {cityPageModule} from './objects/module/cityPageModule'
+import {cityPageIntroSection} from './objects/module/cityPageIntroSection'
+import {cityPageVideoSection} from './objects/module/cityPageVideoSection'
+import {cityPageVirtualMailboxSection} from './objects/module/cityPageVirtualMailboxSection'
+import {cityPagePricingBannerSection} from './objects/module/cityPagePricingBannerSection'
+import {cityPageAdvantagesSection} from './objects/module/cityPageAdvantagesSection'
 import { howitworksType } from './objects/module/howitwrorksType'
 import { howitworksVirtualbox } from './objects/module/howitworksVirtualbox'
 import { builtForHowYouWorkToday } from './objects/module/builtforhowyouworktoday'
@@ -262,6 +268,12 @@ contactUsSection,
   marketPlaceModule,
   marketPlaceIntroSection,
   marketPlaceCategoriesSection,
+  cityPageModule,
+  cityPageIntroSection,
+  cityPageAdvantagesSection,
+  cityPageVideoSection,
+  cityPageVirtualMailboxSection,
+  cityPagePricingBannerSection,
   howitworksType,
   howitworksVirtualbox,
   builtForHowYouWorkToday,

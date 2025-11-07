@@ -34,6 +34,7 @@ import { BUSINESS_ACCELERATOR_MODULE } from './modules/accelerator';
 import { ANYTIME_PHONE_MODULE } from './modules/anytimephone';
 import { SMALL_BUSINESS_OWNER_MODULE } from './modules/smallBusinessOwner';
 import { ANYTIME_MOBILE_APP } from './modules/anytimemobileapp';
+import { CITY_PAGE_MODULE } from './modules/citypagemodule';
 export const MODULES = groq`
   _key,
   _type,
@@ -139,6 +140,9 @@ export const MODULES = groq`
   },
    (_type == "renterreferralprogram") => {  
     ${RENTER_REFERRAL_FRAGMENT}
+  },
+  (_type == "cityPageModule") => {
+    ${CITY_PAGE_MODULE}
   }
 
 `;
