@@ -120,10 +120,10 @@ export async function loader({params, context}: LoaderFunctionArgs) {
   return json({ caseStudy });
 }
 const seo: SeoHandleFunction = ({data}) => ({
-  title: data?.page?.seo?.title || 'Anytime Mailbox',
+  title: data?.caseStudy?.seo?.title || data?.caseStudy?.title,
   description:
-    data?.page?.seo?.description ||
-    'A custom storefront powered by Hydrogen and Sanity',
+  data?.caseStudy?.seo?.description ||
+  data?.caseStudy?.title,
 });
 export const handle = { seo };
 export default function CaseStudyPage() {

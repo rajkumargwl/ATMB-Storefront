@@ -69,13 +69,16 @@ function getPlainText(content: PortableTextBlock[] | undefined): string {
     )
     .join(" ");
 }
+
  const seo: SeoHandleFunction = ({ data }) => ({
   title:
-    data?.page?.seo?.title || 'Business Accelerator - Anytime | Mailbox',
+    data?.post?.seo?.title || data?.post?.title,
   description:
-    data?.page?.seo?.description ||
-    'Explore our Business Accelerator program and resources.',
+    data?.post?.seo?.description ||
+    data?.post?.title,
 });
+
+export const handle = { seo };
 // To render author + date
 const renderAuthorDate = (author: string | undefined, date: string | undefined) => (
   <p className="flex items-center gap-2">

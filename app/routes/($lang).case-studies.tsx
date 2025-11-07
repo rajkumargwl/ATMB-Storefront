@@ -45,10 +45,10 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
 }
 const seo: SeoHandleFunction = ({ data }) => ({
   title:
-    data?.page?.seo?.title || 'Business Accelerator - Anytime | Mailbox',
+    data?.page?.seo?.title || 'Case Studies - Anytime | Mailbox',
   description:
     data?.page?.seo?.description ||
-    'Explore our Business Accelerator program and resources.',
+    'Why partner with Anytime Mailbox? Because a virtual mailbox offering generates new revenue and profit. These case studies show you how.',
 });
 export const handle = { seo };
 export default function CaseStudies() {

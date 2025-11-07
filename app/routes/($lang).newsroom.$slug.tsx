@@ -118,10 +118,10 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
   return json({ newsItem, relatedNews });
 }
   const seo: SeoHandleFunction = ({data}) => ({
-   title: data?.page?.seo?.title || 'Anytime Mailbox',
+   title: data?.newsItem?.seo?.title || data?.newsItem?.title,
    description:
-     data?.page?.seo?.description ||
-     'Anytime Mailbox',
+     data?.newsItem?.seo?.description ||
+     data?.newsItem?.title
  });
  export const handle = { seo };
  
