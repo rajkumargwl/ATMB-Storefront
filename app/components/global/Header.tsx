@@ -180,7 +180,7 @@ useEffect(() => {
           : item.label === "Contact Us"
           ? "/contact"
         : item.url ?? "#")}
-        className={`text-PrimaryBlack hover:text-PrimaryBlack font-normal flex items-center gap-[6px] text-[14px] md:text-[14px] ${currentLanguage === 'en-es' ? 'xl:text-[15px]' : 'xl:text-[16px]' } leading-[24px] tracking-[0px]`}
+        className={`text-PrimaryBlack transition-all hover:text-DarkOrange font-normal flex items-center gap-[6px] text-[14px] md:text-[14px] ${currentLanguage === 'en-es' ? 'xl:text-[15px]' : 'xl:text-[16px]' } leading-[24px] tracking-[0px]`}
                >
                   {item.label} 
                   {item.hasSubmenu && (
@@ -214,7 +214,7 @@ useEffect(() => {
                               gIdx > 1 ? "mt-[15px]" : ""
                             }`}
                           >
-                            <p className="mb-5 font-Roboto text-PrimaryBlack font-medium leading-[28px] md:leading-[28px] text-[20px] md:text-[20px] tracking-[0px]">
+                            <p className="mb-5 font-Roboto text-PrimaryBlack font-medium leading-[28px] md:leading-[28px] text-[20px] md:text-[20px] tracking-[0px] ">
                               {group.title}
                             </p>
                             <ul className="flex flex-col gap-4">
@@ -224,7 +224,7 @@ useEffect(() => {
                                     to={buildLocalizedUrl(link.url ?? "#")}
                                     aria-label={link.label}
                                     title={link.label}
-                                    className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]"
+                                    className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px] transition-all hover:text-DarkOrange"
                                   >
                                     {link.label}
                                   </Link>
@@ -246,7 +246,7 @@ useEffect(() => {
                          <li key={i}>
                            <Link
                              to={localizedUrl}
-                             className="block px-4 py-[6px] text-PrimaryBlack hover:text-PrimaryBlack font-normal text-[14px] md:text-[14px] xl:text-[16px] leading-[24px] tracking-[0px]"
+                             className="block px-4 py-[6px] text-PrimaryBlack transition-all hover:text-DarkOrange font-normal text-[14px] md:text-[14px] xl:text-[16px] leading-[24px] tracking-[0px]"
                            >
                              {sub?.label}
                            </Link>
@@ -342,7 +342,7 @@ useEffect(() => {
                 //   {loginButton.label}
                 // </Link>
                 <button
-                className="w-fit rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[11px] md:py-[15px]"
+                className="w-fit rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[11px] md:py-[15px] transition-all  hover:bg-PrimaryBlack hover:text-white"
                 onClick={() => {
                   setIsMobileMenuOpen(false);
                   const ssoUrl = "https://store.xecurify.com/moas/broker/login/shopify/0dv7ud-pz.myshopify.com/account?idpname=custom_openidconnect_Okf";
@@ -375,12 +375,33 @@ useEffect(() => {
       
 
           {/* Mobile menu button */}
-          <button
+          {/* <button
             className="lg:hidden"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             <MenuIcon />
-          </button>
+          </button> */}
+            <button
+    aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+    title={isMobileMenuOpen ? "Close menu" : "Open menu"} // tooltip for browsers
+    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+    className="p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#F60] lg:hidden"
+  >
+    <MenuIcon aria-hidden="true" />
+
+  </button>
+
+  {/* Custom tooltip (visible on hover or focus) */}
+  <span
+    role="tooltip"
+    className="
+      absolute left-1/2 -translate-x-1/2 top-full mt-1
+      text-xs text-white bg-black px-2 py-1 rounded opacity-0 group-hover:opacity-100 group-focus-within:opacity-100
+      transition-opacity duration-200
+    "
+  >
+    {isMobileMenuOpen ? "Close menu" : "Open menu"}
+  </span>
         </div>
       </div>
 
@@ -503,7 +524,7 @@ useEffect(() => {
                 ) : (
                   loginButton && (
                     <button
-                    className="w-fit rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[11px]"
+                    className="w-fit rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[11px] transition-all  hover:bg-PrimaryBlack hover:text-white"
                     onClick={() => {
                       setIsMobileMenuOpen(false);
                       const ssoUrl = "https://store.xecurify.com/moas/broker/login/shopify/0dv7ud-pz.myshopify.com/account?idpname=custom_openidconnect_Okf";
