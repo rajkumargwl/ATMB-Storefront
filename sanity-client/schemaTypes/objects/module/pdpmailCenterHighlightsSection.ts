@@ -23,10 +23,10 @@ export const pdpmailCenterHighlightsSection = defineType({
     }),
     defineField({
       name: 'icon',
-      title: 'Varified Icon',
+      title: 'Verified Icon',
       type: 'image',
       options: {hotspot: true},
-      description: 'Upload Varified Icon here (supports .svg, .png, .jpg)',
+      description: 'Upload Verified Icon here (supports .svg, .png, .jpg)',
     }),
     defineField({
       name: 'designation',
@@ -34,19 +34,40 @@ export const pdpmailCenterHighlightsSection = defineType({
       type: 'string',
       description: 'e.g., Mail Center Operator',
     }),
+
+    // ✅ FIXED partnerLogos
     defineField({
       name: 'partnerLogos',
       title: 'Courier / Partner Logos',
       type: 'array',
       description: 'Upload courier partner logos like USPS, FedEx, UPS, DHL.',
       of: [
-        defineField({
-          name: 'logo',
-          title: 'Logo',
-          type: 'image',
-          options: {hotspot: true},
-          description: 'Upload courier company logo (supports .svg, .png, .jpg)',
-        }),
+        {
+          type: 'object',
+          name: 'partnerLogo',
+          title: 'Partner Logo',
+          fields: [
+            defineField({
+              name: 'logo',
+              title: 'Logo',
+              type: 'image',
+              options: {hotspot: true},
+              description: 'Upload courier company logo (supports .svg, .png, .jpg)',
+            }),
+            defineField({
+              name: 'alt',
+              title: 'Alt Text',
+              type: 'string',
+              description: 'Add the partner name here',
+            }),
+          ],
+          preview: {
+            select: {
+              title: 'alt',
+              media: 'logo',
+            },
+          },
+        },
       ],
     }),
   ],
@@ -58,4 +79,3 @@ export const pdpmailCenterHighlightsSection = defineType({
     },
   },
 });
- 

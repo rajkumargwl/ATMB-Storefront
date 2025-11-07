@@ -21,6 +21,8 @@ interface DownloadMailboxRenterAppsProps {
   };
   appStoreLink?: string | null;
   googlePlayLink?: string | null;
+    appalt?: string | null;
+  googlealt?: string | null;
 }
  
 const DownloadMailboxRenterApps: React.FC<DownloadMailboxRenterAppsProps> = ({
@@ -31,7 +33,8 @@ const DownloadMailboxRenterApps: React.FC<DownloadMailboxRenterAppsProps> = ({
   googlePlayIcon,
   appStoreLink,
   googlePlayLink,
-  
+    appalt,
+  googlealt,
 }) => 
   
   
@@ -90,7 +93,7 @@ const DownloadMailboxRenterApps: React.FC<DownloadMailboxRenterAppsProps> = ({
               >
                 <img
                   src={appStoreIcon.url}
-                  alt="Mailbox Renter Apps-Download on the App Store"
+                   alt={appalt || "Download Mailbox Renter Apps from App Store"}
                   className="w-full object-cover"
                 />
               </a>
@@ -104,7 +107,7 @@ const DownloadMailboxRenterApps: React.FC<DownloadMailboxRenterAppsProps> = ({
               >
                 <img
                   src={googlePlayIcon.url}
-                  alt=" Mailbox Renter Apps Download on the App Store Get it on Google Play"
+                  alt={googlealt || "Download Mailbox Renter Apps from Google Play Store"}
                   className="w-full object-cover"
                 />
               </a>
