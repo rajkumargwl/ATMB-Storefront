@@ -45,8 +45,9 @@ export function CartLineItems({
 }
 
 function LineItem({lineItem}: {lineItem: CartLine | ComponentizableCartLine}) {
-  const {merchandise, attributes} = lineItem;
-console.log("attributes",attributes);
+  
+const {merchandise, attributes} = lineItem;
+
 const hasBundleAttr = attributes?.find(attr => attr.key === 'hasBundle')?.value;
 const showChangeButtons = hasBundleAttr === 'false';
 
