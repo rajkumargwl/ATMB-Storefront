@@ -17,7 +17,7 @@ export default function AboutHowItStartedSection({heading, content, image}: Prop
         
         {/* Left image */}
         {image?.url && (
-          <div className="w-full md:w-[50.3%] relative order-2 md:order-1">
+          <div className="w-full md:w-[50.1%] relative order-2 md:order-1">
             <img
               src={image.url}
               alt={image.alt || ''}
@@ -27,7 +27,7 @@ export default function AboutHowItStartedSection({heading, content, image}: Prop
         )}
  
         {/* Right content */}
-        <div className="w-full md:w-[49.7%] space-y-4 md:space-y-4 order-1 md:order-2">
+        <div className="w-full md:w-[49.9%] space-y-4 md:space-y-4 order-1 md:order-2">
           <h2 className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px]">{heading}</h2>
           
           {content?.length > 0 && (
