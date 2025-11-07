@@ -49,11 +49,15 @@ export default function Footer({ data }: FooterProps) {
           <div className="lg:col-span-2 md:max-w-[306px] flex items-center md:items-start flex-col gap-6 lg:gap-[69px]">
             <div className="block">
               {data.logo?.asset?.url && (
+               
+                 <Link to={`/`}>
+ 
                 <img
                   src={data.logo.asset.url}
                   alt={data.title || 'Logo'}
                   className="h-[56px] w-[111px] mb-6 ml-auto md:ml-[0px] mr-auto md:mr-[0px]"
                 />
+                </Link>
               )}
               {data.description && (
                 <p className="tracking-[0px] font-Roboto text-LightWhite text-[16px] leading-[24px] font-normal text-center md:text-left">
@@ -141,7 +145,7 @@ export default function Footer({ data }: FooterProps) {
                       {item.link ? (
                         <a
                           href={usePrefixPathWithLocale(item.link)}
-                          className="font-Roboto text-LightWhite text-[14px] leading-[21px] font-normal tracking-[0px] inline-block"
+                          className="font-Roboto text-LightWhite text-[14px] leading-[21px] font-normal tracking-[0px] inline-block transition-all hover:text-DarkOrange"
                         >
                           {item.label} {item.value}
                         </a>
@@ -174,7 +178,7 @@ export default function Footer({ data }: FooterProps) {
               <Link
                 key={idx}
                 to={usePrefixPathWithLocale(link.link) || '#'}
-                className="font-Roboto text-[14px] leading-[21px] font-normal tracking-[0px] text-white"
+                className="font-Roboto text-[14px] leading-[21px] font-normal tracking-[0px] text-white transition-all hover:text-DarkOrange"
               >
                 {link.label}
               </Link>
@@ -228,7 +232,7 @@ function FooterColumn({
           <li key={idx}>
             <Link
               to={usePrefixPathWithLocale(link.link) || '#'}
-              className="font-Roboto text-LightWhite text-[14px] leading-[21px] font-normal tracking-[0px] py-1 inline-block"
+              className="font-Roboto text-LightWhite text-[14px] leading-[21px] font-normal tracking-[0px] py-1 inline-block transition-all hover:text-DarkOrange"
             >
               {link.label}
             </Link>
