@@ -191,11 +191,12 @@ export default function BlogAuthorDetailPage() {
                                 <span className="font-Roboto text-white font-semibold leading-[43.2px] md:leading-[61.6px] text-[36px] md:text-[56px] tracking-[-0.54px] md:tracking-[-1.12px]">1000+</span>
                                 <p className="font-Roboto text-white font-medium leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px]">Rely on Virtual Mailbox for a professional address, business line, and growth tools — all in one.</p>
                             </div>
-                            <Link to={`/create-account`} className="group relative flex items-center justify-center w-full bg-DarkOrange text-white font-medium font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full h-[52px] overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]">
+                            <Link to={`/create-account`} className="group relative flex items-center justify-center w-full bg-DarkOrange text-white font-medium font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full h-[52px] overflow-hidden transition-all hover:bg-[#DF5D07] hover:text-white">
                             
-                             <span className="relative flex items-center">Get Started Today <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
-                            <RightArrowWhite />
-                            </span></span>
+                           
+                               <span className="relative flex items-center transition-all duration-300">Get Started Today  <span className="relative right-0 opacity-0 translate-x-[12px] hidden group-hover:opacity-100 group-hover:block group-hover:translate-x-[12px] transition-all duration-300">
+                                <RightArrowWhite />
+                                </span></span>
                             </Link>
                             </div>
                         </div>
@@ -493,7 +494,7 @@ export default function BlogAuthorDetailPage() {
                     </ul>
                     <div className="hidden md:flex justify-center mt-11">
                             <button                            
-                                className="flex items-center justify-center w-[151px] h-[44px] md:h-[52px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-PrimaryBlack border border-[#091019] px-4 py-[12px] bg-white hover:bg-[#f3f3f3]"
+                                className="flex items-center justify-center w-[151px] h-[44px] md:h-[52px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-PrimaryBlack border border-[#091019] px-4 py-[12px] bg-white transition-all  hover:bg-PrimaryBlack hover:text-white"
                             >
                                 Load More
                             </button>

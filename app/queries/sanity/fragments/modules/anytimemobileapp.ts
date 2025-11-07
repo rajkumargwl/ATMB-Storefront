@@ -15,7 +15,8 @@ export const ANYTIME_MOBILE_APP = groq`
         icon {
           "url": asset->url
         },
-        link
+        link,
+        alt
       },
       image {
         "url": asset->url
@@ -30,9 +31,11 @@ export const ANYTIME_MOBILE_APP = groq`
         "url": asset->url
       },
       appStoreLink,
+      appalt,
       googlePlayIcon {
         "url": asset->url
       },
+      googlealt,
       googlePlayLink,
       mockupImage {
         "url": asset->url

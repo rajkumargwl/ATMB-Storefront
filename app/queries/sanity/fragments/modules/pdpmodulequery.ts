@@ -28,13 +28,17 @@ export const PRODUCT_MODULE_QUERY = groq`
   isVerified,
   icon { "url": asset->url },
   designation,
-  partnerLogos[] { "url": asset->url },
+  partnerLogos[] {
+    logo { "url": asset->url },
+    alt
+  },
   highlightsTitle,
   highlights[] {
     value,
     class
   }
 },
+
 (_type == "pdpanytimePhoneSection") => {
     title,
     description,

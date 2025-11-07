@@ -39,10 +39,17 @@ export default function LanguageCurrencyMenu({iconUrl}: Props) {
           <img
             src={iconUrl}
             alt="Language & Currency"
+                   title="Change Language or Currency"
             className="object-contain"
           />
         )}
       </button>
+      <div
+        role="tooltip"
+        className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-[#091019] text-white text-sm rounded-md px-3 py-1 opacity-0 pointer-events-none whitespace-nowrap transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100"
+      >
+        Change Language or Currency
+      </div>
 
       {/* Context Menu */}
       {open && (

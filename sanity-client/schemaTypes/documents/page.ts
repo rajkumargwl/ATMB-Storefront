@@ -11,6 +11,18 @@ export const pageType = defineType({
   groups: GROUPS,
   fields: [
     defineField({
+      name: 'language',
+      title: 'Language',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'English', value: 'en'},
+          {title: 'Spanish', value: 'en-es'},
+        ],
+      },
+      hidden: true,
+    }),
+    defineField({
       name: 'title',
       group: 'editorial',
       type: 'string',
@@ -51,7 +63,8 @@ export const pageType = defineType({
            { type: 'anytimePhone' },
             { type: 'operatorsignup' },
             {type: 'smallBusinessOwnerPage'},
-              {type: 'anytimemobile'}
+              {type: 'anytimemobile'},
+              { type: 'cityPageModule' },
         // add more modules if needed
       ],
     }),
