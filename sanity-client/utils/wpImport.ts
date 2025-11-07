@@ -1,6 +1,6 @@
 const { createClient } = require('@sanity/client')
 const axios = require('axios')
-const { parse, HTMLElement, TextNode, Node } = require('node-html-parser')
+const { parse, TextNode} = require('node-html-parser')
 const fs = require('fs')
 const path = require('path')
 const https = require('https')
@@ -160,8 +160,15 @@ async function importPosts() {
     
     const mainImage = await fetchFeaturedImage(post)
     const authorName = post.author_name || (post.author_info?.display_name) || null;
+         
+    const seo = post.yoast_head_json
+    ? {
+        _type: 'seo',
+        title: post.yoast_head_json.title || '',
+        description: post.yoast_head_json.description || '',
+      }
+    : null
 
-   
     const doc = {
       _id: `wpPost-${post.slug}`,
       _type: 'wpPost',
@@ -170,7 +177,8 @@ async function importPosts() {
       content: post.content.rendered.replace(/<[^>]*>/g, ''), // strip HTML
       date: post.date,
       link: post.link,
-      mainImage
+      mainImage,
+      seo,
     }
     
 
