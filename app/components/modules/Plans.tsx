@@ -204,13 +204,13 @@ return (
                           return (
                             <li key={idx} className="pb-4 border-b border-LightWhite">
                               <strong className="mb-1 block font-Roboto text-PrimaryBlack font-medium leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px]">{title}</strong>
-                              {variants.length > 0 && (
+                              {/* {variants.length > 0 && (
                                 <ul className="list-none p-0 m-0">
                                   {variants.map((v, vi) => (
                                     <li key={vi} className="font-Roboto text-LightGray font-normal leading-[21px] md:leading-[21px] text-[14px] md:text-[14px] tracking-[0px]">{v}</li>
                                   ))}
                                 </ul>
-                              )}
+                              )} */}
                             </li>
                           );
                         }
