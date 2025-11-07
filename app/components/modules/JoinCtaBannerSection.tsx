@@ -55,7 +55,7 @@ const JoinCtaBannerSection: React.FC<JoinCtaBannerSectionProps> = ({
         {cta?.label && (
           <a
             href={cta.url ?? "#"}
-            className="mt-8 flex items-center justify-center w-full md:w-[221px] h-[52px] md:h-[52px] rounded-[100px] font-medium leading-[16px] tracking-[0.08px] text-[16px] text-PrimaryBlack bg-white px-4 py-[12px]"
+            className="mt-8 flex items-center justify-center w-full md:w-[221px] h-[52px] md:h-[52px] rounded-[100px] font-medium leading-[16px] tracking-[0.08px] text-[16px] text-PrimaryBlack bg-white px-4 py-[12px] transition-all  hover:bg-PrimaryBlack hover:text-white"
           >
             {cta.label}
           </a>

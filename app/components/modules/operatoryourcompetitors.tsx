@@ -1,5 +1,5 @@
-
 import {PortableText} from '@portabletext/react';
+import RightArrowWhite from '~/components/icons/RightArrowWhite';
  
 interface OperatorYourCompetitorsProps {
   module: {
@@ -61,8 +61,11 @@ export function OperatorYourCompetitors({module, imageAspectClassName}: Operator
               </a>
             )}
             {ctaText && !ctaUrl && (
-              <button className="flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px] px-4 rounded-full w-full md:w-[227px] h-[44px] md:h-[52px]">
-                {ctaText}
+              <button className="group relative overflow-hidden  flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px] px-4 rounded-full w-full md:w-[227px] h-[44px] md:h-[52px] transition-all  hover:bg-[#DF5D07] hover:text-white hover:md:w-[257px]">
+                
+                   <span className="relative flex items-center transition-all duration-300">{ctaText}<span className="relative right-0 opacity-0 translate-x-[12px] hidden group-hover:opacity-100 group-hover:block group-hover:translate-x-[12px] transition-all duration-300">
+              <RightArrowWhite />
+            </span></span>
               </button>
             )}
           </div>

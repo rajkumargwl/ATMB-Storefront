@@ -291,16 +291,7 @@ const PdpAnytimePhoneSection: React.FC<Props> = ({
                   ),
                 )}
               </ul>
-              {/* <AddToCartButton
-                lines={[{merchandiseId: productData.defaultVariant.id, quantity: 1}]}
-                disabled={!productData.defaultVariant.availableForSale}
-                analytics={{
-                  products: [productData.productAnalytics],
-                  totalValue: parseFloat(productData.productAnalytics.price),
-                }}
-                buttonClassName="flex items-center justify-center w-full h-[44px] md:h-[52px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-white md:text-PrimaryBlack border border-DarkOrange md:border-[#091019] px-4 py-[12px] bg-DarkOrange md:bg-white hover:opacity-100 group relative overflow-hidden transition-all hover:bg-DarkOrange hover:text-white hover:border-DarkOrange"
-                text="Add to Cart"
-              /> */}
+              
               <ReplacePlanAddToCartButton
   selectedVariant={productData.defaultVariant}
   replaceLineId={null} // or pass actual lineId if replacing
