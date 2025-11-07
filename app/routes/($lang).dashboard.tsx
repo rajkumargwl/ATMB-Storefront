@@ -1,4 +1,5 @@
 import { useLoaderData, Link } from '@remix-run/react';
+import RightArrowWhite from '~/components/icons/RightArrowWhite';
 import {
   defer,
   type LoaderFunctionArgs,
@@ -91,7 +92,7 @@ export default function DashboardPage() {
                                 <span  className="font-Roboto text-PrimaryBlack font-medium leading-[33.6px] md:leading-[33.6px] text-[24px] md:text-[24px] tracking-[0px] md:tracking-[0px]">Virtual Mailbox</span>
                             </div>
                             <div>
-                               <button className='flex items-center justify-center rounded-[100px] font-normal leading-[14px] tracking-[0.07px] text-[14px] text-PrimaryBlack border border-[#091019] px-[12px] py-[8px] h-[36px] transition-all'>Manage</button>
+                               <button className='flex items-center justify-center rounded-[100px] font-normal leading-[14px] tracking-[0.07px] text-[14px] text-PrimaryBlack border border-[#091019] px-[12px] py-[8px] h-[36px] transition-all hover:bg-PrimaryBlack hover:text-white'>Manage</button>
                             </div>
                         </div>
                         <div className='grid grid-cols-1 md:grid-cols-3 gap-8 '>
@@ -192,7 +193,7 @@ export default function DashboardPage() {
                                         Custom recording and messages
                                     </li>
                                 </ul>
-                                <button className='font-medium font-Roboto text-[16px] tracking-[0.08px] leading-[16px]  py-[12px] px-4 rounded-full w-fit h-[44px] bg-DarkOrange text-white transition-all hover:scale-[1.02] hover:bg-[#DD5827]'>
+                                <button className='font-medium font-Roboto text-[16px] tracking-[0.08px] leading-[16px]  py-[12px] px-4 rounded-full w-fit h-[44px] bg-DarkOrange text-white transition-all  hover:bg-[#DF5D07] hover:text-white'>
                                     Get Started Today
                                 </button>
                             </div>
@@ -242,8 +243,8 @@ export default function DashboardPage() {
                                     Exclusive Promos
                                 </li>
                             </ul>
-                            <button className='font-medium font-Roboto text-[16px] tracking-[0.08px] leading-[16px]  py-[12px] px-4 rounded-full w-fit h-[44px] bg-DarkOrange text-white transition-all hover:scale-[1.02] hover:bg-[#DD5827]'>
-                                Get Started Today
+                            <button className='group relative overflow-hidden font-medium font-Roboto text-[16px] tracking-[0.08px] leading-[16px]  py-[12px] px-4 rounded-full w-fit h-[44px] bg-DarkOrange text-white  transition-all  hover:bg-[#DF5D07] hover:text-white'>
+                               Get Started Today 
                             </button>
                         </div>
 
@@ -270,7 +271,7 @@ export default function DashboardPage() {
                                 <span  className="font-Roboto text-PrimaryBlack font-medium leading-[33.6px] md:leading-[33.6px] text-[24px] md:text-[24px] tracking-[0px] md:tracking-[0px]">Virtual Mailbox</span>
                             </div>
                             <div>
-                                <button className='flex items-center justify-center rounded-[100px] font-normal leading-[14px] tracking-[0.07px] text-[14px] text-PrimaryBlack border border-[#091019] px-[12px] py-[8px] h-[36px] transition-all'>Manage</button>
+                                <button className='flex items-center justify-center rounded-[100px] font-normal leading-[14px] tracking-[0.07px] text-[14px] text-PrimaryBlack border border-[#091019] px-[12px] py-[8px] h-[36px] transition-all  hover:bg-PrimaryBlack hover:text-white'>Manage</button>
                             </div>
                         </div>
                         <div className='flex flex-col md:flex-row gap-5 md:gap-0'>
@@ -343,7 +344,7 @@ export default function DashboardPage() {
                                 <span  className="font-Roboto text-PrimaryBlack font-medium leading-[33.6px] md:leading-[33.6px] text-[24px] md:text-[24px] tracking-[0px] md:tracking-[0px]">Anytime Phone</span>
                             </div>
                             <div>
-                                <button className='flex items-center justify-center rounded-[100px] font-normal leading-[14px] tracking-[0.07px] text-[14px] text-PrimaryBlack border border-[#091019] px-[12px] py-[8px] h-[36px] transition-all'>Manage</button>
+                                <button className='flex items-center justify-center rounded-[100px] font-normal leading-[14px] tracking-[0.07px] text-[14px] text-PrimaryBlack border border-[#091019] px-[12px] py-[8px] h-[36px] transition-all  hover:bg-PrimaryBlack hover:text-white'>Manage</button>
                             </div>
                         </div>
                         <div className='flex flex-col md:flex-row gap-5 md:gap-0'>
@@ -385,7 +386,7 @@ export default function DashboardPage() {
                                 <span  className="font-Roboto text-PrimaryBlack font-medium leading-[33.6px] md:leading-[33.6px] text-[24px] md:text-[24px] tracking-[0px] md:tracking-[0px]">Anytime Business Accelerator</span>
                             </div>
                             <div>
-                                <button className='flex items-center justify-center rounded-[100px] font-normal leading-[14px] tracking-[0.07px] text-[14px] text-PrimaryBlack border border-[#091019] px-[12px] py-[8px] h-[36px] transition-all'>Manage</button>
+                                <button className='flex items-center justify-center rounded-[100px] font-normal leading-[14px] tracking-[0.07px] text-[14px] text-PrimaryBlack border border-[#091019] px-[12px] py-[8px] h-[36px] transition-all  hover:bg-PrimaryBlack hover:text-white'>Manage</button>
                             </div>
                         </div>
                         <div className='flex flex-col md:flex-row gap-5 md:gap-0'>

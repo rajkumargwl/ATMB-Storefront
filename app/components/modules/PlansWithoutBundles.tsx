@@ -103,6 +103,8 @@ const filteredVariants = variants.filter((variant) => {
             className={`rounded-[16px] w-10 h-[22px] relative ${
               billingCycle === 'yearly' ? 'bg-DarkOrange' : 'bg-[#BFBFBF]'
             }`}
+             aria-label={`Switch to ${billingCycle === 'monthly' ? 'yearly' : 'monthly'} billing`}
+              aria-pressed={billingCycle === 'yearly'}
           >
             <div
               className={`absolute left-[2px] top-[2px] w-[18px] h-[18px] bg-white rounded-[16px] ${
