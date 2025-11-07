@@ -178,7 +178,7 @@ export const PRODUCT_QUERY = `#graphql
           {namespace: "custom", key: "plan_type"},
           {namespace: "custom", key: "billing_product_id"},
           { namespace: "custom", key: "features" },
-          {namespace: "custom", key: "bundle_product_id"}
+          {namespace: "custom", key: "bundle_items"} 
         ]) {
           key
           value
@@ -191,7 +191,7 @@ export const PRODUCT_QUERY = `#graphql
             {namespace: "custom", key: "plan_type"},
             {namespace: "custom", key: "billing_product_id"},
             { namespace: "custom", key: "features" },
-            {namespace: "custom", key: "bundle_product_id"}
+            {namespace: "custom", key: "bundle_items"}
           ]) {
             key
             value
