@@ -62,20 +62,37 @@ export default function Testimonials({ data }: Props) {
             <div className="hidden md:flex justify-end gap-5">
               <button
                 ref={prevRef}
+                 title="Previous Slide"
                 className={`w-14 h-14 flex items-center justify-center rounded-full text-white ${
                   isBeginning ? "bg-[#D3D3D3]" : "bg-DarkOrange"
                 }`}
               >
                 <ArrowLeftIcon />
               </button>
+               {/* Tooltip */}
+      <div
+        role="tooltip"
+        className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-[#091019] text-white text-sm rounded-md px-3 py-1 opacity-0 pointer-events-none whitespace-nowrap transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100"
+      >
+        Previous Slide
+      </div>
+              
               <button
                 ref={nextRef}
+                title="Next Slide"
                 className={`w-14 h-14 flex items-center justify-center rounded-full text-white ${
                   isEnd ? "bg-[#D3D3D3]" : "bg-DarkOrange"
                 }`}
               >
                 <ArrowRightIcon />
               </button>
+               {/* Tooltip */}
+      <div
+        role="tooltip"
+        className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-[#091019] text-white text-sm rounded-md px-3 py-1 opacity-0 pointer-events-none whitespace-nowrap transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100"
+      >
+        Next Slide
+      </div>
             </div>
           )}
         </div>

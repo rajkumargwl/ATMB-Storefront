@@ -177,7 +177,7 @@ export const footerType = defineType({
           name: "links",
           title: "Links",
           type: "array",
-          validation: (Rule) => Rule.max(3),
+          // validation: (Rule) => Rule.max(3),
           of: [
             {
               type: "object",
