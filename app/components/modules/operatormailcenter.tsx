@@ -1,4 +1,3 @@
-
 interface OperatorMailCenterProps {
   module: {
     title?: string;
@@ -56,7 +55,7 @@ export function OperatorMailCenter({module}: OperatorMailCenterProps) {
               </a>
             ) : (
               <button
-                className="flex items-center justify-center bg-DarkOrange text-white font-medium font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full w-full md:w-[221px] h-[52px] md:h-[52px]"
+                className="flex items-center justify-center bg-DarkOrange text-white font-medium font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full w-full md:w-[221px] h-[52px] md:h-[52px] transition-all  hover:bg-[#DF5D07] hover:text-white"
               >
                 {buttonText}
               </button>

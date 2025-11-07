@@ -1,3 +1,4 @@
+
 import { Link } from '@remix-run/react';
 import RightArrowWhite from '~/components/icons/RightArrowWhite';
  
@@ -102,10 +103,10 @@ export function HowItWorks2({ data }: HowItWorks2Props) {
           <div className="flex items-center justify-center">
             <Link
               to={data.button.url || '#'}
-              className="group relative flex items-center justify-center w-full md:w-[312px] bg-DarkOrange text-white font-Roboto font-normal leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-[16px] py-[12px] rounded-[100px] overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]"
+              className="group relative flex items-center justify-center w-full md:w-[312px] bg-DarkOrange text-white font-Roboto font-normal leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-[16px] py-[12px] rounded-[100px] overflow-hidden transition-all hover:bg-[#DF5D07] hover:text-white"
             >
               
-               <span className="relative flex items-center">{data.button.text} <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
+              <span className="relative flex items-center transition-all duration-300">{data.button.text} <span className="relative right-0 opacity-0 translate-x-[12px] hidden group-hover:opacity-100 group-hover:block group-hover:translate-x-[12px] transition-all duration-300">
               <RightArrowWhite />
             </span></span>
             </Link>
@@ -115,3 +116,4 @@ export function HowItWorks2({ data }: HowItWorks2Props) {
     </section>
   );
 }
+ 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import PlanBg from '~/components/icons/PlanBg';
 import Fire from '~/components/icons/Fire';
 import CheckBlack from '~/components/icons/CheckBlack';
@@ -46,8 +46,11 @@ individualProducts?: any[];
 export default function Pricingmodule({ data, bundles, individualProducts}: PricingModuleProps) {
 const [activeTab, setActiveTab] = useState<"individual" | "bundles">("individual");
 const [billing, setBilling] = useState<"monthly" | "yearly">("monthly");
+const [focusedTabIndex, setFocusedTabIndex] = useState(0);
+const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 const isYearly = billing === "yearly";
 //console.log("individual product in Pricing Module:",individualProducts);
+
 const tabs = [
 {
 id: "individual",
@@ -67,6 +70,36 @@ tabCards: [], // no Sanity bundles
 
 const currentTab = tabs.find((t) => t.id === activeTab)!;
 const plans = currentTab.tabCards;
+
+// Focus management for tabs
+useEffect(() => {
+  if (tabRefs.current[focusedTabIndex]) {
+    tabRefs.current[focusedTabIndex]?.focus();
+  }
+}, [focusedTabIndex]);
+
+const handleTabKeyDown = (event: React.KeyboardEvent, index: number) => {
+  if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
+    event.preventDefault();
+    const nextIndex = (index + 1) % tabs.length;
+    setFocusedTabIndex(nextIndex);
+  } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+    event.preventDefault();
+    const prevIndex = (index - 1 + tabs.length) % tabs.length;
+    setFocusedTabIndex(prevIndex);
+  } else if (event.key === 'Home') {
+    event.preventDefault();
+    setFocusedTabIndex(0);
+  } else if (event.key === 'End') {
+    event.preventDefault();
+    setFocusedTabIndex(tabs.length - 1);
+  }
+};
+
+const handleTabClick = (tabId: "individual" | "bundles", index: number) => {
+  setActiveTab(tabId);
+  setFocusedTabIndex(index);
+};
 
 return ( 
 <section id = "bundle-mail-phone" className="bg-[#F6F6F6] px-5 py-[40px] md:py-[60px] lg:py-[100px]"> 
@@ -94,9 +127,14 @@ return (
             return (
               <button
                 key={tab.id}
+                ref={(el) => {
+                  tabRefs.current[idx] = el;
+                }}
                 role="tab"
                 aria-selected={isSelected}
-                onClick={() => setActiveTab(tab.id as "individual" | "bundles")}
+                tabIndex={focusedTabIndex === idx ? 0 : -1}
+                onClick={() => handleTabClick(tab.id as "individual" | "bundles", idx)}
+                onKeyDown={(e) => handleTabKeyDown(e, idx)}
                 className={`px-6 py-3 font-Roboto text-[16px] font-normal leading-[24px] tracking-[0] rounded-full border transition ${
                   isSelected
                     ? "border-PrimaryBlack text-white bg-PrimaryBlack"

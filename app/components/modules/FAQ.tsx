@@ -7,14 +7,14 @@ import CloseFAQ from '~/components/icons/CloseFAQ';
 import RightArrowWhite from '~/components/icons/RightArrowWhite';
 import { Link } from "@remix-run/react";
 import {usePrefixPathWithLocale} from '~/lib/utils';
-
+ 
 type Props = {
   data: SanityFAQ;
 };
-
+ 
 export default function FAQ({ data }: Props) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
-
+ 
   return (
     <section id= "faq" className="px-5 py-[40px] md:py-[60px] lg:py-[100px]">
       <div className="max-w-[1240px] mx-auto">
@@ -28,14 +28,14 @@ export default function FAQ({ data }: Props) {
               {data?.subheadline}
             </p>
           </div>
-
+ 
           {/* FAQ Content */}
           <div className="space-y-4 max-w-[812px] lg:min-w-[812px] mx-auto">
             {data?.faqs?.length > 0 ? (
               data.faqs.map((faq, idx) => {
                 const isOpen = openIndex === idx;
                 const contentRef = useRef(null);
-
+ 
                 return (
                   <div
                     key={idx}
@@ -61,7 +61,7 @@ export default function FAQ({ data }: Props) {
                         {isOpen ? <CloseFAQ /> : <PlusFAQ />}
                       </span>
                     </button>
-
+ 
                     {/* Smooth auto height transition */}
                     <div
                       ref={contentRef}
@@ -88,13 +88,10 @@ export default function FAQ({ data }: Props) {
           </div>
           <div className="flex justify-center mt-11 md:mt-14">
             <Link to={usePrefixPathWithLocale('/faq-operator')}>
-              <button className="group relative flex items-center justify-center bg-DarkOrange text-white font-Roboto font-medium leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-4 md:px-[143px] rounded-[100px] min-w-[205px] md:min-w-auto min-h-[52px] md:min-h-auto overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]">
-                <span className="relative flex items-center">
-                  View All FAQs
-                  <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
-                    <RightArrowWhite />
-                  </span>
-                </span>
+              <button className="group relative flex items-center justify-center bg-DarkOrange text-white font-Roboto font-medium leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-[16px] py-[12px] rounded-[100px] min-w-[205px] md:min-w-[385px] min-h-[52px] overflow-hidden transition-all hover:bg-[#DF5D07] hover:text-white">
+                <span className="relative flex items-center transition-all duration-300">View All FAQs <span className="relative right-0 opacity-0 translate-x-[12px] hidden group-hover:opacity-100 group-hover:block group-hover:translate-x-[12px] transition-all duration-300">
+              <RightArrowWhite />
+            </span></span>
               </button>
             </Link>
           </div>
