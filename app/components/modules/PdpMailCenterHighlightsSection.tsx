@@ -3,6 +3,7 @@ import { Check } from "lucide-react";
  
 type PartnerLogo = {
   url: string;
+  alt: string;
 };
  
 type Icon = {
@@ -74,8 +75,8 @@ const PdpMailCenterHighlightsSection: React.FC<Props> = ({
             <div className="w-[54px] h-[33px] bg-white rounded-[3px] flex items-center justify-center border border-LightWhite">
             <img
               key={index}
-              src={logo.url}
-              alt={`partner-${index}`}
+               src={logo.logo?.url}
+              alt={logo.alt || `partner-${index}`}
               className="w-auto h-auto object-contain"/>
             </div>
           ))}

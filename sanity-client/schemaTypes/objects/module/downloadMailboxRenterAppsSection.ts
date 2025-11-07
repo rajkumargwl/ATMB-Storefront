@@ -28,6 +28,12 @@ export const downloadMailboxRenterAppsSection = defineType({
       options: { accept: ".svg" },
       description: "Upload the App Store SVG icon.",
     }),
+     defineField({
+      name: "appalt",
+      title: "Alt text for icon",
+      type: "string", 
+      description: "add the alt text here",
+    }),
     defineField({
       name: "appStoreLink",
       title: "App Store Link",
@@ -41,6 +47,12 @@ export const downloadMailboxRenterAppsSection = defineType({
       type: "file",
       options: { accept: ".svg" },
       description: "Upload the Google Play SVG icon.",
+    }),
+     defineField({
+      name: "googlealt",
+      title: "Alt text for icon",
+      type: "string", 
+      description: "add the alt text here",
     }),
     defineField({
       name: "googlePlayLink",

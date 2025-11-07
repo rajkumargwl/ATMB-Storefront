@@ -1,6 +1,7 @@
 import React from "react";
  
 interface AppButton {
+   alt: string;
   icon: {
     url: string;
   };
@@ -58,7 +59,7 @@ const SmallBusinessOwnerAppDownloadSection: React.FC<SmallBusinessOwnerAppDownlo
               >
                 <img
                   src={btn.icon?.url}
-                  alt={`Mail Center Operator Apps : Download from Store`}
+                 alt={btn.alt || `Download app button ${index + 1}`}
                   className="w-full object-cover"
                 />
               </a>
