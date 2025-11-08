@@ -14,9 +14,9 @@ export default function MarketplaceCategories({ data }: Props) {
         {/* Left: Text Content */}
         <div>
           {data?.label && (
-            <p className="font-Roboto text-[#4D4E4F] font-medium leading-[28px] text-[20px]">{data?.label}</p>
+            <h1 className="font-Roboto text-[#4D4E4F] font-medium leading-[28px] text-[20px]">{data?.label}</h1>
           )}
-          <h1 className="mt-5 font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] tracking-[-0.36px] text-[24px] md:text-[36px] md:leading-[43.2px] md:tracking-[-0.54px]">{data?.heading}</h1>
+          <h2 className="mt-5 font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] tracking-[-0.36px] text-[24px] md:text-[36px] md:leading-[43.2px] md:tracking-[-0.54px]">{data?.heading}</h2>
           
         </div>
 
