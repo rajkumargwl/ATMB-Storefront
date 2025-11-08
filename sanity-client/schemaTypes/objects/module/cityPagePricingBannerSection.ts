@@ -9,14 +9,14 @@ export const cityPagePricingBannerSection = defineType({
       name: 'text',
       title: 'Banner Text',
       type: 'string',
-      description: 'Main text (e.g., "Plans start at $9.99")',
+      description: 'Please mention @city and @country for dynamic text',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'ctaText',
       title: 'CTA Button Text',
       type: 'string',
-      description: 'Text for the call-to-action button (e.g., "Get a Indiana Address")',
+      description: 'Please mention @city and @country for dynamic text',
       validation: (Rule) => Rule.required(),
     }),
     defineField({

@@ -15,6 +15,7 @@ import {usePrefixPathWithLocale, validateLocale} from '~/lib/utils';
 import { SeoHandleFunction } from '@shopify/hydrogen';
 import { CITY_PAGE_MODULE } from '~/queries/sanity/fragments/modules/citypagemodule';
 import React from 'react';
+import { PortableText } from '@portabletext/react';
 // -----------------
 // SEO
 // -----------------
@@ -133,143 +134,27 @@ console.log("decodedCountry, decodedState", decodedCountry, decodedState);
     .map(([name, count]) => ({name, count}))
     .sort((a, b) => a.name.localeCompare(b.name));
 
-    const dummyTestimonialData = {
-      headline: "What Our Customers Say",
-      subheadline: "Thousand trust Anytime Mailbox",
-      testimonials: [
-        {
-          _key: "1",
-          type: "quote",
-          quote:
-            "I travel for work most of the year, and Anytime Mailbox has made managing my mail effortless. I get scans within hours, can forward packages anywhere, and never worry about missing important documents again.",
-          authorName: "John Doe",
-          authorTitle: "Founder, Startup Co.",
-          authorImage: {
-            url: "https://cdn.sanity.io/images/m5xb8z9y/production/6c6013ec1d9c25ee9d2a190fe7e936188ac4934b-64x64.png",
-          },
-          starIcon: {
-            url: "https://cdn.sanity.io/files/m5xb8z9y/production/c543ab461d31dac8d7435372643c376b63e5623a.svg",
-          },
-          rating: "4.8",
-          readMoreText: "Read more...",
-          readMoreUrl: "#",
-        },
-        {
-          _key: "2",
-          type: "quote",
-          quote:
-            "I travel for work most of the year, and Anytime Mailbox has made managing my mail effortless. I get scans within hours, can forward packages anywhere, and never worry about missing important documents again.",
-          authorName: "Jane Smith",
-          authorTitle: "Marketing Lead, Creative Inc.",
-          authorImage: {
-            url: "https://cdn.sanity.io/images/m5xb8z9y/production/6c6013ec1d9c25ee9d2a190fe7e936188ac4934b-64x64.png",
-          },
-          starIcon: {
-            url: "https://cdn.sanity.io/files/m5xb8z9y/production/c543ab461d31dac8d7435372643c376b63e5623a.svg",
-          },
-          rating: "5.0",
-          readMoreText: "Read more...",
-          readMoreUrl: "#",
-        },
-        {
-          _key: "3",
-          type: "video",
-          authorName: "Raj Patel",
-          authorTitle: "Product Designer, UX Labs",
-          authorImage: {
-            url: "https://cdn.sanity.io/images/m5xb8z9y/production/6c6013ec1d9c25ee9d2a190fe7e936188ac4934b-64x64.png",
-          },
-          starIcon: {
-            url: "https://cdn.sanity.io/files/m5xb8z9y/production/c543ab461d31dac8d7435372643c376b63e5623a.svg",
-          },
-          rating: "4.9",
-          videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-          videoThumbnail: {
-            url: "https://cdn.sanity.io/images/m5xb8z9y/production/4da40797caf56c12fe5e95816470cb198b95f1a6-349x250.png",
-          },
-          playIcon: {
-            url: "https://cdn.sanity.io/files/m5xb8z9y/production/9107bb3818c3b05330736ec84ea60379f1eb6221.svg",
-          },
-        },
-        {
-          _key: "1",
-          type: "quote",
-          quote:
-            "I travel for work most of the year, and Anytime Mailbox has made managing my mail effortless. I get scans within hours, can forward packages anywhere, and never worry about missing important documents again.",
-          authorName: "John Doe",
-          authorTitle: "Founder, Startup Co.",
-          authorImage: {
-            url: "https://cdn.sanity.io/images/m5xb8z9y/production/6c6013ec1d9c25ee9d2a190fe7e936188ac4934b-64x64.png",
-          },
-          starIcon: {
-            url: "https://cdn.sanity.io/files/m5xb8z9y/production/c543ab461d31dac8d7435372643c376b63e5623a.svg",
-          },
-          rating: "4.8",
-          readMoreText: "Read more...",
-          readMoreUrl: "#",
-        },
-      ],
-    };
-
-    const dummyBusinessData = {
-      headline: "Advantages of a " + decodedState + " Business Address",
-      features: [
-        {
-          _key: "1",
-          title: "Key Sectors",
-          description:
-            "A wide range of industries including technology, finance, tourism, and manufacturing offer a wealth of opportunities for business growth.",
-          icon: {
-            tooltipTitle: "Sales Analytics",
-            // iconFile: {
-            //   url: "https://cdn-icons-png.flaticon.com/512/3135/3135715.png",
-            // },
-            svg: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.459 16.5C15.6966 16.4998 15.931 16.556 16.1426 16.6641C16.3542 16.7723 16.5377 16.9293 16.6768 17.1221C16.8159 17.3149 16.9064 17.5384 16.9424 17.7734C16.9783 18.0083 16.9579 18.2482 16.8828 18.4736L15.8838 21.4736C15.7842 21.7727 15.5927 22.0336 15.3369 22.2178C15.0811 22.4019 14.7732 22.5004 14.458 22.5H9.54004C9.22474 22.5005 8.91706 22.4019 8.66113 22.2178C8.40518 22.0336 8.2139 21.7728 8.11426 21.4736L7.11426 18.4736C7.03926 18.2483 7.01881 18.0082 7.05469 17.7734C7.09066 17.5384 7.18212 17.3149 7.32129 17.1221C7.46048 16.9293 7.64368 16.7722 7.85547 16.6641C8.06712 16.556 8.30142 16.4998 8.53906 16.5H15.459ZM8.53906 18L9.54004 21H14.458L15.458 18H8.53906ZM17.71 9C17.9478 8.99967 18.1827 9.05587 18.3945 9.16406C18.6063 9.27225 18.7895 9.42922 18.9287 9.62207C19.0679 9.81496 19.1594 10.0383 19.1953 10.2734C19.2312 10.5086 19.21 10.749 19.1348 10.9746L18.1348 13.9746C18.035 14.2736 17.8438 14.5337 17.5879 14.7178C17.332 14.9018 17.0242 15.0006 16.709 15H7.29101C6.97602 15.0004 6.66882 14.9017 6.41309 14.7178C6.1573 14.5337 5.96594 14.2735 5.86621 13.9746L4.86621 10.9746C4.79097 10.749 4.77078 10.5085 4.80664 10.2734C4.84255 10.0385 4.93322 9.81486 5.07226 9.62207C5.21137 9.42928 5.39476 9.27227 5.60644 9.16406C5.81805 9.05594 6.05241 8.99985 6.29004 9H17.71ZM7.29101 13.5H16.709L17.709 10.5H6.29004L7.29101 13.5ZM19.3633 1.5C19.5811 1.49987 19.7965 1.54722 19.9941 1.63867C20.1919 1.73025 20.3679 1.86399 20.5088 2.03027C20.6495 2.19657 20.7528 2.3915 20.8105 2.60156C20.8683 2.81163 20.8787 3.0322 20.8428 3.24707L20.3428 6.24707C20.2855 6.59757 20.105 6.9159 19.834 7.14551C19.563 7.3751 19.2194 7.501 18.8643 7.5H5.13476C4.77949 7.50108 4.43512 7.37519 4.16406 7.14551C3.89318 6.9159 3.71256 6.59752 3.65527 6.24707L3.15527 3.24707C3.11943 3.03216 3.13062 2.81162 3.18848 2.60156C3.24634 2.39153 3.34941 2.19651 3.49023 2.03027C3.63104 1.86408 3.80627 1.73026 4.00391 1.63867C4.20154 1.5471 4.41695 1.5 4.63476 1.5H19.3633ZM4.63476 3L5.13476 6H18.8633L19.3643 3H4.63476Z" fill="white"/></svg>' 
-           },
-        },
-
-        {
-          _key: "2",
-          title: "Market Access",
-          description:
-            decodedState + ", located in the southeastern region of Australia, provides businesses of any size domestic and international market access.",
-          icon: {
-            tooltipTitle: "Inventory",
-            svg: '<svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none"><path d="M5.54352 5.46385C5.74977 5.0551 6.16227 4.8001 6.61977 4.8001H18.0535C18.5073 4.8001 18.9235 5.0551 19.126 5.46385L21.256 9.7276C21.3085 9.82885 21.3348 9.9451 21.3348 10.0576C21.3348 10.4663 21.001 10.8001 20.5923 10.8001H4.07727C3.66852 10.8001 3.33477 10.4663 3.33477 10.0576C3.33477 9.94135 3.36102 9.82885 3.41352 9.7276L5.54352 5.46385ZM2.13477 10.0576C2.13477 11.0813 2.92977 11.9213 3.93477 11.9926V18.6001C3.93477 19.5938 4.74102 20.4001 5.73477 20.4001H12.9348C13.9285 20.4001 14.7348 19.5938 14.7348 18.6001V12.0001H19.5348V19.8001C19.5348 20.1301 19.8048 20.4001 20.1348 20.4001C20.4648 20.4001 20.7348 20.1301 20.7348 19.8001V11.9963C21.7398 11.9251 22.5348 11.0851 22.5348 10.0613C22.5348 9.76135 22.4635 9.46135 22.3285 9.19135L20.1985 4.9276C19.7898 4.11385 18.961 3.6001 18.0498 3.6001H6.61977C5.71227 3.6001 4.87977 4.11385 4.47477 4.9276L2.34102 9.19135C2.20602 9.46135 2.13477 9.7576 2.13477 10.0613V10.0576ZM5.13477 15.6001V12.0001H13.5348V15.6001H5.13477ZM5.13477 16.8001H13.5348V18.6001C13.5348 18.9301 13.2648 19.2001 12.9348 19.2001H5.73477C5.40477 19.2001 5.13477 18.9301 5.13477 18.6001V16.8001Z" fill="white"/></svg>'
-          },
-        },
-        {
-          _key: "3",
-          title: "Supportive Policies",
-          description:
-            decodedState + " offers grants, subsidies, mentorship programs, and access to resources to support small businesses and startups.",
-          icon: {
-            tooltipTitle: "Dashboard Insights",
-            svg: '<svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none"><path d="M6.66602 1.5H12.666V6C12.666 7.65469 14.0113 9 15.666 9H20.166V21C20.166 21.8297 19.4957 22.5 18.666 22.5H6.66602C5.83633 22.5 5.16602 21.8297 5.16602 21V3C5.16602 2.17031 5.83633 1.5 6.66602 1.5ZM14.166 2.12344L19.5426 7.5H15.666C14.8363 7.5 14.166 6.82969 14.166 6V2.12344ZM6.66602 0C5.01133 0 3.66602 1.34531 3.66602 3V21C3.66602 22.6547 5.01133 24 6.66602 24H18.666C20.3207 24 21.666 22.6547 21.666 21V8.74219C21.666 7.94531 21.352 7.18125 20.7895 6.61875L15.0426 0.876563C14.4801 0.314063 13.7207 0 12.9238 0H6.66602ZM8.91602 12C8.50352 12 8.16602 12.3375 8.16602 12.75C8.16602 13.1625 8.50352 13.5 8.91602 13.5H16.416C16.8285 13.5 17.166 13.1625 17.166 12.75C17.166 12.3375 16.8285 12 16.416 12H8.91602ZM8.91602 16.5C8.50352 16.5 8.16602 16.8375 8.16602 17.25C8.16602 17.6625 8.50352 18 8.91602 18H16.416C16.8285 18 17.166 17.6625 17.166 17.25C17.166 16.8375 16.8285 16.5 16.416 16.5H8.91602Z" fill="white"/></svg>'
-            },
-        }
-      ],
-    };
-
   // Extract cityPageModule from page data
   const cityPageModule = page?.modules?.find((m: any) => m._type === 'cityPageModule');
   
-  return defer({decodedCountry, decodedState, cities, locations, cityPageModule, data: dummyTestimonialData, dummyBusinessData});
+  return defer({decodedCountry, decodedState, cities, locations, cityPageModule});
 }
 
 
 // Component
 export default function StatePage() {
-  const {decodedCountry, decodedState, cities, locations, cityPageModule, data, dummyBusinessData} =
+  const {decodedCountry, decodedState, cities, locations, cityPageModule} =
     useLoaderData<typeof loader>();
 
   // Extract sections from cityPageModule
+  const cityPageIntroSection = cityPageModule?.modules?.find((m: any) => m._type === 'cityPageIntroSection');
   const advantagesSection = cityPageModule?.modules?.find((m: any) => m._type === 'cityPageAdvantagesSection');
   const videoSection = cityPageModule?.modules?.find((m: any) => m._type === 'cityPageVideoSection');
   const virtualMailboxSection = cityPageModule?.modules?.find((m: any) => m._type === 'cityPageVirtualMailboxSection');
-  const testimonialSection = cityPageModule?.modules?.find((m: any) => m._type === 'testimonial');
+  const testimonialSection: any = cityPageModule?.modules?.find((m: any) => m._type === 'testimonial'); 
   const pricingBannerSection = cityPageModule?.modules?.find((m: any) => m._type === 'cityPagePricingBannerSection');
 
+  console.log("testimonialSection", testimonialSection);
     // Testimonial slider state
     const prevRef = useRef<HTMLButtonElement>(null);
     const nextRef = useRef<HTMLButtonElement>(null);
@@ -330,30 +215,46 @@ export default function StatePage() {
           
           {/* Image Section */}
           <div className="w-full md:w-[50.3%] relative order-1 md:order-1">
+            {cityPageIntroSection.image?.url && (
             <img
-              src={CityImage}
+              src={cityPageIntroSection.image?.url || ''}
               alt="How it started"
               className="rounded-[20px] w-full object-cover"
             />
+            )}
           </div>
 
           {/* Text Section */}
           <div className="w-full md:w-[49.7%] space-y-4 order-1 md:order-1">
-            <h2 className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px]">
-            Why Get a Mailing Address in<br/><span className='text-[#FF6600]'>{decodedState}</span> 
-            </h2>
+              <h2
+                className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px]"
+                dangerouslySetInnerHTML={{
+                  __html: cityPageIntroSection.heading
+                    ? cityPageIntroSection.heading.replaceAll(
+                        '@city',
+                        `<span class='text-[#FF6600]'>${decodedState}</span>`
+                      )
+                    : `Why Get a Mailing Address in <span class='text-[#FF6600]'>${decodedState}</span>`,
+                }}
+              ></h2>
 
-            <div className="prose prose-lg how-started text-PrimaryBlack">
-              <p>
-              {decodedState}, Australia’s business capital, is an attractive destination for entrepreneurs looking to expand their market reach. With a thriving economy, a wide range of industries, and a strategic location in Australia, this region presents businesses with many opportunities for growth.
-                <br />
-                <br />
-                By setting up a virtual mailbox address in {decodedState}, you get to call Australia’s top-performing region home. It is a prime spot for accessing markets in the Asia-Pacific region and is a top destination for investors.
-                <br />
-                <br />
-                With a Virtual Mailbox address in {decodedState}, your business can tap into business opportunities and world-class markets.
-              </p>
-            </div>
+
+              <div className="prose prose-lg how-started text-PrimaryBlack">
+                {cityPageIntroSection?.description && (
+                  <PortableText
+                    value={JSON.parse(
+                      JSON.stringify(cityPageIntroSection.description).replaceAll(
+                        '@city',
+                        decodedState
+                      ).replaceAll(
+                        '@country',
+                        decodedCountry
+                      )
+                    )}
+                  />
+                )}
+              </div>
+
           </div>
         </div>
       </section>
@@ -362,14 +263,25 @@ export default function StatePage() {
         <div className="max-w-[1240px] mx-auto">
           {/* Heading */}
           <div className="flex flex-col gap-5 max-w-[850px] mx-auto">
-            <h2 className="font-Roboto text-white font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.39px] md:tracking-[-0.54px] text-center">
-              {advantagesSection?.heading || dummyBusinessData?.headline}
-            </h2>
+            {/* <h2 className="font-Roboto text-white font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.39px] md:tracking-[-0.54px] text-center">
+              {advantagesSection?.heading || "Advantages of a " + decodedState + " Business Address"}
+            </h2> */}
+            <h2
+             className="font-Roboto text-white font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.39px] md:tracking-[-0.54px] text-center"
+              dangerouslySetInnerHTML={{
+                __html: advantagesSection.heading
+                  ? advantagesSection.heading.replaceAll(
+                      '@city',
+                      `${decodedState}`
+                    )
+                  : `Why Get a Mailing Address in ${decodedState}`,
+              }}
+            ></h2>
           </div>
 
           {/* Cards Grid */}
           <div className="mt-14 gap-8 mx-auto grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-6 auto-rows-min">
-            {(advantagesSection?.advantages?.length ? advantagesSection.advantages : dummyBusinessData?.features || []).map((item: any, index: number) => {
+            {(advantagesSection?.advantages?.length ? advantagesSection.advantages : []).map((item: any, index: number) => {
   
               return (
                 <div
@@ -399,10 +311,15 @@ export default function StatePage() {
                       {item.heading || item.title}
                     </h3>
                     {/* Description */}
-                    <p className={`mt-2 font-Roboto font-normal leading-[21px] text-[14px] tracking-[0px]
-                      text-PrimaryBlack`}>
-                      {item.description}
-                    </p>
+                    {item.description && (
+                      <p
+                        className="mt-2 font-Roboto font-normal leading-[21px] text-[14px] tracking-[0px] text-PrimaryBlack"
+                      >
+                        {item.description
+                          .replaceAll('@city', decodedState)
+                          .replaceAll('@country', decodedCountry)}
+                      </p>
+                    )}
                   </div>
 
                 
@@ -445,7 +362,7 @@ export default function StatePage() {
         null
       )}
 
-      {/* ==== How It Works Section ==== */}
+      {/* ==== How Virtual Mailbox Section ==== */}
       {virtualMailboxSection && (
         <section className="bg-[#091019] text-white py-20 text-center">
           <div className="max-w-[1240px] mx-auto px-5 md:px-0">
@@ -462,10 +379,18 @@ export default function StatePage() {
                     ) : null}
                   </div>
                   <h3 className="font-[600] text-[18px] md:text-[24px] mb-4">
-                    {step.title ? step.title.replaceAll('@city', decodedState) : ''}
+                    {step.title
+                      ? step.title
+                          .replaceAll('@city', decodedState)
+                          .replaceAll('@country', decodedCountry)
+                      : ''}
                   </h3>
                   <p className="font-[400] text-[14px] md:text-[18px] leading-[27px]">
-                  {step.description ? step.description.replaceAll('@city', decodedState) : ''}
+                  {step.description
+                    ? step.description
+                        .replaceAll('@city', decodedState)
+                        .replaceAll('@country', decodedCountry)
+                    : ''}
                   </p>
                   {index < (virtualMailboxSection.steps?.length || 0) - 1 && (
                     <div className="hidden md:block absolute left-[26%] top-[50px] transform -translate-y-1/2">
@@ -499,7 +424,7 @@ export default function StatePage() {
           {/* Heading + Arrows */}
           <div className="flex flex-col md:flex-row justify-between items-end">
             <h2 className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[43.2px] text-[26px] md:text-[36px] tracking-[-0.39px] md:tracking-[-0.54px] text-center md:text-left">
-              {data?.subheadline || data?.headline}
+              {testimonialSection?.headline}
             </h2>
             <div className="hidden md:flex justify-end gap-5">
               <button
@@ -554,7 +479,7 @@ export default function StatePage() {
                 setIsEnd(swiper.isEnd);
               }}
             >
-              {data?.testimonials?.map((item, idx) =>
+              {testimonialSection?.testimonials?.map((item, idx) => 
                 item.type === "quote" ? (
                   <SwiperSlide key={item._key} className="!h-auto !flex-shrink-0">
                     <div className="transition-all duration-500 ease-in-out group bg-white rounded-[20px] border border-LightWhite p-6 flex flex-col justify-between hover:bg-PrimaryBlack">
@@ -701,17 +626,19 @@ export default function StatePage() {
           {/* Left Text */}
           <div className="z-10 text-left mb-6 px-5 md:px-0 md:mb-0 order-1 mt-10 md:mt-0 pt-0 md:pt-25">
             <h2 className="text-white font-Roboto font-[600] text-[28px] md:text-[56px] leading-[38px] md:leading-[61.6px] tracking-[-1.12px] md:mb-6 mb-4">
-              Plans start at $9.99
+              {pricingBannerSection?.text || "Plans start at $9.99"}
             </h2>
             <button aria-label="Get a Address" className="bg-white text-[#041E2C] font-[400] text-[16px] leading-[16px] tracking-[0.08px] px-4 py-3 rounded-full hover:bg-gray-100 transition">
-              Get a {decodedState} Address
+            {pricingBannerSection?.ctaText
+              ? pricingBannerSection.ctaText.replaceAll('@city', decodedState)
+              : `Get a ${decodedState} Address`}
             </button>
           </div>
 
           {/* Right Image (Responsive position) */}
           <div className="order-2 md:order-2 px-5 flex justify-center items-center md:justify-end w-full md:w-auto">
             <img
-              src={require('~/components/media/boy-city.svg')}
+              src={pricingBannerSection?.image?.url || ''}
               alt="Person checking phone"
               className="w-full max-w-[400px] md:max-w-[500px] h-auto object-contain"
             />
