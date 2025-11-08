@@ -9,14 +9,14 @@ export const cityPageIntroSection = defineType({
       name: 'heading',
       title: 'Heading',
       type: 'string',
-      description: 'Main heading with bold text',
+      description: 'Please mention @city and @country for dynamic text',
     }),
     defineField({
         name: 'description',
         title: 'Description',
         type: 'array',
         of: [{ type: 'block' }],
-        // group: 'editorial',
+        description: 'Please mention @city and @country for dynamic text',
       }),
     defineField({
       name: 'image',

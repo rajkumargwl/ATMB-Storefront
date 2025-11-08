@@ -39,7 +39,7 @@ export const cityPageAdvantagesSection = defineType({
               name: 'description',
               title: 'Description',
               type: 'text',
-              description: 'Description text for the advantage card',
+              description: 'Please mention @city and @country for dynamic text',
               validation: (Rule) => Rule.required(),
             }),
           ],
