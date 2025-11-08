@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from "@remix-run/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import CloseIcon from "~/components/icons/CloseIcon";
 import CartIcon from "~/components/icons/CartIcon";
 import SearchIcon from "~/components/icons/SearchIcon";
@@ -143,6 +143,20 @@ useEffect(() => {
 
  const buildLocalizedUrl = usePrefixPathWithLocale2(); 
  const [openItem, setOpenItem] = useState<string | null>(null);
+ const navRef = useRef(null);
+
+ useEffect(() => {
+   function handleClickOutside(e) {
+     if (navRef.current && !navRef.current.contains(e.target)) {
+       // Hide all open submenus if clicked outside
+       document.querySelectorAll(".submenu").forEach((submenu) => {
+         submenu.classList.add("hidden");
+       });
+     }
+   }
+   document.addEventListener("mousedown", handleClickOutside);
+   return () => document.removeEventListener("mousedown", handleClickOutside);
+ }, []);
 
   return (
     <header className=" relative z-[99] w-full bg-white px-5 border-b border-LightWhite lg:border-none">
@@ -164,102 +178,130 @@ useEffect(() => {
 
 
           {/* Menu (Desktop only) */}
-          <nav className={`hidden lg:flex ${currentLanguage === 'en-es' ? '' : 'space-x-2 xl:space-x-3' }`}>
-            {menu?.map((item, idx) => (
-              <div key={idx} className="relative group p-2">
-                 <Link
-                  to={
-                    buildLocalizedUrl(item.label === "Solutions"
-        ? "/solutionsvm"
-        : item.label === "Locations"
-        ? "/sublocations"
-          : item.label === "Blog"
-          ? "/blogs"
-          : item.label === "About Us"
-          ? "/about-us"
-          : item.label === "Contact Us"
-          ? "/contact"
-        : item.url ?? "#")}
-        className={`text-PrimaryBlack transition-all hover:text-DarkOrange font-normal flex items-center gap-[6px] text-[14px] md:text-[14px] ${currentLanguage === 'en-es' ? 'xl:text-[15px]' : 'xl:text-[16px]' } leading-[24px] tracking-[0px]`}
-               >
-                  {item.label} 
-                  {item.hasSubmenu && (
-                 <span className="group-hover:transform group-hover:rotate-180 transition-all duration-500 ease-in-out"> <ArrowDownIcon /></span>
-                  )}
-                </Link> 
+          <nav
+      ref={navRef}
+      className={`hidden lg:flex ${
+        currentLanguage === "en-es" ? "" : "space-x-2 xl:space-x-3"
+      }`}
+    >
+      {menu?.map((item, idx) => (
+        <div key={idx} className="relative group p-2">
+          <Link
+            to={buildLocalizedUrl(
+              item.label === "Solutions"
+                ? "/solutionsvm"
+                : item.label === "Locations"
+                ? "/sublocations"
+                : item.label === "Blog"
+                ? "/blogs"
+                : item.label === "About Us"
+                ? "/about-us"
+                : item.label === "Contact Us"
+                ? "/contact"
+                : item.url ?? "#"
+            )}
+            className={`text-PrimaryBlack transition-all hover:text-DarkOrange font-normal flex items-center gap-[6px] text-[14px] md:text-[14px] ${
+              currentLanguage === "en-es" ? "xl:text-[15px]" : "xl:text-[16px]"
+            } leading-[24px] tracking-[0px]`}
+            onKeyDown={(e) => {
+              const submenu =
+                e.currentTarget.parentElement?.querySelector(".submenu");
+              if (!submenu) return;
 
+              // Open/close with Enter or Space
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                submenu.classList.toggle("hidden");
+              }
 
-                {/* Dropdown submenu */}
-                {item?.hasSubmenu && item?.submenuType === "mega" && item?.megaMenu?.length > 0 && (
-                    <div className="absolute z-[2] left-0 pt-[15px] hidden group-hover:block min-w-[100px]">
-                      <div className="min-w-[812px] p-6 rounded-[20px] border border-[#cccccc] bg-white shadow-[0_4px_14px_0_rgba(0,0,0,0.05)] grid md:grid-cols-2">
-                        {/* {item?.subMenu.map((sub, i) => {
-                          const localizedUrl = buildLocalizedUrl(sub?.url) ?? "#";
+              // Close with Escape
+              if (e.key === "Escape") {
+                submenu.classList.add("hidden");
+                e.currentTarget.focus();
+              }
+            }}
+            onBlur={(e) => {
+              const parent = e.currentTarget.parentElement;
+              setTimeout(() => {
+                if (!parent?.contains(document.activeElement)) {
+                  parent?.querySelector(".submenu")?.classList.add("hidden");
+                }
+              }, 100);
+            }}
+          >
+            {item.label}
+            {item.hasSubmenu && (
+              <span className="group-hover:transform group-hover:rotate-180 transition-all duration-500 ease-in-out">
+                <ArrowDownIcon />
+              </span>
+            )}
+          </Link>
 
-                          return (
-                            <li key={i}>
-                              <Link
-                                to={localizedUrl}
-                                className="block px-4 py-[6px] text-PrimaryBlack hover:text-PrimaryBlack font-normal text-[14px] md:text-[14px] xl:text-[16px] leading-[24px] tracking-[0px]"
-                              >
-                                {sub?.label}
-                              </Link>
-                            </li>
-                          );
-                        })} */}
-                         {item?.megaMenu.map((group: any, gIdx: number) => (
-                          <div
-                            key={gIdx}
-                            className={`${gIdx % 2 === 0 ? "pr-8 border-r border-LightWhite" : "pl-8"} ${
-                              gIdx > 1 ? "mt-[15px]" : ""
-                            }`}
-                          >
-                            <p className="mb-5 font-Roboto text-PrimaryBlack font-medium leading-[28px] md:leading-[28px] text-[20px] md:text-[20px] tracking-[0px] ">
-                              {group.title}
-                            </p>
-                            <ul className="flex flex-col gap-4">
-                              {group.links?.map((link: any, lIdx: number) => (
-                                <li key={lIdx}>
-                                  <Link
-                                    to={buildLocalizedUrl(link.url ?? "#")}
-                                    aria-label={link.label}
-                                    title={link.label}
-                                    className="font-Roboto text-LightGray font-normal leading-[24px] md:leading-[24px] text-[16px] md:text-[16px] tracking-[0px] transition-all hover:text-DarkOrange"
-                                  >
-                                    {link.label}
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
+          {/* Mega Menu */}
+          {item?.hasSubmenu &&
+            item?.submenuType === "mega" &&
+            item?.megaMenu?.length > 0 && (
+              <div className="submenu absolute z-[2] left-0 pt-[15px] hidden group-hover:block min-w-[100px]">
+                <div className="min-w-[812px] p-6 rounded-[20px] border border-[#cccccc] bg-white shadow-[0_4px_14px_0_rgba(0,0,0,0.05)] grid md:grid-cols-2">
+                  {item?.megaMenu.map((group, gIdx) => (
+                    <div
+                      key={gIdx}
+                      className={`${
+                        gIdx % 2 === 0
+                          ? "pr-8 border-r border-LightWhite"
+                          : "pl-8"
+                      } ${gIdx > 1 ? "mt-[15px]" : ""}`}
+                    >
+                      <p className="mb-5 font-Roboto text-PrimaryBlack font-medium leading-[28px] text-[20px] tracking-[0px]">
+                        {group.title}
+                      </p>
+                      <ul className="flex flex-col gap-4">
+                        {group.links?.map((link, lIdx) => (
+                          <li key={lIdx}>
+                            <Link
+                              to={buildLocalizedUrl(link.url ?? "#")}
+                              aria-label={link.label}
+                              title={link.label}
+                              className="font-Roboto text-LightGray font-normal leading-[24px] text-[16px] tracking-[0px] transition-all hover:text-DarkOrange"
+                            >
+                              {link.label}
+                            </Link>
+                          </li>
                         ))}
-                      </div>
+                      </ul>
                     </div>
-                  )}
-
-                {item?.hasSubmenu && item?.submenuType === "regular" && item?.subMenu?.length > 0 && (
-                   <div className="min-w-[130px] absolute z-[2] left-0 mt-2 bg-white border border-LightWhite shadow-md rounded-[6px] hidden group-hover:block min-w-[100px]">
-                   <ul className="py-2">
-                     {item?.subMenu.map((sub, i) => {
-                       const localizedUrl = buildLocalizedUrl(sub?.url) ?? "#";
-                       return (
-                         <li key={i}>
-                           <Link
-                             to={localizedUrl}
-                             className="block px-4 py-[6px] text-PrimaryBlack transition-all hover:text-DarkOrange font-normal text-[14px] md:text-[14px] xl:text-[16px] leading-[24px] tracking-[0px]"
-                           >
-                             {sub?.label}
-                           </Link>
-                         </li>
-                       );
-                     })}
-                   </ul>
-                 </div>
-                )}
-
+                  ))}
+                </div>
               </div>
-            ))}
-          </nav>
+            )}
+
+          {/* Regular Submenu */}
+          {item?.hasSubmenu &&
+            item?.submenuType === "regular" &&
+            item?.subMenu?.length > 0 && (
+              <div className="submenu min-w-[130px] absolute z-[2] left-0 mt-2 bg-white border border-LightWhite shadow-md rounded-[6px] hidden group-hover:block">
+                <ul className="py-2">
+                  {item?.subMenu.map((sub, i) => {
+                    const localizedUrl = buildLocalizedUrl(sub?.url) ?? "#";
+                    return (
+                      <li key={i}>
+                        <Link
+                          to={localizedUrl}
+                          className="block px-4 py-[6px] text-PrimaryBlack transition-all hover:text-DarkOrange font-normal text-[14px] md:text-[14px] xl:text-[16px] leading-[24px] tracking-[0px]"
+                        >
+                          {sub?.label}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            )}
+        </div>
+      ))}
+    </nav>
+
+
         </div>
 
         {/* Right section */}
