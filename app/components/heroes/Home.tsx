@@ -47,19 +47,6 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
     return () => clearTimeout(timeout);
   }, [searchquery, navigate, location.search, skipSearchQSync]);
   
-  const handleSearchResultClick = (item: any) => {
-    setSkipSearchQSync(true);
-    setSearchquery("");
-    setQresults([]);
- 
-    if (item.type === "product") {
-      navigate(`/products/${item.handle}`);
-    } else if (item.type === "location") {
-      const queryParam = item.name || item.city;
-      navigate(`/sublocations?q=${encodeURIComponent(queryParam)}`);
-    }
-  };
-  
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const newQuery = params.get("p") || "";
@@ -103,13 +90,10 @@ export default function HomeHero({ hero, homeSearchResults, searchQuery }: Props
   buttonText={hero.searchButtonText}
   initialQuery={searchQuery}
   results={homeSearchResults}
-  onResultClick={(item) => {
-    if (item.type === "product") {
-      navigate(`/products/${item.handle}`);
-    } else if (item.type === "location") {
-      const queryParam = item.displayName || item.city;
-      navigate(`/sublocations?q=${encodeURIComponent(item.city || '')}`);
-    }
+  onResultClick={(item) => { 
+     // const queryParam = item.displayName || item.city;
+      navigate(`/sublocations?q=${encodeURIComponent(item.addressLine1 || '')}`);
+    
   }}
 />
 

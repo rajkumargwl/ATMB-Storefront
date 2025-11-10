@@ -84,7 +84,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
     const navigate = useNavigate();
     const [selectedCity, setSelectedCity] = useState<string>(initialQuery || '');
     const [searchCity, setSearchCity] = useState<string>(initialQuery || '');
-    const [filtered, setFiltered] = useState<LocationAPI[]>(locations);
+    const [filtered, setFiltered] = useState(locations);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState<LocationAPI | null>(
       locations[0] || null,
@@ -106,6 +106,12 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
           : [...prev, feature],
       );
     };
+    useEffect(() => {
+      if (locations && Array.isArray(locations)) {
+        setFiltered(locations);
+      }
+    }, [locations]);
+    console.log("Filtered Locations:", filtered);
 
     const [tempPlanTier, setTempPlanTier] = useState(planTier);
     const [tempMinPrice, setTempMinPrice] = useState(minPrice);
@@ -156,7 +162,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
     
     useEffect(() => {
         if (initialQuery && !selectedCity) {
-          setSelectedCity(initialQuery);
+         // setSelectedCity(initialQuery);
           setSearchCity(initialQuery);
         }
       }, [initialQuery]);
@@ -202,7 +208,6 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
          // setSelectedLocation(null);
         }
       }, [selectedCity, planTier, minPrice, maxPrice, selectedFeatures, locations]);
-  
     useEffect(() => {
       if (filtered.length > 0) {
         setSelectedLocation(filtered[0]);
@@ -376,7 +381,6 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
 
   const getPrefixedPath = usePrefixPathWithLocale2(); 
  
-
   return (
     <>
      {/* <Header data={header} searchResults={mergedResults} searchQuery={q} /> */}
@@ -575,7 +579,9 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                   <div className="hidden md:flex flex-col gap-[2px]">
                     <p className="font-Roboto text-[#4B5563] font-normal text-[14px] leading-[21px] tracking-[0px]">Starting from</p>
                     <p className="flex font-Roboto text-PrimaryBlack font-semibold text-[24px] leading-[31.2px] tracking-[-0.39px]">
-                    <Money data={{ amount: (loc.priceRange || 0.0).toFixed(2), currencyCode: currencyCode }}/><span className='font-Roboto text-LightGray font-normal text-[18px] leading-[27px] tracking-[0px]'>/month</span>
+                    {/* <Money data={{ amount: (loc.priceRange || 0.0).toFixed(2), currencyCode: currencyCode }}/> */}
+                    <Money data={{ amount: (9.99).toFixed(2), currencyCode: currencyCode }}/>
+                    <span className='font-Roboto text-LightGray font-normal text-[18px] leading-[27px] tracking-[0px]'>/month</span>
                     </p>
                   </div>                 
 
@@ -742,7 +748,9 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                    <div className="flex  flex-col gap-[2px]">
                       <p className="font-Roboto text-[#4B5563] font-normal text-[14px] leading-[21px] tracking-[0px]">Starting from</p>
                       <p className="flex font-Roboto text-PrimaryBlack font-semibold text-[24px] leading-[31.2px] tracking-[-0.39px]">
-                        <Money data={{ amount: (loc.priceRange || 0.0).toFixed(2), currencyCode: currencyCode }}/><span className='font-Roboto text-LightGray font-normal text-[18px] leading-[27px] tracking-[0px]'>/month</span>
+                        {/* <Money data={{ amount: (loc.priceRange || 0.0).toFixed(2), currencyCode: currencyCode }}/> */}
+                        <Money data={{ amount: (9.99).toFixed(2), currencyCode: currencyCode }}/>
+                        <span className='font-Roboto text-LightGray font-normal text-[18px] leading-[27px] tracking-[0px]'>/month</span>
                       </p>
                     </div>  
                      <button

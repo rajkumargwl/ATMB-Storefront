@@ -109,9 +109,12 @@ export async function loader({ context, params, request }: LoaderFunctionArgs) {
        const searchresults = await context.sanity.query({
          query: `{
            "locations": *[_type == "location" && (
-             displayName match $search ||
+             country match $search ||
              city match $search ||
-             postalCode match $search
+             postalCode match $search ||
+             state match $search ||
+             addressLine1 match $search ||
+             displayName match $search
            )][0...5]{
               _id,
         locationId,
@@ -162,7 +165,7 @@ export default function Index() {
   
   //const { page, gids,  header, footer, mergedResults, q } = useLoaderData<typeof loader>();
    const { page, gids, p, homeSearchResults,bundles, individualProducts,header, isLoggedIn, customer, language} = useLoaderData<typeof loader>();
- 
+     console.log("Home Search Results in Component:", homeSearchResults, p);
    return (
     <>
      {/* <Header data={header} searchQuery={q} searchResults={homeSearchResults} isLoggedIn={isLoggedIn} customer={customer} currentLanguage={language} /> */}
