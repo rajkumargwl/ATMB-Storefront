@@ -144,7 +144,7 @@ export default function Module({imageAspectClassName, module, homeSearchResults,
  case 'pdpdetailedFeaturesSection':
   return <PdpDetailedFeaturesSection {...module} />;
  case 'pdpmailCenterHighlightsSection':
-  return <PdpMailCenterHighlightsSection {...module} highlights={highlights} />;
+  return <PdpMailCenterHighlightsSection {...module} highlights={highlights} location={location} />;
    case 'pdpvirtualMailboxLocation':
   return <VirtualMailboxLocationCard {...module} />;
 

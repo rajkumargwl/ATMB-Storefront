@@ -32,6 +32,7 @@ export async function loader({context}: LoaderFunctionArgs) {
       query: /* groq */ `
         *[_type == "location" && defined(country) && country != "" ]{
           displayName,
+          addressLine1,
           country,
           state,
           country_code,
@@ -186,7 +187,7 @@ export default function CountryLocationsPage() {
           initialQuery=""
           results={locations || []}
           onResultClick={(item) => {
-            navigate(`/sublocations?q=${encodeURIComponent(item.displayName || item.city || '')}`);
+            navigate(`/sublocations?q=${encodeURIComponent(item.addressLine1 || '')}`);
           }}
         />
 

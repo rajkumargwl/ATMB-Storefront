@@ -219,7 +219,7 @@ console.log("decodedCountry, decodedState", decodedCountry, decodedState);
           _key: "2",
           title: "Market Access",
           description:
-            decodedState + ", located in the southeastern region of Australia, provides businesses of any size domestic and international market access.",
+            decodedState + ", located in the southeastern region of "+ decodedCountry + ", provides businesses of any size domestic and international market access.",
           icon: {
             tooltipTitle: "Inventory",
             svg: '<svg xmlns="http://www.w3.org/2000/svg" width="25" height="24" viewBox="0 0 25 24" fill="none"><path d="M5.54352 5.46385C5.74977 5.0551 6.16227 4.8001 6.61977 4.8001H18.0535C18.5073 4.8001 18.9235 5.0551 19.126 5.46385L21.256 9.7276C21.3085 9.82885 21.3348 9.9451 21.3348 10.0576C21.3348 10.4663 21.001 10.8001 20.5923 10.8001H4.07727C3.66852 10.8001 3.33477 10.4663 3.33477 10.0576C3.33477 9.94135 3.36102 9.82885 3.41352 9.7276L5.54352 5.46385ZM2.13477 10.0576C2.13477 11.0813 2.92977 11.9213 3.93477 11.9926V18.6001C3.93477 19.5938 4.74102 20.4001 5.73477 20.4001H12.9348C13.9285 20.4001 14.7348 19.5938 14.7348 18.6001V12.0001H19.5348V19.8001C19.5348 20.1301 19.8048 20.4001 20.1348 20.4001C20.4648 20.4001 20.7348 20.1301 20.7348 19.8001V11.9963C21.7398 11.9251 22.5348 11.0851 22.5348 10.0613C22.5348 9.76135 22.4635 9.46135 22.3285 9.19135L20.1985 4.9276C19.7898 4.11385 18.961 3.6001 18.0498 3.6001H6.61977C5.71227 3.6001 4.87977 4.11385 4.47477 4.9276L2.34102 9.19135C2.20602 9.46135 2.13477 9.7576 2.13477 10.0613V10.0576ZM5.13477 15.6001V12.0001H13.5348V15.6001H5.13477ZM5.13477 16.8001H13.5348V18.6001C13.5348 18.9301 13.2648 19.2001 12.9348 19.2001H5.73477C5.40477 19.2001 5.13477 18.9301 5.13477 18.6001V16.8001Z" fill="white"/></svg>'
@@ -323,10 +323,10 @@ export default function StatePage() {
 
             <div className="prose prose-lg how-started text-PrimaryBlack">
               <p>
-              {decodedState}, Australia’s business capital, is an attractive destination for entrepreneurs looking to expand their market reach. With a thriving economy, a wide range of industries, and a strategic location in Australia, this region presents businesses with many opportunities for growth.
+              {decodedState}, {decodedCountry}’s business capital, is an attractive destination for entrepreneurs looking to expand their market reach. With a thriving economy, a wide range of industries, and a strategic location in {decodedCountry}, this region presents businesses with many opportunities for growth.
                 <br />
                 <br />
-                By setting up a virtual mailbox address in {decodedState}, you get to call Australia’s top-performing region home. It is a prime spot for accessing markets in the Asia-Pacific region and is a top destination for investors.
+                By setting up a virtual mailbox address in {decodedState}, you get to call {decodedCountry}’s top-performing region home. It is a prime spot for accessing markets in the Asia-Pacific region and is a top destination for investors.
                 <br />
                 <br />
                 With a Virtual Mailbox address in {decodedState}, your business can tap into business opportunities and world-class markets.

@@ -175,13 +175,19 @@ export async function loader({request, context, params}: LoaderFunctionArgs) {
       const results = await context.sanity.query({
         query: `{
           "locations": *[_type == "location" && (
-            name match $search ||
             city match $search ||
-            postalCode match $search
+            postalCode match $search ||
+            addressLine1 match $search ||
+            state match $search ||
+            country match $search ||
+            displayName match $search
           )][0...5]{
             _id,
             _type,
-            name,
+            displayName,
+            addressLine1,
+            state,
+            country,
             city,
             postalCode,
             "slug": slug.current
