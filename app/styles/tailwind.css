@@ -549,7 +549,16 @@ body.no-scroll {
 .news-detail ul ul {
   margin-bottom: 0px;
 }
-.news-detail ol li,
+.news-detail ol li {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0px;
+    color: #4D4E4F;
+    font-family: "Roboto", "sans-serif";
+    list-style-type: decimal;
+    list-style-position: outside;
+}
 .news-detail ul li {
     font-size: 16px;
     font-weight: 400;
@@ -818,3 +827,4 @@ body.no-scroll {
     padding-left: 18px;
 }
 }
+ 
