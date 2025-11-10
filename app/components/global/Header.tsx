@@ -203,6 +203,8 @@ useEffect(() => {
             className={`text-PrimaryBlack transition-all hover:text-DarkOrange font-normal flex items-center gap-[6px] text-[14px] md:text-[14px] ${
               currentLanguage === "en-es" ? "xl:text-[15px]" : "xl:text-[16px]"
             } leading-[24px] tracking-[0px]`}
+            aria-haspopup={item.hasSubmenu ? "true" : undefined}
+            aria-expanded="false"
             onKeyDown={(e) => {
               const submenu =
                 e.currentTarget.parentElement?.querySelector(".submenu");
@@ -211,12 +213,16 @@ useEffect(() => {
               // Open/close with Enter or Space
               if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();
+                const isHidden = submenu.classList.contains("hidden");
+
                 submenu.classList.toggle("hidden");
+                e.currentTarget.setAttribute("aria-expanded", String(isHidden));
               }
 
               // Close with Escape
               if (e.key === "Escape") {
                 submenu.classList.add("hidden");
+                e.currentTarget.setAttribute("aria-expanded", "false");
                 e.currentTarget.focus();
               }
             }}
@@ -225,6 +231,7 @@ useEffect(() => {
               setTimeout(() => {
                 if (!parent?.contains(document.activeElement)) {
                   parent?.querySelector(".submenu")?.classList.add("hidden");
+                  e.currentTarget.setAttribute("aria-expanded", "false"); 
                 }
               }, 100);
             }}
