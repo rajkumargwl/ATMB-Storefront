@@ -59,17 +59,7 @@ export default {
         },
       },
     }),
-    // defineField({
-    //   name: 'slug',
-    //   title: 'Slug',
-    //   type: 'slug',
-    //   options: {
-    //     source: 'title',
-    //     maxLength: 96,
-    //   },
-    //   group: 'editorial',
-    //   validation: (Rule) => Rule.required(),
-    // }),
+
     defineField({
       name: 'content',
       title: 'Content',

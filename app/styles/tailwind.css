@@ -544,12 +544,22 @@ body.no-scroll {
     display: flex;
     flex-direction: column;
     gap: 7px;
+    margin-left: 0;
 }
 .news-detail ol ol,
 .news-detail ul ul {
   margin-bottom: 0px;
 }
-.news-detail ol li,
+.news-detail ol li {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 24px;
+    letter-spacing: 0px;
+    color: #4D4E4F;
+    font-family: "Roboto", "sans-serif";
+    list-style-type: decimal;
+    list-style-position: outside;
+}
 .news-detail ul li {
     font-size: 16px;
     font-weight: 400;
@@ -818,3 +828,4 @@ body.no-scroll {
     padding-left: 18px;
 }
 }
+ 
