@@ -22,11 +22,21 @@ export default function ReplacePlanAddToCartButton({
   text,
 }: Props) {
   if (!selectedVariant) return null;
-  
       const billingProductId =
       // selectedVariant?.metafields?.find((m) => m.key === 'billing_product_id')?.value || '';
          selectedVariant?.metafields?.find((m) => m && m.key === 'billing_product_id')?.value || ''
- 
+        
+         // Check for bundle items (safe, fallback to false)
+        const bundleItemsMetafield = selectedVariant?.metafields?.find((m) => m && m.key === 'billing_items');
+        let hasBundle = false;
+        if (bundleItemsMetafield?.value) {
+          try {
+            const parsed = JSON.parse(bundleItemsMetafield.value);
+            hasBundle = Array.isArray(parsed) && parsed.length > 0;
+          } catch {
+            hasBundle = false;
+          }
+        }
     //Normalize locationProperties so it's always iterable
     const normalizedLocationProps =
       Array.isArray(locationProperties)
@@ -43,6 +53,7 @@ export default function ReplacePlanAddToCartButton({
         key: 'billing_product_id',
         value: billingProductId,
       },
+      { key: 'hasBundle', value: String(hasBundle) }, 
     ];
 
   // If replacing, first remove the old one

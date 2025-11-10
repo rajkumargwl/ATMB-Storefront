@@ -45,7 +45,11 @@ export function CartLineItems({
 }
 
 function LineItem({lineItem}: {lineItem: CartLine | ComponentizableCartLine}) {
-  const {merchandise, attributes} = lineItem;
+  
+const {merchandise, attributes} = lineItem;
+
+const hasBundleAttr = attributes?.find(attr => attr.key === 'hasBundle')?.value;
+const showChangeButtons = hasBundleAttr === 'false';
 
   const updatingItems = useCartFetchers(CartForm.ACTIONS.LinesUpdate);
   const removingItems = useCartFetchers(CartForm.ACTIONS.LinesRemove);
@@ -193,34 +197,24 @@ function LineItem({lineItem}: {lineItem: CartLine | ComponentizableCartLine}) {
  
       </div>
       <div className='flex flex-row gap-2 items-center justify-center mt-[16px] md:mt-[0px]'>
-        <Link
-          to={`/sublocations`}
-          className="p-2 font-Roboto text-PrimaryBlack font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px] md:tracking-[0.07px]
-                      underline decoration-solid decoration-skip-ink-auto decoration-auto underline-offset-auto"
-        >
-         Change Location
-        </Link>
-        {/* {(merchandise.product.handle==='virtual-mailbox')? <Link
-        to={`/PDP/${merchandise.product.handle}?locationId=${attributes?.find(attr => attr.key === 'locationId')?.value}`}
-        className="p-2 p-2 font-Roboto text-PrimaryBlack font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px] md:tracking-[0.07px]
-                      underline decoration-solid decoration-skip-ink-auto decoration-auto underline-offset-auto"
-      >
-        Change Plan
-            </Link>
-      :<Link
-      to={`/PDP/${merchandise.product.handle}`}
-      className="p-2 p-2 font-Roboto text-PrimaryBlack font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px] md:tracking-[0.07px]
-                      underline decoration-solid decoration-skip-ink-auto decoration-auto underline-offset-auto"
-      >
-      Change Plan
-      </Link>
-      } */}
-      <ChangePlanButton
-        lineId={lineItem.id}
-        productHandle={merchandise.product.handle}
-        locationId={attributes?.find(attr => attr.key === 'locationId')?.value ?? undefined}
-       />
-            
+        
+            {showChangeButtons && (
+              <>
+                <Link
+                  to={`/sublocations`}
+                  className="p-2 font-Roboto text-PrimaryBlack font-normal leading-[14px] text-[14px] underline decoration-solid"
+                >
+                  Change Location
+                </Link>
+
+                <ChangePlanButton
+                  lineId={lineItem.id}
+                  productHandle={merchandise.product.handle}
+                  locationId={attributes?.find(attr => attr.key === 'locationId')?.value ?? undefined}
+                />
+              </>
+            )}
+
       
             {/* Quantity */}
             {/* <CartItemQuantity line={lineItem} submissionQuantity={updating} /> */}
@@ -442,9 +436,9 @@ export function CartActions({cart}: {cart: Cart}) {
       {/* {cart.checkoutUrl} */}
       <Button
         to="/checkout"
-        className={clsx([defaultButtonStyles(), 'w-1/2 flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full h-[52px]'])}
+        className={clsx([defaultButtonStyles(), 'w-1/2 flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full h-[52px] transition-all  hover:bg-[#DF5D07] hover:text-white hover:opacity-100'])}
       >
-        Checkout 
+        Checkout         
       </Button>
     </div>
   );

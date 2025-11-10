@@ -2,11 +2,12 @@ import {json, type LoaderFunctionArgs} from "@shopify/remix-oxygen";
 import {useLoaderData,Link} from "@remix-run/react";
 import {PortableText, type PortableTextComponents} from "@portabletext/react";
 import { usePrefixPathWithLocale } from '~/lib/utils';
-
- import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
-import { SEO } from "~/queries/sanity/fragments/seo";
  
-
+import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
+import { SEO } from "~/queries/sanity/fragments/seo";
+import RightArrowWhite from '~/components/icons/RightArrowWhite';
+ 
+ 
 // Custom renderers for PortableText content
 const components: PortableTextComponents = {
   types: {
@@ -118,11 +119,11 @@ export async function loader({params, context}: LoaderFunctionArgs) {
   });
   return json({ caseStudy });
 }
- const seo: SeoHandleFunction = ({data}) => ({
-  title: data?.page?.seo?.title || 'Anytime Mailbox',
+const seo: SeoHandleFunction = ({data}) => ({
+  title: data?.caseStudy?.seo?.title || data?.caseStudy?.title,
   description:
-    data?.page?.seo?.description ||
-    'A custom storefront powered by Hydrogen and Sanity',
+  data?.caseStudy?.seo?.description ||
+  data?.caseStudy?.title,
 });
 export const handle = { seo };
 export default function CaseStudyPage() {
@@ -170,9 +171,12 @@ export default function CaseStudyPage() {
                 <a
                   href={caseStudy.cta.file.asset.url}
                   download
-                  className="mt-5 flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full w-[193px] h-[52px] transition-all hover:scale-[1.02] hover:bg-[#DD5827]"
+                  className="group relative overflow-hidden  mt-5 flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full w-[193px] h-[52px] hover:w-[223px] transition-all  hover:bg-[#DF5D07] hover:text-white"
                 >
-                  {caseStudy.cta.text}
+                  
+                   <span className="relative flex items-center transition-all duration-300">{caseStudy.cta.text} <span className="relative right-0 opacity-0 translate-x-[12px] hidden group-hover:opacity-100 group-hover:block group-hover:translate-x-[12px] transition-all duration-300">
+              <RightArrowWhite />
+            </span></span>
                 </a>
               )}
             </div>
@@ -370,7 +374,7 @@ export default function CaseStudyPage() {
               {caseStudy.virtualMailSection?.buttonText && (
                 <a
                   href={usePrefixPathWithLocale(caseStudy.virtualMailSection?.buttonUrl ?? "#")}
-                  className="flex items-center justify-center bg-white text-PrimaryBlack font-medium font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full w-[193px] h-[52px]"
+                  className="flex items-center justify-center bg-white text-PrimaryBlack font-medium font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full w-[193px] h-[52px] transition-all  hover:bg-PrimaryBlack hover:text-white"
                 >
                   {caseStudy.virtualMailSection.buttonText}
                 </a>

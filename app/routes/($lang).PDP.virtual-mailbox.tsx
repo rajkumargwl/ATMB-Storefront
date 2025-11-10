@@ -180,14 +180,16 @@ export default function Plans() {
   const sortedVariants = filteredVariants.sort((a, b) => a.position - b.position);*/
  // Map variants to include metafields
 const variantsWithBillingId = variants.map((variant) => {
+
   const planTypeField = variant.metafields?.find((m) => m && m.key === 'plan_type');
   const billingProductField = variant.metafields?.find((m) => m && m.key === 'billing_product_id');
- 
+  const bundleItemsField = variant.metafields?.find((m) => m && m.key === 'bundle_items');
 
   return {
     ...variant,
     planType: planTypeField?.value?.toLowerCase() || null,
     billingProductId: billingProductField?.value || null,
+    bundleItems: bundleItemsField?.value ? JSON.parse(bundleItemsField.value) : null,
   };
 });
 

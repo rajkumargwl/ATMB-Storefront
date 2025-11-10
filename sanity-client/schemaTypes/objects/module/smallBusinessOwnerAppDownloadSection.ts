@@ -41,6 +41,12 @@ export const smallBusinessOwnerAppDownloadSection = defineType({
               options: { accept: ".svg" },
               description: "Upload the SVG icon for the button",
             }),
+             defineField({
+              name: "alt",
+              title: "Alt Text",
+              type: "string",
+              description: "Alt text for icon",
+            }),
             defineField({
               name: "link",
               title: "Button Link",

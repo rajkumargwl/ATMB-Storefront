@@ -1,3 +1,4 @@
+
 // app/components/BusinessBanner.tsx
 import React from "react";
  
@@ -22,7 +23,7 @@ const BusinessBanner: React.FC<BusinessBannerProps> = ({ title, cta, image }) =>
         {cta?.label && (
           <a
             href={cta.url ?? "/PDP/business-accelerator"}
-            className="flex items-center justify-center w-full md:w-[248px] h-[52px] md:h-[52px] rounded-[100px] font-medium leading-[16px] tracking-[0.08px] text-[16px] text-PrimaryBlack bg-white px-4 py-[12px]"
+            className="flex items-center justify-center w-full md:w-[248px] h-[52px] md:h-[52px] rounded-[100px] font-medium leading-[16px] tracking-[0.08px] text-[16px] text-PrimaryBlack bg-white px-4 py-[12px] transition-all  hover:bg-PrimaryBlack hover:text-white"
           >
             {cta.label}
           </a>
@@ -74,3 +75,4 @@ const BusinessBanner: React.FC<BusinessBannerProps> = ({ title, cta, image }) =>
 };
  
 export default BusinessBanner;
+ 

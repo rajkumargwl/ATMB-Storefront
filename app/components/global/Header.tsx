@@ -1,5 +1,5 @@
 import { Link, useNavigate, useLocation } from "@remix-run/react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import CloseIcon from "~/components/icons/CloseIcon";
 import CartIcon from "~/components/icons/CartIcon";
 import SearchIcon from "~/components/icons/SearchIcon";
@@ -290,8 +290,22 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
     }
   }, [isMobileMenuOpen]);
 
-  const buildLocalizedUrl = usePrefixPathWithLocale2();
-  const [openItem, setOpenItem] = useState<string | null>(null);
+ const buildLocalizedUrl = usePrefixPathWithLocale2(); 
+ const [openItem, setOpenItem] = useState<string | null>(null);
+ const navRef = useRef(null);
+
+ useEffect(() => {
+   function handleClickOutside(e) {
+     if (navRef.current && !navRef.current.contains(e.target)) {
+       // Hide all open submenus if clicked outside
+       document.querySelectorAll(".submenu").forEach((submenu) => {
+         submenu.classList.add("hidden");
+       });
+     }
+   }
+   document.addEventListener("mousedown", handleClickOutside);
+   return () => document.removeEventListener("mousedown", handleClickOutside);
+ }, []);
 
   return (
     <header className=" relative z-[99] w-full bg-white px-5 border-b border-LightWhite lg:border-none">
@@ -311,33 +325,137 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
           </div>
 
           {/* Menu (Desktop only) */}
-          <nav className={`hidden lg:flex ${currentLanguage === 'en-es' ? '' : 'space-x-2 xl:space-x-3' }`}>
-            {menu?.map((item, idx) => (
-              <div key={idx} className="relative group p-2">
-                 <Link
-                  to={
-                    buildLocalizedUrl(item.label === "Solutions"
-        ? "/solutionsvm"
-        : item.label === "Locations"
-        ? "/sublocations"
-          : item.label === "Blog"
-          ? "/blogs"
-          : item.label === "About Us"
-          ? "/about-us"
-          : item.label === "Contact Us"
-          ? "/contact"
-        : item.url ?? "#")}
-        className={`text-PrimaryBlack hover:text-PrimaryBlack font-normal flex items-center gap-[6px] text-[14px] md:text-[14px] ${currentLanguage === 'en-es' ? 'xl:text-[15px]' : 'xl:text-[16px]' } leading-[24px] tracking-[0px]`}
-               >
-                  {item.label} 
-                  {item.hasSubmenu && (
-                 <span className="group-hover:transform group-hover:rotate-180 transition-all duration-500 ease-in-out"> <ArrowDownIcon /></span>
-                  )}
-                </Link>
-                {/* submenu omitted for brevity in this snippet; original content retained */}
+          <nav
+      ref={navRef}
+      className={`hidden lg:flex ${
+        currentLanguage === "en-es" ? "" : "space-x-2 xl:space-x-3"
+      }`}
+    >
+      {menu?.map((item, idx) => (
+        <div key={idx} className="relative group p-2">
+          <Link
+            to={buildLocalizedUrl(
+              item.label === "Solutions"
+                ? "/solutionsvm"
+                : item.label === "Locations"
+                ? "/sublocations"
+                : item.label === "Blog"
+                ? "/blogs"
+                : item.label === "About Us"
+                ? "/about-us"
+                : item.label === "Contact Us"
+                ? "/contact"
+                : item.url ?? "#"
+            )}
+            className={`text-PrimaryBlack transition-all hover:text-DarkOrange font-normal flex items-center gap-[6px] text-[14px] md:text-[14px] ${
+              currentLanguage === "en-es" ? "xl:text-[15px]" : "xl:text-[16px]"
+            } leading-[24px] tracking-[0px]`}
+            aria-haspopup={item.hasSubmenu ? "true" : undefined}
+            aria-expanded="false"
+            onKeyDown={(e) => {
+              const submenu =
+                e.currentTarget.parentElement?.querySelector(".submenu");
+              if (!submenu) return;
+
+              // Open/close with Enter or Space
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                const isHidden = submenu.classList.contains("hidden");
+
+                submenu.classList.toggle("hidden");
+                e.currentTarget.setAttribute("aria-expanded", String(isHidden));
+              }
+
+              // Close with Escape
+              if (e.key === "Escape") {
+                submenu.classList.add("hidden");
+                e.currentTarget.setAttribute("aria-expanded", "false");
+                e.currentTarget.focus();
+              }
+            }}
+            onBlur={(e) => {
+              const parent = e.currentTarget.parentElement;
+              setTimeout(() => {
+                if (!parent?.contains(document.activeElement)) {
+                  parent?.querySelector(".submenu")?.classList.add("hidden");
+                  e.currentTarget.setAttribute("aria-expanded", "false"); 
+                }
+              }, 100);
+            }}
+          >
+            {item.label}
+            {item.hasSubmenu && (
+              <span className="group-hover:transform group-hover:rotate-180 transition-all duration-500 ease-in-out">
+                <ArrowDownIcon />
+              </span>
+            )}
+          </Link>
+
+          {/* Mega Menu */}
+          {item?.hasSubmenu &&
+            item?.submenuType === "mega" &&
+            item?.megaMenu?.length > 0 && (
+              <div className="submenu absolute z-[2] left-0 pt-[15px] hidden group-hover:block min-w-[100px]">
+                <div className="min-w-[812px] p-6 rounded-[20px] border border-[#cccccc] bg-white shadow-[0_4px_14px_0_rgba(0,0,0,0.05)] grid md:grid-cols-2">
+                  {item?.megaMenu.map((group, gIdx) => (
+                    <div
+                      key={gIdx}
+                      className={`${
+                        gIdx % 2 === 0
+                          ? "pr-8 border-r border-LightWhite"
+                          : "pl-8"
+                      } ${gIdx > 1 ? "mt-[15px]" : ""}`}
+                    >
+                      <p className="mb-5 font-Roboto text-PrimaryBlack font-medium leading-[28px] text-[20px] tracking-[0px]">
+                        {group.title}
+                      </p>
+                      <ul className="flex flex-col gap-4">
+                        {group.links?.map((link, lIdx) => (
+                          <li key={lIdx}>
+                            <Link
+                              to={buildLocalizedUrl(link.url ?? "#")}
+                              aria-label={link.label}
+                              title={link.label}
+                              className="font-Roboto text-LightGray font-normal leading-[24px] text-[16px] tracking-[0px] transition-all hover:text-DarkOrange"
+                            >
+                              {link.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
               </div>
-            ))}
-          </nav>
+            )}
+
+          {/* Regular Submenu */}
+          {item?.hasSubmenu &&
+            item?.submenuType === "regular" &&
+            item?.subMenu?.length > 0 && (
+              <div className="submenu min-w-[130px] absolute z-[2] left-0 mt-2 bg-white border border-LightWhite shadow-md rounded-[6px] hidden group-hover:block">
+                <ul className="py-2">
+                  {item?.subMenu.map((sub, i) => {
+                    const localizedUrl = buildLocalizedUrl(sub?.url) ?? "#";
+                    return (
+                      <li key={i}>
+                        <Link
+                          to={localizedUrl}
+                          className="block px-4 py-[6px] text-PrimaryBlack transition-all hover:text-DarkOrange font-normal text-[14px] md:text-[14px] xl:text-[16px] leading-[24px] tracking-[0px]"
+                        >
+                          {sub?.label}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            )}
+        </div>
+      ))}
+    </nav>
+
+
         </div>
 
         {/* Right section */}
@@ -400,7 +518,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
             ) : (
               loginButton && (
                 <button
-                className="w-fit rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[11px] md:py-[15px]"
+                className="w-fit rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[11px] md:py-[15px] transition-all  hover:bg-PrimaryBlack hover:text-white"
                 onClick={() => {
                   setIsMobileMenuOpen(false);
                   const ssoUrl = "https://store.xecurify.com/moas/broker/login/shopify/0dv7ud-pz.myshopify.com/account?idpname=custom_openidconnect_Okf";
@@ -428,20 +546,191 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
               </Link>
             )}
           </div>
+      
 
           {/* Mobile menu button */}
-          <button
+          {/* <button
             className="lg:hidden"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             <MenuIcon />
-          </button>
+          </button> */}
+            <button
+    aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
+    title={isMobileMenuOpen ? "Close menu" : "Open menu"} // tooltip for browsers
+    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+    className="p-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#F60] lg:hidden"
+  >
+    <MenuIcon aria-hidden="true" />
+
+  </button>
+
+  {/* Custom tooltip (visible on hover or focus) */}
+  <span
+    role="tooltip"
+    className="
+      absolute left-1/2 -translate-x-1/2 top-full mt-1
+      text-xs text-white bg-black px-2 py-1 rounded opacity-0 group-hover:opacity-100 group-focus-within:opacity-100
+      transition-opacity duration-200
+    "
+  >
+    {isMobileMenuOpen ? "Close menu" : "Open menu"}
+  </span>
         </div>
       </div>
 
-      {/* Mobile menu, Search modal, and remaining JSX preserved exactly as before.
-          The important change is: results items now include `.matchType` and
-          handleResultClick / render use that. */}
+      {/* Mobile menu (Side Drawer) */}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 z-50">
+          {/* Overlay */}
+          <div
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+
+          {/* Side Drawer */}
+          <div className="absolute right-0 top-0 h-full w-4/5 max-w-sm bg-white shadow-lg flex flex-col p-6">
+            {/* Close Icon */}
+            <button
+              className="self-end mb-6"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              <CloseIcon className="h-6 w-6 text-gray-700" />
+            </button>
+
+            {/* Navigation */}
+            <nav className="flex flex-col space-y-4 overflow-auto">
+              {menu?.map((item, idx) => {
+                const isOpen = openItem === item.label;
+                return (
+                  <div key={idx} className="pb-3">
+                    {/* Main item */}
+                    <button
+                      className="w-full flex justify-between items-center text-left text-PrimaryBlack font-normal text-base leading-[24px]"
+                      onClick={() => {
+                        if (item.hasSubmenu) {
+                          setOpenItem(isOpen ? null : item.label);
+                        } else {
+                          setIsMobileMenuOpen(false);
+                          navigate(
+                            buildLocalizedUrl(
+                              item.label === "Solutions"
+                                ? "/solutionsvm"
+                                : item.label === "Locations"
+                                ? "/sublocations"
+                                : item.url ?? "#"
+                            )
+                          );
+                        }
+                      }}
+                    >
+                      {item.label}
+                      {item.hasSubmenu && (
+                        <span
+                          className={`transform transition-transform ${
+                            isOpen ? "rotate-180" : ""
+                          }`}
+                        >
+                          <ArrowDownIcon />
+                        </span>
+                      )}
+                    </button>
+
+                    {/* Regular Submenu */}
+                    {item.hasSubmenu &&
+                      item.submenuType === "regular" &&
+                      isOpen &&
+                      item.subMenu?.length > 0 && (
+                        <ul className="mt-2 pl-4 flex flex-col gap-2">
+                          {item.subMenu.map((sub, sIdx) => (
+                            <li key={sIdx}>
+                              <Link
+                                to={buildLocalizedUrl(sub.url ?? "#")}
+                                onClick={() => setIsMobileMenuOpen(false)}
+                                className="text-LightGray text-sm"
+                              >
+                                {sub.label}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+
+                    {/* Mega Menu */}
+                    {item.hasSubmenu &&
+                      item.submenuType === "mega" &&
+                      isOpen &&
+                      item.megaMenu?.length > 0 && (
+                        <div className="mt-2 pl-4 flex flex-col gap-4">
+                          {item.megaMenu.map((group, gIdx) => (
+                            <div key={gIdx}>
+                              <p className="text-PrimaryBlack font-medium mb-2">
+                                {group.title}
+                              </p>
+                              <ul className="flex flex-col gap-2">
+                                {group.links.map((link, lIdx) => (
+                                  <li key={lIdx}>
+                                    <Link
+                                      to={buildLocalizedUrl(link.url ?? "#")}
+                                      onClick={() => setIsMobileMenuOpen(false)}
+                                      className="text-LightGray text-sm"
+                                    >
+                                      {link.label}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                  </div>
+                );
+              })}
+
+               {isLoggedIn ? (
+               <Link
+               to={buildLocalizedUrl('/account')}
+               className="text-base font-medium text-PrimaryBlack hover:underline cursor-pointer"
+             >
+               Welcome, {customer?.firstName || "User"}
+             </Link>
+                ) : (
+                  loginButton && (
+                    <button
+                    className="w-fit rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-9 py-[11px] transition-all  hover:bg-PrimaryBlack hover:text-white"
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      const ssoUrl = "https://store.xecurify.com/moas/broker/login/shopify/0dv7ud-pz.myshopify.com/account?idpname=custom_openidconnect_Okf";
+                      const width = 800;
+                      const height = 600;
+                      const left = (window.screen.width - width) / 2;
+                      const top = (window.screen.height - height) / 2;
+                      window.open(
+                        ssoUrl,
+                        "SSO Login",
+                        `width=${width},height=${height},top=${top},left=${left},resizable,scrollbars=yes,status=1`
+                      );
+                    }}
+                  >
+                    {loginButton.label}
+                  </button>
+                  )
+                )}
+                {!isLoggedIn && getStartedButton && (
+                <Link
+                  // to={buildLocalizedUrl('create-account')}
+                  to={buildLocalizedUrl(getStartedButton?.link ?? '#')}
+                  className="w-fit rounded-[100px] bg-[#F60] font-Roboto text-white px-5 py-3 font-normal leading-[16px] tracking-[0.08px] text-base flex items-center gap-2 transition-all hover:scale-[1.02] hover:bg-[#DD5827]"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  {getStartedButton?.label} 
+                </Link>
+                )}
+            </nav>
+          </div>
+        </div>
+      )}
 
       {/* Search Popup Modal */}
       {isSearchOpen && (

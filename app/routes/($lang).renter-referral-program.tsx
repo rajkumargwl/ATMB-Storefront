@@ -34,7 +34,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
   if(language !== 'en-es'){
     language = 'en';
   }
-
+ 
 
 
   try {
@@ -43,10 +43,10 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
       query: RENTER_PAGE_QUERY,
       params: { language  }
     });
-    
+     
     // Extract the single page object
     const page = pageResults?.[0];
-
+  
     if (!page) {
  
       throw notFound();

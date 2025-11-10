@@ -98,7 +98,7 @@ export default function CheckoutPage() {
       {/* Success Icon */}
       <div className="">
         <div className="rounded-full">
-        <svg width="112" height="112" viewBox="0 0 112 112" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <svg width="105" height="105" viewBox="0 0 112 112" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g clip-path="url(#clip0_3650_73970)">
         <path d="M93.1115 93.1226C113.614 72.6201 113.614 39.3789 93.1115 18.8764C72.609 -1.62612 39.3678 -1.62612 18.8653 18.8764C-1.63723 39.3789 -1.63723 72.6201 18.8653 93.1226C39.3678 113.625 72.609 113.625 93.1115 93.1226Z" fill="#FF2E32"/>
         <path fill-rule="evenodd" clip-rule="evenodd" d="M107.745 64.9056C104.009 86.7631 86.7634 104.008 64.9066 107.744L36.6439 79.4809C29.8808 73.8995 25.5703 65.4529 25.5703 55.9994C25.5703 39.1931 39.1941 25.5693 56.0004 25.5693C65.4539 25.5693 73.9005 29.88 79.4819 36.6429L107.745 64.9056Z" fill="#E8161A"/>

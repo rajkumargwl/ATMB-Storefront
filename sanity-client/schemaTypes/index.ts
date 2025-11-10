@@ -106,6 +106,12 @@ import {renterEditor} from './objects/module/rentereditor'
 import {marketPlaceModule} from './objects/module/marketPlaceModule'
 import {marketPlaceIntroSection} from './objects/module/marketPlaceIntroSection'
 import {marketPlaceCategoriesSection} from './objects/module/marketPlaceCategoriesSection'
+import {cityPageModule} from './objects/module/cityPageModule'
+import {cityPageIntroSection} from './objects/module/cityPageIntroSection'
+import {cityPageVideoSection} from './objects/module/cityPageVideoSection'
+import {cityPageVirtualMailboxSection} from './objects/module/cityPageVirtualMailboxSection'
+import {cityPagePricingBannerSection} from './objects/module/cityPagePricingBannerSection'
+import {cityPageAdvantagesSection} from './objects/module/cityPageAdvantagesSection'
 import { howitworksType } from './objects/module/howitwrorksType'
 import { howitworksVirtualbox } from './objects/module/howitworksVirtualbox'
 import { builtForHowYouWorkToday } from './objects/module/builtforhowyouworktoday'
@@ -158,7 +164,7 @@ import { pdpCommonFeaturesSection } from './objects/module/pdpCommonFeaturesSect
 import { pdpwhyChooseAnytimePhoneSection } from './objects/module/pdpwhyChooseAnytimePhoneSection'
 import { pdpFeatureGridSection } from './objects/module/pdpFeatureGridSection'
 import  { productplans }  from './objects/module/productplans'
-
+import { renterReferralBannerBottomModule } from './objects/module/renterReferralBannerBottomModule'
 import { pdpanytimePhonebannerSection } from './objects/module/pdpanytimebanner'
 const annotations = [linkEmailType, linkExternalType, linkInternalType, linkProductType]
 
@@ -262,6 +268,12 @@ contactUsSection,
   marketPlaceModule,
   marketPlaceIntroSection,
   marketPlaceCategoriesSection,
+  cityPageModule,
+  cityPageIntroSection,
+  cityPageAdvantagesSection,
+  cityPageVideoSection,
+  cityPageVirtualMailboxSection,
+  cityPagePricingBannerSection,
   howitworksType,
   howitworksVirtualbox,
   builtForHowYouWorkToday,
@@ -317,7 +329,8 @@ referralStep,
 renterReferralBannerModule,
 inviteAFriendSection,
 pdpanytimePhonebannerSection,
-operatorOurAdvantage
+operatorOurAdvantage,
+renterReferralBannerBottomModule
 ]
 
 import {portableTextType} from './portableText/portableTextType'
@@ -332,7 +345,7 @@ import {productType} from './documents/product'
 import {productVariantType} from './documents/productVariant'
 // import {plansType} from './documents/plans'
 
-const documents = [collectionType, colorThemeType, pageType, productType, productVariantType,wpPost,blockContent,casestudy,news]
+const documents = [collectionType, colorThemeType, pageType, productType, productVariantType,wpPost,blockContent,casestudy,news,author]
 
 import {homeType} from './singletons/homeType'
 import {settingsType} from './singletons/settingsType'
@@ -340,6 +353,7 @@ import { referralStep } from './objects/module/referralStep'
 import { renterReferralBannerModule } from './objects/module/renterReferralBannerModule'
 import { inviteAFriendSection } from './objects/module/inviteAFriend'
 import { operatorOurAdvantage } from './objects/module/operatorouradvantage'
+import { author } from './documents/author'
 
 
 const singletons = [homeType, settingsType,]

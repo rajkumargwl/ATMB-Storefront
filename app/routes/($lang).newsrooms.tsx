@@ -5,30 +5,30 @@ import { useState } from "react";
 import { PortableText } from "@portabletext/react";
 import {useRootLoaderData} from '~/root';
 import { DEFAULT_LOCALE } from "~/lib/utils";
-
-
+ 
+ 
 export function usePrefixPathWithLocale() {
   const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
-
+ 
   // Return a function that safely prefixes any path
   return (path?: string | null) => {
     if (!path) return selectedLocale.pathPrefix || "/";
     return `${selectedLocale.pathPrefix}${path.startsWith("/") ? path : "/" + path}`;
   };
 }
-
-
+ 
+ 
   import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
 import { SEO } from "~/queries/sanity/fragments/seo";
-
-
-
+ 
+ 
+ 
 export async function loader({ context, params }: LoaderFunctionArgs) {
   let language = params.lang || 'en';
   if(language !== 'en-es'){
     language = 'en';
   }
-
+ 
   const newsItems = await context.sanity.query({
     query: `*[_type == "news" && (language == $language || !defined(language))] | order(date desc) {
       _id,
@@ -68,14 +68,14 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
    description:
      data?.page?.seo?.description ||
      'Our Newsroom is the source for news about Anytime Mailbox. Read press releases, get updates, watch video and download images',
- });
- export const handle = { seo };
+});
+export const handle = { seo };
  
 export default function Newsroom() {
   const { allCards } = useLoaderData<typeof loader>();
   const [visibleCount, setVisibleCount] = useState(6);
    const prefixPathWithLocale = usePrefixPathWithLocale();
-
+ 
   // Group all cards by year
   const groupedByYear: Record<string, any[]> = {};
   allCards.forEach((card) => {
@@ -151,7 +151,7 @@ export default function Newsroom() {
                   {cards.map((card, idx) => (
                     <Link
                              key={idx}
-                             to={prefixPathWithLocale(card.externalLink)} 
+                             to={prefixPathWithLocale(card.externalLink)}
                             className="flex md:min-h-[358px]"
                           >
                     <article
@@ -233,7 +233,7 @@ export default function Newsroom() {
             <div className="flex justify-center mt-8">
               <button
                 onClick={handleLoadMore}
-                className="flex items-center justify-center w-[151px] h-[44px] md:h-[52px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-PrimaryBlack border border-[#091019] px-4 py-[12px] bg-white"
+                className="flex items-center justify-center w-[151px] h-[44px] md:h-[52px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-PrimaryBlack border border-[#091019] px-4 py-[12px] bg-white transition-all  hover:bg-PrimaryBlack hover:text-white"
               >
                 Load More
               </button>
@@ -246,4 +246,3 @@ export default function Newsroom() {
     </div>
   );
 }
- 

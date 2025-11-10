@@ -40,7 +40,39 @@ const truncateText = (text: string, maxLength = 120) => {
   if (text.length <= maxLength) return text;
   return text.slice(0, maxLength) + "...";
 };
- 
+type NewsItem = {
+  _id: string;
+  title: string;
+  slug: string;
+  description: any[];
+  date: string;
+  featuredImage?: {
+    asset?: {
+      _id: string;
+      url: string;
+      metadata?: { dimensions?: { width: number; height: number } };
+    };
+    alt?: string;
+  };
+  logoImage?: {
+    asset?: {
+      _id: string;
+      url: string;
+      metadata?: { dimensions?: { width: number; height: number } };
+    };
+    alt?: string;
+  };
+  seo?: {
+    title?: string;
+    description?: string;
+  };
+};
+
+type LoaderData = {
+  newsItem: NewsItem;
+  relatedNews: NewsItem[];
+};
+
 export async function loader({ params, context }: LoaderFunctionArgs) {
   const { slug } = params;
   let language = params.lang || 'en';
@@ -49,7 +81,7 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
   }
  
   // Fetch the current news item
-  const newsItem = await context.sanity.query({
+  /*const newsItem = await context.sanity.query({
     query: `*[_type == "news" && slug.current == $slug && (language == $language || !defined(language))][0] {
       _id,
       title,
@@ -75,8 +107,45 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
       ${SEO}
     }`,
     params: { slug, language },
+  });*/
+  const newsItem = await context.sanity.query({
+    query: `*[_type == "news" && slug.current == $slug && (language == $language || !defined(language))][0] {
+      _id,
+      title,
+      "slug": slug.current,
+      description[]{
+        ...,
+        _type == "image" => {
+          ...,
+          asset->{
+            _id,
+            url,
+            metadata { dimensions { width, height } }
+          }
+        }
+      },
+      date,
+      featuredImage {
+        asset->{
+          _id,
+          url,
+          metadata { dimensions { width, height } }
+        },
+        alt
+      },
+      logoImage {
+        asset->{
+          _id,
+          url,
+          metadata { dimensions { width, height } }
+        },
+        alt
+      },
+      ${SEO}
+    }`,
+    params: { slug, language },
   });
- 
+  
   if (!newsItem) throw new Response(null, { status: 404 });
  
   // Convert current news date to a year range
@@ -115,25 +184,65 @@ export async function loader({ params, context }: LoaderFunctionArgs) {
     });
   }
  
-  return json({ newsItem, relatedNews });
+  //return json({ newsItem, relatedNews });
+  return json<LoaderData>({ newsItem, relatedNews });
 }
   const seo: SeoHandleFunction = ({data}) => ({
-   title: data?.page?.seo?.title || 'Anytime Mailbox',
+   title: data?.newsItem?.seo?.title || data?.newsItem?.title,
    description:
-     data?.page?.seo?.description ||
-     'Anytime Mailbox',
+     data?.newsItem?.seo?.description ||
+     data?.newsItem?.title
  });
  export const handle = { seo };
  
 // PortableText components
+// const ptComponents = {
+//   block: {
+//     normal: ({ children }: any) => <p>{children}</p>,
+//   },
+//   marks: {},
+//   types: {},
+// };
 const ptComponents = {
   block: {
-    normal: ({ children }: any) => <p>{children}</p>,
+    normal: ({ children }: any) => <p className="mb-4">{children}</p>,
+    h2: ({ children }: any) => (
+      <h2 className="text-2xl font-semibold mt-6 mb-3">{children}</h2>
+    ),
   },
-  marks: {},
-  types: {},
+  list: {
+    bullet: ({ children }: any) => (
+      <ul className="list-disc ml-6 mb-4 space-y-1">{children}</ul>
+    ),
+    number: ({ children }: any) => (
+      <ol className="list-decimal ml-6 mb-4 space-y-1">{children}</ol>
+    ),
+  },
+  listItem: ({ value, children }: any) => {
+    // Manually force numbered list items if the source block says so
+    if (value?.listItem === "number") {
+      return <li className="ml-2 list-decimal list-inside">{children}</li>;
+    }
+    return <li className="ml-2 list-disc list-inside">{children}</li>;
+  },
+  types: {
+    image: ({ value }: any) => {
+      const url = value?.asset?.url;
+      if (!url) return null;
+      return (
+        <figure className="my-6">
+          <img
+            src={url}
+            alt={value.alt || "News image"}
+            className="rounded-lg w-full object-cover"
+            loading="lazy"
+          />
+        </figure>
+      );
+    },
+  },
 };
- 
+
 // Format date helper
 const formatDate = (dateString: string) => {
   if (!dateString) return "Date N/A";
@@ -167,11 +276,11 @@ const splitContent = (blocks: any[]) => {
  
  
 export default function NewsroomDetailPage() {
-  const { newsItem, relatedNews } = useLoaderData<typeof loader>()
- 
-  const { mainBlocks, asideBlocks } = splitContent(newsItem.description || [])
+   const { newsItem, relatedNews } = useLoaderData<LoaderData>();
+   const { mainBlocks, asideBlocks } = splitContent(newsItem.description || []);
    const prefixPathWithLocale = usePrefixPathWithLocale();
- 
+ console.log('newsItem:', newsItem);
+  
   return (
     <div className="min-h-screen">
       <main className="">
@@ -250,9 +359,16 @@ export default function NewsroomDetailPage() {
                 )}
  
                 {/* Description */}
-                <div className="news-detail prose prose-lg max-w-none  space-y-[28px]">
+                {/* <div className="news-detail prose prose-lg max-w-none  space-y-[28px]">
                   <PortableText value={mainBlocks} components={ptComponents} />
-                </div>
+                </div> */}
+              <div className="news-detail prose prose-lg max-w-none space-y-[28px] prose-ol:list-decimal prose-ul:list-disc prose-li:ml-6
+                prose-p:font-normal prose-p:text-[16px] prose-p:leading-[24px]
+                prose-li:font-normal prose-li:text-[16px] prose-li:leading-[24px]
+                prose-h2:font-semibold prose-h2:text-[24px] prose-h2:leading-[32px]
+                prose-strong:font-semibold prose-strong:text-PrimaryBlack">
+                <PortableText value={mainBlocks} components={ptComponents} />
+              </div>
               </div>
  
       

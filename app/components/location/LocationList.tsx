@@ -71,7 +71,7 @@ interface LocationsListProps {
 
 export default function LocationsList({locations, initialQuery = '', isCityPage, country, decodedState}: LocationsListProps) {
    const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
-   console.log("locationsnnnnn",locations);
+  //  console.log("locationsnnnnn",locations);
     let currencyCode = selectedLocale?.currency || 'USD';
     const [minVal, setMinVal] = useState(25);
     const [maxVal, setMaxVal] = useState(75);

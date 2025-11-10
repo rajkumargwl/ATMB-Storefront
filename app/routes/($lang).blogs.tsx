@@ -1,4 +1,3 @@
-
 import {json, type LoaderFunctionArgs, defer} from '@shopify/remix-oxygen';
 import {useLoaderData, useFetcher} from '@remix-run/react';
 import {notFound} from '~/lib/utils';
@@ -8,10 +7,10 @@ import { Link } from 'react-router-dom';
 import {AnalyticsPageType, type SeoHandleFunction} from '@shopify/hydrogen';
 import { usePrefixPathWithLocale } from '~/lib/utils';
 import { SEO } from '~/queries/sanity/fragments/seo';
-
+ 
 const FIRST_PAGE_SIZE = 11;
 const NEXT_PAGE_SIZE = 12;
-
+ 
 export async function loader({context, request, params}: LoaderFunctionArgs) {
   let language = params.lang || 'en';
   if(language !== 'en-es'){
@@ -33,7 +32,7 @@ export async function loader({context, request, params}: LoaderFunctionArgs) {
       link,
         ${SEO}
     }`,
-    params: { language }, 
+    params: { language },
   });
  
   if (!posts) throw notFound();
@@ -51,7 +50,7 @@ function portableTextToPlainText(blocks: any[]): string {
     })
     .join("\n");
 }
- const seo: SeoHandleFunction = ({data}) => ({
+const seo: SeoHandleFunction = ({data}) => ({
   title: data?.page?.seo?.title || 'Virtual Mailbox Blog: Tips, News & Guides',
   description:
     data?.page?.seo?.description ||
@@ -186,7 +185,7 @@ export default function BlogIndex() {
               <button
                 onClick={loadMore}
                 disabled={loading}
-                className="flex items-center justify-center w-[151px] h-11 md:h-[52px] px-4 py-3 border border-PrimaryBlack rounded-full font-Roboto font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack"
+                className="flex items-center justify-center w-[151px] h-11 md:h-[52px] px-4 py-3 border border-PrimaryBlack rounded-full font-Roboto font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack transition-all  hover:bg-PrimaryBlack hover:text-white"
               >
                 {loading ? "Loading..." : "Load More"}
               </button>
@@ -197,4 +196,3 @@ export default function BlogIndex() {
     </div>
   );
 }
- 

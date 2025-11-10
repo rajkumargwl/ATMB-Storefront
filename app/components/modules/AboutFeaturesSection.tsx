@@ -28,10 +28,11 @@ export default function AboutFeaturesSection({ backgroundColor, features }: Prop
             className="flex flex-col items-center self-start"
           >
             {feature.icon?.url && (
-             <span className="bg-white rounded-full p-[18px] md:p-6"> <img
+             <span className="bg-white rounded-full p-[18px] md:p-6"> 
+             <img
                 src={feature.icon.url}
                 alt={feature.title}
-                className="rounded-[20px] w-6 md:w-8 h-6 md:h-8 object-cover"
+                className=" w-6 md:w-8 h-6 md:h-8 object-cover"
               title={feature.tooltipTitle}
               />
               </span>

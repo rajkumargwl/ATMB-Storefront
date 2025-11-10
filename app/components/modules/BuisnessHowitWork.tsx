@@ -56,7 +56,7 @@ export default function BuisnessHowitWork({
             <li
               key={idx}
               role="listitem"
-              tabIndex={0}
+             
               aria-label={`${step.heading ?? ""}. ${step.text ?? ""}`}
               className="relative flex flex-col items-center text-center"
             >

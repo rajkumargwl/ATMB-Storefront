@@ -3,6 +3,7 @@ import { Check } from "lucide-react";
 
 type PartnerLogo = {
   url: string;
+  alt: string;
 };
 
 type Icon = {
@@ -121,6 +122,7 @@ const PdpMailCenterHighlightsSection: React.FC<Props> = ({
             ))}
           </div>
         </div>
+<<<<<<< HEAD
 
         {/* Right Section — only render if highlights exist */}
         {hasHighlights && (
@@ -142,6 +144,18 @@ const PdpMailCenterHighlightsSection: React.FC<Props> = ({
                   <span className="font-Roboto text-white text-[16px] leading-[24px]">{item}</span>
                 </div>
               ))}
+=======
+        <p className="font-Roboto text-white font-normal leading-[18px] md:leading-[18px] text-[12px] md:text-[12px] tracking-[0px]">{designation}</p>
+ 
+        <div className="flex flex-wrap items-center gap-2 mt-6">
+          {partnerLogos?.map((logo, index) => (
+            <div className="w-[54px] h-[33px] bg-white rounded-[3px] flex items-center justify-center border border-LightWhite">
+            <img
+              key={index}
+               src={logo.logo?.url}
+              alt={logo.alt || `partner-${index}`}
+              className="w-auto h-auto object-contain"/>
+>>>>>>> dev
             </div>
           </div>
         )}

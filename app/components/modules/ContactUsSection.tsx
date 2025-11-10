@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from "react";
 import Contact from "~/components/media/contact.png";
 import RightArrowWhite from '~/components/icons/RightArrowWhite';
@@ -27,10 +28,10 @@ type ContactUsProps = {
  
 export default function ContactUsSection({ data }: ContactUsProps) {
   if (!data) return null;
-
+ 
   const recaptchaRef = useRef<HTMLDivElement | null>(null);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
-
+ 
   // ✅ Load Google reCAPTCHA script
   useEffect(() => {
     const script = document.createElement("script");
@@ -52,7 +53,7 @@ export default function ContactUsSection({ data }: ContactUsProps) {
  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+ 
     if (!recaptchaToken) {
       alert("Please verify you are not a robot before submitting.");
       return;
@@ -106,7 +107,7 @@ export default function ContactUsSection({ data }: ContactUsProps) {
  
       // --- Success message (only if both succeed) ---
       alert("Thank you! Your form has been submitted.");
-      e.currentTarget?.reset(); 
+      e.currentTarget?.reset();
       setRecaptchaToken(null);
       if (window.grecaptcha && recaptchaRef.current) {
         window.grecaptcha.reset();
@@ -211,11 +212,11 @@ export default function ContactUsSection({ data }: ContactUsProps) {
  
               
               <div className="relative pt-3 flex items-center justify-center">
-                <button type="submit" className="flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto py-[12px] px-4 rounded-full w-full md:w-[271px] h-[52px] group relative overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]">
-                  
-                   <span className="relative flex items-center">Submit <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
-                      <RightArrowWhite />
-                    </span></span>
+                <button type="submit" className="flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto py-[12px] px-4 rounded-full w-full md:w-[271px] h-[52px] group relative overflow-hidden transition-all hover:bg-[#DF5D07] hover:text-white">
+ 
+                      <span className="relative flex items-center transition-all duration-300">Submit <span className="relative right-0 opacity-0 translate-x-[12px] hidden group-hover:opacity-100 group-hover:block group-hover:translate-x-[12px] transition-all duration-300">
+              <RightArrowWhite />
+            </span></span>
                   </button>
               </div>
             </form>
@@ -274,4 +275,5 @@ export default function ContactUsSection({ data }: ContactUsProps) {
     </section>
   );
 }
+ 
  

@@ -26,7 +26,7 @@ export default {
       },
       hidden: true,
     },
-     {
+    defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
@@ -36,46 +36,30 @@ export default {
         isUnique: async (slug, context) => {
           const { document, getClient } = context
           const client = getClient({ apiVersion: '2023-01-01' })
-    
-          // Fallback to 'en' if language is missing
-          const language = document?.language || 'en'
-    
-          const params = {
-            slug,
-            language,
-            id: document._id,
-          }
-    
-          // Query for other wpPost documents with same slug + language
+
+          // Ensure slug and language exist
+          if (!slug || !document) return true
+
+          const language = document.language || 'en'
+          const id = document._id.replace(/^drafts\./, '')
+
+          // ✅ Fetch documents with same slug *and* same language, excluding self
           const duplicate = await client.fetch(
-            `*[
+            `count(*[
               _type == "wpPost" &&
               slug.current == $slug &&
-              (
-                (defined(language) && language == $language) ||
-                (!defined(language) && $language == "en")
-              ) &&
+              language == $language &&
               !(_id in [$id, "drafts." + $id])
-            ][0]._id`,
-            params
+            ])`,
+            { slug, language, id }
           )
-    
-          // If none found, slug is unique for this language
-          return !duplicate
+
+          // If 0 matches found, it’s unique
+          return duplicate === 0
         },
       },
-    },
-    // defineField({
-    //   name: 'slug',
-    //   title: 'Slug',
-    //   type: 'slug',
-    //   options: {
-    //     source: 'title',
-    //     maxLength: 96,
-    //   },
-    //   group: 'editorial',
-    //   validation: (Rule) => Rule.required(),
-    // }),
+    }),
+
     defineField({
       name: 'content',
       title: 'Content',
