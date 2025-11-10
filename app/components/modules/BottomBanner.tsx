@@ -24,18 +24,18 @@ export function BottomBanner({ data }: BottomBanner) {
   } = data || {};
  
   return (
-    <section className="bg-Red relative flex flex-col  items-center justify-between text-white md:px-5  overflow-hidden">
-      <div className="relative z-[3] max-w-[1240px] mx-auto w-full flex flex-col md:flex-row gap-[0] md:gap-[60px] lg:gap-[251px]">
+   <section className="bg-DarkOrange relative flex flex-col  items-center justify-between text-white px-5 py-[60px]  overflow-hidden">
+      <div className="relative z-[3] max-w-[1240px] mx-auto w-full flex flex-col md:flex-row gap-[40px] md:gap-[24px]">
         {/* Text Section */}
-        <div className="relative z-[4] w-full md:w-[57.3%] lg:w-[60%] pb-[0] pt-[100px] md:py-[60px] lg:py-[100px] flex flex-col justify-center px-5 md:px-[0]">
+        <div className="relative z-[4] w-full md:w-[60.3%] order-2 md:order-1  flex flex-col justify-center">
           {heading && (
-            <h2 className="max-w-[594px] font-Roboto text-white font-semibold leading-[38.4px] md:leading-[43.2px] text-[32px] md:text-[36px] tracking-[-0.48px] md:tracking-[-0.54px]">
+            <h2 className="max-w-[707px] text-center md:text-left font-Roboto text-white font-semibold leading-[38.4px] md:leading-[61.6px] text-[32px] md:text-[56px] tracking-[-0.48px] md:tracking-[-1.12px]">
               {heading}
             </h2>
           )}
  
           {description && (
-            <p className="mt-6 text-white font-Roboto text-[16px] md:text-[18px] leading-[1.5] font-normal">
+            <p className="mt-8 text-white font-Roboto text-[16px] md:text-[18px] leading-[1.5] font-normal">
               {description}
             </p>
           )}
@@ -43,7 +43,7 @@ export function BottomBanner({ data }: BottomBanner) {
           {buttonText && (
             <a
               href={buttonLink || '#'}
-              className="mt-4 flex items-center justify-center w-[180px] h-[52px] md:h-[52px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-PrimaryBlack bg-white px-4 py-[12px] border border-PrimaryBlack transition-all  hover:bg-PrimaryBlack hover:text-white"
+              className="mt-8 flex items-center justify-center w-full md:w-[221px] h-[52px] md:h-[52px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-PrimaryBlack bg-white px-4 py-[12px] border border-PrimaryBlack transition-all  hover:bg-PrimaryBlack hover:text-white"
             >
               {buttonText}
             </a>
@@ -52,11 +52,11 @@ export function BottomBanner({ data }: BottomBanner) {
  
         {/* Image Section */}
         {image?.url && (
-          <div className="w-full md:w-[42.7%] lg:w-[40%] relative z-[4] flex items-center justify-end md:justify-start px-5 md:px-[0px]">
+          <div className="w-full md:w-[39.7%] order-1 md:order-2 relative z-[4] flex items-center">
             <img
               src={image.url}
               alt="Referral banner image"
-              className="w-[262px] h-full object-contain object-bottom"
+              className="w-full md:w-[431px] h-auto md:h-[344px] object-contain"
             />
           </div>
         )}
