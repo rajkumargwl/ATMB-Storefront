@@ -106,6 +106,7 @@ import PdpWhyChooseAnytimePhone from './PdpWhyChooseAnytimePhone';
 import { InviteFriend } from './InviteFriend';
 import { RefferalBanner } from './RefferalBanner';
 import { RefferalStep } from './RefferalStep';
+import { BottomBanner, RefferalBottomBanner } from './BottomBanner';
 
 type Props = {
   module: SanityModule | ProductWithNodes;
@@ -359,7 +360,10 @@ case 'smartBusinessSection':
 
     case 'renterReferralBannerModule':
   return <RefferalBanner data={module} />
-
+  
+  
+    case 'renterReferralBannerBottomModule':
+  return <BottomBanner data={module} />
     
     case 'pdpPageModule':
       return (
@@ -371,9 +375,7 @@ case 'smartBusinessSection':
         </>
       );
    
-    // case 'PDPCommonFeatures':
-    //   return <PDPCommonFeaturesSection {...module} />;    
-    
+ 
 
    
     case 'aboutUsModule':

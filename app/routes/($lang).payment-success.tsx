@@ -8,6 +8,9 @@ import { useRootLoaderData } from "~/root";
 import { useEffect } from "react";
 import {ClientOnly} from "~/components/ClientOnly"; // custom helper
 import RoktIntegration from "~/components/RoktIntegration.client";
+import {
+  Money,
+} from '@shopify/hydrogen-react';
 
 export const loader: LoaderFunction = async ({ context }) => {
 const { env, storefront } = context;
@@ -99,6 +102,7 @@ export default function CheckoutPage() {
 const { cart, customer } = useLoaderData<typeof loader>();
 const navigate = useNavigate();
 const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
+console.log("selectedLocale", selectedLocale);
 let currencyCode = selectedLocale?.currency || 'USD';
 
 // Define visible attribute keys
@@ -192,7 +196,7 @@ return (
     {/* Success Icon */}
     <div className="">
       <div className="rounded-full">
-        <svg xmlns="http://www.w3.org/2000/svg" width="112" height="112" viewBox="0 0 112 112" fill="none">
+        <svg xmlns="http://www.w3.org/2000/svg" width="105" height="105" viewBox="0 0 112 112" fill="none">
           <g clipPath="url(#clip0_2232_18108)">
             <path
               d="M93.1115 93.1226C113.614 72.6201 113.614 39.3789 93.1115 18.8764C72.609 -1.62612 39.3678 -1.62612 18.8653 18.8764C-1.63723 39.3789 -1.63723 72.6201 18.8653 93.1226C39.3678 113.625 72.609 113.625 93.1115 93.1226Z"
@@ -221,22 +225,24 @@ return (
     </div>
 
     {/* Title */}
-    <h1 className="text-[24px] md:text-[36px] font-[600] md:leading-[43.2px] md:tracking-[-0.54px] leading-[31.2px] tracking-[-0.36px] text-[#091019] text-center mb-7 mt-7 sm:mb-10">
+    <h1 className="text-[24px] md:text-[36px] font-[600] md:leading-[43.2px] md:tracking-[-0.54px] leading-[31.2px] tracking-[-0.36px] text-[#091019] text-center md:mb-7 mt-7 mb-10">
       Payment Successful — You’re All Set!
     </h1>
 
     {/* Cart Layout */}
     {cart?.lines?.edges?.length > 0 && (
       <>
-        {cart.lines.edges.map((edge: any) => {
+        {cart.lines.edges.map((edge: any, index: number) => {
           const line = edge.node;
           const variant = line.merchandise;
           const productTitle = variant?.product?.title || "Untitled Product";
           const price = line.cost?.totalAmount?.amount;
           const currency = line.cost?.totalAmount?.currencyCode;
-
+          const isLast = index === cart.lines.edges.length - 1;
           return (
-            <div className="w-full max-w-[410px] border border-[#DCDCDC] rounded-xl shadow-sm p-6 mb-2 sm:mb-6">
+            <div className={`w-full max-w-[410px] border border-[#DCDCDC] rounded-xl shadow-sm p-6 ${
+                isLast ? "" : " md:mb-2 mb-6 "
+              }`}>
             <div key={line.id} className="mb-6 last:mb-0">
               <div className="flex items-center gap-3 mb-4">
                 <div className="bg-orange-500 text-white p-2 rounded-full">
@@ -256,9 +262,8 @@ return (
                 <div className="font-Roboto text-[14px] font-[400] text-[#091019] leading-[21px] mb-2">
                   {variant.title} Plan
                 </div>
-                <div className="text-[16px] font-[500] text-[#171717] leading-[24px]">
-                  {currencyCode} {price}{" "}
-                  <span className="text-[16px] font-[500] text-[#4D4E4F] leading-[24px]">/ month</span>
+                <div className="flex text-[16px] font-[500] text-[#171717] leading-[24px]">
+                  <Money data={{ amount: price, currencyCode: currencyCode }}/>&nbsp;<span className="text-[16px] font-[500] text-[#4D4E4F] leading-[24px]">/month</span>
                 </div>
               </div>
           
@@ -294,17 +299,17 @@ return (
         <button
         aria-label="Continue"
         title="Continue"
-      onClick={async () => {
-        try {
-          await fetch("/api/clear-cart", { method: "POST" });
-          await fetch("/api/clear-customer-metafields", { method: "POST" });
-          localStorage.removeItem("checkoutCart");
-          navigate("/");
-        } catch (error) {
-          console.error("Error clearing cart:", error);
-        }
-      }}
-      className="px-4 py-3 max-w-[236px] w-full border border-gray-400 rounded-full text-gray-800 font-medium hover:bg-gray-100 transition"
+        onClick={async () => {
+          try {
+            await fetch("/api/clear-cart", { method: "POST" });
+            await fetch("/api/clear-customer-metafields", { method: "POST" });
+            localStorage.removeItem("checkoutCart");
+            navigate("/");
+          } catch (error) {
+            console.error("Error clearing cart:", error);
+          }
+        }}
+      className="mt-7 px-4 py-3 max-w-[236px] w-full border border-gray-400 rounded-full text-gray-800 font-medium hover:bg-gray-100 transition"
     >
       Continue
     </button>
