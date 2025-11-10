@@ -30,7 +30,14 @@ export async function loader({context}: LoaderFunctionArgs) {
   const [locations] = await Promise.all([
     context.sanity.query({
       query: /* groq */ `
-        *[_type == "location" && defined(country) && country != "" ]{
+        *[_type == "location" 
+          && defined(country) 
+          && country != "" 
+          && (
+            (defined(state) && state != "") ||
+            (defined(city) && city != "")
+          )
+        ]{
           displayName,
           addressLine1,
           country,
