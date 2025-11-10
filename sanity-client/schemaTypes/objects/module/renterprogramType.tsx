@@ -17,6 +17,8 @@ export const renterreferralprogramType = defineType({
          { type: 'referralStep' }, 
          { type: 'renterReferralBannerModule' }, 
         { type: 'renterEditor' }, 
+         { type: 'renterReferralBannerBottomModule' }, 
+       
 
       ],
     }),
