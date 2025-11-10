@@ -88,8 +88,8 @@ export default function FAQ({ data }: Props) {
           </div>
           <div className="flex justify-center mt-11 md:mt-14">
             <Link to={usePrefixPathWithLocale('/faq-operator')}>
-              <button className="group relative flex items-center justify-center bg-DarkOrange text-white font-Roboto font-medium leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-[16px] py-[12px] rounded-[100px] min-w-[205px] md:min-w-[385px] min-h-[52px] overflow-hidden transition-all hover:bg-[#DF5D07] hover:text-white">
-                <span className="relative flex items-center transition-all duration-300">View All FAQs <span className="relative right-0 opacity-0 translate-x-[12px] hidden group-hover:opacity-100 group-hover:block group-hover:translate-x-[12px] transition-all duration-300">
+              <button className="group relative flex items-center justify-center bg-DarkOrange text-white font-Roboto font-medium leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-[16px] py-[12px] rounded-[100px] min-w-[205px] md:min-w-[385px] min-h-[52px] overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DF5D07]">
+              <span className="relative flex items-center">View All FAQs <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
               <RightArrowWhite />
             </span></span>
               </button>

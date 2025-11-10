@@ -1,4 +1,3 @@
-
 import { Link } from '@remix-run/react';
 import RightArrowWhite from '~/components/icons/RightArrowWhite';
  
@@ -75,10 +74,9 @@ export function HowItWorksVirtualbox({ data }: HowItWorksVirtualboxProps) {
             {data.ctaButton && (
               <Link
                 to={data.ctaButton.url || '#'}
-                className="group relative flex items-center justify-center w-full md:w-[192px] bg-DarkOrange text-white font-Roboto font-normal leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-[16px] py-[12px] rounded-[100px] overflow-hidden transition-all  hover:bg-[#DF5D07] hover:text-white]"
+                className="group relative flex items-center justify-center w-full md:w-[192px] bg-DarkOrange text-white font-Roboto font-normal leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-[16px] py-[12px] rounded-[100px] overflow-hidden transition-all  hover:scale-[1.01] hover:bg-[#DF5D07]"
               >               
-              
-               <span className="relative flex items-center transition-all duration-300">{data.ctaButton.label} <span className="relative right-0 opacity-0 translate-x-[12px] hidden group-hover:opacity-100 group-hover:block group-hover:translate-x-[12px] transition-all duration-300">
+             <span className="relative flex items-center">{data.ctaButton.label}  <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
               <RightArrowWhite />
             </span></span>
               </Link>
@@ -99,4 +97,3 @@ export function HowItWorksVirtualbox({ data }: HowItWorksVirtualboxProps) {
     </section>
   );
 }
- 
