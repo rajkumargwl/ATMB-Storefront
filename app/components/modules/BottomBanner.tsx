@@ -1,6 +1,6 @@
 import React from 'react';
  
-interface RenterReferralBannerProps {
+interface BottomBanner {
   data: {
     _key?: string;
     _type?: string;
@@ -14,7 +14,7 @@ interface RenterReferralBannerProps {
   };
 }
  
-export function RefferalBottomBanner({ data }: RenterReferralBannerProps) {
+export function BottomBanner({ data }: BottomBanner) {
   const {
    sectionTitle: heading = '',
     description,
@@ -24,7 +24,7 @@ export function RefferalBottomBanner({ data }: RenterReferralBannerProps) {
   } = data || {};
  
   return (
-    <section className="bg-DarkOrange relative flex flex-col  items-center justify-between text-white md:px-5  overflow-hidden">
+    <section className="bg-Red relative flex flex-col  items-center justify-between text-white md:px-5  overflow-hidden">
       <div className="relative z-[3] max-w-[1240px] mx-auto w-full flex flex-col md:flex-row gap-[0] md:gap-[60px] lg:gap-[251px]">
         {/* Text Section */}
         <div className="relative z-[4] w-full md:w-[57.3%] lg:w-[60%] pb-[0] pt-[100px] md:py-[60px] lg:py-[100px] flex flex-col justify-center px-5 md:px-[0]">

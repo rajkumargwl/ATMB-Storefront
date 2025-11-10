@@ -6,7 +6,7 @@ export default {
   name: 'news',
   title: 'Newsroom',
   type: 'document',
-  groups: GROUPS, // 👈 this makes use of your GROUPS definition
+  groups: GROUPS, // this makes use of your GROUPS definition
   fields: [
     defineField({
       name: 'title',
@@ -45,7 +45,7 @@ export default {
           const language = document.language || 'en'
           const id = document._id.replace(/^drafts\./, '')
 
-          // ✅ Fetch documents with same slug *and* same language, excluding self
+          // Fetch documents with same slug *and* same language, excluding self
           const duplicate = await client.fetch(
             `count(*[
               _type == "news" &&
@@ -72,11 +72,19 @@ export default {
     //   },
     //   validation: Rule => Rule.required(),
     // }),
+    // defineField({
+    //   name: 'description',
+    //   title: 'Description',
+    //   type: 'blockContent',
+    // }),
     defineField({
       name: 'description',
       title: 'Description',
       type: 'blockContent',
-    }),
+      description: `Tip: To show side content, wrap the section with a <strong> tag.
+      Content before the first <strong> tag will appear in the main area.
+      Content after the second <strong> tag will appear in the sidebar.`,
+    }),    
     defineField({
       name: 'featuredImage',
       title: 'Featured Image',
@@ -99,7 +107,7 @@ export default {
       type: 'datetime',
       validation: Rule => Rule.required(),
     }),
-    // 👇 Add SEO field group
+    // Add SEO field group
     defineField({
       name: 'seo',
       title: 'SEO',
