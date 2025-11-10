@@ -41,7 +41,7 @@ export default function MarketplaceIntro({ data }: Props) {
 
   return (
     <section className="px-5 py-[40px] md:py-[60px] lg:py-[100px]">
-      <div className="max-w-[1240px] mx-auto flex flex-col lg:flex-row gap-10">
+      <div className="max-w-[1240px] mx-auto flex flex-col lg:flex-row gap-11">
         {/* Sidebar */}
         {/* <aside className="w-full lg:w-[280px]">
           <ul className="flex lg:flex-col overflow-x-auto lg:overflow-x-visible">
@@ -167,7 +167,7 @@ export default function MarketplaceIntro({ data }: Props) {
       );
     })()}
   </div>
-  
+
   {/* Desktop Sidebar Tabs */}
 <ul
   role="tablist"
@@ -334,7 +334,7 @@ export default function MarketplaceIntro({ data }: Props) {
                     sub?.buttonText + " about " + sub?.name || "Learn More"
                   }
                   target="_blank"
-                  className="flex items-center gap-1 text-[16px] leading-[16px] text-[#091019] cursor-pointer border border-[#091019] rounded-full px-4 py-3"
+                  className="flex items-center gap-3 text-[16px] font-[400] leading-[16px] text-[#091019] cursor-pointer border border-[#091019] rounded-full px-4 py-3"
                 >
                   {sub?.buttonText || "Learn More"}
                   <NewTabIcon className="w-4 h-4" />
