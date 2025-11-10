@@ -233,7 +233,7 @@ export default function MarketplaceIntro({ data }: Props) {
 
           <div className="p-6 md:p-8">
             {/* Title */}
-            <h3 className="text-[32px] font-[600] leading-[38.4px] tracking-[-0.48px] text-PrimaryBlack mb-6">
+            <h3 className="md:text-[32px] text-[20px] font-[600] leading-[38.4px] tracking-[-0.48px] text-PrimaryBlack mb-6">
               {activeCategory === -1 ? "All Categories" : currentCategory?.title}
             </h3>
 
