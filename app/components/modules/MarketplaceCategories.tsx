@@ -254,13 +254,15 @@ export default function MarketplaceIntro({ data }: Props) {
                           <img
                             src={sub?.logo?.url}
                             alt={sub?.logo?.alt || sub?.name}
-                            className="h-[28px] object-contain"
+                            className="h-[28px]  max-w-[140px] object-contain"
                           />
                         )}
 
                         {/* {sub?.buttonText && ( */}
                           <Link
                             to={sub?.buttonLink || "#"}
+                            title={sub?.buttonText + ' about ' + sub?.name || "Learn More"}
+                            aria-label={sub?.buttonText + ' about ' + sub?.name || "Learn More"}
                             target="_blank"
                             className="flex items-center gap-1 text-[16px] leading-[16px] text-[#091019] cursor-pointer border border-[#091019] rounded-full px-4 py-3"
                           >
