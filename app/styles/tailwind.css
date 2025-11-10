@@ -544,6 +544,7 @@ body.no-scroll {
     display: flex;
     flex-direction: column;
     gap: 7px;
+    margin-left: 0;
 }
 .news-detail ol ol,
 .news-detail ul ul {

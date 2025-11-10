@@ -40,9 +40,9 @@ export default function AffiliateProgramSection({
         {ctaText && (
           <a
             href={ctaUrl ?? "#"}
-            className="group relative flex items-center justify-center w-full md:w-[249px] h-[44px] md:h-[52px] rounded-full bg-DarkOrange px-4 py-3 text-white  font-Roboto font-normal text-[16px] md:text-[16px] leading-[16px] tracking-[0.08px] overflow-hidden transition-all  hover:bg-[#DF5D07] hover:text-white"
+            className="group relative flex items-center justify-center w-full md:w-[249px] h-[44px] md:h-[52px] rounded-full bg-DarkOrange px-4 py-3 text-white  font-Roboto font-normal text-[16px] md:text-[16px] leading-[16px] tracking-[0.08px] overflow-hidden transition-all  hover:scale-[1.01] hover:bg-[#DF5D07]"
           >
-               <span className="relative flex items-center transition-all duration-300">{ctaText} <span className="relative right-0 opacity-0 translate-x-[12px] hidden group-hover:opacity-100 group-hover:block group-hover:translate-x-[12px] transition-all duration-300">
+            <span className="relative flex items-center">{ctaText}  <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
               <RightArrowWhite />
             </span></span>
           </a>
