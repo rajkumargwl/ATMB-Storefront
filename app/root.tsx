@@ -266,7 +266,6 @@ export default function App() {
   const {preview, header, footer, q, searchResults,  isLoggedIn, customer, language, cart, ...data} = useLoaderData<typeof loader>();
   const cartCount = cart?._data?.lines?.edges.length || 0;
   const locale = data.selectedLocale ?? DEFAULT_LOCALE;
-  console.log("localelocale", locale);
   const hasUserConsent = true;
   const nonce = useNonce();
 
