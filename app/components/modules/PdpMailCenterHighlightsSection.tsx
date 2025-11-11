@@ -16,6 +16,7 @@ type Icon = {
 type Props = {
   companyName: string;
   designation: string;
+  
   highlightsTitle: string;
   highlights: string[];
   partnerLogos: PartnerLogo[];

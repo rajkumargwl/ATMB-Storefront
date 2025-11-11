@@ -108,7 +108,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
       cache,
     }),
   ]);
- console.log("pageee",JSON.stringify(page,null,2));
+
  
 
   return defer({
