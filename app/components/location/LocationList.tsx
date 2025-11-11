@@ -395,6 +395,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
               <button
                 className="rounded-full md:border md:border-LightWhite p-2 md:p-[11px]"
                 title="Back"
+                aria-label='Back'
                 onClick={() => navigate(-1)}
               >
                 <LeftArrowBlack />
@@ -414,6 +415,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
               <button
                 className={`rounded-full md:border md:border-LightWhite p-2 md:p-[11px] ${isCityPage ? 'hidden' : ''}`}
                 title='Back'
+                aria-label='Back'
                 onClick={() => navigate(-1)}
               >
                 <LeftArrowBlack />
@@ -422,7 +424,9 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
 
               <div className="flex flex-col w-full relative">
                 <div className={`flex items-center gap-[10px] w-full rounded-full border border-LightWhite py-[4px] md:py-[3px] pl-3 md:pl-4 ${isCityPage ? 'pr-[4px] md:pr-[3px]' : 'pr-[4px] md:pr-[3px]'} shadow-[0_6px_24px_0_rgba(0,0,0,0.05)] md:shadow-none bg-white`}>
+                  <label htmlFor="searchCity" className="sr-only">Search City</label>
                   <input
+                    id="searchCity"
                     type="text"
                     value={searchCity}
                     aria-label="Search City"
@@ -449,6 +453,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                   <button
                     className={`flex items-center justify-center min-w-[32px] md:min-w-[48px] w-[32px] md:w-12 h-[32px] md:h-12 bg-DarkOrange rounded-full`}
                     onClick={() => setSelectedCity(searchCity)}
+                    aria-label='Search City'
                   >
                     <img
                       src={SearchWhite}
@@ -831,6 +836,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                   <button
                     className={`flex items-center justify-center min-w-[32px] md:min-w-[48px] w-[32px] md:w-12 h-[32px] md:h-12 bg-DarkOrange rounded-full ${isCityPage ? 'hidden' : ''}`}
                     onClick={() => setSelectedCity(searchCity)}
+                    aria-label="Search City"
                   >
                     <img
                       src={SearchWhite}
@@ -1086,15 +1092,17 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                 Plan Tier
               </label>
               <div className="flex relative">
+                <label htmlFor="planTier" className="sr-only">Plan Tier</label>
                 <select
                   value={tempPlanTier}
                   onChange={(e) => setTempPlanTier(e.target.value)}
                   aria-label="All Tiers"
+                  id="planTier"
                   className="relative z-[2] border border-LightWhite bg-transparent px-3 py-[18.5px] rounded-[8px] w-full font-Roboto text-PrimaryBlack font-normal text-[14px] leading-[21px] tracking-[0px] appearance-none"
                 >
-                  <option value="">All Tiers</option>
+                  <option value="" aria-label="All Tiers">All Tiers</option>
                   {uniqueTiers.map((tier) => (
-                    <option key={tier} value={tier}>
+                    <option key={tier} value={tier} aria-label={tier}>
                       {tier}
                     </option>
                   ))}
@@ -1141,8 +1149,11 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
     ></div>
 
     {/* Left Thumb */}
+    <label htmlFor="minPriceSlider" className="sr-only">Minimum Price Slider</label>
     <input
       type="range"
+      id="minPriceSlider"
+      aria-label="minPriceSlider"
       min="0"
       max="100"
       value={tempMinVal}
@@ -1156,8 +1167,11 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
     />
 
     {/* Right Thumb */}
+    <label htmlFor="maxPriceSlider" className="sr-only">Maximum Price Slider</label>
     <input
       type="range"
+      id="maxPriceSlider"
+      aria-label="maxPriceSlider"
       min="0"
       max="100"
       value={tempMaxVal}
@@ -1186,8 +1200,11 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
 
   {/* Number Boxes */}
   <div className="flex items-center justify-between gap-2 mt-3">
+    <label htmlFor="minPrice" className="sr-only">Minimum Price</label>
     <input
       type="number"
+      id="minPrice"
+      aria-label="minPrice"
       value={tempMinPrice}
       min={PRICE_MIN}
       max={tempMaxPrice - 1}
@@ -1199,8 +1216,11 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
       aria-label="Minimum Price"
       className="border border-LightWhite w-20 px-3 py-2 rounded-[8px] font-Roboto text-PrimaryBlack font-normal text-[16px] leading-[24px] tracking-[0px]"
     />
+    <label htmlFor="maxPrice" className="sr-only">Maximum Price</label>
     <input
       type="number"
+      id="maxPrice"
+      aria-label="maxPrice"
       value={tempMaxPrice}
       min={tempMinPrice + 1}
       max={PRICE_MAX}
