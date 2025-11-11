@@ -1,6 +1,6 @@
 // app/routes/($lang).cart.tsx
 
-import {Await, useLoaderData} from '@remix-run/react';
+import {Await, useLoaderData, useNavigate} from '@remix-run/react';
 import {Suspense} from 'react';
 import {useRootLoaderData} from '~/root'; 
 import {
@@ -16,7 +16,7 @@ import {
 import SpinnerIcon from '~/components/icons/Spinner';
 import CartBundleSection from '~/components/cart/CartBundleSection';
 import CartEssentialsSection from '~/components/cart/CartEssentialsSection';
-
+import LeftArrowBlack from '~/components/icons/LeftArrowBlack';
 import {
   defer,
   json,
@@ -345,7 +345,7 @@ export async function loader({ context }: LoaderFunctionArgs) {
 export default function Cart() {
   const rootData = useRootLoaderData();
   const { bundleProducts, essentialsProducts} = useLoaderData<typeof loader>();
-  
+  const navigate = useNavigate();
 //console.log('Essentials Products in Cart page:', essentialsProducts);
   return (
     <section className="">
@@ -369,11 +369,18 @@ export default function Cart() {
             <div className="bg-white px-5 pt-[32px] pb-[40px] md:pb-[60px]">
               <div className='max-w-[1240px] mx-auto'>
                 <div className='flex flex-row items-center justify-start mb-6 md:mb-8 gap-3 md:gap-6'>
-                    <span className='flex items-center justify-center w-[32px] md:w-[48px] h-[32px] md:h-[48px] border border-LightWhite rounded-full'>
+                    {/* <span onClick={() => navigate(-1)} className='flex items-center justify-center w-[32px] md:w-[48px] h-[32px] md:h-[48px] border border-LightWhite rounded-full'>
                       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" className='w-[16px] md:w-[24px] h-[16px] md:h-[24px]'>
                         <path d="M9.53027 5.33008C9.56751 5.29284 9.63366 5.29284 9.6709 5.33008C9.70773 5.36727 9.70774 5.43254 9.6709 5.46973L3.24121 11.8994H21C21.0539 11.8994 21.1006 11.9461 21.1006 12C21.1005 12.0538 21.0538 12.0996 21 12.0996H3.24121L9.6709 18.5293C9.70807 18.5665 9.70794 18.6326 9.6709 18.6699C9.63366 18.7072 9.56751 18.7072 9.53027 18.6699L2.93066 12.0703C2.89343 12.0331 2.89343 11.9669 2.93066 11.9297L9.53027 5.33008Z" fill="#091019" stroke="#091019"/>
                       </svg>
-                    </span>
+                    </span> */}
+                     <button
+                className="rounded-full md:border md:border-LightWhite p-2 md:p-[11px]"
+                title="Back"
+                onClick={() => navigate(-1)}
+              >
+                <LeftArrowBlack />
+              </button>
                     <h1 className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[38.4px] text-[24px] md:text-[32px] tracking-[-0.36px] md:tracking-[-0.48px]">Your Cart</h1>
                 </div>
               </div>

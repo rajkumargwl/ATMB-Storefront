@@ -30,8 +30,17 @@ export async function loader({context}: LoaderFunctionArgs) {
   const [locations] = await Promise.all([
     context.sanity.query({
       query: /* groq */ `
-        *[_type == "location" && defined(country) && country != "" ]{
+        *[_type == "location" 
+          && defined(country) 
+          && country != "" 
+          && state != ""
+          && (
+            (defined(state) && state != "") ||
+            (defined(city) && city != "")
+          )
+        ]{
           displayName,
+          addressLine1,
           country,
           state,
           country_code,
@@ -186,7 +195,7 @@ export default function CountryLocationsPage() {
           initialQuery=""
           results={locations || []}
           onResultClick={(item) => {
-            navigate(`/sublocations?q=${encodeURIComponent(item.displayName || item.city || '')}`);
+            navigate(`/sublocations?q=${encodeURIComponent(item.addressLine1 || '')}`);
           }}
         />
 

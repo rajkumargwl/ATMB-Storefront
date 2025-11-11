@@ -175,13 +175,19 @@ export async function loader({request, context, params}: LoaderFunctionArgs) {
       const results = await context.sanity.query({
         query: `{
           "locations": *[_type == "location" && (
-            name match $search ||
             city match $search ||
-            postalCode match $search
+            postalCode match $search ||
+            addressLine1 match $search ||
+            state match $search ||
+            country match $search ||
+            displayName match $search
           )][0...5]{
             _id,
             _type,
-            name,
+            displayName,
+            addressLine1,
+            state,
+            country,
             city,
             postalCode,
             "slug": slug.current
@@ -215,6 +221,7 @@ export async function loader({request, context, params}: LoaderFunctionArgs) {
   }
  
   const selectedLocale = context.storefront.i18n as I18nLocale;
+  console.log("selectedLocale", selectedLocale);
  
   return defer({
     preview,
@@ -285,7 +292,7 @@ export default function App() {
   }, []);
   
   return (
-    <html lang={locale.language}>
+    <html lang={locale.country === 'ES' ? 'es' : 'en'}>
       <head>
         <meta charSet="utf-8" />
         <Seo />
