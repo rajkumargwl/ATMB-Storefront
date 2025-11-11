@@ -1,8 +1,10 @@
 import { CartForm, Money } from '@shopify/hydrogen';
 import { DEFAULT_LOCALE } from '~/lib/utils';
 import { useRootLoaderData } from '~/root';
+import { useRef, useEffect } from "react";
  
 export default function CartBundleSection({ bundleProducts }: { bundleProducts: any[] }) {
+  const prevState = useRef<string>("idle");
   if (!bundleProducts || bundleProducts.length === 0) return null;
  
   const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
@@ -23,7 +25,7 @@ export default function CartBundleSection({ bundleProducts }: { bundleProducts: 
       : null;
  
   const variantId = bundle.billing === 'monthly' ? bundle.monthlyVariantId : bundle.yearlyVariantId;
- 
+  
   return (
     <div className="flex flex-col items-start w-full lg:w-[50%] gap-[24px] md:gap-10">
       {/* Header */}
@@ -107,15 +109,31 @@ export default function CartBundleSection({ bundleProducts }: { bundleProducts: 
             lines: [{ merchandiseId: variantId, quantity: 1 }],
           }}
         >
-          {(props: { state: string }) => (
-            <button
-              type="submit"
-              disabled={props.state !== 'idle'}
-              className="flex items-center justify-center gap-[12px] w-full md:w-[202px] h-[44px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-PrimaryBlack border border-[#091019] px-4 py-[12px] transition-all  hover:bg-PrimaryBlack hover:text-white"
-            >
-              {props.state !== 'idle' ? 'Adding...' : 'Upgrade to Bundle'}
-            </button>
-          )}
+         {(props: { state: string }) => {
+             useEffect(() => {
+              if (prevState.current === "submitting" && props.state === "idle") {
+                window.scrollTo({
+                  top: 0, 
+                  behavior: "smooth",
+                });
+              }
+              prevState.current = props.state;
+            }, [props.state]);
+            return (
+              <button
+                type="submit"
+                disabled={props.state !== "idle"}
+                onClick={() => {
+                  // set state to submitting before actual form submit
+                  prevState.current = "submitting";
+                }}
+                className="flex items-center justify-center gap-[12px] w-full md:w-[202px] h-[44px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-PrimaryBlack border border-[#091019] px-4 py-[12px] transition-all hover:bg-PrimaryBlack hover:text-white"
+              >
+                {props.state !== "idle" ? "Adding..." : "Upgrade to Bundle"}
+              </button>
+            );
+          }}
+
         </CartForm>
         </div>
       </div>

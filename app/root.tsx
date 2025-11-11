@@ -221,6 +221,7 @@ export async function loader({request, context, params}: LoaderFunctionArgs) {
   }
  
   const selectedLocale = context.storefront.i18n as I18nLocale;
+  console.log("selectedLocale", selectedLocale);
  
   return defer({
     preview,
@@ -291,7 +292,7 @@ export default function App() {
   }, []);
   
   return (
-    <html lang={locale.language}>
+    <html lang={locale.country === 'ES' ? 'es' : 'en'}>
       <head>
         <meta charSet="utf-8" />
         <Seo />

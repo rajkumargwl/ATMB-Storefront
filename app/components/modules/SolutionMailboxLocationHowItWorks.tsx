@@ -1,4 +1,5 @@
 import React from "react";
+import RightArrowWhite from '~/components/icons/RightArrowWhite';
  
 interface Card {
   title?: string;
@@ -71,9 +72,12 @@ const SolutionMailboxLocationHowItWorks: React.FC<SolutionMailboxLocationHowItWo
                   <div className="mt-8">
                     <a
                       href={card?.buttonLink || "/sublocations"}
-                      className="flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full w-full h-[52px]"
+                      className="group flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full w-full h-[52px]  overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DF5D07]"
                     >
-                      {card.buttonText}
+                      
+                       <span className="relative flex items-center">{card.buttonText} <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
+                        <RightArrowWhite />
+                      </span></span>
                     </a>
                   </div>
                 )}

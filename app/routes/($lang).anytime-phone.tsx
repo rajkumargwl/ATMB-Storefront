@@ -21,7 +21,7 @@ import { fetchIndividualProducts } from '~/lib/individualProduct.server';
 // -----------------
 const seo: SeoHandleFunction = ({ data }) => ({
   title:
-    data?.page?.seo?.title || 'Anytime Phone - Sanity x Hydrogen',
+    data?.page?.seo?.title || 'Anytime Phone - Anytime Mailbox',
   description:
     data?.page?.seo?.description ||
     'Explore the Anytime Phone solutions powered by Sanity and Hydrogen.',

@@ -20,6 +20,7 @@ export default function ReplacePlanAddToCartButton({
   disabled,
   buttonClassName,
   text,
+  ariaLabel,
 }: Props) {
   if (!selectedVariant) return null;
       const billingProductId =
@@ -80,7 +81,7 @@ export default function ReplacePlanAddToCartButton({
           redirectTo: usePrefixPathWithLocale('/cart'),
         }}
       >
-        <button type="submit" disabled={disabled} className={buttonClassName}>
+        <button type="submit" disabled={disabled} className={buttonClassName} >
           {text || 'Change Plan'}
         </button>
       </CartForm>
@@ -110,7 +111,8 @@ export default function ReplacePlanAddToCartButton({
       <button
         type="submit"
         disabled={disabled}
-        className={buttonClassName}>
+        className={buttonClassName}
+        aria-label={ariaLabel || 'Add to cart'}>
         <span className="relative flex items-center">{text || 'Add to Cart'} <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
               <RightArrowWhite />
             </span></span>      

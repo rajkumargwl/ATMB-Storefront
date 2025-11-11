@@ -79,6 +79,13 @@ export default function CartEssentialsSection({
                   type="submit"
                   className="flex items-center justify-center gap-[12px] w-full md:w-[202px] h-[44px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-PrimaryBlack border border-[#091019] px-4 py-[12px] transition-all  hover:bg-PrimaryBlack hover:text-white"
                   disabled={state !== 'idle'}
+                  onClick={() => {
+                    window.scrollTo({
+                      top: 0, 
+                      behavior: "smooth",
+                    });
+                  }
+              }
                 >
                   {state !== 'idle' ? 'Adding...' : '+ Add to Cart'}
                 </button>

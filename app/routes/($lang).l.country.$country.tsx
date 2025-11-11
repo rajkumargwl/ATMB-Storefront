@@ -32,11 +32,11 @@ export async function loader({context, params}: LoaderFunctionArgs) {
   const [locations] = await Promise.all([
     context.sanity.query({
       query: /* groq */ `
-        *[_type == "location" && country == $country]{
+        *[_type == "location" && country == $country ]{
           country,
           state,
           city,
-          name,
+          displayName,
           postalCode,
           type,
           "latitude":coordinates.lat,
@@ -48,9 +48,14 @@ export async function loader({context, params}: LoaderFunctionArgs) {
       cache,
     }),
   ]);
+  
   const stateMap: Record<string, number> = {};
   locations.forEach((loc: any) => {
-    const state = loc.state || 'Unknown';
+    const state = loc.state?.trim();
+  
+    // Skip records with no state value
+    if (!state) return;
+  
     if (!stateMap[state]) stateMap[state] = 0;
     stateMap[state] += 1;
   });

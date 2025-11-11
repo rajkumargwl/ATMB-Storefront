@@ -90,7 +90,6 @@ const showChangeButtons = hasBundleAttr === 'false';
   const hasDefaultVariantOnly =
     firstVariant.name === 'Title' && firstVariant.value === 'Default Title';
     const VISIBLE_ATTRIBUTES = [
-      'locationId',
       'displayName',
       'addressLine1',
       'city',
@@ -175,20 +174,28 @@ const showChangeButtons = hasBundleAttr === 'false';
           <ul className="mt-4 font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[31.2px] text-[24px] md:text-[24px] tracking-[-0.3px] md:tracking-[-0.36px]">
             {merchandise.selectedOptions.map(({name, value}) => (
               <li key={name}>
-                {name}: {value}
+                {name=='Plans' ? value:''}
+               
               </li>
             ))}
           </ul>
         )}
           {attributes?.length > 0 && (
       <div className="mt-2 ">
-    {attributes
-     .filter((attr) => VISIBLE_ATTRIBUTES.includes(attr.key))
-      .map((attr) => (
-        <p key={attr.key} className='font-Roboto text-LightGray font-normal leading-[24px] text-[16px] tracking-[0px]'>
-           {attr.value}
-        </p>
-      ))}
+  {attributes
+  .filter((attr) => VISIBLE_ATTRIBUTES.includes(attr.key))
+  // 🧠 Sort so that 'displayName' always comes first
+  .sort((a, b) => (a.key === 'displayName' ? -1 : b.key === 'displayName' ? 1 : 0))
+  .map((attr) => (
+    <p
+      key={attr.key}
+      className={`font-Roboto text-LightGray font-normal leading-[24px] text-[16px] tracking-[0px] ${
+        attr.key === 'displayName' ? 'font-semibold text-[#091019]' : ''
+      }`}
+    >
+      {attr.value}
+    </p>
+  ))}
        
 
   </div>
@@ -298,7 +305,13 @@ function UpdateCartButton({
     </CartForm>
   );
 }
-
+const handleConfirm = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const confirmed = window.confirm("Are you sure you want to remove this item?");
+  if (!confirmed) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+};
 function ItemRemoveButton({lineIds}: {lineIds: CartLine['id'][]}) {
   return (
     <CartForm
@@ -309,6 +322,7 @@ function ItemRemoveButton({lineIds}: {lineIds: CartLine['id'][]}) {
       <button
         className="disabled:pointer-events-all disabled:cursor-wait"
         type="submit"
+        onClick={handleConfirm}
       >
         <RemoveIcon />
       </button>
