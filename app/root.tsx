@@ -221,6 +221,7 @@ export async function loader({request, context, params}: LoaderFunctionArgs) {
   }
  
   const selectedLocale = context.storefront.i18n as I18nLocale;
+  console.log("selectedLocale", selectedLocale);
  
   return defer({
     preview,
@@ -265,6 +266,7 @@ export default function App() {
   const {preview, header, footer, q, searchResults,  isLoggedIn, customer, language, cart, ...data} = useLoaderData<typeof loader>();
   const cartCount = cart?._data?.lines?.edges.length || 0;
   const locale = data.selectedLocale ?? DEFAULT_LOCALE;
+  console.log("localelocale", locale);
   const hasUserConsent = true;
   const nonce = useNonce();
 
@@ -291,7 +293,7 @@ export default function App() {
   }, []);
   
   return (
-    <html lang={locale.language}>
+    <html lang={locale.country === 'ES' ? 'es' : 'en'}>
       <head>
         <meta charSet="utf-8" />
         <Seo />
