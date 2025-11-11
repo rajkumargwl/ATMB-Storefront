@@ -628,7 +628,7 @@ export default function StatePage() {
             <h2 className="text-white font-Roboto font-[600] text-[28px] md:text-[56px] leading-[38px] md:leading-[61.6px] tracking-[-1.12px] md:mb-6 mb-4">
               {pricingBannerSection?.text || "Plans start at $9.99"}
             </h2>
-            <button aria-label="Get a Address" className="bg-white text-[#041E2C] font-[400] text-[16px] leading-[16px] tracking-[0.08px] px-4 py-3 rounded-full hover:bg-gray-100 transition">
+            <button aria-label="Get a Address" className="flex items-center justify-center w-[263px] md:w-[290px] h-[44px] md:h-[52px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-PrimaryBlack bg-white px-4 py-[12px] transition-all  hover:bg-PrimaryBlack hover:text-white">
             {pricingBannerSection?.ctaText
               ? pricingBannerSection.ctaText.replaceAll('@city', decodedState)
               : `Get a ${decodedState} Address`}

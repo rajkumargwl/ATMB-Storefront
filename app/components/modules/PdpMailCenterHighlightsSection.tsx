@@ -2,9 +2,12 @@ import React from "react";
 import { Check } from "lucide-react";
 
 type PartnerLogo = {
-  url: string;
   alt: string;
+  logo: {
+    url: string;
+  };
 };
+
 
 type Icon = {
   url: string;
@@ -112,12 +115,16 @@ const PdpMailCenterHighlightsSection: React.FC<Props> = ({
           <p className="font-Roboto text-white text-[12px] leading-[18px]">{designation}</p>
 
           <div className="flex flex-wrap gap-2 mt-6">
-            {partnerLogos?.map((logo, index) => (
+              {partnerLogos?.map((partner, index) => (
               <div
                 key={index}
                 className="w-[54px] h-[33px] bg-white rounded-[3px] flex items-center justify-center border border-LightWhite"
               >
-                <img src={logo.url} alt={`partner-${index}`} className="w-auto h-auto object-contain" />
+                  <img
+        src={partner.logo?.url}
+        alt={partner.alt || `partner-logo-${index}`}
+        className="w-auto h-auto object-contain"
+      />
               </div>
             ))}
           </div>
