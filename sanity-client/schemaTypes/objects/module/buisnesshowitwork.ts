@@ -14,12 +14,19 @@ export const buisnesshowitwork = defineType({
       initialValue: 'How it works',
       validation: (Rule) => Rule.required(),
     }),
+    
     defineField({
       name: 'description',
       title: 'Section Description',
-      type: 'text',
+      type: 'string',
       initialValue: 'Get started in minutes and unlock growth resources at your fingertips.',
       validation: (Rule) => Rule.required(),
+    }),
+     defineField({
+      name: 'descriptionLine2',
+      title: 'Section Description Line 2 ',
+      type: 'string',
+      initialValue: 'Get started in minutes and unlock growth resources at your fingertips.',
     }),
     defineField({
       name: 'steps',

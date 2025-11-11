@@ -11,6 +11,7 @@ type Step = {
 type BuisnessHowItWorkProps = {
   title?: string;
   description?: string;
+  descriptionLine2?: string;
   steps?: Step[];
   ctaText?: string;
   ctaUrl?: string;
@@ -19,6 +20,7 @@ type BuisnessHowItWorkProps = {
 export default function BuisnessHowitWork({
   title,
   description,
+    descriptionLine2,
   steps = [],
   ctaText,
   ctaUrl
@@ -47,6 +49,9 @@ export default function BuisnessHowitWork({
           >
             {description}
           </p>
+        )}
+         {descriptionLine2 && (
+          <p className="text-lg text-gray-500 mt-2">{descriptionLine2}</p>
         )}
         </div>
  

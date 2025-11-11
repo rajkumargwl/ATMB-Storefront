@@ -1,5 +1,6 @@
 import React from "react";
-
+import RightArrowWhite from '~/components/icons/RightArrowWhite';
+ 
 type Props = {
   smallHeading?: string;
   mainHeading?: string;
@@ -10,7 +11,7 @@ type Props = {
     url?: string;
   };
 };
-
+ 
 export default function CareerPromotionSection({
   smallHeading,
   mainHeading,
@@ -29,19 +30,19 @@ export default function CareerPromotionSection({
               {smallHeading}
             </p>
           )}
-
+ 
           {mainHeading && (
             <h1 className="mt-5 mb-4 md:mb-0 font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] tracking-[-0.36px] text-[24px] md:text-[36px] md:leading-[43.2px] md:tracking-[-0.54px] max-w-[529px]">
              {mainHeading.split(/(\s+)/).map((chunk, idx) => {
               if (chunk.trim() === "") {
                 return chunk; // preserve spaces
               }
-
+ 
               const cleanWord = chunk.replace(/[.,!?—]/g, "");
               const isHighlighted = highlightedWords?.some(
                 (w) => w.toLowerCase() === cleanWord.toLowerCase()
               );
-
+ 
               return isHighlighted ? (
                 <span key={idx} className="text-[#FF6600]">
                   {chunk}
@@ -50,23 +51,26 @@ export default function CareerPromotionSection({
                 chunk
               );
             })}
-
+ 
             </h1>
           )}
-
+ 
           {buttonText && (
             <div className="max-1265px:mb-4">
               <a
                 href={buttonLink || "#"}
                 target="_blank"
-                className="font-Roboto inline-block rounded-full bg-[#FF6600] text-[16px] leading-[16px] px-4 py-3 text-white font-normal hover:bg-orange-600 transition-colors"
+                className="group flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full w-full md:w-[230px] h-[44px]  overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DF5D07]"
               >
                 {buttonText}
+                 {/* <span className="relative flex items-center">{buttonText} <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[25px] transition-all duration-300">
+              <RightArrowWhite />
+            </span></span> */}
               </a>
             </div>
           )}
         </div>
-
+ 
         {/* Right side: image */}
         {image?.url && (
           <div className="flex justify-center md:justify-end">

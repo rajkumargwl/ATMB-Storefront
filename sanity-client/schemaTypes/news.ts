@@ -61,29 +61,10 @@ export default {
         },
       },
     }),
-
-    // defineField({
-    //   name: 'slug',
-    //   title: 'Slug',
-    //   type: 'slug',
-    //   options: {
-    //     source: 'title',
-    //     maxLength: 96,
-    //   },
-    //   validation: Rule => Rule.required(),
-    // }),
-    // defineField({
-    //   name: 'description',
-    //   title: 'Description',
-    //   type: 'blockContent',
-    // }),
     defineField({
       name: 'description',
       title: 'Description',
       type: 'blockContent',
-      description: `Tip: To show side content, wrap the section with a <strong> tag.
-      Content before the first <strong> tag will appear in the main area.
-      Content after the second <strong> tag will appear in the sidebar.`,
     }),    
     defineField({
       name: 'featuredImage',

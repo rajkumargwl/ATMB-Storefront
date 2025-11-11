@@ -1,5 +1,6 @@
 type BusinessTransformationSectionProps = {
   title: string;
+  secondlinetitle?: string;
   subtitle?: string;
   cards: {
     icon?: { url?: string };
@@ -11,6 +12,7 @@ type BusinessTransformationSectionProps = {
  
 export default function BusinessTransformationSection({
   title,
+  secondlinetitle,
   subtitle,
   cards,
 }: BusinessTransformationSectionProps) {
@@ -22,6 +24,9 @@ export default function BusinessTransformationSection({
           <h2 className="max-w-[299px] md:max-w-full mx-auto font-Roboto text-white font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px]">
             {title}
           </h2>
+            {secondlinetitle && (
+          <p className="text-lg text-gray-600 mt-2">{secondlinetitle}</p>
+        )}
           {subtitle && (
             <p className="font-Roboto text-white font-normal leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px] opacity-90">
               {subtitle}

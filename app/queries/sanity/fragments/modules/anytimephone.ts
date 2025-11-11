@@ -10,6 +10,7 @@ export const ANYTIME_PHONE_MODULE = groq`
 
     (_type == "solutionHeroModule") => {
       heading,
+      headingLine2,
       highlightText,
       description,
       cta {
@@ -49,6 +50,7 @@ export const ANYTIME_PHONE_MODULE = groq`
       // 🔸 Transformation Section
     (_type == "businessTransformationSection") => {
       title,
+      secondlinetitle,
        "cards":items[] {
         heading,
         description,
@@ -67,9 +69,10 @@ export const ANYTIME_PHONE_MODULE = groq`
       },
       "image": image.asset->url
     },
- // 🔸 Banner Section
+
     (_type == "businessAcceleratorBannerSection") => {
       title,
+      titleline2,
       cta {
         label,
         url
@@ -84,6 +87,7 @@ export const ANYTIME_PHONE_MODULE = groq`
     (_type == "buisnesshowitwork") => {
       title,
       description,
+      descriptionLine2,
       steps[] {
         heading,
         text,
