@@ -12,6 +12,11 @@ export const solutionHeroModule = defineType({
       description: "Main headline text (e.g. 'Access Your Postal Mail from Anywhere')",
     }),
     defineField({
+      name: 'headingLine2',
+      title: 'Heading Line 2',
+      type: 'string',
+    }),
+    defineField({
       name: 'highlightText',
       title: 'Highlight Text',
       type: 'string',

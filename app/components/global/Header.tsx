@@ -223,7 +223,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
     return () => clearTimeout(t);
   }, [query, navigate, location.search, skipSearchSync]);
 
-  /** 🧭 Handle result click using matchType (reliable) */
+ 
   const handleResultClick = (item: any) => {
     setSkipSearchSync(true);
     setQuery("");
@@ -433,7 +433,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
           {item?.hasSubmenu &&
             item?.submenuType === "regular" &&
             item?.subMenu?.length > 0 && (
-              <div className="submenu min-w-[130px] absolute z-[2] left-0 mt-2 bg-white border border-LightWhite shadow-md rounded-[6px] hidden group-hover:block">
+              <div className="submenu min-w-[230px] absolute z-[2] left-0 mt-2 bg-white border border-LightWhite shadow-md rounded-[6px] hidden group-hover:block">
                 <ul className="py-2">
                   {item?.subMenu.map((sub, i) => {
                     const localizedUrl = buildLocalizedUrl(sub?.url) ?? "#";

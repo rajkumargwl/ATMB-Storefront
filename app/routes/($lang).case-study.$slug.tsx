@@ -171,12 +171,11 @@ export default function CaseStudyPage() {
                 <a
                   href={caseStudy.cta.file.asset.url}
                   download
-                  className="group relative overflow-hidden  mt-5 flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full w-[193px] h-[52px] hover:w-[223px] transition-all  hover:bg-[#DF5D07] hover:text-white"
+                  className="group relative overflow-hidden  mt-5 flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full w-[193px] h-[52px] transition-all  hover:scale-[1.01] hover:bg-[#DF5D07]"
                 >
-                  
-                   <span className="relative flex items-center transition-all duration-300">{caseStudy.cta.text} <span className="relative right-0 opacity-0 translate-x-[12px] hidden group-hover:opacity-100 group-hover:block group-hover:translate-x-[12px] transition-all duration-300">
-              <RightArrowWhite />
-            </span></span>
+                  <span className="relative flex items-center">{caseStudy.cta.text} <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[25px] transition-all duration-300">
+                    <RightArrowWhite />
+                  </span></span>
                 </a>
               )}
             </div>
