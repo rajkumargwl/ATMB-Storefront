@@ -12,6 +12,7 @@ import clsx from 'clsx';
 import { SanityPreview } from 'hydrogen-sanity';
 import { Suspense, useState } from 'react';
 import { fetchGids, notFound, validateLocale } from '~/lib/utils';
+import RightArrowWhite from '~/components/icons/RightArrowWhite';
 
 // -----------------
 // GROQ QUERY
@@ -110,11 +111,11 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
 }
 
 // RightArrowWhite component
-const RightArrowWhite = () => (
-   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 25" fill="none">
-    <path d="M18.6009 5.2998C18.9309 5.2998 19.2009 5.5698 19.2009 5.8998V15.4998C19.2009 15.8298 18.9309 16.0998 18.6009 16.0998C18.2709 16.0998 18.0009 15.8298 18.0009 15.4998V7.34731L5.82461 19.5236C5.59211 19.7561 5.20961 19.7561 4.97711 19.5236C4.74461 19.2911 4.74461 18.9086 4.97711 18.6761L17.1534 6.4998H9.00086C8.67086 6.4998 8.40086 6.2298 8.40086 5.8998C8.40086 5.5698 8.67086 5.2998 9.00086 5.2998H18.6009Z" fill="white"/>
-  </svg>
-);
+// const RightArrowWhite = () => (
+//    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 25" fill="none">
+//     <path d="M18.6009 5.2998C18.9309 5.2998 19.2009 5.5698 19.2009 5.8998V15.4998C19.2009 15.8298 18.9309 16.0998 18.6009 16.0998C18.2709 16.0998 18.0009 15.8298 18.0009 15.4998V7.34731L5.82461 19.5236C5.59211 19.7561 5.20961 19.7561 4.97711 19.5236C4.74461 19.2911 4.74461 18.9086 4.97711 18.6761L17.1534 6.4998H9.00086C8.67086 6.4998 8.40086 6.2298 8.40086 5.8998C8.40086 5.5698 8.67086 5.2998 9.00086 5.2998H18.6009Z" fill="white"/>
+//   </svg>
+// );
 
 // Helper function to format date
 const formatDate = (dateString: string) => {
@@ -248,7 +249,7 @@ export default function BlogAuthorDetailPage() {
                                 </p>
                                 
                                 {author?.introduction && (
-                                    <div className="mb-6 md:mb-10">
+                                    <div className="mb-1 md:mb-5 blog-author-data">
                                         <PortableText value={author.introduction} />
                                     </div>
                                 )}
@@ -369,9 +370,9 @@ export default function BlogAuthorDetailPage() {
                                     <span className="font-Roboto text-white font-semibold leading-[43.2px] md:leading-[61.6px] text-[36px] md:text-[56px] tracking-[-0.54px] md:tracking-[-1.12px]">1000+</span>
                                     <p className="font-Roboto text-white font-medium leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px]">Rely on Virtual Mailbox for a professional address, business line, and growth tools — all in one.</p>
                                 </div>
-                                <Link to={`/create-account`} className="group relative flex items-center justify-center w-full bg-DarkOrange text-white font-medium font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full h-[52px] overflow-hidden transition-all hover:bg-[#DF5D07] hover:text-white">
-                                    <span className="relative flex items-center transition-all duration-300">Get Started Today  <span className="relative right-0 opacity-0 translate-x-[12px] hidden group-hover:opacity-100 group-hover:block group-hover:translate-x-[12px] transition-all duration-300">
-                                        <RightArrowWhite />
+                                <Link to={`/create-account`} className="group relative flex items-center justify-center w-full bg-DarkOrange text-white font-medium font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full h-[52px] overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DF5D07]">
+                                    <span className="relative flex items-center">Get Started Today <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
+                                    <RightArrowWhite />
                                     </span></span>
                                 </Link>
                             </div>

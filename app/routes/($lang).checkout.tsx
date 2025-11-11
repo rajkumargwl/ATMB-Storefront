@@ -35,6 +35,16 @@ import {PRODUCT_QUERY, ALL_PRODUCTS_QUERY} from '~/queries/shopify/product';
 import type {Product} from '@shopify/hydrogen/storefront-api-types';
 import {notFound} from '~/lib/utils';
 import Button from "~/components/elements/Button";
+import type {SeoHandleFunction} from '@shopify/hydrogen';
+
+
+const seo: SeoHandleFunction<typeof loader> = () => ({
+  title: 'Checkout',
+});
+
+export const handle = {
+  seo,
+};
 
 export const loader: LoaderFunction = async ({ context, params }) => {
   const { env } = context;
@@ -422,7 +432,7 @@ useEffect(() => {
                               <h1 className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[28px] text-[24px] md:text-[20px] tracking-[-0.36px] md:tracking-[-0.3px]">Back to cart</h1>
                           </div>
                           <div className="mb-8">
-                            <h1 className="font-[600] text-[#091019] md:text-[32px] md:leading-[38.4px] md:tracking-[-0.48px] text-[24px] leading-[31.2px] tracking-[-0.36px]">Checkout</h1>
+                            <h2 className="font-[600] text-[#091019] md:text-[32px] md:leading-[38.4px] md:tracking-[-0.48px] text-[24px] leading-[31.2px] tracking-[-0.36px]">Checkout</h2>
                             <p className="text-[#4D4E4F] font-[400] text-[16px] leading-[24px] mt-1">
                               Get started in seconds and manage your mail anytime, anywhere.
                             </p>
@@ -481,14 +491,14 @@ useEffect(() => {
                                       style: { base: { fontSize: "16px", color: "#091019" }, invalid: { color: "#FF6600" } },
                                       placeholder: '1212 1212 1212 1212'
                                     }}
-                                    id="card-number"
+                                    id="cardnumber"
                                     aria-labelledby="Credit or debit card number"
                                     aria-describedby="Credit or debit card number"
                                     className="peer font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
                                   />
                                   <label
-                                     htmlFor="card-number"
-                                     aria-label="card-number"
+                                     htmlFor="cardnumber"
+                                     aria-label="cardnumber"
                                     className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F]  leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150"
                                   >
                                     Card Number

@@ -15,6 +15,11 @@ export const businessAcceleratorBannerSection = defineType({
       initialValue: 'Make this your groundbreaking year',
       validation: (Rule) => Rule.required(),
     }),
+     defineField({
+      name: 'titleline2',
+      title: 'Banner Title Line 2',
+      type: 'string',
+    }),
 
     // 👉 CTA Button
     defineField({

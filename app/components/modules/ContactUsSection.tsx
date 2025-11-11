@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from "react";
 import Contact from "~/components/media/contact.png";
 import RightArrowWhite from '~/components/icons/RightArrowWhite';
@@ -212,11 +211,10 @@ export default function ContactUsSection({ data }: ContactUsProps) {
  
               
               <div className="relative pt-3 flex items-center justify-center">
-                <button type="submit" className="flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto py-[12px] px-4 rounded-full w-full md:w-[271px] h-[52px] group relative overflow-hidden transition-all hover:bg-[#DF5D07] hover:text-white">
- 
-                      <span className="relative flex items-center transition-all duration-300">Submit <span className="relative right-0 opacity-0 translate-x-[12px] hidden group-hover:opacity-100 group-hover:block group-hover:translate-x-[12px] transition-all duration-300">
-              <RightArrowWhite />
-            </span></span>
+                <button type="submit" className="flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto py-[12px] px-4 rounded-full w-full md:w-[271px] h-[52px] group relative overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DF5D07]">
+                  <span className="relative flex items-center">Submit <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
+                    <RightArrowWhite />
+                  </span></span>
                   </button>
               </div>
             </form>
@@ -275,5 +273,3 @@ export default function ContactUsSection({ data }: ContactUsProps) {
     </section>
   );
 }
- 
- 

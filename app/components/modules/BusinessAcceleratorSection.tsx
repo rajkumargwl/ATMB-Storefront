@@ -1,4 +1,3 @@
-
 import { PortableText } from '@portabletext/react';
 import RightArrowWhite from '~/components/icons/RightArrowWhite';
  
@@ -59,11 +58,10 @@ const getHighlightedTitle = (title: string, highlightedText?: string) => {
           {data.cta?.label && (
             <a
               href={data.cta.url ?? '/PDP/business-accelerator'}
-              className="group relative overflow-hidden flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full w-full md:w-[209px] h-[52px] transition-all  hover:bg-[#DF5D07] hover:text-white"
+              className="group relative overflow-hidden flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full w-full md:w-[209px] h-[52px] transition-all hover:scale-[1.01] hover:bg-[#DF5D07]"
               aria-label={data.cta.label}
             >
-            
-                 <span className="relative flex items-center transition-all duration-300">  {data.cta.label} <span className="relative right-0 opacity-0 translate-x-[12px] hidden group-hover:opacity-100 group-hover:block group-hover:translate-x-[12px] transition-all duration-300">
+             <span className="relative flex items-center">{data.cta.label} <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[30px] transition-all duration-300">
               <RightArrowWhite />
             </span></span>
             </a>
@@ -85,4 +83,3 @@ const getHighlightedTitle = (title: string, highlightedText?: string) => {
     </section>
   );
 }
- 

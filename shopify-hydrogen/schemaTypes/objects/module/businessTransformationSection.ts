@@ -15,6 +15,13 @@ export const businessTransformationSection = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'secondlinetitle',
+      title: 'Section 2nd line ',
+      type: 'string',
+      initialValue: 'Change your business and your life',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
       name: 'items',
       title: 'Transformation Cards',
       type: 'array',
