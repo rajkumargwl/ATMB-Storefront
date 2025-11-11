@@ -16,6 +16,7 @@ type TrustSection = {
  
 type SolutionHeroModule = {
   heading: string;
+   headingLine2?: string;
   highlightText?: string;
   description: string;
   cta: {
@@ -54,6 +55,19 @@ export default function SolutionHero({ data }: Props) {
                 )}
               </span>
             ))}
+              {data?.headingLine2 && (
+                    <>
+                      <br />
+                   {data?.headingLine2?.split(data.highlightText || "").map((part, i, arr) => (
+                <span key={`line2-${i}`}>
+                   {part}
+                     {i < arr.length - 1 && (
+                      <span className="text-DarkOrange">{data.highlightText}</span>
+                      )}
+                     </span>
+                ))}
+    </>
+  )}
           </h1>
  
           <p className="max-w-[526px] mb-[20px] md:mb-[40px] font-Roboto text-PrimaryBlack font-normal leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px]">

@@ -21,9 +21,9 @@ export default function WhyBusinessesChooseUs({ data }: Props) {
       <div className="relative z-2 max-w-[1240px] mx-auto flex justify-between flex-col md:flex-row gap-11 md:gap-5">
         {/* Left section */}
         <div className="max-w-[379px] flex flex-col gap-5">
-          <h3 className="font-Roboto text-white font-semibold leading-[31.2px] md:leading-[43.2px] tracking-[-0.39px] md:tracking-[-0.54px] text-[26px] md:text-[36px]">
+          <h2 className="font-Roboto text-white font-semibold leading-[31.2px] md:leading-[43.2px] tracking-[-0.39px] md:tracking-[-0.54px] text-[26px] md:text-[36px]">
             {data?.heading }
-          </h3>
+          </h2>
           <p className="font-Roboto text-LightWhite font-normal leading-[21px] md:leading-[27px] text-[14px] md:text-[18px] tracking-[0px]">
             {data?.description }
           </p>

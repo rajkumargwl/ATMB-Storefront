@@ -4,6 +4,7 @@ import React from "react";
  
 type BusinessBannerProps = {
   title: string;
+  titleline2?: string; 
   cta: {
     label: string;
     url?: string | null;
@@ -12,14 +13,24 @@ type BusinessBannerProps = {
     url: string;
   };
 };
- 
-const BusinessBanner: React.FC<BusinessBannerProps> = ({ title, cta, image }) => {
+
+const BusinessBanner: React.FC<BusinessBannerProps> = ({ title, titleline2, cta, image }) => {
+  
   return (
     <section className="bg-DarkOrange relative flex flex-col  items-center justify-between text-white md:px-5  overflow-hidden rounded-2xl">
       {/* Left Content */}
       <div className="relative z-[3] max-w-[1240px] mx-auto w-full flex flex-col md:flex-row gap-6 md:gap-[46px]">
       <div className="relative z-[4] w-full md:w-[66.8%] pb-[0] py-[40px] md:py-[60px] lg:py-[80px] flex flex-col justify-center px-5 md:px-[0]">
-        <h2 className="mb-[32px] max-w-[772px] font-Roboto text-white font-semibold leading-[38.4px] md:leading-[61.6px] text-[32px] md:text-[56px] tracking-[-0.48px] md:tracking-[-1.12px]">{title}</h2>
+        <h2 className="mb-[32px] max-w-[772px] font-Roboto text-white font-semibold leading-[38.4px] md:leading-[61.6px] text-[32px] md:text-[56px] tracking-[-0.48px] md:tracking-[-1.12px]">{title}{titleline2 && (
+              <>
+                <br />
+                <span className="block text-white opacity-80">
+                  {titleline2}
+                </span>
+              </>
+            )}</h2>
+        
+        
         {cta?.label && (
           <a
             href={cta.url ?? "/PDP/business-accelerator"}

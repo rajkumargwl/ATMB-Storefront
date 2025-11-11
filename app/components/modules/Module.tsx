@@ -305,7 +305,7 @@ case 'smartBusinessSection':
   return <BusinessSupport data={module} />;
   
   case 'businessAcceleratorBannerSection':
-  return <BusinessBanner title={module.title} cta={module.cta} image={module.image} />;
+  return <BusinessBanner title={module.title}   titleline2={module.titleline2} cta={module.cta} image={module.image} />;
    
   case 'webinarsTopicsSection':
   return <WebinarsTopicsSection data={module} />;
