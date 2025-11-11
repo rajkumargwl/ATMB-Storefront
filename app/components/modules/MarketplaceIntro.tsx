@@ -9,7 +9,7 @@ export default function MarketplaceCategories({ data }: Props) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
   // console.log("marketplace intro:", data);
   return (
-    <section className="border-b border-[#DCDCDC] py-14">
+    <section className="border-b border-t border-[#DCDCDC] py-14 bg-[#FFFFFF]">
       <div className="max-w-[1240px] mx-auto  max-1265px:px-4 max-1265px:gap-2 md:gap-[62px] grid md:grid-cols-2 items-center">
         {/* Left: Text Content */}
         <div>
