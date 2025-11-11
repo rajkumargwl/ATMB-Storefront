@@ -242,7 +242,65 @@ export async function loader({ context }: LoaderFunctionArgs) {
     storefront.query<{ product: Product }>(PRODUCT_QUERY, { variables: { handle: 'business-accelerato', selectedOptions: [] } }),
   ]);
 
-  const essentialsProducts = [virtualMailbox.product, virtualPhone.product, BusinessAcc.product];
+  //const essentialsProducts = [virtualMailbox.product, virtualPhone.product, BusinessAcc.product];
+  const extractFeatures = (product: any) => {
+    let features: string[] = [];
+  
+    // Product-level metafields
+    const productFeatures = product.metafields?.find(
+      (mf: any) => mf && mf.key === "features"
+    );
+    if (productFeatures?.value) {
+      try {
+        features = JSON.parse(productFeatures.value);
+      } catch {
+        features = [productFeatures.value];
+      }
+    }
+  
+    // Fallback: variant-level
+    if (features.length === 0 && product.variants?.nodes?.length) {
+      const variantFeatureMf = product.variants.nodes[0].metafields?.find(
+        (mf: any) => mf && mf.key === "features"
+      );
+      if (variantFeatureMf?.value) {
+        try {
+          features = JSON.parse(variantFeatureMf.value);
+        } catch {
+          features = [variantFeatureMf.value];
+        }
+      }
+    }
+  
+    return features;
+  };
+  
+  const essentialsProducts = [virtualMailbox.product, virtualPhone.product, BusinessAcc.product].map(
+    (product) => ({
+      id: product.id,
+      title: product.title,
+      handle: product.handle,
+      description: product.description,
+      image: product.featuredImage?.url ?? null,
+      features: extractFeatures(product),
+      variants: product.variants?.nodes?.map((variant: any) => ({
+        id: variant.id,
+        title: variant.title,
+        price: variant.priceV2?.amount ?? null,
+        currency: variant.priceV2?.currencyCode ?? "USD",
+        features: (() => {
+          const mf = variant.metafields?.find((m: any) => m && m.key === "features");
+          if (!mf?.value) return [];
+          try {
+            return JSON.parse(mf.value);
+          } catch {
+            return [mf.value];
+          }
+        })(),
+      })),
+    })
+  );
+  
 
   const allBundles = await storefront.query(BUNDLE_PRODUCTS_QUERY, {
     variables: { country: "US", language: "EN" },

@@ -5,7 +5,7 @@ import { DEFAULT_LOCALE } from '~/lib/utils';
  
 export default function CartEssentialsSection({
   essentialsProducts,
-  cartLines = [], // ✅ default to empty array
+  cartLines = [], // default to empty array
   onAddToCart,
 }: {
   essentialsProducts: any[];
@@ -28,8 +28,8 @@ export default function CartEssentialsSection({
  
   const firstEssential =
     availableEssentials[Math.floor(Math.random() * availableEssentials.length)];
-  const firstVariant = firstEssential.variants.nodes[0];
- 
+  //const firstVariant = firstEssential.variants.nodes[0];
+  const firstVariant = firstEssential?.variants?.[0];
   const isVirtualMailbox = firstEssential.handle === 'virtual-mailbox';
   return (
      <div className='w-full lg:w-[50%]'>
@@ -46,18 +46,49 @@ export default function CartEssentialsSection({
         <div className='flex flex-col md:flex-row items-start md:items-center justify-start md:justify-between gap-[16px] md:gap-[28px]'>
         <div className="flex flex-col">
           <h3 className="mb-2 flex font-Roboto text-PrimaryBlack font-semibold leading-[28px] md:leading-[28px] text-[20px] md:text-[20px] tracking-[-0.36px] md:tracking-[-0.3px]">{firstEssential.title}</h3>
-          <p className="font-Roboto text-LightGray font-normal leading-[21px] md:leading-[21px] text-[14px] md:text-[14px] tracking-[0px] line-clamp-3">{firstEssential.description}</p>
+          <p className="font-Roboto text-LightGray font-normal leading-[21px] md:leading-[21px] text-[14px] md:text-[14px] tracking-[0px] line-clamp-1">{firstEssential.description}</p>
         </div>
  
         <div className="flex flex-col items-end">
           <p className="flex items-end font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[31.2px] text-[24px] md:text-[24px] tracking-[-0.3px] md:tracking-[-0.36px]">
-                      <Money data={{ amount: firstVariant.price.amount, currencyCode: currencyCode }}/>
+                      {/* <Money data={{ amount: firstVariant.price.amount, currencyCode: currencyCode }}/> */}
+                      <Money
+                      data={{
+                        amount: firstVariant?.price ?? 0, // direct string or number
+                        currencyCode: firstVariant?.currency ?? currencyCode,
+                      }}
+                    />
                       <span className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">/month</span>
           </p>
  
           
         </div>
+        
       </div>
+       {/* Features Section */}
+       {firstEssential?.features?.length > 0 && (
+          <ul className="flex flex-col gap-2 mt-2">
+            {firstEssential.features.map((feature: string, index: number) => (
+              <li key={index} className="flex items-center gap-2 text-[14px] text-PrimaryBlack">
+                <span className="flex items-center justify-center w-[24px] h-[24px]">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="17"
+                    height="16"
+                    viewBox="0 0 17 16"
+                    fill="none"
+                  >
+                    <path
+                      d="M16.5544 0.110975C16.8206 0.305975 16.8806 0.680975 16.6856 0.950975L6.18563 15.351C6.08063 15.4935 5.92313 15.5835 5.74688 15.5947C5.57063 15.606 5.40188 15.546 5.27438 15.4222L0.174375 10.3222C-0.058125 10.0897 -0.058125 9.70722 0.174375 9.47472C0.406875 9.24222 0.789375 9.24222 1.02188 9.47472L5.62688 14.0797L15.7144 0.245975C15.9094 -0.0202754 16.2844 -0.0802754 16.5544 0.114725V0.110975Z"
+                      fill="#091019"
+                    ></path>
+                  </svg>
+                </span>
+                {feature}
+              </li>
+            ))}
+          </ul>
+        )}
       <div className='flex flex-row items-center justify-center cart-form'>
         {isVirtualMailbox ? (
             <button
@@ -72,7 +103,12 @@ export default function CartEssentialsSection({
           ) : (
             <CartForm
               action={CartForm.ACTIONS.LinesAdd}
-              inputs={{lines: [{merchandiseId: firstVariant.id, quantity: 1}]}}
+              //inputs={{lines: [{merchandiseId: firstVariant.id, quantity: 1}]}}
+              inputs={{
+                lines: firstVariant?.id
+                  ? [{ merchandiseId: firstVariant.id, quantity: 1 }]
+                  : [],
+              }}
             >
               {({state}) => (
                 <button
