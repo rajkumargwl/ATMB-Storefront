@@ -38,19 +38,19 @@ const services = [
   };
   
   type LocationAPI = {
-    location_id: string;
-    display_name: string;
+    _id: string;
+    displayName: string;
     city: string;
-    state_code: string;
+    stateCode: string;
     postalCode: string;
-    address_line1: string;
-    address_line2?: string;
+    addressLine1: string;
+    addressLine2?: string;
     latitude?: number;
     longitude?: number;
     planTier?: string;
     priceRange?: number;
-    feature_list?: Feature[];
-    rating_list?: Rating[];
+    featureList?: Feature[];
+    ratingList?: Rating[];
   };
   
   const seo: SeoHandleFunction = () => ({
@@ -153,7 +153,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
     //   const matchFeatures =
     //     selectedFeatures.length > 0
     //       ? selectedFeatures.every((f) =>
-    //           (loc.feature_list || []).map((ft) => ft.label).includes(f),
+    //           (loc.featureList || []).map((ft) => ft.label).includes(f),
     //         )
     //       : true;
   
@@ -175,12 +175,12 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
       
         const newFiltered = locations.filter((loc) => {
           const city = loc.city?.toLowerCase() || '';
-          const display_name = loc.display_name?.toLowerCase() || '';
+          const displayName = loc.displayName?.toLowerCase() || '';
           const postal = loc.postalCode?.toLowerCase() || '';
           const tier = loc.planTier || '';
       
           const matchesCity =
-            query ? city.includes(query) || display_name.includes(query) || postal.includes(query) : true;
+            query ? city.includes(query) || displayName.includes(query) || postal.includes(query) : true;
       
           const matchesTier = planTier ? tier === planTier : true;
       
@@ -190,7 +190,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
           const matchesFeatures =
             selectedFeatures.length > 0
               ? selectedFeatures.every((f) =>
-                  (loc.feature_list || []).some(
+                  (loc.featureList || []).some(
                     (ft) => ft.label?.toLowerCase() === f.toLowerCase(),
                   ),
                 )
@@ -218,10 +218,10 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
       new Set(locations.map((loc) => loc.city).filter(Boolean)),
     );
     const displayNames = Array.from(
-      new Set(locations.map((loc) => loc.display_name).filter(Boolean)),
+      new Set(locations.map((loc) => loc.displayName).filter(Boolean)),
     );
     const uniqueFeatures = Array.from(
-      new Set(locations.flatMap((loc) => loc.feature_list?.map((f) => f.label) || [])),
+      new Set(locations.flatMap((loc) => loc.featureList?.map((f) => f.label) || [])),
     );
   
     const uniqueTiers = Array.from(
@@ -374,7 +374,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
   const combinedCities = cities.map((city, index) => ({
     id: index,
     city,
-    display_name: city, // fallback if display_name missing
+    displayName: displayNames[index] || city, // fallback if displayName missing
   }));
   const [showMap, setShowMap] = useState(false);
 
@@ -382,9 +382,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
   const getPrefixedPath = usePrefixPathWithLocale2(); 
  
   return (
-    
     <>
-    
      {/* <Header data={header} searchResults={mergedResults} searchQuery={q} /> */}
     <div className="flex px-5 pt-[24px] md:pt-[40px] pb-[40px] md:pb-[60px]">
       <div className="flex flex-col lg:flex-row max-w-[1340px] mx-auto w-full gap-6">
@@ -397,6 +395,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
               <button
                 className="rounded-full md:border md:border-LightWhite p-2 md:p-[11px]"
                 title="Back"
+                aria-label='Back'
                 onClick={() => navigate(-1)}
               >
                 <LeftArrowBlack />
@@ -416,15 +415,18 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
               <button
                 className={`rounded-full md:border md:border-LightWhite p-2 md:p-[11px] ${isCityPage ? 'hidden' : ''}`}
                 title='Back'
+                aria-label='Back'
                 onClick={() => navigate(-1)}
               >
                 <LeftArrowBlack />
               </button>  
               
 
-               <div className="flex flex-col w-full relative">
-                <div className={`flex items-center gap-[10px] w-full rounded-full border border-LightWhite py-[4px] md:py-[3px] pl-3 md:pl-4 shadow-[0_6px_24px_0_rgba(0,0,0,0.05)] md:shadow-none bg-white`}>
+              <div className="flex flex-col w-full relative">
+                <div className={`flex items-center gap-[10px] w-full rounded-full border border-LightWhite py-[4px] md:py-[3px] pl-3 md:pl-4 ${isCityPage ? 'pr-[4px] md:pr-[3px]' : 'pr-[4px] md:pr-[3px]'} shadow-[0_6px_24px_0_rgba(0,0,0,0.05)] md:shadow-none bg-white`}>
+                  <label htmlFor="searchCity" className="sr-only">Search City</label>
                   <input
+                    id="searchCity"
                     type="text"
                     value={searchCity}
                     aria-label="Search City"
@@ -451,6 +453,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                   <button
                     className={`flex items-center justify-center min-w-[32px] md:min-w-[48px] w-[32px] md:w-12 h-[32px] md:h-12 bg-DarkOrange rounded-full`}
                     onClick={() => setSelectedCity(searchCity)}
+                    aria-label='Search City'
                   >
                     <img
                       src={SearchWhite}
@@ -458,7 +461,17 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                       className="w-[16px] md:w-[21px] h-[16px] md:h-[21px] object-contain"
                     />
                   </button>
-                  
+                  {/* {!searchCity && ( <button
+                    className={`flex items-center justify-center min-w-[24px] md:min-w-[24px] w-[24px] md:w-[24px] h-[24px] md:h-[24px] rounded-full ${isCityPage ? '' : 'hidden'}`}
+                    onClick={() => setSelectedCity(searchCity)}
+                  >
+                    <img
+                      src={ArrowDown}
+                      alt="Logo"
+                      className="w-[16px] md:w-[13px] object-contain"
+                    />
+                  </button>
+                  )} */}
                 </div>
 
                 {showSuggestions &&
@@ -466,33 +479,33 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                   combinedCities.filter(
                     (cityObj) =>
                       cityObj.city?.toLowerCase().includes(searchCity.toLowerCase()) ||
-                      cityObj.display_name?.toLowerCase().includes(searchCity.toLowerCase())
+                      cityObj.displayName?.toLowerCase().includes(searchCity.toLowerCase())
                   ).length > 0 && (
                     <ul className="absolute z-50 w-full bg-white border border-LightWhite rounded-b-md max-h-40 overflow-y-auto mt-12 shadow-md">
                       {combinedCities
                         .filter(
                           (cityObj) =>
                             cityObj.city?.toLowerCase().includes(searchCity.toLowerCase()) ||
-                            cityObj.display_name?.toLowerCase().includes(searchCity.toLowerCase())
+                            cityObj.displayName?.toLowerCase().includes(searchCity.toLowerCase())
                         )
                         .map((cityObj) => (
                           <li
                             key={cityObj.id}
                             className="px-3 py-2 cursor-pointer hover:bg-gray-100"
                             onClick={() => {
-                              setSearchCity(cityObj.display_name || cityObj.city);
-                              setSelectedCity(cityObj.display_name || cityObj.city);
+                              setSearchCity(cityObj.displayName || cityObj.city);
+                              setSelectedCity(cityObj.displayName || cityObj.city);
                               setShowSuggestions(false);
-                              //navigate(`/sublocations?q=${encodeURIComponent(cityObj.display_name || cityObj.city)}`, { replace: true });
+                              //navigate(`/sublocations?q=${encodeURIComponent(cityObj.displayName || cityObj.city)}`, { replace: true });
                               
                             }}
                           >
-                           {cityObj.city}
+                            {cityObj.displayName} ({cityObj.city})
                           </li>
                         ))}
                     </ul>
                 )} 
-              </div> 
+              </div>
             </div>
 
             <div className="flex items-center gap-[10px] px-[9px] md:px-4 py-[9px] md:py-3 border border-LightWhite rounded-full">
@@ -510,7 +523,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
            
             {filtered.map((loc) => (
               <div
-                key={loc.location_id}
+                key={loc._id}
                 className="bg-white border border-LightWhite rounded-[12px] p-5 md:p-6 cursor-pointer"
                 onMouseEnter={() => zoomToLocation(loc)}
               >
@@ -523,7 +536,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                    <div className="">
                      <div className="flex items-center justify-between mb-3 md:mb-4">
                   <div className="flex gap-8">
-                    {loc.rating_list?.some(
+                    {loc.ratingList?.some(
                       (r) => r.type === 'TOPRATED' && r.status === 'ACTIVE',
                     ) && (
                       <div className="flex items-center gap-2 relative after:content-[''] after:absolute after:w-[1px] after:h-[13px] after:bg-LightWhite after:top-[1px] after:right-[-17px]">
@@ -557,13 +570,13 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                  
                 </div>
                       <div className="flex items-start md:items-center flex-row gap-3 pb-2">
-                       <h2 className="font-Roboto text-PrimaryBlack font-semibold text-[20px] leading-[28px] tracking-[-0.3px]">{loc.city}</h2>
+                       <h2 className="font-Roboto text-PrimaryBlack font-semibold text-[20px] leading-[28px] tracking-[-0.3px]">{loc.displayName}</h2>
                         <span className="border border-[rgba(116,160,56,0.3)] bg-[rgba(85,128,25,0.08)] px-2 py-1 tpx-2 py-1 rounded-[8px] font-Roboto text-[#436713] font-normal text-[12px] leading-[18px] tracking-[0px] min-w-[67px]">
                         0.2 miles
                         </span>
                       </div> 
                       <p className="font-Roboto text-PrimaryBlack font-normal text-[14px] leading-[21px] tracking-[0px]">
-                        {loc.address_line1}, {loc.city}, {loc.state_code}{' '}
+                        {loc.addressLine1}, {loc.city}, {loc.stateCode}{' '}
                         {loc.postalCode}
                       </p>
                   </div> 
@@ -585,12 +598,12 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                 <div className="flex flex-wrap gap-3 text-sm text-gray-700 relative">
   {/* Remove duplicates safely */}
   {Array.from(
-    new Set((loc.feature_list || []).map((f) => f.feature?.label).filter(Boolean))
+    new Set((loc.featureList || []).map((f) => f.label))
   )
     .slice(0, 3)
     .map((label) => (
       <div
-        key={loc.location_id + label}
+        key={loc._id + label}
         className="flex items-center gap-2 font-Roboto text-PrimaryBlack font-normal text-[14px] leading-[21px] tracking-[0px]"
       >
         <span className="flex items-center w-[20px] h-[20px]">
@@ -601,62 +614,59 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
     ))}
 
   {/* +N and Popup */}
-  {loc.feature_list &&
-    Array.from(
-      new Set((loc.feature_list || []).map((f) => f.feature?.label).filter(Boolean))
-    ).length > 3 && (
-      <div className="relative">
-        {/* +N Button */}
-        <span
-          className="cursor-pointer text-PrimaryBlack font-medium px-2 py-1 bg-[#F6F6F6] rounded-full border border-LightWhite"
-          onClick={(e) => {
-            e.stopPropagation();
-            setShowMore((prev) => !prev);
+  {loc.featureList && loc.featureList.length > 3 && (
+    <div className="relative">
+      {/* +N Button */}
+      <span
+        className="cursor-pointer text-PrimaryBlack font-medium px-2 py-1 bg-[#F6F6F6] rounded-full border border-LightWhite"
+        onClick={(e) => {
+          e.stopPropagation();
+          setShowMore((prev) => !prev);
+        }}
+      >
+        +{
+          Array.from(new Set((loc.featureList || []).map((f) => f.label)))
+            .length - 3
+        }
+      </span>
+
+      {/* Popup */}
+      {showMore && (
+        <div
+          className="absolute bottom-full left-1/2 -translate-x-1/2 mb-3 
+                     bg-PrimaryBlack rounded-[12px] p-4 z-[9999] 
+                     flex flex-col gap-3 shadow-2xl border border-gray-700"
+          style={{
+            position: 'absolute',
+            zIndex: 9999,
+            transform: 'translateX(-50%)',
+            minWidth: '184px',
           }}
         >
-          +
           {Array.from(
-            new Set((loc.feature_list || []).map((f) => f.feature?.label).filter(Boolean))
-          ).length - 3}
-        </span>
-
-        {/* Popup */}
-        {showMore && (
-          <div
-            className="absolute bottom-[-35px] left-[35px] mb-3 
-                     bg-PrimaryBlack rounded-[12px] p-4 z-[9999] 
-                     flex flex-col gap-3"
-            style={{
-              position: 'absolute',
-              zIndex: 9999,
-              minWidth: '190px',
-            }}
-          >
-            {Array.from(
-              new Set((loc.feature_list || []).map((f) => f.feature?.label).filter(Boolean))
-            )
-              .slice(3)
-              .map((label, idx) => (
-                <div
-                  key={loc.location_id + label + idx}
-                  className="flex items-center gap-2 cursor-pointer"
-                >
-                  <img
-                    src={Location}
-                    alt="location"
-                    className="w-[18px] h-[18px] object-contain invert"
-                  />
-                  <span className="font-Roboto text-white font-normal text-[14px] leading-[21px] tracking-[0px]">
-                    {label}
-                  </span>
-                </div>
-              ))}
-          </div>
-        )}
-      </div>
-    )}
+            new Set((loc.featureList || []).map((f) => f.label))
+          )
+            .slice(3)
+            .map((label, idx) => (
+              <div
+                key={loc._id + label + idx}
+                className="flex items-center gap-2 hover:bg-white/10 rounded-md cursor-pointer px-2 py-1"
+              >
+                <img
+                  src={Location}
+                  alt="location"
+                  className="w-[18px] h-[18px] object-contain invert"
+                />
+                <span className="font-Roboto text-white text-[14px] leading-[21px]">
+                  {label}
+                </span>
+              </div>
+            ))}
+        </div>
+      )}
+    </div>
+  )}
 </div>
-
 
 
 
@@ -708,7 +718,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                 {/* CTA Button */}
                 {/* <button
                   onClick={() =>
-                    navigate(`/PDP/virtual-mailbox?locationId=${loc.location_id}`)
+                    navigate(`/PDP/virtual-mailbox?locationId=${loc._id}`)
                   }
                   className="hidden md:flex rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-[23px] py-[13px] transition-all"
                 >
@@ -721,7 +731,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
 
                   // Build query string with locationId
                   const queryParams = new URLSearchParams();
-                  queryParams.set("locationId", loc.location_id);
+                  queryParams.set("locationId", loc._id);
                   queryParams.set("variantId", variantId);
                   const bundlePDP = getPrefixedPath(`/PDP/bundle-product?${queryParams.toString()}`);
                   const virtualPDP = getPrefixedPath(`/PDP/virtual-mailbox?${queryParams.toString()}`);
@@ -734,7 +744,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                     navigate(virtualPDP);
                   }
                 }}
-                className="hidden md:flex rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-[16px] py-[12px]  transition-all  hover:bg-PrimaryBlack hover:text-white"
+                className="hidden md:flex rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-[16px] py-[12px] transition-all transition-all  hover:bg-PrimaryBlack hover:text-white"
               >
                 Select
            </button>
@@ -750,7 +760,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                     </div>  
                      <button
                         onClick={() =>
-                          navigate(`/PDP/virtual-mailbox?locationId=${loc.location_id}`)
+                          navigate(`/PDP/virtual-mailbox?locationId=${loc._id}`)
                         }
                         className="rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-[23px] py-[13px] transition-all"
                       >
@@ -826,6 +836,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                   <button
                     className={`flex items-center justify-center min-w-[32px] md:min-w-[48px] w-[32px] md:w-12 h-[32px] md:h-12 bg-DarkOrange rounded-full ${isCityPage ? 'hidden' : ''}`}
                     onClick={() => setSelectedCity(searchCity)}
+                    aria-label="Search City"
                   >
                     <img
                       src={SearchWhite}
@@ -851,28 +862,28 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                   combinedCities.filter(
                     (cityObj) =>
                       cityObj.city?.toLowerCase().includes(searchCity.toLowerCase()) ||
-                      cityObj.display_name?.toLowerCase().includes(searchCity.toLowerCase())
+                      cityObj.displayName?.toLowerCase().includes(searchCity.toLowerCase())
                   ).length > 0 && (
                     <ul className="absolute z-50 w-full bg-white border border-LightWhite rounded-b-md max-h-40 overflow-y-auto mt-12 shadow-md">
                       {combinedCities
                         .filter(
                           (cityObj) =>
                             cityObj.city?.toLowerCase().includes(searchCity.toLowerCase()) ||
-                            cityObj.display_name?.toLowerCase().includes(searchCity.toLowerCase())
+                            cityObj.displayName?.toLowerCase().includes(searchCity.toLowerCase())
                         )
                         .map((cityObj) => (
                           <li
                             key={cityObj.id}
                             className="px-3 py-2 cursor-pointer hover:bg-gray-100"
                             onClick={() => {
-                              setSearchCity(cityObj.display_name || cityObj.city);
-                              setSelectedCity(cityObj.display_name || cityObj.city);
+                              setSearchCity(cityObj.displayName || cityObj.city);
+                              setSelectedCity(cityObj.displayName || cityObj.city);
                               setShowSuggestions(false);
-                              //navigate(`/sublocations?q=${encodeURIComponent(cityObj.display_name || cityObj.city)}`, { replace: true });
+                              //navigate(`/sublocations?q=${encodeURIComponent(cityObj.displayName || cityObj.city)}`, { replace: true });
                               
                             }}
                           >
-                            {cityObj.city}
+                            {cityObj.displayName} ({cityObj.city})
                           </li>
                         ))}
                     </ul>
@@ -1081,15 +1092,17 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                 Plan Tier
               </label>
               <div className="flex relative">
+                <label htmlFor="planTier" className="sr-only">Plan Tier</label>
                 <select
                   value={tempPlanTier}
                   onChange={(e) => setTempPlanTier(e.target.value)}
                   aria-label="All Tiers"
+                  id="planTier"
                   className="relative z-[2] border border-LightWhite bg-transparent px-3 py-[18.5px] rounded-[8px] w-full font-Roboto text-PrimaryBlack font-normal text-[14px] leading-[21px] tracking-[0px] appearance-none"
                 >
-                  <option value="">All Tiers</option>
+                  <option value="" aria-label="All Tiers">All Tiers</option>
                   {uniqueTiers.map((tier) => (
-                    <option key={tier} value={tier}>
+                    <option key={tier} value={tier} aria-label={tier}>
                       {tier}
                     </option>
                   ))}
@@ -1136,8 +1149,11 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
     ></div>
 
     {/* Left Thumb */}
+    <label htmlFor="minPriceSlider" className="sr-only">Minimum Price Slider</label>
     <input
       type="range"
+      id="minPriceSlider"
+      aria-label="minPriceSlider"
       min="0"
       max="100"
       value={tempMinVal}
@@ -1151,8 +1167,11 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
     />
 
     {/* Right Thumb */}
+    <label htmlFor="maxPriceSlider" className="sr-only">Maximum Price Slider</label>
     <input
       type="range"
+      id="maxPriceSlider"
+      aria-label="maxPriceSlider"
       min="0"
       max="100"
       value={tempMaxVal}
@@ -1181,8 +1200,11 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
 
   {/* Number Boxes */}
   <div className="flex items-center justify-between gap-2 mt-3">
+    <label htmlFor="minPrice" className="sr-only">Minimum Price</label>
     <input
       type="number"
+      id="minPrice"
+      aria-label="minPrice"
       value={tempMinPrice}
       min={PRICE_MIN}
       max={tempMaxPrice - 1}
@@ -1194,8 +1216,11 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
       aria-label="Minimum Price"
       className="border border-LightWhite w-20 px-3 py-2 rounded-[8px] font-Roboto text-PrimaryBlack font-normal text-[16px] leading-[24px] tracking-[0px]"
     />
+    <label htmlFor="maxPrice" className="sr-only">Maximum Price</label>
     <input
       type="number"
+      id="maxPrice"
+      aria-label="maxPrice"
       value={tempMaxPrice}
       min={tempMinPrice + 1}
       max={PRICE_MAX}

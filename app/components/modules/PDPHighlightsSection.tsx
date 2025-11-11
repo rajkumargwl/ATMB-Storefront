@@ -10,6 +10,7 @@ type Highlight = {
 type Props = {
   heading?: string;
   highlights?: Highlight[];
+  
 };
 
 export default function PDPHighlightsSection({ heading, highlights }: Props) {
