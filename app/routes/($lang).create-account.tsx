@@ -313,6 +313,8 @@ export default function Register() {
                               <div className="flex items-center gap-3">
                                 <Button
                                   onClick={() => window.history.back()}
+                                  title="Back to cart"
+                                  aria-label="Back to cart"
                                   className="bg-[#ffffff] p-6 w-[32px] md:w-[36px] h-[32px] md:h-[36px] border border-LightWhite rounded-full flex items-center justify-center p-0"
                                 >
                                   <svg
@@ -348,9 +350,9 @@ export default function Register() {
                           <div className="">
                             {/* Checkout header */}
                             <div className="mb-8">
-                              <h1 className="font-[600] text-[#091019] md:text-[32px] md:leading-[38.4px] md:tracking-[-0.48px] text-[24px] leading-[31.2px] tracking-[-0.36px]">
+                              <h2 className="font-[600] text-[#091019] md:text-[32px] md:leading-[38.4px] md:tracking-[-0.48px] text-[24px] leading-[31.2px] tracking-[-0.36px]">
                                 Checkout
-                              </h1>
+                              </h2>
                               <p className="text-[#4D4E4F] font-[400] text-[16px] leading-[24px] mt-1">
                                 Get started in seconds and manage your mail anytime, anywhere.
                               </p>
@@ -384,7 +386,7 @@ export default function Register() {
                                       <input
                                         id="first_name"
                                         name="first_name"
-                                        aria-label="First Name"
+                                        aria-label="first_name"
                                         type="text"
                                         required
                                         placeholder="Chirstopher"
@@ -400,7 +402,7 @@ export default function Register() {
                                       />
                                       <label
                                         htmlFor="first_name"
-                                        aria-label="First Name"
+                                        aria-label="first_name"
                                         className="font-[400] absolute left-4 top-[10px] text-[12px] leading-[18px] text-[#4D4E4F] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150"
                                       >
                                         First Name
@@ -411,7 +413,7 @@ export default function Register() {
                                       <input
                                         id="last_name"
                                         name="last_name"
-                                        aria-label='Last Name'
+                                        aria-label='last_name'
                                         type="text"
                                         placeholder="Philip"
                                         required
@@ -427,7 +429,7 @@ export default function Register() {
                                       />
                                       <label
                                         htmlFor="last_name"
-                                        aria-label='Last Name'
+                                        aria-label='last_name'
                                         className="font-[400] absolute left-4 top-[10px] text-[12px] leading-[18px] text-[#4D4E4F] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150"
                                       >
                                         Last Name
@@ -442,7 +444,7 @@ export default function Register() {
                                         id="phone"
                                         name="phone"
                                         type="text"
-                                        aria-label='Phone Number'
+                                        aria-label='phone'
                                         placeholder="+1 786 564 683"
                                         maxLength={16}
                                         required
@@ -464,7 +466,7 @@ export default function Register() {
                                       />
                                       <label
                                         htmlFor="phone"
-                                        aria-label='Phone Number'
+                                        aria-label='phone'
                                         className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F] leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150"
                                       >
                                         Phone Number
@@ -483,7 +485,7 @@ export default function Register() {
                                         name="email"
                                         type="text"
                                         required
-                                        aria-label='Email Address'
+                                        aria-label='email'
                                         placeholder="chris.philip@anytime.com"
                                         onFocus={() => setFormError(null)}
                                         onBlur={(event) => {
@@ -499,7 +501,7 @@ export default function Register() {
                                       />
                                       <label
                                         htmlFor="email"
-                                        aria-label='Email Address'
+                                        aria-label='email'
                                         className="font-[400] absolute left-4 top-[10px] text-[12px] text-[#4D4E4F] leading-[18px] peer-placeholder-shown:top-2 peer-placeholder-shown:text-[14px] peer-placeholder-shown:text-[#9CA3AF] transition-all duration-150"
                                       >
                                         Email Address
@@ -568,8 +570,8 @@ export default function Register() {
                                   {/* Buttons */}
                                   <button
                                     type="submit"
-                                    title='Create an Account'
-                                    aria-label='Create an Account'
+                                    title='Create Account'
+                                    aria-label='Create Account'
                                     disabled={!!(firstNameError || lastNameError || phoneError || nativeEmailError) || isSubmitting}
                                     className="flex items-center justify-center mt-5 bg-[#F6F6F6] h-[52px] hover:bg-[#e55a00] px-4 text-[#4D4E4F] hover:text-white font-medium text-[16px] py-3 rounded-full transition-all w-full"
                                   >
