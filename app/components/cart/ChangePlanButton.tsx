@@ -35,6 +35,7 @@ function ChangePlanButton({
       className="font-Roboto text-PrimaryBlack font-normal leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px] md:tracking-[0.07px]
                       underline decoration-solid decoration-skip-ink-auto decoration-auto underline-offset-auto"
       onClick={handleClick}
+      aria-label="Change your billing plan"
     >
       Change Plan
     </button>

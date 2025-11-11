@@ -252,6 +252,7 @@ const filteredVariants = variants.filter((variant) => {
                       : 'w-full h-[44px] md:h-[52px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-white md:text-PrimaryBlack border border-DarkOrange md:border-[#091019] px-4 py-[12px] bg-DarkOrange md:bg-white hover:bg-DarkOrange hover:text-white hover:border-DarkOrange'
                   }`}
                   text="Add to Cart"
+                  ariaLabel={`Add ${product.title} - ${variant.title} to your cart`}
          
                 />
               </div>

@@ -1,7 +1,7 @@
 import { CartForm, Money } from '@shopify/hydrogen';
 import { DEFAULT_LOCALE } from '~/lib/utils';
 import { useRootLoaderData } from '~/root';
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
  
 export default function CartBundleSection({ bundleProducts }: { bundleProducts: any[] }) {
   const prevState = useRef<string>("idle");
@@ -110,14 +110,15 @@ export default function CartBundleSection({ bundleProducts }: { bundleProducts: 
           }}
         >
          {(props: { state: string }) => {
-            // Detect when submission completes (from 'submitting' -> 'idle')
-            if (prevState.current === "submitting" && props.state === "idle") {
-              window.scrollTo({ top: 0, behavior: "smooth" });
-            }
-    
-            // Update the previous state
-            prevState.current = props.state;
-    
+             useEffect(() => {
+              if (prevState.current === "submitting" && props.state === "idle") {
+                window.scrollTo({
+                  top: 0, 
+                  behavior: "smooth",
+                });
+              }
+              prevState.current = props.state;
+            }, [props.state]);
             return (
               <button
                 type="submit"

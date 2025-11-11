@@ -1,15 +1,18 @@
 import React from "react";
 import { Check } from "lucide-react";
-
+ 
 type PartnerLogo = {
-  url: string;
   alt: string;
+  logo: {
+    url: string;
+  };
 };
-
+ 
+ 
 type Icon = {
   url: string;
 };
-
+ 
 type Props = {
   companyName: string;
   designation: string;
@@ -20,7 +23,7 @@ type Props = {
   isVerified: boolean;
   location?: any;
 };
-
+ 
 const PdpMailCenterHighlightsSection: React.FC<Props> = ({
   companyName,
   designation,
@@ -32,7 +35,7 @@ const PdpMailCenterHighlightsSection: React.FC<Props> = ({
   location,
 }) => {
   const hasHighlights = highlights && highlights.length > 0;
-
+ 
   return (
     <section className="px-5 py-[40px] bg-PrimaryBlack relative z-[2] overflow-hidden">
       {/* Background SVGs */}
@@ -61,7 +64,7 @@ const PdpMailCenterHighlightsSection: React.FC<Props> = ({
           </defs>
         </svg>
       </div>
-
+ 
       {/* Mobile Background */}
       <div className="flex md:hidden absolute z-[1] top-[0px] right-[0px]">
         <svg xmlns="http://www.w3.org/2000/svg" width="393" height="782" viewBox="0 0 393 782" fill="none">
@@ -88,7 +91,7 @@ const PdpMailCenterHighlightsSection: React.FC<Props> = ({
           </defs>
         </svg>
       </div>
-
+ 
       {/* Content */}
       <div
         className={`max-w-[1240px] mx-auto flex flex-col md:flex-row gap-9 md:gap-6 relative z-[2] ${
@@ -110,19 +113,23 @@ const PdpMailCenterHighlightsSection: React.FC<Props> = ({
             )}
           </div>
           <p className="font-Roboto text-white text-[12px] leading-[18px]">{designation}</p>
-
+ 
           <div className="flex flex-wrap gap-2 mt-6">
-            {partnerLogos?.map((logo, index) => (
+              {partnerLogos?.map((partner, index) => (
               <div
                 key={index}
                 className="w-[54px] h-[33px] bg-white rounded-[3px] flex items-center justify-center border border-LightWhite"
               >
-                <img src={logo.url} alt={`partner-${index}`} className="w-auto h-auto object-contain" />
+                  <img
+        src={partner.logo?.url}
+        alt={partner.alt || `partner-logo-${index}`}
+        className="w-auto h-auto object-contain"
+      />
               </div>
             ))}
           </div>
         </div>
-
+ 
         {/* Right Section — only render if highlights exist */}
         {hasHighlights && (
           <div className="w-full md:w-[68.5%] flex flex-col">
@@ -150,5 +157,5 @@ const PdpMailCenterHighlightsSection: React.FC<Props> = ({
     </section>
   );
 };
-
+ 
 export default PdpMailCenterHighlightsSection;
