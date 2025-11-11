@@ -51,7 +51,7 @@ export default function BuisnessHowitWork({
           </p>
         )}
          {descriptionLine2 && (
-          <p className="text-lg text-gray-500 mt-2">{descriptionLine2}</p>
+          <p className="mt-[-20px] text-center font-Roboto text-white font-normal leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px]">{descriptionLine2}</p>
         )}
         </div>
  

@@ -138,7 +138,7 @@ return (
                 className={`px-6 py-3 font-Roboto text-[16px] font-normal leading-[24px] tracking-[0] rounded-full border transition ${
                   isSelected
                     ? "border-PrimaryBlack text-white bg-PrimaryBlack"
-                    : "text-PrimaryBlack"
+                    : "text-PrimaryBlack transition-all  hover:bg-PrimaryBlack hover:text-white"
                 }`}
               >
                 {tab.tabName}

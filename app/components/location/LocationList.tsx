@@ -566,7 +566,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                 </div>
                       <div className="flex items-start md:items-center flex-row gap-3 pb-2">
                        <h2 className="font-Roboto text-PrimaryBlack font-semibold text-[20px] leading-[28px] tracking-[-0.3px]">{loc.displayName}</h2>
-                        <span className="border border-[rgba(116,160,56,0.3)] bg-[rgba(85,128,25,0.08)] px-2 py-1 tpx-2 py-1 rounded-[8px] font-Roboto text-[#558019] font-normal text-[12px] leading-[18px] tracking-[0px] min-w-[67px]">
+                        <span className="border border-[rgba(116,160,56,0.3)] bg-[rgba(85,128,25,0.08)] px-2 py-1 tpx-2 py-1 rounded-[8px] font-Roboto text-[#436713] font-normal text-[12px] leading-[18px] tracking-[0px] min-w-[67px]">
                         0.2 miles
                         </span>
                       </div> 
@@ -739,7 +739,7 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
                     navigate(virtualPDP);
                   }
                 }}
-                className="hidden md:flex rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-[16px] py-[12px] transition-all"
+                className="hidden md:flex rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-base text-PrimaryBlack border border-[#091019] px-[16px] py-[12px] transition-all transition-all  hover:bg-PrimaryBlack hover:text-white"
               >
                 Select
            </button>

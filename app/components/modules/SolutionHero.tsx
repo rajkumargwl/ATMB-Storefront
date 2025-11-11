@@ -75,11 +75,10 @@ export default function SolutionHero({ data }: Props) {
           </p>
  
           {data?.cta?.label && (
-            <Link to={data?.cta?.url || "/PDP/virtual-phone-number"} className="group relative overflow-hidden flex items-center justify-center w-full md:w-[207px] bg-DarkOrange text-white font-Roboto font-medium leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-[16px] py-[12px] rounded-[100px] transition-all  hover:bg-[#DF5D07] hover:text-white">
-              
-                <span className="relative flex items-center transition-all duration-300">{data.cta.label}  <span className="relative right-0 opacity-0 translate-x-[12px] hidden group-hover:opacity-100 group-hover:block group-hover:translate-x-[12px] transition-all duration-300">
+            <Link to={data?.cta?.url || "/PDP/virtual-phone-number"} className="group relative overflow-hidden flex items-center justify-center w-full md:w-[207px] bg-DarkOrange text-white font-Roboto font-medium leading-[16px] text-[16px] tracking-[0.08px] h-[52px] px-[16px] py-[12px] rounded-[100px] transition-all hover:scale-[1.01] hover:bg-[#DF5D07]">
+             <span className="relative flex items-center">{data.cta.label} <span className="absolute right-0 opacity-0 translate-x-[-8px] group-hover:opacity-100 group-hover:translate-x-[35px] transition-all duration-300">
               <RightArrowWhite />
-            </span></span>            
+            </span></span>           
             </Link>
           )}
  

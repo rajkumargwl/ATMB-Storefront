@@ -308,7 +308,6 @@ function UpdateCartButton({
 const handleConfirm = (e: React.MouseEvent<HTMLButtonElement>) => {
   const confirmed = window.confirm("Are you sure you want to remove this item?");
   if (!confirmed) {
-    // ❌ Stop the form from submitting
     e.preventDefault();
     e.stopPropagation();
   }

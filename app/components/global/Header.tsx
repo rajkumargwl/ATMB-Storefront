@@ -333,7 +333,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
     >
       {menu?.map((item, idx) => (
         <div key={idx} className="relative group p-2">
-          <Link
+         <Link
             to={buildLocalizedUrl(
               item.label === "Solutions"
                 ? "/solutionsvm"
@@ -353,20 +353,43 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
             aria-haspopup={item.hasSubmenu ? "true" : undefined}
             aria-expanded="false"
             onKeyDown={(e) => {
-              const submenu =
-                e.currentTarget.parentElement?.querySelector(".submenu");
+              const submenu = e.currentTarget.parentElement?.querySelector(".submenu");
               if (!submenu) return;
 
-              // Open/close with Enter or Space
+              // Open or close menu with Enter or Space
               if (e.key === "Enter" || e.key === " ") {
                 e.preventDefault();
                 const isHidden = submenu.classList.contains("hidden");
-
                 submenu.classList.toggle("hidden");
                 e.currentTarget.setAttribute("aria-expanded", String(isHidden));
+
+                if (!isHidden) return; // Only add listeners when menu is open
+
+                // Add key listener for ESC and TAB navigation
+                const handleKey = (ev: KeyboardEvent) => {
+                  if (ev.key === "Escape") {
+                    submenu.classList.add("hidden");
+                    e.currentTarget.setAttribute("aria-expanded", "false");
+                    e.currentTarget.focus();
+                    document.removeEventListener("keydown", handleKey);
+                  }
+
+                  if (ev.key === "Tab") {
+                    // Delay check after focus changes
+                    requestAnimationFrame(() => {
+                      if (!submenu.contains(document.activeElement)) {
+                        submenu.classList.add("hidden");
+                        e.currentTarget.setAttribute("aria-expanded", "false");
+                        document.removeEventListener("keydown", handleKey);
+                      }
+                    });
+                  }
+                };
+
+                document.addEventListener("keydown", handleKey);
               }
 
-              // Close with Escape
+              // Also close if ESC pressed while trigger is focused
               if (e.key === "Escape") {
                 submenu.classList.add("hidden");
                 e.currentTarget.setAttribute("aria-expanded", "false");
@@ -378,7 +401,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
               setTimeout(() => {
                 if (!parent?.contains(document.activeElement)) {
                   parent?.querySelector(".submenu")?.classList.add("hidden");
-                  e.currentTarget.setAttribute("aria-expanded", "false"); 
+                  e.currentTarget.setAttribute("aria-expanded", "false");
                 }
               }, 100);
             }}
@@ -390,6 +413,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
               </span>
             )}
           </Link>
+
 
           {/* Mega Menu */}
           {item?.hasSubmenu &&
