@@ -33,6 +33,7 @@ export async function loader({context}: LoaderFunctionArgs) {
         *[_type == "location" 
           && defined(country) 
           && country != "" 
+          && state != ""
           && (
             (defined(state) && state != "") ||
             (defined(city) && city != "")
