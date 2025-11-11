@@ -25,7 +25,7 @@ export default function BusinessTransformationSection({
             {title}
           </h2>
             {secondlinetitle && (
-          <p className="text-lg text-gray-600 mt-2">{secondlinetitle}</p>
+          <p className="mt-[-20px] max-w-[299px] md:max-w-full mx-auto font-Roboto text-white font-semibold leading-[31.2px] md:leading-[43.2px] text-[24px] md:text-[36px] tracking-[-0.36px] md:tracking-[-0.54px]">{secondlinetitle}</p>
         )}
           {subtitle && (
             <p className="font-Roboto text-white font-normal leading-[24px] md:leading-[27px] text-[16px] md:text-[18px] tracking-[0px] opacity-90">

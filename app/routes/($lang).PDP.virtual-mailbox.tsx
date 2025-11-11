@@ -108,21 +108,7 @@ export async function loader({context, params, request}: LoaderFunctionArgs) {
       cache,
     }),
   ]);
-
-//  console.log("Product variants with metafields:");
-//  product.variants.nodes.forEach((variant: any, i: number) => {
-//    const metafields = (variant.metafields || [])
-//      .filter((m: any) => m !== null)
-//      .map((m: any) => ({
-//        key: m.key,
-//        value: m.value,
-//      }));
- 
-//    console.log(`Variant ${i + 1}:`, {
-//      title: variant.title,
-//      metafields,
-//    });
-//  });
+ console.log("pageee",JSON.stringify(page,null,2));
  
 
   return defer({
