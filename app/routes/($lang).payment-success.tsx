@@ -102,7 +102,7 @@ export default function CheckoutPage() {
 const { cart, customer } = useLoaderData<typeof loader>();
 const navigate = useNavigate();
 const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
-console.log("selectedLocale", selectedLocale);
+// console.log("selectedLocale", selectedLocale);
 let currencyCode = selectedLocale?.currency || 'USD';
 
 // Define visible attribute keys
@@ -172,19 +172,21 @@ useEffect(() => {
   }
 }, [cart]);
 
-console.log("customercustomer Payment Success Page with cart:", customer);
+// console.log("customercustomer Payment Success Page with cart:", customer);
 return (
 <>
-    <ClientOnly>
-      <RoktIntegration 
-        userData={{
-          email: customer?.email, // or fetch customer info from session
-          firstName: customer?.firstName,
-          lastName: customer?.lastName,
-        }}
-        cart={cart}
-      />
-    </ClientOnly>
+<ClientOnly>
+  <RoktIntegration
+    userData={{
+      email: customer?.email,
+      firstName: customer?.firstName,
+      lastName: customer?.lastName,
+      phone: customer?.phone,
+    }}
+    cart={cart}
+  />
+</ClientOnly>
+<div id="rokt-placeholder"></div>
     {/* Header */}
     <div className="top-6 border-b border-[#DCDCDC] w-full mx-auto flex items-center justify-center py-5 px-5 md:px-25 bg-white"> <img
        src="https://cdn.sanity.io/images/m5xb8z9y/production/6312d6eb4f994397153b67ef3043e166e1f574d4-101x50.svg"
@@ -302,7 +304,7 @@ return (
         onClick={async () => {
           try {
             await fetch("/api/clear-cart", { method: "POST" });
-            await fetch("/api/clear-customer-metafields", { method: "POST" });
+            //await fetch("/api/clear-customer-metafields", { method: "POST" });
             localStorage.removeItem("checkoutCart");
             navigate("/");
           } catch (error) {
@@ -313,7 +315,7 @@ return (
     >
       Continue
     </button>
-
+    
   </div>
 </>
 );
