@@ -304,7 +304,7 @@ return (
         onClick={async () => {
           try {
             await fetch("/api/clear-cart", { method: "POST" });
-            await fetch("/api/clear-customer-metafields", { method: "POST" });
+            //await fetch("/api/clear-customer-metafields", { method: "POST" });
             localStorage.removeItem("checkoutCart");
             navigate("/");
           } catch (error) {
