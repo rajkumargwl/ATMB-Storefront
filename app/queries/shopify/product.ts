@@ -17,6 +17,14 @@ export const PRODUCT_VARIANT_FIELDS = `
       currencyCode
       amount
     }
+    priceV2 {
+      amount
+      currencyCode
+    }
+    compareAtPriceV2 {
+      amount
+      currencyCode
+    }
     selectedOptions {
       name
       value
