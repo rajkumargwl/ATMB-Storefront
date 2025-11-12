@@ -70,6 +70,7 @@ export default async function handleRequest(
       "https://wchat.freshchat.com", // ✅ Freshchat widget domain
       'https://www.google.com/recaptcha/',
       'https://www.gstatic.com/recaptcha/',
+      'https://apps.rokt.com', // ✅ Allow Rokt WebSDK
     ],
     fontSrc: [
       `'self'`,
@@ -92,6 +93,7 @@ export default async function handleRequest(
       'https://www.youtube-nocookie.com',
       "https://anytime-mailbox.freshchat.com", // ✅ Allow Freshchat iframe
       'https://www.google.com/recaptcha/',
+      'https://apps.rokt.com', // ✅ Allow Rokt connections
     ],
     connectSrc: [
       `'self'`,
@@ -111,6 +113,7 @@ export default async function handleRequest(
       'https://www.google.com/recaptcha/',
       'https://www.gstatic.com/recaptcha/',
       'https://development.anytimeapi.com/',
+      'https://apps.rokt.com', // ✅ Allow Rokt connections
     ],
   });
 
