@@ -221,7 +221,6 @@ export async function loader({request, context, params}: LoaderFunctionArgs) {
   }
  
   const selectedLocale = context.storefront.i18n as I18nLocale;
-  console.log("selectedLocale", selectedLocale);
  
   return defer({
     preview,

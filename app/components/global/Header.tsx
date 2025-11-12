@@ -271,7 +271,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
       if (event.origin !== "https://shopifystage.anytimehq.co") return;
 
       if (event.data?.token) {
-        console.log("Received token:", event.data.token);
+        // console.log("Received token:", event.data.token);
 
         // Redirect parent window with token in URL
         window.location.href = `/account/login?token=${event.data.token}`;

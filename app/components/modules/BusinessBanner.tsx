@@ -24,7 +24,7 @@ const BusinessBanner: React.FC<BusinessBannerProps> = ({ title, titleline2, cta,
         <h2 className="mb-[32px] max-w-[772px] font-Roboto text-white font-semibold leading-[38.4px] md:leading-[61.6px] text-[32px] md:text-[56px] tracking-[-0.48px] md:tracking-[-1.12px]">{title}{titleline2 && (
               <>
                 <br />
-                <span className="block text-white opacity-80">
+                <span className="block text-white">
                   {titleline2}
                 </span>
               </>

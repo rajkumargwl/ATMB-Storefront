@@ -98,7 +98,8 @@ export function BuiltForYou({ data }: BuiltForYouProps) {
                       id={`tab-${index}`}
                       aria-selected={activeTab === index}
                       aria-controls={`tabpanel-${index}`}
-                      // Only the active tab is tabbable by default
+                      // Announce count for screen readers
+                      aria-label={`${tab.label} (${index + 1} of ${data.tabs.length})`}
                       tabIndex={activeTab === index ? 0 : -1}
                       onClick={() => setActiveTab(index)}
                       onKeyDown={(e) => {
@@ -128,11 +129,8 @@ export function BuiltForYou({ data }: BuiltForYouProps) {
                           newIndex = tabs.length - 1;
                         } else if (e.key === "Enter" || e.key === " ") {
                           e.preventDefault();
-                          setActiveTab(index); // Activate tab
+                          setActiveTab(index);
                         }
-
-                        // Optional: auto-activate tab when navigating (can remove if undesired)
-                        // setActiveTab(newIndex);
                       }}
                       className={`w-full text-left px-[16px] py-[18px] md:p-[18px] ${
                         activeTab === index
@@ -160,19 +158,6 @@ export function BuiltForYou({ data }: BuiltForYouProps) {
                         </span>
                       </div>
                     </button>
-
-                    {/* Mobile content */}
-                    {activeTab === index && (
-                      <div
-                        role="tabpanel"
-                        id={`tabpanel-${index}`}
-                        aria-labelledby={`tab-${index}`}
-                        tabIndex={0}
-                        className="w-full flex flex-col mt-4 mb-8 md:hidden"
-                      >
-                        {/* your existing mobile content remains unchanged */}
-                      </div>
-                    )}
                   </div>
                 ))}
               </div>

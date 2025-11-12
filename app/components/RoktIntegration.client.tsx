@@ -1,48 +1,53 @@
-// app/components/RoktIntegration.client.tsx
 import { useEffect } from "react";
 
-export default function RoktIntegration({ userData, cart }: { userData?: any; cart?: any }) {
+export default function RoktIntegration({
+  userData,
+  cart,
+}: {
+  userData?: any;
+  cart?: any;
+}) {
   useEffect(() => {
-
-    // Only run in the browser
     const loadRokt = async () => {
-      if (window.Rokt) return; // prevent double loading
+      // Avoid double loading
+      if ((window as any).Rokt) return;
 
-      const orderId = cart?.id || "";
-      const total = cart?.cost?.totalAmount?.amount || "";
-      const currencyCode = cart?.cost?.totalAmount?.currencyCode || "USD";
-
+      // Create and inject the Rokt script
       const target = document.head || document.body;
       const script = document.createElement("script");
       script.type = "text/javascript";
       script.src = "https://apps.rokt.com/wsdk/integrations/launcher.js";
+      script.fetchPriority = "high";
       script.crossOrigin = "anonymous";
       script.async = true;
       script.id = "rokt-launcher";
       target.appendChild(script);
 
+      // Wait for the script to load
       await new Promise<void>((resolve) => {
-        if (window.Rokt) resolve();
+        if ((window as any).Rokt) resolve();
         else
           script.addEventListener("load", () => {
             resolve();
           });
       });
 
-      const launcher = await window.Rokt.createLauncher({
-        accountId: "3147080751641851509", 
-        sandbox: true, // false in production
+      // Initialize Rokt Launcher
+      const launcher = await (window as any).Rokt.createLauncher({
+        accountId: "3147080751641851509",
+        sandbox: false, // ❗️Set to false in production
       });
 
+      // Send customer and order data
       await launcher.selectPlacements({
         attributes: {
           email: userData?.email || "",
           firstname: userData?.firstName || "",
           lastname: userData?.lastName || "",
           mobile: userData?.phone || "",
-          confirmationref: "",
-          amount: total,
-          currency: currencyCode,
+          confirmationref: cart?.id || "",
+          amount: cart?.cost?.totalAmount?.amount || "",
+          currency: cart?.cost?.totalAmount?.currencyCode || "USD",
           paymenttype: "",
           ccbin: "",
           zipcode: "",
@@ -52,8 +57,13 @@ export default function RoktIntegration({ userData, cart }: { userData?: any; ca
       });
     };
 
-    loadRokt();
-  },  [userData, cart]);
+    // Trigger when the page fully loads
+    window.addEventListener("load", () => {
+      console.log("Rokt start");
+      loadRokt().then(() => console.log("Rokt end"));
+    });
+  }, [userData, cart]);
 
-  return null; // no UI, script only
+  // ✅ Placeholder where Rokt injects the content
+  return <div id="rokt-placeholder"></div>;
 }
