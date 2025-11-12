@@ -69,7 +69,7 @@ export default function CartEssentialsSection({
        {firstEssential?.features?.length > 0 && (
           <ul className="flex flex-col gap-2 mt-2">
             {firstEssential.features.map((feature: string, index: number) => (
-              <li key={index} className="flex items-center gap-2 text-[14px] text-PrimaryBlack">
+              <li key={index} className="flex items-center gap-3 font-Roboto text-PrimaryBlack font-normal leading-[21px] md:leading-[21px] text-[14px] md:text-[14px] tracking-[0px]">
                 <span className="flex items-center justify-center w-[24px] h-[24px]">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
