@@ -184,7 +184,6 @@ const showChangeButtons = hasBundleAttr === 'false';
       <div className="mt-2 ">
   {attributes
   .filter((attr) => VISIBLE_ATTRIBUTES.includes(attr.key))
-  // 🧠 Sort so that 'displayName' always comes first
   .sort((a, b) => (a.key === 'displayName' ? -1 : b.key === 'displayName' ? 1 : 0))
   .map((attr) => (
     <p
@@ -333,7 +332,6 @@ function ItemRemoveButton({lineIds}: {lineIds: CartLine['id'][]}) {
 export function CartSummary({cart,cost}: {cart: Cart,cost: CartCost}) {
   const lines = flattenConnection(cart.lines);
   const VISIBLE_ATTRIBUTES = [
-     'locationId',
     'displayName',
     'addressLine1',
     'city',
@@ -363,13 +361,15 @@ export function CartSummary({cart,cost}: {cart: Cart,cost: CartCost}) {
               <div className="">
                 <div className="font-Roboto text-[#091019] font-[400] leading-[21px] text-[14px] mb-2">{line.merchandise.title} Plan</div>
                 {line.attributes
-                .filter((attr) => VISIBLE_ATTRIBUTES.includes(attr.key))
-                .map((attr, index) => (
-                  <p
-                    key={attr.key}
-                    className={`font-Roboto  tracking-[0px] 
-                      ${index === 0 ? 'font-semibold text-[18px] text-[#091019] leading-[27px] mb-1' : 'font-normal text-[#4D4E4F] text-[16px] leading-[24px]'}`}
-                  >
+               .filter((attr) => VISIBLE_ATTRIBUTES.includes(attr.key))
+               .sort((a, b) => (a.key === 'displayName' ? -1 : b.key === 'displayName' ? 1 : 0))
+               .map((attr) => (
+                <p
+                key={attr.key}
+                className={`font-Roboto text-LightGray font-normal leading-[24px] text-[16px] tracking-[0px] ${
+                  attr.key === 'displayName' ? 'font-semibold text-[#091019]' : ''
+                }`}
+              >
                     <span className={index === 0 ? 'font-semibold' : 'font-normal'}>
                     </span>{' '}
                     {attr.value}
@@ -430,7 +430,7 @@ export function CartSummary({cart,cost}: {cart: Cart,cost: CartCost}) {
   );
 }
 
-export function CartActions({cart}: {cart: Cart}) {
+export function CartActions({cart,cost}: {cart: Cart,cost: CartCost}) {
   const {storeDomain} = useRootLoaderData();
 
   if (!cart || !cart.checkoutUrl) return null;
@@ -452,7 +452,11 @@ export function CartActions({cart}: {cart: Cart}) {
         to="/checkout"
         className={clsx([defaultButtonStyles(), 'w-1/2 flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full h-[52px] transition-all  hover:bg-[#DF5D07] hover:text-white hover:opacity-100'])}
       >
-        Checkout         
+        Checkout  &nbsp; {cost?.subtotalAmount?.amount ? (
+              <Money data={cost?.subtotalAmount} />
+            ) : (
+              '-'
+            )}    
       </Button>
     </div>
   );

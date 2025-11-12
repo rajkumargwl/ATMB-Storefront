@@ -390,7 +390,7 @@ export default function Cart() {
               </div>
               <div className="w-full lg:w-[34.65%] md:sticky md:top-[80px] space-y-6">
                 <CartSummary cart={cart} cost={cart?.cost} />
-                <CartActions cart={cart} />
+                <CartActions cart={cart} cost={cart?.cost}/>
               </div>
             </div>
 
