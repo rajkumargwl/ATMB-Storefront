@@ -88,7 +88,7 @@ export default function CountryPage() {
     // ✅ Load script dynamically if missing
     if (!window.google || !window.google.maps) {
       const script = document.createElement('script');
-      script.src = `https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY_HERE`;
+      script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDXYZ7HuZbqyLOv8xlijti1jwP9k4lSJqM`;
       script.async = true;
       script.onload = () => initMap();
       document.body.appendChild(script);
