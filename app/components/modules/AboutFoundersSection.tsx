@@ -58,6 +58,7 @@ export default function AboutFoundersSection({
                 key={founder._key || founder.name}
                 to={`/founderdetails/${slug}`}
                 prefetch="intent"
+                aria-label={`View profile of ${founder.name}`}
                 className="group relative flex flex-col items-start gap-4 hover:scale-[1.02] transition-transform"
               >
                 {/* Founder Image */}
@@ -65,7 +66,7 @@ export default function AboutFoundersSection({
                   <div className="flex rounded-[20px] bg-white overflow-hidden">
                     <img
                       src={founder.image.url}
-                      alt={founder.name}
+                        alt={`Portrait of ${founder.name}`}
                       className="w-[206px] h-full object-cover"
                     />
                   </div>

@@ -47,6 +47,7 @@ import {HEADER_QUERY} from '~/queries/sanity/header';
 import {FOOTER_QUERY} from '~/queries/sanity/footer';
 import {fetchGids, notFound} from '~/lib/utils';
 import { useEffect } from 'react';
+import FocusHandler from './components/FocusHandler';
 
 const seo: SeoHandleFunction<typeof loader> = ({data}) => ({
   title: data?.layout?.seo?.title,
@@ -303,6 +304,7 @@ export default function App() {
         <link href="https://anytime-cdn-cdc3c2fbcrffb0db.z03.azurefd.net/css/styles.css" rel="stylesheet" /> */}
       </head>
       <body>
+          <FocusHandler />
         <PreviewProvider previewConfig={preview} fallback={<PreviewLoading />}>
            {/* 🔹 Skip link should be FIRST */}
         

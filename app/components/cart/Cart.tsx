@@ -320,6 +320,7 @@ function ItemRemoveButton({lineIds}: {lineIds: CartLine['id'][]}) {
     >
       <button
         className="disabled:pointer-events-all disabled:cursor-wait"
+        title= "Remove Button"
         type="submit"
         onClick={handleConfirm}
       >
