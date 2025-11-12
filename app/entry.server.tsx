@@ -72,6 +72,10 @@ export default async function handleRequest(
       'https://www.gstatic.com/recaptcha/',
       'https://apps.rokt.com', // ✅ Allow Rokt WebSDK
     ],
+    scriptSrcElem: [
+      `'self'`,
+      'https://apps.rokt.com', // ✅ Required for dynamically appended scripts
+    ],
     fontSrc: [
       `'self'`,
       'https://fonts.gstatic.com',
