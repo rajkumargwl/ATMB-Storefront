@@ -616,7 +616,10 @@ body.no-scroll {
     font-family: "Roboto", "sans-serif";
     margin-bottom: 20px;
 }
- 
+
+ .solution-overlay {
+    -webkit-backdrop-filter: blur(12px);
+}
  
  
  

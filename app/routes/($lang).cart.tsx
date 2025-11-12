@@ -388,7 +388,7 @@ export default function Cart() {
               <div className='w-full lg:w-[65.35%]'>                
                 <CartLineItems linesObj={cart?.lines} />
               </div>
-              <div className="w-full lg:w-[34.65%] md:sticky md:top-[80px] space-y-6">
+              <div className="w-full lg:w-[34.65%] md:sticky md:top-[80px] space-y-6 p-6 border border-LightWhite rounded-[12px]">
                 <CartSummary cart={cart} cost={cart?.cost} />
                 <CartActions cart={cart} cost={cart?.cost}/>
               </div>
