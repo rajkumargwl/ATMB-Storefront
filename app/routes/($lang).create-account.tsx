@@ -66,55 +66,53 @@ export const action: ActionFunction = async ({request, context, params}) => {
   const first_name = formData.get('first_name');
   const last_name = formData.get('last_name');
   const phone = formData.get('phone');
- 
-  const pn = parsePhoneNumberFromString(phone || '');
-  if (!pn || !pn.isValid()) {
-    return badRequest<ActionData>({ formError: 'Please enter a valid phone number.' });
-  }
-
-  const phone_country_code = `+${pn.countryCallingCode}`;
-  const phone_local_number = pn.nationalNumber; // no leading 0s for national significant number
-
-  console.log('Parsed phone:', {phone_country_code, phone_local_number});
   const password = "12345678"; // default password for all users
   
   if (!first_name || typeof first_name !== 'string') {
     return badRequest<ActionData>({
-      formError: 'First name is required',
+      formError: 'First name is required.',
     });
   }
   
   if (!last_name || typeof last_name !== 'string') {
     return badRequest<ActionData>({
-      formError: 'Last name is required',
+      formError: 'Last name is required.',
     });
   }
+  if (!phone || typeof phone !== 'string') {
+    return badRequest<ActionData>({
+      formError: 'Phone number is required.',
+    });
+  }
+  const pn = parsePhoneNumberFromString(phone || '');
+  if (!pn || !pn.isValid()) {
+    return badRequest<ActionData>({ formError: 'Please enter a valid phone number including country code (e.g. +91, +1, +63).' });
+  }
+
+  const phone_country_code = `+${pn.countryCallingCode}`;
+  const phone_local_number = pn.nationalNumber; // no leading 0s for national significant number
+
+  // console.log('Parsed phone:', {phone_country_code, phone_local_number});
+
+  const phoneRegex = /^\+?[1-9]\d{7,14}$/;
+  if (!phone || typeof phone !== 'string' || !phoneRegex.test(phone)) {
+    return badRequest<ActionData>({
+      formError: 'Please enter a valid phone number including country code (e.g. +91, +1, +63).',
+    });
+  }
+
+  if (!email || typeof email !== 'string') {
+    return badRequest<ActionData>({
+      formError: 'Email is required.',
+    });
+  }
+  
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!email || typeof email !== 'string' || !emailRegex.test(email)) {
     return badRequest<ActionData>({
       formError: 'Please enter a valid email address.',
     });
   }
-
-  const phoneRegex = /^\+?[1-9]\d{7,14}$/;
-  if (!phone || typeof phone !== 'string' || !phoneRegex.test(phone)) {
-    return badRequest<ActionData>({
-      formError: 'Please enter a valid phone number including country code.',
-    });
-  }
-
-  // if (!email || typeof email !== 'string') {
-  //   return badRequest<ActionData>({
-  //     formError: 'Email is required.',
-  //   });
-  // }
-  
-  // if (!phone || typeof phone !== 'string') {
-  //   return badRequest<ActionData>({
-  //     formError: 'Phone number is required',
-  //   });
-  // }
-  
 
   try {
     // 1️ Create Shopify customer
@@ -178,15 +176,60 @@ export const action: ActionFunction = async ({request, context, params}) => {
       }),
     });
 
+
     const userResponses = await userResponse.json();
     // console.log('External API user creation response:', userResponses);
-    if (userResponses?.success !== true) {
-      // console.error('External API failed', await userResponses.errors);
-      throw new Error('Could not create user in external API: ' + userResponses?.errors.map((err: any) => err?.message).join(', '));
-    }
 
     //  Extract the external user ID
     const externalUserId = userResponses?.data?.user_id;
+
+    if (userResponses?.success !== true) {
+      // console.error('External API failed', await userResponses.errors);
+      throw new Error('Could not create user: ' + userResponses?.errors.map((err: any) => err?.message).join(', '));
+    }else{
+      // Assign organization to user
+      const AssignOrganizationResponse = await fetch('https://anytimeapi.com/customer/organization/assign', {
+        method: 'POST',
+        headers: {
+          'API-Version': 'v1',
+          'Api-Environment': 'STG',
+          'Ocp-Apim-Subscription-Key': context.env.ANYTIME_SUBSCRIPTION_KEY!,
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          organization_id: "F624A867-7E21-4D75-80D5-8AD0CFD63294",
+          customer_id: externalUserId,
+          type: 'USER',
+          role: 'MEMBER',
+          status: 'ACTIVE',
+        }),
+      });
+  
+      const AssignOrganizationResponses = await AssignOrganizationResponse.json();
+      console.log('AssignOrganizationResponse:', AssignOrganizationResponses);
+
+       // Activate user
+       const ActivateUserResponse = await fetch('https://anytimeapi.com/customer/activate', {
+        method: 'POST',
+        headers: {
+          'API-Version': 'v1',
+          'Api-Environment': 'STG',
+          'Ocp-Apim-Subscription-Key': context.env.ANYTIME_SUBSCRIPTION_KEY!,
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: externalUserId,
+          status: 'ACTIVE',
+        }),
+      });
+  
+      const ActivateUserResponses = await ActivateUserResponse.json();
+      console.log('ActivateUserResponses:', ActivateUserResponses);
+    }
+
+    
 
     //  Get the Shopify Customer ID from Step 1
     const shopifyCustomerId = data.customerCreate.customer.id;
@@ -256,7 +299,17 @@ export const action: ActionFunction = async ({request, context, params}) => {
       },
     });
   } catch (error: any) {
-    console.error('Register action failed:', error);
+    console.error('RegisterRegister action failed:', error);
+    if (error.message === 'Phone is invalid') {
+      return badRequest({
+        formError: 'Please enter a valid phone number including country code (e.g. +91, +1, +63).',
+      });
+    }
+    if (error.message === 'Email is invalid') {
+      return badRequest({
+        formError: 'Please enter a valid email address.',
+      });
+    }
     return badRequest({
       formError:
         error?.message ||
@@ -398,7 +451,7 @@ export default function Register() {
                                               : null,
                                           );
                                         }}
-                                        className="font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 leading-[24px] text-[16px] text-[#091019] placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
+                                        className="font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 leading-[24px] text-[16px] text-[#091019] placeholder-[#636363] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
                                       />
                                       <label
                                         htmlFor="first_name"
@@ -425,7 +478,7 @@ export default function Register() {
                                                 : null,
                                             );
                                         }}
-                                        className="font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 leading-[24px] text-[16px] text-[#091019] placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
+                                        className="font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 leading-[24px] text-[16px] text-[#091019] placeholder-[#636363] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
                                       />
                                       <label
                                         htmlFor="last_name"
@@ -454,7 +507,7 @@ export default function Register() {
                                           const phoneRegex = /^\+?[1-9]\d{7,14}$/;
                                           setPhoneError(
                                             value.length && !phoneRegex.test(value)
-                                              ? 'Invalid phone number. Please include country code (e.g. +91, +1, +63).'
+                                              ? 'Please enter a valid phone number including country code (e.g. +91, +1, +63).'
                                               : null,
                                           );
                                         }}
@@ -462,7 +515,7 @@ export default function Register() {
                                           // Allow only + at start and digits
                                           event.currentTarget.value = event.currentTarget.value.replace(/(?!^\+)\D/g, '');
                                         }}
-                                        className="font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
+                                        className="font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#636363] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
                                       />
                                       <label
                                         htmlFor="phone"
@@ -493,11 +546,11 @@ export default function Register() {
                                           const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                                           setNativeEmailError(
                                             value.length && !emailRegex.test(value)
-                                              ? 'Invalid email address.'
+                                              ? 'Please enter a valid email address.'
                                               : null,
                                           );
                                         }}
-                                        className="font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#091019] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
+                                        className="font-[400] peer w-full border border-[#E5E7EB] rounded-[8px] px-4 pt-[30px] pb-2 text-[16px] text-[#091019] leading-[24px] placeholder-[#636363] focus:outline-none focus:ring-2 focus:ring-[#FF6600]"
                                       />
                                       <label
                                         htmlFor="email"
