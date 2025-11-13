@@ -114,7 +114,6 @@ export default function SearchBoxCountry({
 
     setQresults(sorted);
 
-    // 🧭 Auto-navigation for exact match
     const exactCountry = uniqueCountries.find(
       (i) => i.country?.toLowerCase() === query
     );
@@ -136,6 +135,17 @@ export default function SearchBoxCountry({
       setQresults([]);
     }
   }, [searchquery, results, navigate]);
+  const handleSearchClick = () => {
+    const trimmedQuery = searchquery.trim();
+    if (trimmedQuery.length >= 2) {
+      navigate(`/locationsearchResults?q=${encodeURIComponent(trimmedQuery)}`, {
+        state: { results: qresults }, // ✅ Pass filtered results
+      });
+      setSearchquery("");
+      setQresults([]);
+    }
+  };
+  
 
   return (
     <div className="mt-[28px] md:mt-[16px] mb-4 md:mb-5 w-full max-w-[546px]">
@@ -159,6 +169,7 @@ export default function SearchBoxCountry({
         <button
           className="group bg-DarkOrange md:w-[109px] w-[83px] text-center justify-center text-white px-[12px] md:px-[16px] py-[8px] md:py-[12px] font-normal leading-[14px] md:leading-[22px] text-[14px] md:text-[16px] tracking-[0.08px] rounded-full overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]"
           aria-label="Search location"
+          onClick={handleSearchClick}
         >
           <span className="relative items-center">
             {buttonText}
