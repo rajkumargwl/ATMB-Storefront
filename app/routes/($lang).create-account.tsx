@@ -224,6 +224,7 @@ export const action: ActionFunction = async ({request, context, params}) => {
           status: 'ACTIVE',
         }),
       });
+      
   
       const ActivateUserResponses = await ActivateUserResponse.json();
       console.log('ActivateUserResponses:', ActivateUserResponses);
