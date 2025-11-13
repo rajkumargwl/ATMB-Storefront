@@ -21,7 +21,7 @@ jobs:
           cache-dependency-path: '**/package-lock.json'
 
       - name: 📥 Install dependencies
-        run: npm install
+        run: npm install --force
 
       - name: 🔬 Lint
         run: npm run lint
@@ -45,7 +45,7 @@ jobs:
           cache-dependency-path: '**/package-lock.json'
 
       - name: 📥 Install dependencies
-        run: npm install
+        run: npm install --force
 
       - name: 🔬 Check Formatting
         run: npm run format:check
@@ -69,7 +69,7 @@ jobs:
           cache-dependency-path: '**/package-lock.json'
 
       - name: 📥 Install dependencies
-        run: npm install
+        run: npm install --force
 
       # Enabling the turbo cache causes deployments to fail intermittently.
       # The build step fails with dependency issues. More investigation needed.
