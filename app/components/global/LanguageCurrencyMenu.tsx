@@ -5,9 +5,10 @@ import {ChevronDownIcon} from '~/components/icons/ChevronDown';
 
 type Props = {
   iconUrl?: string;
+  iconLabel?: string;
 };
 
-export default function LanguageCurrencyMenu({iconUrl}: Props) {
+export default function LanguageCurrencyMenu({iconUrl, iconLabel}: Props) {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -38,8 +39,8 @@ export default function LanguageCurrencyMenu({iconUrl}: Props) {
         {iconUrl && (
           <img
             src={iconUrl}
-            alt="Language & Currency"
-                   title="Change Language or Currency"
+            alt={iconLabel}
+            title={iconLabel}
             className="object-contain"
           />
         )}
