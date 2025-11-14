@@ -50,18 +50,125 @@ export default function ContactUsSection({ data }: ContactUsProps) {
   const HUBSPOT_PORTAL_ID = '47460136'; //client's HubSpot Portal ID
   const HUBSPOT_FORM_ID = '24cefeaf-82b5-412a-976a-c348ec39d319'; //client's HubSpot Form ID
   const formRef = useRef<HTMLFormElement | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const messageRef = useRef<HTMLParagraphElement | null>(null);
 
+    useEffect(() => {
+      if (successMessage || errorMessage) {
+        messageRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+        const timer = setTimeout(() => {
+          setSuccessMessage(null);
+          setErrorMessage(null);
+        }, 5000); // Auto-hide success & error messages after 5 seconds
+
+        return () => clearTimeout(timer);
+      }
+    }, [successMessage, errorMessage]);
+   
+  const sanitizeInput = (str: string) => {
+    if (!str) return "";
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#x27;")
+      .replace(/\//g, "&#x2F;");
+  };
+  
+  const validateForm = (payload: Record<string, any>) => {
+    const errors: string[] = [];
+  
+    // Common malicious patterns
+    const xssRegex = /<script|<\/script|<img|onerror=|onload=|onclick=|javascript:|<.*?>/i;
+    const sqlRegex = /\b(drop table|sleep\(|union select|--|;|\/\*|\*\/|xp_)\b/i;
+  
+    const validateField = (
+      field: string,
+      value: string,
+      max: number
+    ) => {
+      if (!value || value.trim() === "") {
+        errors.push(`${field} is required.`);
+        return;
+      }
+  
+      // Length check
+      if (value.length > max) {
+        errors.push(`${field} must be at most ${max} characters.`);
+      }
+  
+      // XSS check
+      if (xssRegex.test(value)) {
+        errors.push(`${field} contains invalid or unsafe characters.`);
+      }
+  
+      // SQL Injection check
+      if (sqlRegex.test(value)) {
+        errors.push(`${field} contains prohibited input.`);
+      }
+    };
+  
+    validateField("First name", payload.firstname as string, 255);
+    validateField("Last name", payload.lastname as string, 50);
+  
+    // Email specific validation
+    if (!payload.email) {
+      errors.push("Email is required.");
+    } else {
+      if (payload.email.length > 30)
+        errors.push("Email must be less than 30 characters.");
+  
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(payload.email))
+        errors.push("Invalid email format.");
+  
+      if (xssRegex.test(payload.email) || sqlRegex.test(payload.email)) {
+        errors.push("Email contains invalid characters.");
+      }
+    }
+  
+    validateField("Phone number", payload.phone as string, 20);
+    validateField("Message", payload.message as string, 500);
+    validateField("Company name", payload.company as string, 100);
+    validateField("Job title", payload.what_best_describes_you_ as string, 100);
+    validateField("Referral source", payload.how_did_you_hear_about_us_ as string, 100);
+  
+    return errors;
+  };
+  
+  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
  
     if (!recaptchaToken) {
-      alert("Please verify you are not a robot before submitting.");
-      return;
+      //alert("Please verify you are not a robot before submitting.");
+        setErrorMessage("Please verify you are not a robot before submitting.");
+        setSuccessMessage(null);
+          return;
     }
   
     const formData = new FormData(e.currentTarget);
-    const payload = Object.fromEntries(formData.entries()); // convert to JSON
+   // const payload = Object.fromEntries(formData.entries()); // convert to JSON
   
+
+    // Sanitize inputs
+    const payload = Object.fromEntries(
+      Array.from(formData.entries()).map(([key, value]) => [
+        key,
+        typeof value === "string" ? sanitizeInput(value) : value
+      ])
+    );
+  
+    // Validate inputs
+    const validationErrors = validateForm(payload);
+    if (validationErrors.length > 0) {
+      //alert(validationErrors.join("\n"));
+      setErrorMessage(validationErrors.join("\n"));
+      setSuccessMessage(null);
+      return;
+    }
     try {
       const freshdeskResponse = await fetch("/api/freshdesk-contact", {
         method: "POST",
@@ -106,11 +213,16 @@ export default function ContactUsSection({ data }: ContactUsProps) {
                 return err.message || "There was an error with this field.";
             }
           }).join("\n");
-          alert(messages);
+          //alert(messages);
+          setErrorMessage(messages);
+          setSuccessMessage(null);
           return;
         } else {
-          alert("Error submitting Freshdesk form. Please try again.");
+          //alert("Error submitting Freshdesk form. Please try again.");
+          setErrorMessage("Error submitting form. Please try again.");
+          setSuccessMessage(null);
           return;
+          
         }
       }
       
@@ -140,12 +252,19 @@ export default function ContactUsSection({ data }: ContactUsProps) {
       if (hubspotResponse.status !== 200) {
         const errorText = await hubspotResponse.text();
         console.error("HubSpot submission error:", errorText);
-        alert(`Error submitting HubSpot form: ${errorText}`);
+        //alert(`Error submitting HubSpot form: ${errorText}`);
+        setErrorMessage("Error submitting HubSpot form. Please try again.");
+        setSuccessMessage(null);
+        return;
+
         return;
       }
  
       // --- Success message (only if both succeed) ---
-      alert("Thank you! Your form has been submitted.");
+     // alert("Thank you! Your form has been submitted.");
+      setSuccessMessage("Thank you! Your form has been submitted.");
+      setErrorMessage(null);
+
      
       // setRecaptchaToken(null);
       // if (window.grecaptcha && recaptchaRef.current) {
@@ -193,53 +312,68 @@ export default function ContactUsSection({ data }: ContactUsProps) {
                 {data.formDescription}
               </p>
             )}
- 
-            <form ref={formRef} className="space-y-5" onSubmit={handleSubmit}>
+           {errorMessage && (
+             <p   ref={messageRef} className="mb-4 text-red text-[14px] whitespace-pre-line ">
+              {errorMessage}
+            </p>
+          )}
+
+          {successMessage && (
+            <p className="mb-4 text-[14px] whitespace-pre-line text-green-800">
+              {successMessage}
+            </p>
+          )}
+
+            <form   ref={messageRef} ref={formRef} className="space-y-5" onSubmit={handleSubmit}>
              
               <div className="relative">
                 <label htmlFor="company" className="absolute left-[12px] top-[6px] font-Roboto text-LightGray font-normal leading-[18px] text-[12px]">
-                  Company Name
+                  Company Name<span className="text-red ml-1">*</span>
                 </label>
                 <input type="text" id="company" name="company" placeholder="ABC Corporation" required
-                  className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px] font-Roboto text-PrimaryBlack text-[16px]" />
+                  className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px] font-Roboto text-PrimaryBlack text-[16px]"  maxLength={100}/>
               </div>
  
               
               <div className="flex flex-col md:flex-row gap-5 md:gap-4">
                 <div className="relative w-full">
-                  <label htmlFor="firstname" className="absolute left-[12px] top-[6px] font-Roboto text-LightGray text-[12px]">First Name</label>
-                  <input type="text" id="firstname" name="firstname" placeholder="Scott" required className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px] font-Roboto text-PrimaryBlack text-[16px]" />
+                  <label htmlFor="firstname" className="absolute left-[12px] top-[6px] font-Roboto text-LightGray text-[12px]">First Name<span className="text-red ml-1">*</span></label>
+                  <input type="text" id="firstname" name="firstname" placeholder="Scott" required className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px] font-Roboto text-PrimaryBlack text-[16px]"  maxLength={50}/>
                 </div>
                 <div className="relative w-full">
-                  <label htmlFor="lastname" className="absolute left-[12px] top-[6px] font-Roboto text-LightGray text-[12px]">Last Name</label>
-                  <input type="text" id="lastname" name="lastname" placeholder="Morrison" required className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px] font-Roboto text-PrimaryBlack text-[16px]" />
+                  <label htmlFor="lastname" className="absolute left-[12px] top-[6px] font-Roboto text-LightGray text-[12px]">Last Name<span className="text-red ml-1">*</span></label>
+                  <input type="text" id="lastname" name="lastname" placeholder="Morrison" required className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px] font-Roboto text-PrimaryBlack text-[16px]"  maxLength={50}/>
                 </div>
               </div>
  
               
               <div className="flex flex-col md:flex-row gap-5 md:gap-4">
                 <div className="relative w-full">
-                  <label htmlFor="email" className="absolute left-[12px] top-[6px] font-Roboto text-LightGray text-[12px]">Email</label>
-                  <input type="email" id="email" name="email" placeholder="scott.morrison@example.com" required className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px] font-Roboto text-PrimaryBlack text-[16px]" />
+                  <label htmlFor="email" className="absolute left-[12px] top-[6px] font-Roboto text-LightGray text-[12px]">Email<span className="text-red ml-1">*</span></label>
+                  <input type="email" id="email" name="email" placeholder="scott.morrison@example.com" required className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px] font-Roboto text-PrimaryBlack text-[16px]" maxLength={50}/>
                 </div>
                 <div className="relative w-full">
-                  <label htmlFor="phone" className="absolute left-[12px] top-[6px] font-Roboto text-LightGray text-[12px]">Phone Number</label>
-                  <input type="text" id="phone" name="phone" placeholder="123-456-7890" required className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px] font-Roboto text-PrimaryBlack text-[16px]" />
+                  <label htmlFor="phone" className="absolute left-[12px] top-[6px] font-Roboto text-LightGray text-[12px]">Phone Number<span className="text-red ml-1">*</span></label>
+                  <input type="number" id="phone" name="phone" placeholder="123-456-7890" required className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px] font-Roboto text-PrimaryBlack text-[16px]" maxLength={20}/>
                 </div>
               </div>
  
               
               <div className="relative">
-                <label htmlFor="what_best_describes_you_" className="absolute left-[12px] top-[6px] font-Roboto text-LightGray text-[12px]">Which best describes you?</label>
-                <input type="text" id="what_best_describes_you_" name="what_best_describes_you_" placeholder="Small business owner" required className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px] font-Roboto text-PrimaryBlack text-[16px]" />
+                <label htmlFor="what_best_describes_you_" className="absolute left-[12px] top-[6px] font-Roboto text-LightGray text-[12px]">Which best describes you?<span className="text-red ml-1">*</span></label>
+                <input type="text" id="what_best_describes_you_" name="what_best_describes_you_" placeholder="Small business owner" required className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px] font-Roboto text-PrimaryBlack text-[16px]" maxLength={100}/>
               </div>
               <div className="relative">
-                <label htmlFor="how_did_you_hear_about_us_" className="absolute left-[12px] top-[6px] font-Roboto text-LightGray text-[12px]">How did you hear about us?</label>
-                <input type="text" id="how_did_you_hear_about_us_" name="how_did_you_hear_about_us_" placeholder="Instagram" required className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px] font-Roboto text-PrimaryBlack text-[16px]" />
+                <label htmlFor="how_did_you_hear_about_us_" className="absolute left-[12px] top-[6px] font-Roboto text-LightGray text-[12px]">How did you hear about us?<span className="text-red ml-1">*</span></label>
+                <input type="text" id="how_did_you_hear_about_us_" name="how_did_you_hear_about_us_" placeholder="Instagram" required className="block w-full rounded-[8px] border border-LightWhite bg-white h-[60px] pl-[12px] pt-[24px] pb-[10px] font-Roboto text-PrimaryBlack text-[16px]" maxLength={100}/>
               </div>
               <div className="relative">
-                <label htmlFor="message" className="absolute left-[12px] top-[6px] font-Roboto text-LightGray text-[12px]">Tell us how we can help you</label>
-                <textarea rows={4} id="message" name="message" required placeholder="Looking for a reliable mailbox service" className="block w-full rounded-[8px] border border-LightWhite bg-white h-[126px] pl-[12px] pt-[24px] pb-[10px] font-Roboto text-PrimaryBlack text-[16px]"></textarea>
+                <label htmlFor="message" className="absolute left-[12px] top-[6px] font-Roboto text-LightGray text-[12px]">Tell us how we can help you<span className="text-red ml-1">*</span></label>
+                <textarea rows={4} id="message" name="message" required 
+                placeholder="Looking for a reliable mailbox service" 
+                className="block w-full rounded-[8px] border border-LightWhite bg-white h-[126px] pl-[12px] pt-[24px] pb-[10px] font-Roboto text-PrimaryBlack text-[16px]"
+                maxLength={500}
+                ></textarea>
               </div>
  
               
