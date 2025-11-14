@@ -356,15 +356,24 @@ export default function LocationsList({locations, initialQuery = '', isCityPage,
         const target = { lat: loc.latitude, lng: loc.longitude };
      
         // Step 1: Zoom OUT a bit first
-        smoothZoom(mapRef.current, 8, undefined, () => {
-          // Step 2: Pan while zoomed out
-          smoothPanTo(mapRef.current!, target, 1200, () => {
-            // Step 3: Zoom back IN to final level
-            smoothZoom(mapRef.current!, 12);
-          });
+        // smoothZoom(mapRef.current, 8, undefined, () => {
+        //   // Step 2: Pan while zoomed out
+        //   smoothPanTo(mapRef.current!, target, 1200, () => {
+        //     // Step 3: Zoom back IN to final level
+        //     smoothZoom(mapRef.current!, 12);
+         // Step 1: Smooth zoom OUT slightly before focusing in
+    smoothZoom(mapRef.current, 8, undefined, () => {
+      // Step 2: Smooth pan to target location
+      smoothPanTo(mapRef.current!, target, 1200, () => {
+        // Step 3: Smooth zoom IN to a closer level (e.g., 15 or 16 for street-level)
+        smoothZoom(mapRef.current!, 15, undefined, () => {
+          // Optional: fine-tune centering after zoom completes
+          mapRef.current!.setCenter(target);
         });
-      }
-    };
+      });
+    });
+  }
+};
 
   const resetToAllLocations = () => {
     if (mapRef.current && boundsRef.current && !boundsRef.current.isEmpty()) {
