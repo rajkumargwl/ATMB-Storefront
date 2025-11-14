@@ -1,13 +1,14 @@
-
 import { useState, useEffect } from "react";
 import type { SanityBusinessAtFingerips } from '~/lib/sanity';
 import mobile1 from "~/components/media/mobile1.png";
 import businessBg from "~/components/media/your-business-bg.png";
-
+import { motion, AnimatePresence } from "framer-motion";
+ 
+ 
 type Props = {
   data: SanityBusinessAtFingerips;
 };
-
+ 
 export default function BusinessAtFingerips({ data }: Props) {
   const features = data?.features || [];
   
@@ -27,40 +28,40 @@ export default function BusinessAtFingerips({ data }: Props) {
       nonHighlighted[3] || highlighted,
     ].filter(Boolean);
   };
-
+ 
   const [orderedFeatures, setOrderedFeatures] = useState(getInitialOrder());
   const [activeIndex, setActiveIndex] = useState(2); // Center position for desktop
   const [isMobile, setIsMobile] = useState(false);
-
+ 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
-
+ 
   const handleClick = (index) => {
     if (isMobile) return; // disable reordering on mobile
-
+ 
     if (index === activeIndex) return;
     
     const clickedItem = orderedFeatures[index];
     const otherItems = orderedFeatures.filter((_, i) => i !== index);
-
+ 
     let newOrder = [];
     if (index < 2) {
       newOrder = [clickedItem, ...otherItems];
     } else {
       newOrder = [...otherItems.slice(0, 2), clickedItem, ...otherItems.slice(2)];
     }
-
+ 
     setOrderedFeatures(newOrder);
     setActiveIndex(newOrder.indexOf(clickedItem));
   };
-
+ 
   // Determine which features to render based on device
   const renderFeatures = isMobile ? features : orderedFeatures;
-
+ 
   return (
     <section className="bg-DarkOrange py-[40px] md:py-[60px] lg:py-[100px] px-5 text-center">
       <div className="max-w-[1240px] mx-auto">
@@ -73,7 +74,7 @@ export default function BusinessAtFingerips({ data }: Props) {
             {data?.subheadline}
           </p>
         </div>
-
+ 
         {/* Cards Grid */}
         <div className="mt-14 gap-8 max-w-[1192px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-6 auto-rows-min">
           {renderFeatures.map((item, index) => {
@@ -81,13 +82,13 @@ export default function BusinessAtFingerips({ data }: Props) {
             const isActive = isMobile
               ? item.highlight || index === features.length - 1
               : index === activeIndex;
-
+ 
             return (
               <div
                 key={item._key || index}
                 onClick={() => handleClick(index)}
                 className={`flex flex-col items-start justify-between text-left rounded-[20px] p-5 md:p-6 border transition-all duration-500
-                  ${isActive ? "md:row-span-2 bg-PrimaryBlack border-PrimaryBlack cursor-pointer" 
+                  ${isActive ? "md:row-span-2 bg-PrimaryBlack border-PrimaryBlack cursor-pointer"
                             : "md:row-span-1 bg-white border-LightWhite cursor-pointer"} ${index === 0 ? "nth-4:bg-red-500" : ""}`}
               >
               {/* Icon */}
@@ -110,19 +111,115 @@ export default function BusinessAtFingerips({ data }: Props) {
                       />
                     ) : null}
                   </div>
-                  {/* Title */}
-                  <h3 className={`max-w-[100%] md:max-w-[238px] font-Roboto font-medium leading-[28px] md:leading-[33.6px] text-[20px] md:text-[24px] tracking-[0px]
+               
+                  {/* <h3 className={`max-w-[100%] md:max-w-[238px] font-Roboto font-medium leading-[28px] md:leading-[33.6px] text-[20px] md:text-[24px] tracking-[0px]
                     ${isActive ? "text-white" : "text-PrimaryBlack"}`}>
                     {item.title}
                   </h3>
-                  {/* Description */}
+     
                   <p className={`mt-2 font-Roboto font-normal leading-[21px] text-[14px] tracking-[0px]
                     ${isActive ? "text-white" : "text-LightGray"}`}>
                     {item.description}
-                  </p>
+                  </p> */}
+ 
+                {/* <AnimatePresence mode="wait">
+                  {isActive ? (
+                    <>
+                      <motion.h3
+                        key="title"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 20 }}
+                        transition={{ duration: 0.5, ease: "easeOut" }}
+                        className={`max-w-[100%] md:max-w-[238px] font-Roboto font-medium leading-[28px] md:leading-[33.6px] text-[20px] md:text-[24px] tracking-[0px] text-white`}
+                      >
+                        {item.title}
+                      </motion.h3>
+ 
+                      <motion.p
+                        key="desc"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 20 }}
+                        transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
+                        className="mt-2 font-Roboto font-normal leading-[21px] text-[14px] tracking-[0px] text-white"
+                      >
+                        {item.description}
+                      </motion.p>
+                    </>
+                  ) : (
+                    <>
+                      <h3
+                        className={`max-w-[100%] md:max-w-[238px] font-Roboto font-medium leading-[28px] md:leading-[33.6px] text-[20px] md:text-[24px] tracking-[0px] text-PrimaryBlack`}
+                      >
+                        {item.title}
+                      </h3>
+                      <p className="mt-2 font-Roboto font-normal leading-[21px] text-[14px] tracking-[0px] text-LightGray">
+                        {item.description}
+                      </p>
+                    </>
+                  )}
+                </AnimatePresence> */}
+ 
+                <AnimatePresence mode="wait">
+                  {isActive ? (
+                    <>
+                      {/* Title */}
+                      <motion.h3
+                        key="title"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 20 }}
+                        transition={{ duration: 0.5, ease: "easeOut" }}
+                        className="max-w-[100%] md:max-w-[238px] font-Roboto font-medium leading-[28px] md:leading-[33.6px] text-[20px] md:text-[24px] tracking-[0px] text-white"
+                      >
+                        {item.title}
+                      </motion.h3>
+ 
+                      {/* Description */}
+                      <motion.p
+                        key="desc"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 20 }}
+                        transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
+                        className="mt-2 font-Roboto font-normal leading-[21px] text-[14px] tracking-[0px] text-white"
+                      >
+                        {item.description}
+                      </motion.p>
+ 
+                      {/* Phone Image */}
+                      <motion.div
+                        key="image"
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 30 }}
+                        transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
+                        className="mt-[54px] w-full"
+                      >
+                        <img
+                          src={data?.phoneImage?.url || mobile1}
+                          alt="business"
+                          className="w-full -mb-6 object-cover"
+                        />
+                      </motion.div>
+                    </>
+                  ) : (
+                    <>
+                      {/* Inactive State (no animation, just static) */}
+                      <h3 className="max-w-[100%] md:max-w-[238px] font-Roboto font-medium leading-[28px] md:leading-[33.6px] text-[20px] md:text-[24px] tracking-[0px] text-PrimaryBlack">
+                        {item.title}
+                      </h3>
+                      <p className="mt-2 font-Roboto font-normal leading-[21px] text-[14px] tracking-[0px] text-LightGray">
+                        {item.description}
+                      </p>
+                    </>
+                  )}
+                </AnimatePresence>
+ 
                 </div>
-
-                {isActive && (
+ 
+                {/* {isActive && (
                   <div className="mt-[20px] w-full">
                     <img
                       src={data?.phoneImage?.url || mobile1}
@@ -130,7 +227,25 @@ export default function BusinessAtFingerips({ data }: Props) {
                       className="w-full -mb-6 object-cover"
                     />
                   </div>
-                )}
+                )} */}
+                {/* <AnimatePresence>
+                    {isActive && (
+                      <motion.div
+                        key="image"
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 30 }}
+                        transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
+                        className="mt-[20px] w-full"
+                      >
+                        <img
+                          src={data?.phoneImage?.url || mobile1}
+                          alt="business"
+                          className="w-full -mb-6 object-cover"
+                        />
+                      </motion.div>
+                    )}
+                  </AnimatePresence> */}
               </div>
             );
           })}
