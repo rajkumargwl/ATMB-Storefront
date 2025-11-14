@@ -153,9 +153,9 @@ function Account({customer, orders, heading, addresses}: Account) {
         >
           {heading}
         </h1>
-        <Form method="post" action={usePrefixPathWithLocale('/account/logout')}>
+        {/* <Form method="post" action={usePrefixPathWithLocale('/account/logout')}>
           <Button type="submit">Log out</Button>
-        </Form>
+        </Form> */}
       </AccountSection>
 
       {orders && (

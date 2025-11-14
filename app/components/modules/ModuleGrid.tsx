@@ -107,7 +107,7 @@ type ModuleGridProps = {
 
 //export default function ModuleGrid({items, homeSearchResults, searchQuery}: Props) {
 
-  export default function ModuleGrid({ items, homeSearchResults, searchQuery, bundles ,individualProducts,highlights,productData,location}: ModuleGridProps) {
+  export default function ModuleGrid({ items, homeSearchResults, searchQuery, bundles ,individualProducts,highlights,productData,location, language}: ModuleGridProps) {
     
  
   return (
@@ -125,6 +125,7 @@ type ModuleGridProps = {
            productData={productData}
            location={location}
            highlights={highlights}
+           language={language}
          />
          );
        })}
