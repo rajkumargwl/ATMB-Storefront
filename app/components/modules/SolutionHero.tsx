@@ -122,7 +122,7 @@ export default function SolutionHero({ data }: Props) {
           />
  
           {/* Overlay One */}
-          <div className="flex items-center gap-3 absolute bottom-[-16px] md:bottom-[-32px] left-[0px] md:left-[53px] max-w-[242px] p-4 rounded-[12px] border border-[#DCDCDC] bg-[rgba(255,255,255,0.70)] backdrop-blur-[12px]">
+          <div className="solution-overlay flex items-center gap-3 absolute bottom-[-16px] md:bottom-[-32px] left-[0px] md:left-[53px] max-w-[242px] p-4 rounded-[12px] border border-[#DCDCDC] bg-[rgba(255,255,255,0.70)] backdrop-blur-[12px]">
             {data?.overlayOne?.icon?.url && (
               <img src={data.overlayOne.icon.url} alt="" className="w-6 h-6" />
             )}
@@ -132,7 +132,7 @@ export default function SolutionHero({ data }: Props) {
           </div>
  
           {/* Overlay Two */}
-          <div className="flex items-center gap-3 absolute top-[-14px]  md:top-[45px] lg:top-[45px] right-[-7px] md:right-[-20px] xl:right-[-37px] max-w-[242px] p-4 rounded-[12px] border border-[#DCDCDC] bg-[rgba(255,255,255,0.70)] backdrop-blur-[12px]">
+          <div className="solution-overlay flex items-center gap-3 absolute top-[-14px]  md:top-[45px] lg:top-[45px] right-[-7px] md:right-[-20px] xl:right-[-37px] max-w-[242px] p-4 rounded-[12px] border border-[#DCDCDC] bg-[rgba(255,255,255,0.70)] backdrop-blur-[12px]">
             {data?.overlayTwo?.icon?.url && (
               <img src={data.overlayTwo.icon.url} alt="" className="w-6 h-6" />
             )}

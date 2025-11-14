@@ -77,7 +77,9 @@ useEffect(() => {
     tabRefs.current[focusedTabIndex]?.focus();
   }
 }, [focusedTabIndex]);
-
+useEffect(() => {
+  window.scrollTo(0, 0);
+}, []);
 const handleTabKeyDown = (event: React.KeyboardEvent, index: number) => {
   if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
     event.preventDefault();
