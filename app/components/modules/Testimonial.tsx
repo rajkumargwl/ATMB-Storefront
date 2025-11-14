@@ -13,14 +13,13 @@ type Props = {
   data: SanityTestimonial;
 };
  
-export default function Testimonials({ data }: Props) {
+export default function Testimonials({ data, language }: Props) {
   const prevRef = useRef<HTMLButtonElement>(null);
   const nextRef = useRef<HTMLButtonElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [activeVideo, setActiveVideo] = useState<string | null>(null);
   const [isBeginning, setIsBeginning] = useState(true);
   const [isEnd, setIsEnd] = useState(false);
- 
   const openVideo = (url: string) => {
     if (!url) return;
   
@@ -62,7 +61,7 @@ export default function Testimonials({ data }: Props) {
             <div className="hidden md:flex justify-end gap-5">
               <button
                 ref={prevRef}
-                 title="Previous Slide"
+                 title= {language === "en-es" ? "Diapositiva anterior" : "Previous Slide"}
                 className={`w-14 h-14 flex items-center justify-center rounded-full text-white ${
                   isBeginning ? "bg-[#D3D3D3]" : "bg-DarkOrange"
                 }`}
@@ -74,12 +73,12 @@ export default function Testimonials({ data }: Props) {
         role="tooltip"
         className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-[#091019] text-white text-sm rounded-md px-3 py-1 opacity-0 pointer-events-none whitespace-nowrap transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100"
       >
-        Previous Slide
+        {language === "en-es" ? "Diapositiva anterior" : "Previous Slide"}
       </div>
               
               <button
                 ref={nextRef}
-                title="Next Slide"
+                title={language === "en-es" ? "Siguiente diapositiva" : "Next Slide"}
                 className={`w-14 h-14 flex items-center justify-center rounded-full text-white ${
                   isEnd ? "bg-[#D3D3D3]" : "bg-DarkOrange"
                 }`}
@@ -91,7 +90,7 @@ export default function Testimonials({ data }: Props) {
         role="tooltip"
         className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-[#091019] text-white text-sm rounded-md px-3 py-1 opacity-0 pointer-events-none whitespace-nowrap transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100"
       >
-        Next Slide
+        {language === "en-es" ? "Siguiente diapositiva" : "Next Slide"}
       </div>
             </div>
           )}
