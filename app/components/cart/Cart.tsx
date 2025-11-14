@@ -151,7 +151,7 @@ const showChangeButtons = hasBundleAttr === 'false';
       }
       </div>
 
-      <div className="flex font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[31.2px] text-[24px] md:text-[24px] tracking-[-0.36px] md:tracking-[-0.36px]">
+      <div className="flex flex items-baseline font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[31.2px] text-[24px] md:text-[24px] tracking-[-0.36px] md:tracking-[-0.36px]">
         {updating ? (
           <SpinnerIcon width={24} height={24} />
         ) : (
@@ -188,8 +188,8 @@ const showChangeButtons = hasBundleAttr === 'false';
   .map((attr) => (
     <p
       key={attr.key}
-      className={`font-Roboto text-LightGray font-normal leading-[24px] text-[16px] tracking-[0px] ${
-        attr.key === 'displayName' ? 'font-semibold text-[#091019]' : ''
+      className={`font-Roboto  tracking-[0px] ${
+        attr.key === 'displayName' ? 'font-medium text-[#091019] leading-[27px] text-[18px]' : 'text-LightGray font-normal leading-[24px] text-[16px]'
       }`}
     >
       {attr.value}
@@ -226,13 +226,13 @@ const showChangeButtons = hasBundleAttr === 'false';
             {/* <CartItemQuantity line={lineItem} submissionQuantity={updating} /> */}
       
             {/* Price */}
-            <div className="flex  font-Roboto text-PrimaryBlack font-medium leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px] md:tracking-[0.07px]">
+            {/* <div className="flex  font-Roboto text-PrimaryBlack font-medium leading-[14px] md:leading-[14px] text-[14px] md:text-[14px] tracking-[0.07px] md:tracking-[0.07px]">
               {updating ? (
                 <SpinnerIcon width={24} height={24} />
               ) : (
                 <Money data={lineItem.cost.totalAmount} />
               )}
-            </div>
+            </div> */}
       <div role="cell" className="flex flex-col items-end justify-between">
         <ItemRemoveButton lineIds={[lineItem.id]} />
       </div>
@@ -318,12 +318,12 @@ function ItemRemoveButton({lineIds}: {lineIds: CartLine['id'][]}) {
       action={CartForm.ACTIONS.LinesRemove}
       inputs={{lineIds}}
     >
-      <button
-        className="disabled:pointer-events-all disabled:cursor-wait"
+      <button aria-label="remove" title="remove"
+        className="disabled:pointer-events-all disabled:cursor-wait text-[#B31113] font-Roboto text-[14px] font-normal leading-[100%] tracking-[0.07px] underline underline-offset-auto decoration-solid decoration-from-font"
         type="submit"
         onClick={handleConfirm}
       >
-        <RemoveIcon />
+        Remove
       </button>
     </CartForm>
   );
@@ -341,7 +341,7 @@ export function CartSummary({cart,cost}: {cart: Cart,cost: CartCost}) {
   ];
   return (
     <>
-      <div role="table" aria-label="Cost summary" className="p-6 border border-LightWhite rounded-[12px]">
+      <div role="table" aria-label="Cost summary" className="">
       <h2 className='mb-6 font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[31.2px] text-[24px] md:text-[24px] tracking-[-0.6px] md:tracking-[-0.36px]'>Order Summary</h2>
       {lines.map((line, index) => (
         <div
@@ -424,6 +424,7 @@ export function CartSummary({cart,cost}: {cart: Cart,cost: CartCost}) {
           </span>
         </div>
         </div>
+        
 
       </div>
     </>
@@ -449,7 +450,7 @@ export function CartActions({cart,cost}: {cart: Cart,cost: CartCost}) {
       />
       {/* {cart.checkoutUrl} */}
       <Button
-        to="/checkout"
+        to="/checkout" aria-label="Checkout" title="Checkout"
         className={clsx([defaultButtonStyles(), 'w-1/2 flex items-center justify-center bg-DarkOrange text-white font-normal font-Roboto leading-[16px] text-[16px] tracking-[0.08px] py-[12px]  px-4 rounded-full h-[52px] transition-all  hover:bg-[#DF5D07] hover:text-white hover:opacity-100'])}
       >
         Checkout  &nbsp; {cost?.subtotalAmount?.amount ? (

@@ -40,6 +40,9 @@ type HeaderProps = {
     icon1?: { url: string };
     icon2?: { url: string };
     icon3?: { url: string };
+    icon1Label?: string;
+    icon2Label?: string;
+    icon3Label?: string;
     loginButton?: { label: string; link?: string | null };
     getStartedButton?: { label: string; link?: string | null };
   };
@@ -60,7 +63,7 @@ type HeaderProps = {
 export default function Header({ data, searchResults, searchQuery, isLoggedIn, customer, currentLanguage, cartCount }: HeaderProps) {
   if (!data) return null;
 
-  const { logo, menu, icon1, icon2,icon3, loginButton, getStartedButton } = data;
+  const { logo, menu, icon1, icon2,icon3, icon1Label, icon2Label, icon3Label, loginButton, getStartedButton } = data;
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [results, setResults] = useState<any[]>(searchResults || []);
@@ -489,8 +492,8 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
             <button onClick={() => setIsSearchOpen(true)}>
               <img
                 src={icon1.url}
-                alt="Search"
-                title="Search"
+                alt={icon1Label}
+                title={icon1Label}
                 className="h-6 w-6 object-contain"
               />
             </button>
@@ -504,8 +507,8 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
             >
               <img
                 src={icon2.url}
-                alt="Cart"
-                title="Cart"
+                alt={icon2Label}
+                title={icon2Label}
                 className="h-6 w-6 object-contain"
               />
 
@@ -529,7 +532,7 @@ export default function Header({ data, searchResults, searchQuery, isLoggedIn, c
             </Link>
           )}
 
-          <LanguageCurrencyMenu  iconUrl={GlobeIcon} />
+          <LanguageCurrencyMenu  iconUrl={GlobeIcon} iconLabel={icon3Label} />
 
           <div className="hidden lg:flex items-center space-x-4">
             {isLoggedIn ? (

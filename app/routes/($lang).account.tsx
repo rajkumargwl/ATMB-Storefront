@@ -65,6 +65,49 @@ export async function loader({request, context, params}: LoaderFunctionArgs) {
 
   const customer = await getCustomer(context, customerAccessToken);
 
+  const metafields = customer.metafields;
+  const user_id = metafields.find((m: any) => m?.key === 'user_id')?.value;
+
+  //Get token
+  const tokenResponse = await fetch(
+    `https://login.anytimehq.co/${context.env.MS_ENTRA_TENANT_ID}/oauth2/v2.0/token`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        client_id: context.env.MS_ENTRA_CLIENT_ID!,
+        client_secret: context.env.MS_ENTRA_CLIENT_SECRET!,
+        scope: 'api://stg.anytimeapi.com/customer/.default',
+        grant_type: 'client_credentials',
+      }),
+    }
+  );
+  if (!tokenResponse.ok) {
+    console.error('Failed to get Microsoft Entra token', await tokenResponse.text());
+    throw new Error('Could not get Microsoft Entra access token');
+  }
+  const tokenData = await tokenResponse.json();
+  const accessToken = tokenData?.access_token || '';
+  // Assign organization to user
+  const CustomerDetailResponse = await fetch('https://anytimeapi.com/customer/detail', {
+    method: 'POST',
+    headers: {
+      'API-Version': 'v1',
+      'Api-Environment': 'STG',
+      'Ocp-Apim-Subscription-Key': context.env.ANYTIME_SUBSCRIPTION_KEY!,
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      id: user_id,
+    }),
+  });
+  const CustomerDetailResponses = await CustomerDetailResponse.json();
+  console.log('CustomerDetailResponses:', CustomerDetailResponses);
+  
+
   const heading = customer
     ? customer.firstName
       ? `Hi, ${customer.firstName}.`
@@ -79,6 +122,7 @@ export async function loader({request, context, params}: LoaderFunctionArgs) {
       customer,
       heading,
       orders,
+      CustomerDetailResponses,
       addresses: flattenConnection(customer.addresses) as MailingAddress[],
     },
     {
@@ -141,7 +185,7 @@ interface Account {
   addresses: MailingAddress[];
 }
 
-function Account({customer, orders, heading, addresses}: Account) {
+function Account({customer, orders, heading, addresses, CustomerDetailResponses}: Account) {
   return (
     <div className="divide-y divide-gray pb-24 pt-10">
       <AccountSection>
@@ -153,9 +197,13 @@ function Account({customer, orders, heading, addresses}: Account) {
         >
           {heading}
         </h1>
-        <Form method="post" action={usePrefixPathWithLocale('/account/logout')}>
-          <Button type="submit">Log out</Button>
-        </Form>
+
+        {(CustomerDetailResponses.success === true && CustomerDetailResponses.data.user_id !== null) || customer.email === 'testuser@email.com' && (
+          <Form method="post" action={usePrefixPathWithLocale('/account/logout')}>
+            <Button type="submit">Log out</Button>
+          </Form>
+        )}
+        
       </AccountSection>
 
       {orders && (
@@ -200,6 +248,13 @@ const CUSTOMER_QUERY = `#graphql
       lastName
       phone
       email
+      metafields(identifiers: [
+        { namespace: "custom", key: "user_id" },
+      ]) {
+        namespace
+        key
+        value
+      }
       defaultAddress {
         id
         formatted

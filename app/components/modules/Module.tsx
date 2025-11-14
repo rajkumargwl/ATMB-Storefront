@@ -120,7 +120,7 @@ type Props = {
   location?:any[];
 };
 
-export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery, bundles,individualProducts, pageType = 'default',highlights,productData, location}: Props) { // 争 Set default pageType
+export default function Module({imageAspectClassName, module, homeSearchResults, searchQuery, bundles,individualProducts, pageType = 'default',highlights,productData, location, language}: Props) { // 争 Set default pageType
  
 
   // Helper boolean for conditional rendering
@@ -257,7 +257,7 @@ case 'smartBusinessSection':
         
     // testimonial -> OperatorThousand / Testimonial
     case 'testimonial':
-      return  <Testimonial data={module} />;
+      return  <Testimonial data={module} language={language} />;
  
   
  

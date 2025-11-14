@@ -35,7 +35,7 @@ export default async function handleRequest(
   
   const {SANITY_PROJECT_ID: projectId} = loadContext.env;
 
-  const {nonce, header, NonceProvider} = createContentSecurityPolicy({
+  const csp = createContentSecurityPolicy({
     imgSrc: [
       `'self'`,
       'https://cdn.shopify.com',
@@ -71,10 +71,6 @@ export default async function handleRequest(
       'https://www.google.com/recaptcha/',
       'https://www.gstatic.com/recaptcha/',
       'https://apps.rokt.com', // ✅ Allow Rokt WebSDK
-    ],
-    scriptSrcElem: [
-      `'self'`,
-      'https://apps.rokt.com', // ✅ Required for dynamically appended scripts
     ],
     fontSrc: [
       `'self'`,
@@ -120,6 +116,18 @@ export default async function handleRequest(
       'https://apps.rokt.com', // ✅ Allow Rokt connections
     ],
   });
+
+  const { nonce, header, NonceProvider } = csp;
+
+  // ✅ Append nonce to scriptSrcElem *after* we have nonce
+  csp.scriptSrcElem = [
+    `'self'`,
+    `'nonce-${nonce}'`,
+    'https://cdn.shopify.com',
+    'https://apps.rokt.com',
+    'https://www.google.com',
+    'https://www.gstatic.com',
+  ];
 
   // Only apply CSP in production
   if (process.env.NODE_ENV === 'production') {

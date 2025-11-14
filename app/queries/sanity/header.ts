@@ -23,8 +23,11 @@ export const HEADER_QUERY = groq`
     }
   },
   icon1 { "url": asset->url },
+  icon1Label,
   icon2 { "url": asset->url },
+  icon2Label,
   icon3 { "url": asset->url },
+  icon3Label,
   loginButton { label, link },
   getStartedButton { label, link },
   _updatedAt

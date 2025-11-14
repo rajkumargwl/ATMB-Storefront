@@ -44,7 +44,7 @@ export async function loader({ context, params }: LoaderFunctionArgs) {
   if (!page) throw notFound();
 
   const gids = fetchGids({ page, context });
-  console.log("howwwwwwwwww",JSON.stringify(page,null,2));
+
   return defer({
     page,
     gids,

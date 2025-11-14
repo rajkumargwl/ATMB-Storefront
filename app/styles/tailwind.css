@@ -616,7 +616,12 @@ body.no-scroll {
     font-family: "Roboto", "sans-serif";
     margin-bottom: 20px;
 }
- 
+.blog-author-data h2 strong {
+    font-weight: 500;
+}
+.solution-overlay {
+    -webkit-backdrop-filter: blur(12px);
+}
  
  
  
@@ -855,4 +860,3 @@ body.no-scroll {
     line-height: 27px;
 }
 }
- 

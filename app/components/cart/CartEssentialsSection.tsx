@@ -67,21 +67,11 @@ export default function CartEssentialsSection({
       </div>
        {/* Features Section */}
        {firstEssential?.features?.length > 0 && (
-          <ul className="flex flex-col gap-2 mt-2">
+          <ul className="flex flex-col gap-4">
             {firstEssential.features.map((feature: string, index: number) => (
               <li key={index} className="flex items-center gap-3 font-Roboto text-PrimaryBlack font-normal leading-[21px] md:leading-[21px] text-[14px] md:text-[14px] tracking-[0px]">
                 <span className="flex items-center justify-center w-[24px] h-[24px]">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="17"
-                    height="16"
-                    viewBox="0 0 17 16"
-                    fill="none"
-                  >
-                    <path
-                      d="M16.5544 0.110975C16.8206 0.305975 16.8806 0.680975 16.6856 0.950975L6.18563 15.351C6.08063 15.4935 5.92313 15.5835 5.74688 15.5947C5.57063 15.606 5.40188 15.546 5.27438 15.4222L0.174375 10.3222C-0.058125 10.0897 -0.058125 9.70722 0.174375 9.47472C0.406875 9.24222 0.789375 9.24222 1.02188 9.47472L5.62688 14.0797L15.7144 0.245975C15.9094 -0.0202754 16.2844 -0.0802754 16.5544 0.114725V0.110975Z"
-                      fill="#091019"
-                    ></path>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="17" height="16" viewBox="0 0 17 16" fill="none"><path d="M16.5544 0.110975C16.8206 0.305975 16.8806 0.680975 16.6856 0.950975L6.18563 15.351C6.08063 15.4935 5.92313 15.5835 5.74688 15.5947C5.57063 15.606 5.40188 15.546 5.27438 15.4222L0.174375 10.3222C-0.058125 10.0897 -0.058125 9.70722 0.174375 9.47472C0.406875 9.24222 0.789375 9.24222 1.02188 9.47472L5.62688 14.0797L15.7144 0.245975C15.9094 -0.0202754 16.2844 -0.0802754 16.5544 0.114725V0.110975Z" fill="#091019"></path>
                   </svg>
                 </span>
                 {feature}
@@ -92,6 +82,7 @@ export default function CartEssentialsSection({
       <div className='flex flex-row items-center justify-center cart-form'>
         {isVirtualMailbox ? (
             <button
+            aria-label="add to cart"
               className="flex items-center justify-center gap-[12px] w-full md:w-[202px] h-[44px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-PrimaryBlack border border-[#091019] px-4 py-[12px]"
               onClick={() => navigate(`/sublocations`)}
             >
@@ -116,10 +107,12 @@ export default function CartEssentialsSection({
                   className="flex items-center justify-center gap-[12px] w-full md:w-[202px] h-[44px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-PrimaryBlack border border-[#091019] px-4 py-[12px] transition-all  hover:bg-PrimaryBlack hover:text-white"
                   disabled={state !== 'idle'}
                   onClick={() => {
-                    window.scrollTo({
-                      top: 0, 
-                      behavior: "smooth",
-                    });
+                    const container = document.querySelector("#mainContent"); // your layout wrapper
+                    if (container) {
+                      container.scrollTo({ top: 0, behavior: "smooth" });
+                    } else {
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }
                   }
               }
                 >

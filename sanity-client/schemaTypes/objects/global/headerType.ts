@@ -122,18 +122,21 @@ export const header = defineType({
       type: "image",
       options: { hotspot: true },
     }),
+    defineField({ name: "icon1Label", type: "string", title: "Icon 1 Label" }),
     defineField({
       name: "icon2",
       title: "Icon 2",
       type: "image",
       options: { hotspot: true },
     }),
+    defineField({ name: "icon2Label", type: "string", title: "Icon 2 Label" }),
     defineField({
       name: "icon3",
       title: "Icon 3",
       type: "image",
       options: { hotspot: true },
     }),
+    defineField({ name: "icon3Label", type: "string", title: "Icon 3 Label" }),
  
     // ✅ Login button
     defineField({

@@ -5,11 +5,15 @@ import { useRef, useEffect } from "react";
  
 export default function CartBundleSection({ bundleProducts }: { bundleProducts: any[] }) {
   const prevState = useRef<string>("idle");
-  if (!bundleProducts || bundleProducts.length === 0) return null;
- 
+  const stateRef = useRef<string>("idle");
+
   const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
   let currencyCode = selectedLocale?.currency || 'USD';
-  const bundle = bundleProducts[0]; // show only the first bundle
+
+  if (!bundleProducts || bundleProducts.length === 0) return null; 
+
+  const bundle = bundleProducts[0];
+
  
   const displayPrice = bundle.billing === 'monthly' ? bundle.price : bundle.yearlyPrice;
   
@@ -25,7 +29,18 @@ export default function CartBundleSection({ bundleProducts }: { bundleProducts: 
       : null;
  
   const variantId = bundle.billing === 'monthly' ? bundle.monthlyVariantId : bundle.yearlyVariantId;
-  
+  const scrollTo = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+ 
+    // Optionally move keyboard focus
+    const topEl = document.querySelector("main, h1, #top");
+    if (topEl) {
+      topEl.setAttribute("tabIndex", "-1");
+      topEl.focus();
+    }
+  };
+ 
+ 
   return (
     <div className="flex flex-col items-start w-full lg:w-[50%] gap-[24px] md:gap-10">
       {/* Header */}
@@ -55,7 +70,12 @@ export default function CartBundleSection({ bundleProducts }: { bundleProducts: 
           <div className="flex flex-col items-end">
             <div className="flex items-baseline">
               {displayCompare && (
-                <span className="pr-2 line-through font-Roboto text-PrimaryBlack font-semibold leading-[27px] md:leading-[27px] text-[18px] md:text-[18px] tracking-[0px]"> <Money data={{ amount: displayCompare, currencyCode: currencyCode }}/></span>
+                <span className="relative inline-block pr-2 font-Roboto text-PrimaryBlack font-semibold leading-[27px] md:leading-[27px] text-[18px] md:text-[18px] tracking-[0px]"> <Money data={{ amount: displayCompare, currencyCode: currencyCode }}/>
+                 <span
+                  className="absolute left-[-7px] top-1/2 w-full border-t-2 border-[#FF2E32]"
+                  style={{ transform: 'rotate(12deg)' }}
+                ></span>
+                </span>
               )}
               <span className="font-Roboto text-PrimaryBlack font-semibold leading-[31.2px] md:leading-[31.2px] text-[24px] md:text-[24px] tracking-[-0.3px] md:tracking-[-0.36px]"><Money data={{ amount: displayPrice, currencyCode: currencyCode }}/></span>
               <span className="font-Roboto text-LightGray font-normal leading-[21px] text-[14px] tracking-[0px]">
@@ -78,7 +98,7 @@ export default function CartBundleSection({ bundleProducts }: { bundleProducts: 
                     {item.productTitle}
                   </span>
                   {item.price && (
-                    <span className="flex font-Roboto text-PrimaryBlack font-normal leading-[18px] text-[12px] tracking-[0px]">  
+                    <span className="flex font-Roboto text-PrimaryBlack font-normal leading-[18px] text-[12px] tracking-[0px] py-[6px] px-2 bg-[#D7F3DD] rounded-[8px] w-fit">  
                     <Money data={{ amount: item.price, currencyCode: currencyCode }}/>/m</span>
                   )}
                 </div>
@@ -103,6 +123,8 @@ export default function CartBundleSection({ bundleProducts }: { bundleProducts: 
  
         {/* Add to Cart Button */}
         <div className="flex items-center justify-center">
+        
+
         <CartForm
           action={CartForm.ACTIONS.LinesAdd}
           inputs={{
@@ -110,21 +132,16 @@ export default function CartBundleSection({ bundleProducts }: { bundleProducts: 
           }}
         >
          {(props: { state: string }) => {
-             useEffect(() => {
-              if (prevState.current === "submitting" && props.state === "idle") {
-                window.scrollTo({
-                  top: 0, 
-                  behavior: "smooth",
-                });
-              }
-              prevState.current = props.state;
-            }, [props.state]);
+              console.log("CartForm state:", props.state);
+             
             return (
               <button
+              aria-label="Upgrade to Bundle"
                 type="submit"
                 disabled={props.state !== "idle"}
                 onClick={() => {
                   // set state to submitting before actual form submit
+                  scrollTo();
                   prevState.current = "submitting";
                 }}
                 className="flex items-center justify-center gap-[12px] w-full md:w-[202px] h-[44px] rounded-[100px] font-normal leading-[16px] tracking-[0.08px] text-[16px] text-PrimaryBlack border border-[#091019] px-4 py-[12px] transition-all hover:bg-PrimaryBlack hover:text-white"
@@ -133,10 +150,11 @@ export default function CartBundleSection({ bundleProducts }: { bundleProducts: 
               </button>
             );
           }}
-
+ 
         </CartForm>
         </div>
       </div>
     </div>
   );
 }
+ 
