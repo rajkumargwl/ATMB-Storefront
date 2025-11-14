@@ -31,14 +31,14 @@ export default function ContactUsSection({ data }: ContactUsProps) {
   const recaptchaRef = useRef<HTMLDivElement | null>(null);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
  
-  // ✅ Load Google reCAPTCHA script
+  // Load Google reCAPTCHA script
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://www.google.com/recaptcha/api.js";
     script.async = true;
     document.body.appendChild(script);
   
-    // ✅ Define global callback for reCAPTCHA
+    // Define global callback for reCAPTCHA
     (window as any).onRecaptchaSuccess = (token: string) => {
       setRecaptchaToken(token);
     };
@@ -49,7 +49,8 @@ export default function ContactUsSection({ data }: ContactUsProps) {
   // const HUBSPOT_FORM_ID = '3fb77e45-e6b4-4275-ad2f-4ef212666d0d';
   const HUBSPOT_PORTAL_ID = '47460136'; //client's HubSpot Portal ID
   const HUBSPOT_FORM_ID = '24cefeaf-82b5-412a-976a-c348ec39d319'; //client's HubSpot Form ID
- 
+  const formRef = useRef<HTMLFormElement | null>(null);
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
  
@@ -70,10 +71,49 @@ export default function ContactUsSection({ data }: ContactUsProps) {
   
       const freshdeskResult = await freshdeskResponse.json();
  
-      if (!freshdeskResult.success) {
-        alert(`Error submitting Freshdesk form: ${freshdeskResult.error}`);
-        return;
+      if (!freshdeskResult?.success) {
+        let validationErrors: any[] | undefined;
+      
+        // If error is a string, try to extract JSON
+        if (typeof freshdeskResult.error === "string") {
+          try {
+            // Find the first '{' to extract JSON
+            const jsonStart = freshdeskResult.error.indexOf("{");
+            if (jsonStart !== -1) {
+              const jsonPart = freshdeskResult.error.slice(jsonStart);
+              const parsed = JSON.parse(jsonPart);
+              validationErrors = parsed.errors;
+            }
+          } catch (err) {
+            console.error("Error parsing Freshdesk error string:", err);
+          }
+        } else if (Array.isArray(freshdeskResult.error?.errors)) {
+          validationErrors = freshdeskResult.error.errors;
+        } else if (Array.isArray(freshdeskResult.errors)) {
+          validationErrors = freshdeskResult.errors;
+        }
+      
+        //console.log("validationErrors", validationErrors);
+      
+        if (validationErrors && Array.isArray(validationErrors)) {
+          const messages = validationErrors.map((err: any) => {
+            switch (err.field) {
+              case "email":
+                return "Please enter a valid email address.";
+              case "phone":
+                return "Please enter a valid phone number.";
+              default:
+                return err.message || "There was an error with this field.";
+            }
+          }).join("\n");
+          alert(messages);
+          return;
+        } else {
+          alert("Error submitting Freshdesk form. Please try again.");
+          return;
+        }
       }
+      
  
       const hubspotData = {
         fields: [
@@ -106,18 +146,22 @@ export default function ContactUsSection({ data }: ContactUsProps) {
  
       // --- Success message (only if both succeed) ---
       alert("Thank you! Your form has been submitted.");
-      e.currentTarget?.reset();
-      setRecaptchaToken(null);
-      if (window.grecaptcha && recaptchaRef.current) {
-        window.grecaptcha.reset();
-      }
-  
-      // if (result.success) {
-      //   alert("Thank you! Your form has been submitted.");
-      //   e.currentTarget?.reset();
-      // } else {
-      //   alert(`Error submitting form: ${result.error}`);
+     
+      // setRecaptchaToken(null);
+      // if (window.grecaptcha && recaptchaRef.current) {
+      //   window.grecaptcha.reset();
       // }
+      setTimeout(() => {
+        if (formRef.current) {
+          formRef.current.reset();
+        }
+        setRecaptchaToken(null);
+      
+        if (window.grecaptcha && recaptchaRef.current) {
+          window.grecaptcha.reset();
+        }
+      }, 100);
+     
     } catch (error: any) {
       console.error("Form submission error:", error);
       alert(`Error submitting form: ${error.message}`);
@@ -150,7 +194,7 @@ export default function ContactUsSection({ data }: ContactUsProps) {
               </p>
             )}
  
-            <form className="space-y-5" onSubmit={handleSubmit}>
+            <form ref={formRef} className="space-y-5" onSubmit={handleSubmit}>
              
               <div className="relative">
                 <label htmlFor="company" className="absolute left-[12px] top-[6px] font-Roboto text-LightGray font-normal leading-[18px] text-[12px]">
@@ -200,7 +244,7 @@ export default function ContactUsSection({ data }: ContactUsProps) {
  
               
               <div className="relative">
-                 {/* ✅ Google reCAPTCHA */}
+                 {/* Google reCAPTCHA */}
                  <div
                     className="g-recaptcha"
                     ref={recaptchaRef}
