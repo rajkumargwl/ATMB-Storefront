@@ -73,3 +73,4 @@ export function OperatorYourCompetitors({module, imageAspectClassName}: Operator
     </section>
   );
 }
+ 
