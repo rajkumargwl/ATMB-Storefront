@@ -155,6 +155,19 @@ export default function SearchBox({
 
     return () => clearTimeout(timeout);
   }, [searchquery, navigate, location.search, skipSearchQSync]);
+  const handleSearchClick = () => {
+    const trimmedQuery = searchquery.trim();
+    if (trimmedQuery.length >= 2) {
+      navigate(`/locationsearchResults?q=${encodeURIComponent(trimmedQuery)}`, {
+        state: { results: qresults }, // ✅ Pass filtered results
+      });
+    //   setTimeout(() => {
+    //   setSearchquery("");
+    //   setQresults([]);
+    // }, 200);
+    }
+  };
+  
 
   return (
     <div className="mt-[40px] md:mt-[64px] mb-4 md:mb-5 w-full max-w-[546px]">
@@ -171,6 +184,7 @@ export default function SearchBox({
         <button
           className="group bg-DarkOrange text-white px-[20px] md:px-[35.5px] py-[11px] md:py-[15px] font-normal leading-[14px] md:leading-[22px] text-[14px] md:text-[16px] tracking-[0.08px] rounded-full overflow-hidden transition-all hover:scale-[1.01] hover:bg-[#DD5827]"
           aria-label="Search location"
+          onClick={handleSearchClick}
         >
           <span className="relative flex items-center">
             {buttonText}
