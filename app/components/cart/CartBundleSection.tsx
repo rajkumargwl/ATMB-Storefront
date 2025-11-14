@@ -129,7 +129,6 @@ export default function CartBundleSection({ bundleProducts }: { bundleProducts: 
                 type="submit"
                 disabled={props.state !== "idle"}
                 onClick={() => {
-                  // set state to submitting before actual form submit
                   scrollTo();
                   prevState.current = "submitting";
                 }}
