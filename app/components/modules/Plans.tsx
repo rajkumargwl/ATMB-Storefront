@@ -3,6 +3,7 @@ import PlanBg from '~/components/icons/PlanBg';
 import Fire from '~/components/icons/Fire';
 import CheckBlack from '~/components/icons/CheckBlack';
 import RightArrowWhite from '~/components/icons/RightArrowWhite';
+import {useNavigate} from '@remix-run/react';
 import {
   flattenConnection,
   Image,
@@ -50,7 +51,7 @@ const [focusedTabIndex, setFocusedTabIndex] = useState(0);
 const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 const isYearly = billing === "yearly";
 //console.log("individual product in Pricing Module:",individualProducts);
-
+const navigate = useNavigate();
 const tabs = [
 {
 id: "individual",
@@ -300,9 +301,8 @@ return (
                           ? bundle.monthlyVariantId
                           : bundle.yearlyVariantId;
                       const numericVariantId = gid?.split("/").pop();
-                      window.location.href = hasVirtualMailbox
-                        ? `/sublocations?variantId=${numericVariantId}`
-                        : `/checkout/${numericVariantId}`;
+                      hasVirtualMailbox ? navigate(`/sublocations?variantId=${numericVariantId}`) :
+                         navigate(`/checkout/${numericVariantId}`);
                     }}
                   >
                     
