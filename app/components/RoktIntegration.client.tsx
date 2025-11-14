@@ -9,36 +9,24 @@ export default function RoktIntegration({
 }) {
   useEffect(() => {
     const loadRokt = async () => {
-      // Avoid double loading
       if ((window as any).Rokt) return;
-
-      // Create and inject the Rokt script
-      const target = document.head || document.body;
+  
       const script = document.createElement("script");
-      script.type = "text/javascript";
       script.src = "https://apps.rokt.com/wsdk/integrations/launcher.js";
-      script.fetchPriority = "high";
-      script.crossOrigin = "anonymous";
       script.async = true;
+      script.crossOrigin = "anonymous";
       script.id = "rokt-launcher";
-      target.appendChild(script);
-
-      // Wait for the script to load
+      document.body.appendChild(script);
+  
       await new Promise<void>((resolve) => {
-        if ((window as any).Rokt) resolve();
-        else
-          script.addEventListener("load", () => {
-            resolve();
-          });
+        script.addEventListener("load", () => resolve());
       });
-
-      // Initialize Rokt Launcher
+  
       const launcher = await (window as any).Rokt.createLauncher({
         accountId: "3147080751641851509",
-        sandbox: false, // ❗️Set to false in production
+        sandbox: false,
       });
-
-      // Send customer and order data
+  
       await launcher.selectPlacements({
         attributes: {
           email: userData?.email || "",
@@ -48,21 +36,14 @@ export default function RoktIntegration({
           confirmationref: cart?.id || "",
           amount: cart?.cost?.totalAmount?.amount || "",
           currency: cart?.cost?.totalAmount?.currencyCode || "USD",
-          paymenttype: "",
-          ccbin: "",
-          zipcode: "",
-          country: "",
-          language: "",
         },
       });
     };
-
-    // Trigger when the page fully loads
-    window.addEventListener("load", () => {
-      console.log("Rokt start");
-      loadRokt().then(() => console.log("Rokt end"));
-    });
+  
+    console.log("Loading Rokt");
+    loadRokt().catch(console.error);
   }, [userData, cart]);
+  
 
   // ✅ Placeholder where Rokt injects the content
   return <div id="rokt-placeholder"></div>;
