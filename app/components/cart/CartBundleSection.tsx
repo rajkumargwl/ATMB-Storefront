@@ -6,11 +6,14 @@ import { useRef, useEffect } from "react";
 export default function CartBundleSection({ bundleProducts }: { bundleProducts: any[] }) {
   const prevState = useRef<string>("idle");
   const stateRef = useRef<string>("idle");
-  if (!bundleProducts || bundleProducts.length === 0) return null;
- 
+
   const selectedLocale = useRootLoaderData()?.selectedLocale ?? DEFAULT_LOCALE;
   let currencyCode = selectedLocale?.currency || 'USD';
-  const bundle = bundleProducts[0]; // show only the first bundle
+
+  if (!bundleProducts || bundleProducts.length === 0) return null; 
+
+  const bundle = bundleProducts[0];
+
  
   const displayPrice = bundle.billing === 'monthly' ? bundle.price : bundle.yearlyPrice;
   
@@ -120,6 +123,8 @@ export default function CartBundleSection({ bundleProducts }: { bundleProducts: 
  
         {/* Add to Cart Button */}
         <div className="flex items-center justify-center">
+        
+
         <CartForm
           action={CartForm.ACTIONS.LinesAdd}
           inputs={{
